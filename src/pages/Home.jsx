@@ -1,6 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import SoftBlob from "../components/SoftBlob";
+import SoftBreathingOrb from "../components/SoftBreathingOrb";
+import GeometricPattern from "../components/GeometricPattern";
 import MainScreen from "../components/MainScreen";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
@@ -12,11 +14,14 @@ export default function Home() {
   const [breathScale, setBreathScale] = useState(1);
   const [showSupport, setShowSupport] = useState(false);
   const [theme, setTheme] = useState("light");
+  const [backgroundStyle, setBackgroundStyle] = useState("soft");
   const animRef = useRef(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("pauseTheme") || "light";
     setTheme(saved);
+    const savedBg = localStorage.getItem("pauseBackgroundStyle") || "soft";
+    setBackgroundStyle(savedBg);
   }, []);
 
   const startBreathing = useCallback(() => {
@@ -85,8 +90,10 @@ export default function Home() {
       className="fixed inset-0 overflow-hidden"
       style={{ background: bgColor }}
     >
-      {/* Soft breathing blob */}
-      <SoftBlob breathScale={breathScale} isBreathing={mode === "breathing"} />
+      {/* Background styles */}
+      {backgroundStyle === "soft" && <SoftBlob breathScale={breathScale} isBreathing={mode === "breathing"} />}
+      {backgroundStyle === "geometric" && <GeometricPattern theme={theme} />}
+      {backgroundStyle === "breathing" && <SoftBreathingOrb breathScale={breathScale} theme={theme} />}
 
       {/* UI overlays */}
       <AnimatePresence mode="wait">

@@ -25,16 +25,24 @@ const THEME_COLORS = {
 export default function Theme() {
   const navigate = useNavigate();
   const [currentTheme, setCurrentTheme] = useState("light");
+  const [backgroundStyle, setBackgroundStyle] = useState("soft");
   const colors = THEME_COLORS[currentTheme];
 
   useEffect(() => {
     const saved = localStorage.getItem("pauseTheme") || "light";
     setCurrentTheme(saved);
+    const savedBg = localStorage.getItem("pauseBackgroundStyle") || "soft";
+    setBackgroundStyle(savedBg);
   }, []);
 
   const handleThemeChange = (theme) => {
     setCurrentTheme(theme);
     localStorage.setItem("pauseTheme", theme);
+  };
+
+  const handleBackgroundChange = (style) => {
+    setBackgroundStyle(style);
+    localStorage.setItem("pauseBackgroundStyle", style);
   };
 
   return (
@@ -65,7 +73,95 @@ export default function Theme() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 gap-8">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 gap-12">
+        {/* Background style section */}
+        <div className="w-full">
+          <p
+            className="font-cormorant text-[12px] font-light tracking-[0.2em] uppercase text-center mb-6"
+            style={{ color: colors.secondary }}
+          >
+            Background Style
+          </p>
+          <div className="flex flex-col gap-3 items-center">
+            {/* Soft blob */}
+            <motion.button
+              onClick={() => handleBackgroundChange("soft")}
+              className="w-full max-w-xs p-6 rounded-lg transition-all duration-500 cursor-pointer"
+              style={{
+                background: backgroundStyle === "soft" ? colors.cardBg : "transparent",
+                border: `2px solid ${
+                  backgroundStyle === "soft" ? colors.activeBorder : colors.cardBorder
+                }`,
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <p
+                className="font-cormorant text-[11px] font-light tracking-[0.2em]"
+                style={{ color: colors.text }}
+              >
+                Soft Breathing Blob
+              </p>
+            </motion.button>
+
+            {/* Geometric pattern */}
+            <motion.button
+              onClick={() => handleBackgroundChange("geometric")}
+              className="w-full max-w-xs p-6 rounded-lg transition-all duration-500 cursor-pointer"
+              style={{
+                background: backgroundStyle === "geometric" ? colors.cardBg : "transparent",
+                border: `2px solid ${
+                  backgroundStyle === "geometric" ? colors.activeBorder : colors.cardBorder
+                }`,
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <p
+                className="font-cormorant text-[11px] font-light tracking-[0.2em]"
+                style={{ color: colors.text }}
+              >
+                Geometric Pattern
+              </p>
+            </motion.button>
+
+            {/* Breathing circle */}
+            <motion.button
+              onClick={() => handleBackgroundChange("breathing")}
+              className="w-full max-w-xs p-6 rounded-lg transition-all duration-500 cursor-pointer"
+              style={{
+                background: backgroundStyle === "breathing" ? colors.cardBg : "transparent",
+                border: `2px solid ${
+                  backgroundStyle === "breathing" ? colors.activeBorder : colors.cardBorder
+                }`,
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <p
+                className="font-cormorant text-[11px] font-light tracking-[0.2em]"
+                style={{ color: colors.text }}
+              >
+                Breathing Circle
+              </p>
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div
+          className="w-20 h-px"
+          style={{ background: colors.cardBorder }}
+        />
+        {/* Theme selection section */}
+        <div className="w-full">
+          <p
+            className="font-cormorant text-[12px] font-light tracking-[0.2em] uppercase text-center mb-6"
+            style={{ color: colors.secondary }}
+          >
+            Color Theme
+          </p>
+
         {/* Light theme card */}
         <motion.button
           onClick={() => handleThemeChange("light")}
@@ -135,6 +231,7 @@ export default function Theme() {
             </div>
           </div>
         </motion.button>
+        </div>
       </div>
 
       {/* Footer indicator */}
