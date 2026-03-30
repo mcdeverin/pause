@@ -1,79 +1,47 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { getTotalCycleDuration } from "../lib/breathingTechniques";
 import LiquidOrb from "./LiquidOrb";
 
 const TOTAL_CYCLES = 4;
 
 export default function BreathingScreen({ technique, onDone, theme }) {
-  const [currentPhase, setCurrentPhase] = useState(technique.phases[0]);
-  const [countdown, setCountdown] = useState(technique.phases[0].duration);
-  const [orbScale, setOrbScale] = useState(1);
   const [progress, setProgress] = useState(0);
-  const timerRef = useRef(null);
+  const [currentPhase, setCurrentPhase] = useState(technique.phases[0]);
 
   const textColor = theme === "day" ? "#2C2C2C" : "#E8E0D0";
+
+  // Track progress for the progress bar
+  const getTotalCycleDuration = (tech) => {
+    return tech.phases.reduce((sum, p) => sum + p.duration, 0);
+  };
 
   useEffect(() => {
     let phaseIndex = 0;
     let cycleIndex = 0;
-    let currentCount = technique.phases[0].duration;
+    let secondsElapsed = 0;
     const phaseDurations = technique.phases.map(p => p.duration);
     const cycleDuration = getTotalCycleDuration(technique);
     const totalSeconds = cycleDuration * TOTAL_CYCLES;
-    let totalElapsed = 0;
-
-    const updateOrbScale = (phase, phaseDuration, count) => {
-      const elapsed = phaseDuration - count;
-
-      if (phase.label === "inhale") {
-        return 1.0 + 0.25 * (elapsed / phaseDuration);
-      } else if (phase.label === "inhale2") {
-        return 1.0 + 0.1 * (elapsed / phaseDuration);
-      } else if (phase.label === "exhale") {
-        return 1.25 - 0.25 * (elapsed / phaseDuration);
-      } else if (phase.label === "hold" || phase.label === "hold2") {
-        return phase.label === "hold" ? 1.25 : 1.0;
-      }
-      return 1.0;
-    };
+    let timerRef = null;
 
     const tick = () => {
-      const phase = technique.phases[phaseIndex];
-      const scale = updateOrbScale(phase, phaseDurations[phaseIndex], currentCount);
-      setOrbScale(scale);
-      setCountdown(Math.max(currentCount, 1));
-      setCurrentPhase(phase);
+      secondsElapsed++;
+      setProgress(Math.min(secondsElapsed / totalSeconds, 1));
 
-      totalElapsed++;
-      setProgress(Math.min(totalElapsed / totalSeconds, 1));
-
-      currentCount--;
-
-      if (currentCount <= 0) {
-        phaseIndex++;
-
-        if (phaseIndex >= technique.phases.length) {
-          phaseIndex = 0;
-          cycleIndex++;
-
-          if (cycleIndex >= TOTAL_CYCLES) {
-            setProgress(1);
-            setTimeout(onDone, 500);
-            return;
-          }
-        }
-
-        currentCount = phaseDurations[phaseIndex];
+      // Check if all cycles are done
+      if (cycleIndex >= TOTAL_CYCLES) {
+        setProgress(1);
+        setTimeout(onDone, 500);
+        return;
       }
 
-      timerRef.current = setTimeout(tick, 1000);
+      timerRef = setTimeout(tick, 1000);
     };
 
-    timerRef.current = setTimeout(tick, 0);
+    timerRef = setTimeout(tick, 0);
 
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
+      if (timerRef) clearTimeout(timerRef);
     };
   }, [technique, onDone]);
 
@@ -126,7 +94,7 @@ export default function BreathingScreen({ technique, onDone, theme }) {
         }}
       >
         {/* Liquid Orb */}
-        <LiquidOrb theme={theme} countdown={countdown} orbScale={orbScale} />
+        <LiquidOrb theme={theme} isBreathing={true} technique={technique} />
         <p
           style={{
             fontSize: "28px",
@@ -139,7 +107,7 @@ export default function BreathingScreen({ technique, onDone, theme }) {
             minHeight: "32px",
           }}
         >
-          {currentPhase.label}
+          {currentPhase?.label || "inhale"}
         </p>
 
         {/* Science fact */}

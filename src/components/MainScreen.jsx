@@ -106,7 +106,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           }}
           aria-label="Start breathing"
         >
-          <LiquidOrb theme={theme} countdown={null} orbScale={1} />
+          <LiquidOrb theme={theme} isBreathing={false} />
         </button>
         <button
           onClick={onTap}
