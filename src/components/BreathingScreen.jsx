@@ -113,7 +113,7 @@ export default function BreathingScreen({ technique, onDone, theme }) {
       </div>
 
       {/* Phase label — center */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-24 sm:gap-32">
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-32 sm:gap-40">
         <div className="h-8" />
         <AnimatePresence mode="wait">
           <motion.p
