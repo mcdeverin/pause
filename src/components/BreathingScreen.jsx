@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getTotalCycleDuration } from "../lib/breathingTechniques";
+import CrispOrb from "./CrispOrb";
 
 const TOTAL_CYCLES = 4;
 
@@ -28,20 +29,12 @@ export default function BreathingScreen({ technique, onDone, theme }) {
   const [progress, setProgress] = useState(0);
   const [breathScale, setBreathScale] = useState(1);
   const animFrameRef = useRef(null);
-  const phaseStartRef = useRef(Date.now());
   const totalDuration = getTotalCycleDuration(technique) * TOTAL_CYCLES;
 
   const currentPhase = technique.phases[currentPhaseIndex];
 
-  const getTargetScale = useCallback((label) => {
-    if (label === "inhale") return 1.6;
-    if (label === "exhale") return 0.7;
-    return breathScale; // hold keeps current
-  }, [breathScale]);
-
   useEffect(() => {
     const startTime = Date.now();
-    phaseStartRef.current = startTime;
     let phaseIdx = 0;
     let cycles = 0;
     let phaseStart = startTime;
@@ -50,22 +43,18 @@ export default function BreathingScreen({ technique, onDone, theme }) {
       const now = Date.now();
       const elapsed = now - startTime;
 
-      // Overall progress
       setProgress(Math.min(elapsed / totalDuration, 1));
 
-      // Phase progress
       const phaseElapsed = now - phaseStart;
       const phaseDuration = technique.phases[phaseIdx].duration;
       const phaseProgress = Math.min(phaseElapsed / phaseDuration, 1);
 
-      // Calculate breath scale based on phase
       const phase = technique.phases[phaseIdx];
       if (phase.label === "inhale") {
         setBreathScale(0.7 + phaseProgress * 0.9);
       } else if (phase.label === "exhale") {
         setBreathScale(1.6 - phaseProgress * 0.9);
       }
-      // hold: keep current scale
 
       if (phaseElapsed >= phaseDuration) {
         phaseIdx++;
@@ -96,14 +85,14 @@ export default function BreathingScreen({ technique, onDone, theme }) {
 
   return (
     <motion.div
-      className="absolute inset-0 flex flex-col items-center justify-between z-10 pointer-events-none"
+      className="w-full min-h-screen flex flex-col items-center px-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
     >
       {/* Technique name */}
-      <div className="pt-16 sm:pt-20 text-center">
+      <div className="w-full pt-12 text-center">
         <p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.35em] uppercase"
           style={{ color: colors.text }}
@@ -112,38 +101,41 @@ export default function BreathingScreen({ technique, onDone, theme }) {
         </p>
       </div>
 
-      {/* Phase label — center */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={currentPhase.label + currentPhaseIndex}
-            className="font-cormorant text-xl sm:text-2xl font-light tracking-[0.3em]"
-            style={{ color: colors.text }}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {currentPhase.label}
-          </motion.p>
-        </AnimatePresence>
+      {/* Orb with breathing animation */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full">
+        <CrispOrb breathScale={breathScale} isBreathing={true} theme={theme} />
+
+        {/* Phase label */}
+        <div className="mt-8">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={currentPhase.label + currentPhaseIndex}
+              className="font-cormorant text-xl sm:text-2xl font-light tracking-[0.3em]"
+              style={{ color: colors.text }}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {currentPhase.label}
+            </motion.p>
+          </AnimatePresence>
+        </div>
       </div>
 
-      {/* Science fact — bottom */}
-      <div className="pb-40 sm:pb-48">
-        <motion.p
-          className="font-cormorant italic text-[10px] sm:text-[11px] font-light max-w-[260px] sm:max-w-[300px] text-center leading-relaxed px-6"
-          style={{ color: colors.secondary }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 3, delay: 2 }}
-        >
-          {technique.science}
-        </motion.p>
-      </div>
+      {/* Science fact */}
+      <motion.p
+        className="font-cormorant italic text-[10px] sm:text-[11px] font-light max-w-[260px] sm:max-w-[300px] text-center leading-relaxed my-8"
+        style={{ color: colors.secondary }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 3, delay: 2 }}
+      >
+        {technique.science}
+      </motion.p>
 
       {/* Bottom: progress line + done */}
-      <div className="pb-12 sm:pb-16 w-full flex flex-col items-center gap-6 pointer-events-auto">
+      <div className="flex flex-col items-center gap-6 pb-12 sm:pb-16 w-full">
         {/* Progress line */}
         <div className="w-40 sm:w-52 h-px relative overflow-hidden" style={{ background: colors.progressBg }}>
           <motion.div

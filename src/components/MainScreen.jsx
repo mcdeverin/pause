@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
+import CrispOrb from "./CrispOrb";
 
 const THEME_COLORS = {
   day: {
@@ -14,29 +15,27 @@ const THEME_COLORS = {
 
 export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme }) {
   const colors = THEME_COLORS[theme] || THEME_COLORS.day;
+  
   return (
     <motion.div
-      className="absolute inset-0 flex flex-col items-center z-10 pointer-events-none overflow-y-auto"
+      className="w-full min-h-screen flex flex-col items-center px-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Header */}
-      <div className="relative z-20 w-full pt-6 sm:pt-8 px-6 flex items-center justify-between pointer-events-none">
-        {/* App name */}
-        <div>
-          <h1
-            className="font-cormorant text-[9px] sm:text-[10px] font-light tracking-[0.4em] uppercase"
-            style={{ color: colors.text }}
-          >
-            Always Pause
-          </h1>
-        </div>
-        {/* Theme toggle */}
+      {/* Header with title and theme toggle */}
+      <div className="w-full pt-12 flex items-center justify-between">
+        <h1
+          className="font-cormorant text-[9px] sm:text-[10px] font-light tracking-[0.4em] uppercase"
+          style={{ color: colors.text }}
+        >
+          Always Pause
+        </h1>
+        
         <motion.button
           onClick={onToggleTheme}
-          className="pointer-events-auto p-2 rounded-full transition-all duration-300 hover:opacity-70"
+          className="p-2 rounded-full transition-all duration-300 hover:opacity-70"
           style={{
             background: theme === "day" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.08)",
           }}
@@ -52,18 +51,14 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         </motion.button>
       </div>
 
-      {/* Center tap area */}
-      <button
-        onClick={onTap}
-        className="pointer-events-auto absolute inset-0 cursor-pointer focus:outline-none"
-        aria-label="Tap to pause"
-      />
+      {/* Main content area with flex layout */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full py-8">
+        {/* Orb */}
+        <CrispOrb breathScale={1} isBreathing={false} theme={theme} />
+      </div>
 
-      {/* Tap prompt and support */}
-      <div className="flex-1 flex flex-col items-center w-full px-6">
-        {/* Spacer to push content below orb */}
-        <div className="flex-1" />
-
+      {/* Bottom section: tap prompt, divider, support */}
+      <div className="flex flex-col items-center gap-4 pb-12 sm:pb-16">
         {/* Tap to pause text */}
         <motion.p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.45em]"
@@ -79,13 +74,12 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         </motion.p>
 
         {/* Divider */}
-        <div className="w-48 h-px my-8" style={{ background: colors.secondary, opacity: 0.3 }} />
+        <div className="w-48 h-px" style={{ background: colors.secondary, opacity: 0.3 }} />
 
-        {/* Support button with spacer */}
-        <div className="flex-1" />
+        {/* Support button */}
         <button
           onClick={onSupportClick}
-          className="pointer-events-auto transition-opacity duration-500 hover:opacity-60 pb-12 sm:pb-16"
+          className="transition-opacity duration-500 hover:opacity-60"
           style={{ color: colors.secondary }}
           aria-label="Support Always Pause"
         >
@@ -94,6 +88,14 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           </p>
         </button>
       </div>
+
+      {/* Tap to activate breathing overlay */}
+      <button
+        onClick={onTap}
+        className="fixed inset-0 cursor-pointer focus:outline-none"
+        style={{ background: "transparent" }}
+        aria-label="Tap to pause"
+      />
     </motion.div>
   );
 }

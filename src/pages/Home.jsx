@@ -80,13 +80,11 @@ export default function Home() {
 
   return (
     <div
-      className="fixed inset-0 overflow-hidden"
+      className="w-full min-h-screen flex flex-col"
       style={{ background: bgColor }}
     >
-      {/* Breathing orb */}
-      <SoftBlob breathScale={breathScale} isBreathing={mode === "breathing"} theme={theme} />
 
-      {/* UI overlays */}
+      {/* Main content */}
       <AnimatePresence mode="wait">
         {mode === "idle" && (
           <MainScreen
