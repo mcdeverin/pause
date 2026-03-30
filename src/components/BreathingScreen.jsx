@@ -3,9 +3,8 @@ import { motion } from "framer-motion";
 import LiquidOrb from "./LiquidOrb";
 
 export default function BreathingScreen({ technique, onDone, theme }) {
-  const phases = technique.phases.split(',').map(Number);
-  const labels = technique.phaseLabels.split(',');
-
+  const [phases] = useState(() => technique.phases.split(',').map(Number));
+  const [labels] = useState(() => technique.phaseLabels.split(','));
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(phases[0]);
   const [orbScale, setOrbScale] = useState(1.0);
@@ -41,7 +40,7 @@ export default function BreathingScreen({ technique, onDone, theme }) {
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [phaseIndex, phases, labels]);
+  }, [phaseIndex, phases, labels, onDone]);
 
   return (
     <motion.div
