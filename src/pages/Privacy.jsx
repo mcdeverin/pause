@@ -16,75 +16,74 @@ export default function Privacy() {
         <h1 className="text-3xl font-light mb-8 font-cormorant">Privacy Policy</h1>
 
         <div className="space-y-6 text-sm text-foreground/80 leading-relaxed font-serif">
+          <p className="text-xs text-foreground/60 mb-6">
+            Last Updated: March 2026
+          </p>
+
           <section>
-            <h2 className="text-lg font-semibold mb-3">Introduction</h2>
+            <h2 className="text-lg font-semibold mb-3">Overview</h2>
             <p>
-              Always Pause is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
+              Work OnDeck LLC ("we," "us," or "our") operates the Always Pause mobile application. This Privacy Policy explains how we handle information when you use our app.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">1. Information We Collect</h2>
+            <h2 className="text-lg font-semibold mb-3">Information We Collect</h2>
             <p>
-              We collect information that you voluntarily provide to us when using Always Pause. This may include your name, email address, and any other information you choose to provide. We also collect information about your use of the application, including breathing sessions and preferences.
+              Always Pause is designed to be a minimal, privacy-respecting app. We collect only the following:
             </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold mb-3">2. How We Use Your Information</h2>
-            <p>
-              We use the information we collect to:
-            </p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Provide and improve the Always Pause service</li>
-              <li>Personalize your experience</li>
-              <li>Communicate with you about updates and features</li>
-              <li>Analyze usage patterns to enhance functionality</li>
-              <li>Ensure the security and integrity of the application</li>
+            <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
+              <li><strong>Usage Analytics:</strong> We collect anonymous, aggregated data about how the app is used — such as which breathing techniques are selected and how often the app is opened. This data cannot be used to identify you personally.</li>
             </ul>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold mb-3">3. Data Storage and Security</h2>
+            <p className="mt-4">
+              We do <strong>NOT</strong> collect your name, email address, location, health data, or any personally identifiable information.
+            </p>
             <p>
-              Your data is stored securely using industry-standard encryption and security practices. We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
+              We do <strong>NOT</strong> sell your data to third parties.
+            </p>
+            <p>
+              We do <strong>NOT</strong> use your data for advertising purposes.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">4. Third-Party Sharing</h2>
+            <h2 className="text-lg font-semibold mb-3">How We Use Your Information</h2>
             <p>
-              We do not sell, trade, or rent your personal information to third parties. We may share information only when required by law or with your explicit consent.
+              Anonymous usage data is used solely to improve the app experience — understanding which features are used most helps us make Always Pause better.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">5. Cookies and Local Storage</h2>
+            <h2 className="text-lg font-semibold mb-3">Third Party Services</h2>
             <p>
-              Always Pause uses local storage to remember your preferences, such as your chosen theme. This information is stored locally on your device and is not transmitted to our servers without your consent.
+              Always Pause may use Apple's built-in App Analytics which collects anonymous usage data subject to Apple's own privacy policy.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">6. Your Rights</h2>
+            <h2 className="text-lg font-semibold mb-3">Children's Privacy</h2>
             <p>
-              You have the right to access, update, or delete your personal information at any time. You can do this by contacting us or through the application settings.
+              Always Pause is not directed at children under 13. We do not knowingly collect data from children under 13.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">7. Changes to This Privacy Policy</h2>
+            <h2 className="text-lg font-semibold mb-3">Changes to This Policy</h2>
             <p>
-              We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of any significant changes by updating the date at the top of this policy.
+              We may update this Privacy Policy from time to time. We will notify users of significant changes by updating the date at the top of this page.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">8. Contact Us</h2>
+            <h2 className="text-lg font-semibold mb-3">Contact Us</h2>
             <p>
-              If you have questions about this Privacy Policy or our privacy practices, please contact us through the support section of the application.
+              Questions? Email us at: <a href="mailto:support@workondeck.com" className="underline hover:opacity-70">support@workondeck.com</a>
             </p>
           </section>
+
+          <p className="text-xs text-foreground/60 mt-8 pt-4 border-t border-foreground/10">
+            © 2026 Work OnDeck LLC. All rights reserved.
+          </p>
         </div>
       </div>
     </div>
