@@ -148,7 +148,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "10px",
             color: textColor,
-            opacity: 0.35,
+            opacity: 0.2,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             background: "none",
