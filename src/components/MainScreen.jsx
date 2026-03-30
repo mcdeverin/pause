@@ -77,7 +77,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         {/* Support button */}
         <button
           onClick={onSupportClick}
-          className="mt-24 sm:mt-32 pointer-events-auto transition-opacity duration-500 hover:opacity-60"
+          className="mt-40 sm:mt-48 pointer-events-auto transition-opacity duration-500 hover:opacity-60"
           style={{ color: colors.secondary }}
           aria-label="Support Always Pause"
         >
