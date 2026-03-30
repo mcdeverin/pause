@@ -14,8 +14,8 @@ const THEME_COLORS = {
   },
 };
 
-export default function MainScreen({ onTap, onSupportClick, theme, onToggleTheme }) {
-  const colors = THEME_COLORS[theme];
+export default function MainScreen({ onTap, onSupportClick, theme = "light", onToggleTheme }) {
+  const colors = THEME_COLORS[theme] || THEME_COLORS.light;
   return (
     <motion.div
       className="absolute inset-0 flex flex-col items-center justify-between z-10 pointer-events-none"
