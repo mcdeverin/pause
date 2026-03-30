@@ -1,29 +1,11 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getTotalCycleDuration } from "../lib/breathingTechniques";
 import CrispOrb from "./CrispOrb";
 
 const TOTAL_CYCLES = 4;
 
-const THEME_COLORS = {
-  day: {
-    text: "#2C2C2C",
-    secondary: "#888888",
-    progressBar: "#5B8DB8",
-    progressBg: "rgba(91, 141, 184, 0.15)",
-    progressFill: "rgba(91, 141, 184, 0.6)",
-  },
-  night: {
-    text: "#E8E0D0",
-    secondary: "#A0A0A0",
-    progressBar: "#7B6BA8",
-    progressBg: "rgba(123, 107, 168, 0.15)",
-    progressFill: "rgba(123, 107, 168, 0.6)",
-  },
-};
-
 export default function BreathingScreen({ technique, onDone, theme }) {
-  const colors = THEME_COLORS[theme];
   const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
   const [cycleCount, setCycleCount] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -85,33 +67,50 @@ export default function BreathingScreen({ technique, onDone, theme }) {
 
   return (
     <motion.div
-      className="w-full min-h-screen flex flex-col items-center px-6"
+      className="w-full min-h-screen flex flex-col items-center justify-between"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Technique name */}
-      <div className="w-full pt-12 text-center">
+      {/* Technique name at top */}
+      <div style={{ paddingTop: "60px", width: "100%", textAlign: "center" }}>
         <p
-          className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.35em] uppercase"
-          style={{ color: colors.text }}
+          style={{
+            fontSize: "13px",
+            letterSpacing: "2px",
+            color: "#2C2C2C",
+            opacity: 0.7,
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            margin: 0,
+            textTransform: "uppercase",
+          }}
         >
           {technique.name}
         </p>
       </div>
 
-      {/* Orb with breathing animation */}
-      <div className="flex-1 flex flex-col items-center justify-center w-full">
-        <CrispOrb breathScale={breathScale} isBreathing={true} theme={theme} />
+      {/* Center: Orb with phase word and science fact below */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full" style={{ minHeight: "50vh", paddingLeft: "24px", paddingRight: "24px" }}>
+        {/* Orb */}
+        <div style={{ width: "280px", height: "280px", marginBottom: "24px" }}>
+          <CrispOrb breathScale={breathScale} isBreathing={true} theme={theme} />
+        </div>
 
         {/* Phase label */}
-        <div className="mt-8">
+        <div style={{ marginTop: "24px", marginBottom: "16px" }}>
           <AnimatePresence mode="wait">
             <motion.p
               key={currentPhase.label + currentPhaseIndex}
-              className="font-cormorant text-xl sm:text-2xl font-light tracking-[0.3em]"
-              style={{ color: colors.text }}
+              style={{
+                fontSize: "28px",
+                color: "#2C2C2C",
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 300,
+                margin: 0,
+                textTransform: "lowercase",
+              }}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
@@ -121,27 +120,39 @@ export default function BreathingScreen({ technique, onDone, theme }) {
             </motion.p>
           </AnimatePresence>
         </div>
+
+        {/* Science fact */}
+        <motion.p
+          style={{
+            fontSize: "12px",
+            color: "#888888",
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: "italic",
+            fontWeight: 300,
+            textAlign: "center",
+            maxWidth: "280px",
+            lineHeight: 1.6,
+            margin: 0,
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 3, delay: 2 }}
+        >
+          {technique.science}
+        </motion.p>
       </div>
 
-      {/* Science fact */}
-      <motion.p
-        className="font-cormorant italic text-[10px] sm:text-[11px] font-light max-w-[260px] sm:max-w-[300px] text-center leading-relaxed my-8"
-        style={{ color: colors.secondary }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 3, delay: 2 }}
-      >
-        {technique.science}
-      </motion.p>
-
-      {/* Bottom: progress line + done */}
-      <div className="flex flex-col items-center gap-6 pb-12 sm:pb-16 w-full">
-        {/* Progress line */}
-        <div className="w-40 sm:w-52 h-px relative overflow-hidden" style={{ background: colors.progressBg }}>
+      {/* Bottom: Progress bar + done button */}
+      <div className="w-full flex flex-col items-center" style={{ paddingBottom: "40px", gap: "20px" }}>
+        {/* Progress bar */}
+        <div style={{ width: "180px", height: "1px", background: "rgba(91, 141, 184, 0.15)", position: "relative", overflow: "hidden" }}>
           <motion.div
-            className="absolute top-0 left-0 h-full"
             style={{
-              background: colors.progressFill,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: "100%",
+              background: "rgba(91, 141, 184, 0.6)",
               width: `${progress * 100}%`,
             }}
             transition={{ duration: 0.1 }}
@@ -151,16 +162,21 @@ export default function BreathingScreen({ technique, onDone, theme }) {
         {/* Done button */}
         <button
           onClick={onDone}
-          className="font-cormorant text-[10px] font-light tracking-[0.35em] cursor-pointer transition-colors duration-700 hover:opacity-60"
-          style={{ color: colors.text }}
+          style={{
+            fontSize: "10px",
+            color: "#2C2C2C",
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            transition: "opacity 700ms",
+          }}
+          className="hover:opacity-60"
         >
-          · &nbsp;done&nbsp; ·
+          · done ·
         </button>
       </div>
     </motion.div>
   );
-}
-
-export function useBreathScale() {
-  return 1;
 }
