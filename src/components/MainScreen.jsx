@@ -148,7 +148,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "10px",
             color: textColor,
-            opacity: 0.2,
+            opacity: 0.45,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             background: "none",
@@ -164,7 +164,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "10px",
             color: textColor,
-            opacity: 0.25,
+            opacity: 0.45,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             display: "flex",
@@ -187,8 +187,8 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
               margin: 0,
               transition: "opacity 300ms",
             }}
-            onMouseEnter={(e) => (e.target.style.opacity = "0.5")}
-            onMouseLeave={(e) => (e.target.style.opacity = "0.25")}
+            onMouseEnter={(e) => (e.target.style.opacity = "0.7")}
+            onMouseLeave={(e) => (e.target.style.opacity = "0.45")}
           >
             Privacy
           </button>
@@ -207,8 +207,8 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
               margin: 0,
               transition: "opacity 300ms",
             }}
-            onMouseEnter={(e) => (e.target.style.opacity = "0.5")}
-            onMouseLeave={(e) => (e.target.style.opacity = "0.25")}
+            onMouseEnter={(e) => (e.target.style.opacity = "0.7")}
+            onMouseLeave={(e) => (e.target.style.opacity = "0.45")}
           >
             Terms
           </button>
