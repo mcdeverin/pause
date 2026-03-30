@@ -223,7 +223,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         {/* Science fact */}
         <p
           style={{
-            fontSize: "12px",
+            fontSize: "14px",
             color: theme === "day" ? "#888888" : "#A0A0A0",
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: "italic",
