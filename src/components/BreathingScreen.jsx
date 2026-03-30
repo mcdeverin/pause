@@ -131,7 +131,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             fontSize: "13px",
             letterSpacing: "5px",
             color: textColor,
-            opacity: 0.55,
+            opacity: 0.75,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             margin: 0,
@@ -195,7 +195,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               zIndex: 10,
               fontSize: "48px",
               fontWeight: 200,
-              color: "rgba(255, 255, 255, 0.95)",
+              color: "rgba(255, 255, 255, 1.0)",
               fontFamily: "'Cormorant Garamond', serif",
               textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
             }}
@@ -207,7 +207,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         {/* Phase label */}
         <p
           style={{
-            fontSize: "28px",
+            fontSize: "22px",
             color: textColor,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
@@ -215,6 +215,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             textTransform: "lowercase",
             textAlign: "center",
             minHeight: "32px",
+            opacity: 0.85,
           }}
         >
           {labels[phaseIndex]}
@@ -223,7 +224,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         {/* Science fact */}
         <p
           style={{
-            fontSize: "14px",
+            fontSize: "13px",
             color: theme === "day" ? "#888888" : "#A0A0A0",
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: "italic",
@@ -232,7 +233,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             maxWidth: "280px",
             lineHeight: 1.6,
             margin: 0,
-            opacity: 0.7,
+            opacity: 0.55,
           }}
         >
           {technique.science}
