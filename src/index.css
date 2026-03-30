@@ -5,6 +5,17 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    overflow: hidden;
+  }
+
+  * {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   :root {
     --background: 37 13% 96%;
     --foreground: 0 0% 11%;
@@ -104,7 +115,10 @@
 
   body {
     @apply bg-background text-foreground;
-    overflow: auto;
+    overflow: hidden;
+    overscroll-behavior: none;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 
