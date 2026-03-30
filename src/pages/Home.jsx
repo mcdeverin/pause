@@ -11,7 +11,13 @@ export default function Home() {
   const [technique, setTechnique] = useState(null);
   const [breathScale, setBreathScale] = useState(1);
   const [showSupport, setShowSupport] = useState(false);
+  const [theme, setTheme] = useState("light");
   const animRef = useRef(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("pauseTheme") || "light";
+    setTheme(saved);
+  }, []);
 
   const startBreathing = useCallback(() => {
     const t = getRandomTechnique();
@@ -72,10 +78,12 @@ export default function Home() {
     };
   }, [mode, technique]);
 
+  const bgColor = theme === "light" ? "#F7F5F2" : "#0D1B2A";
+
   return (
     <div
       className="fixed inset-0 overflow-hidden"
-      style={{ background: "#F7F5F2" }}
+      style={{ background: bgColor }}
     >
       {/* Soft breathing blob */}
       <SoftBlob breathScale={breathScale} isBreathing={mode === "breathing"} />
@@ -83,13 +91,14 @@ export default function Home() {
       {/* UI overlays */}
       <AnimatePresence mode="wait">
         {mode === "idle" && (
-          <MainScreen key="main" onTap={startBreathing} onSupportClick={() => setShowSupport(true)} />
+          <MainScreen key="main" onTap={startBreathing} onSupportClick={() => setShowSupport(true)} theme={theme} onToggleTheme={() => setTheme(theme === "light" ? "dark" : "light")} />
         )}
         {mode === "breathing" && technique && (
           <BreathingScreen
             key="breathing"
             technique={technique}
             onDone={stopBreathing}
+            theme={theme}
           />
         )}
       </AnimatePresence>
@@ -97,7 +106,7 @@ export default function Home() {
       {/* Support overlay */}
       <AnimatePresence>
         {showSupport && (
-          <SupportScreen key="support" onClose={() => setShowSupport(false)} />
+          <SupportScreen key="support" onClose={() => setShowSupport(false)} theme={theme} />
         )}
       </AnimatePresence>
     </div>
