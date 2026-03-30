@@ -2,48 +2,46 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import LiquidOrb from "./LiquidOrb";
 
-const TOTAL_CYCLES = 4;
-
 export default function BreathingScreen({ technique, onDone, theme }) {
-  const [progress, setProgress] = useState(0);
-  const [currentPhase, setCurrentPhase] = useState(technique.phases[0]);
+  const phases = technique.phases.split(',').map(Number);
+  const labels = technique.phaseLabels.split(',');
+
+  const [phaseIndex, setPhaseIndex] = useState(0);
+  const [secondsLeft, setSecondsLeft] = useState(phases[0]);
+  const [orbScale, setOrbScale] = useState(1.0);
 
   const textColor = theme === "day" ? "#2C2C2C" : "#E8E0D0";
 
-  // Track progress for the progress bar
-  const getTotalCycleDuration = (tech) => {
-    return tech.phases.reduce((sum, p) => sum + p.duration, 0);
-  };
-
   useEffect(() => {
-    let phaseIndex = 0;
-    let cycleIndex = 0;
-    let secondsElapsed = 0;
-    const phaseDurations = technique.phases.map(p => p.duration);
-    const cycleDuration = getTotalCycleDuration(technique);
-    const totalSeconds = cycleDuration * TOTAL_CYCLES;
-    let timerRef = null;
-
-    const tick = () => {
-      secondsElapsed++;
-      setProgress(Math.min(secondsElapsed / totalSeconds, 1));
-
-      // Check if all cycles are done
-      if (cycleIndex >= TOTAL_CYCLES) {
-        setProgress(1);
-        setTimeout(onDone, 500);
-        return;
-      }
-
-      timerRef = setTimeout(tick, 1000);
-    };
-
-    timerRef = setTimeout(tick, 0);
-
-    return () => {
-      if (timerRef) clearTimeout(timerRef);
-    };
-  }, [technique, onDone]);
+    const interval = setInterval(() => {
+      setSecondsLeft(prev => {
+        if (prev <= 1) {
+          // Move to next phase
+          setPhaseIndex(prevPhase => {
+            const nextPhase = (prevPhase + 1) % phases.length;
+            const nextLabel = labels[nextPhase].toLowerCase();
+            if (nextLabel.includes('inhale')) setOrbScale(1.0);
+            else if (nextLabel.includes('exhale')) setOrbScale(1.3);
+            else setOrbScale(1.3);
+            return nextPhase;
+          });
+          return phases[(phaseIndex + 1) % phases.length];
+        }
+        // Mid-phase scale update
+        const currentLabel = labels[phaseIndex].toLowerCase();
+        const phaseDuration = phases[phaseIndex];
+        const elapsed = phaseDuration - prev + 1;
+        const progress = elapsed / phaseDuration;
+        if (currentLabel.includes('inhale')) {
+          setOrbScale(1.0 + 0.35 * progress);
+        } else if (currentLabel.includes('exhale')) {
+          setOrbScale(1.35 - 0.35 * progress);
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [phaseIndex, phases, labels]);
 
   return (
     <motion.div
@@ -93,8 +91,51 @@ export default function BreathingScreen({ technique, onDone, theme }) {
           zIndex: 5,
         }}
       >
-        {/* Liquid Orb */}
-        <LiquidOrb theme={theme} isBreathing={true} technique={technique} />
+        {/* Blob with countdown */}
+        <div
+          style={{
+            position: "relative",
+            width: "260px",
+            height: "260px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              width: "260px",
+              height: "260px",
+              background: theme === "day"
+                ? "radial-gradient(circle at 35% 35%, rgba(91, 141, 184, 0.9) 0%, rgba(143, 175, 143, 0.7) 60%, rgba(143, 175, 143, 0.5) 100%)"
+                : "radial-gradient(circle at 35% 35%, rgba(74, 91, 140, 0.9) 0%, rgba(155, 142, 196, 0.7) 60%, rgba(155, 142, 196, 0.5) 100%)",
+              borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
+              boxShadow: theme === "day"
+                ? "0 0 60px rgba(91, 141, 184, 0.25), inset 0 0 40px rgba(255, 255, 255, 0.1)"
+                : "0 0 60px rgba(74, 91, 140, 0.25), inset 0 0 40px rgba(255, 255, 255, 0.05)",
+              filter: theme === "day"
+                ? "drop-shadow(0 0 30px rgba(143, 175, 143, 0.15))"
+                : "drop-shadow(0 0 30px rgba(155, 142, 196, 0.15))",
+              transform: `scale(${orbScale})`,
+              transition: "transform 0.9s ease-in-out",
+              animation: "liquidMorph 8s ease-in-out infinite",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 10,
+              fontSize: "32px",
+              fontWeight: 200,
+              color: "rgba(255, 255, 255, 0.95)",
+              fontFamily: "'Cormorant Garamond', serif",
+              textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            {secondsLeft}
+          </div>
+        </div>
         <p
           style={{
             fontSize: "28px",
@@ -107,7 +148,7 @@ export default function BreathingScreen({ technique, onDone, theme }) {
             minHeight: "32px",
           }}
         >
-          {currentPhase?.label || "inhale"}
+          {labels[phaseIndex]}
         </p>
 
         {/* Science fact */}
@@ -129,46 +170,20 @@ export default function BreathingScreen({ technique, onDone, theme }) {
         </p>
       </div>
 
-      {/* Bottom: Progress bar + done button */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "40px",
-          left: 0,
-          right: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "20px",
-          zIndex: 10,
-        }}
-      >
-        {/* Progress bar */}
+      {/* Bottom: Done button */}
         <div
           style={{
-            width: "180px",
-            height: "1px",
-            background: theme === "day"
-              ? "rgba(91, 141, 184, 0.15)"
-              : "rgba(123, 107, 168, 0.15)",
-            position: "relative",
-            overflow: "hidden",
+            position: "absolute",
+            bottom: "40px",
+            left: 0,
+            right: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "20px",
+            zIndex: 10,
           }}
         >
-          <motion.div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              height: "100%",
-              background: theme === "day"
-                ? "rgba(91, 141, 184, 0.6)"
-                : "rgba(123, 107, 168, 0.6)",
-              width: `${progress * 100}%`,
-            }}
-            transition={{ duration: 0.1 }}
-          />
-        </div>
 
         {/* Done button */}
         <button
