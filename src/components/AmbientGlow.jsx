@@ -14,7 +14,7 @@ export default function AmbientGlow({ breathScale = 1, isBreathing = false }) {
         }}
         transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         style={{
-          background: "radial-gradient(circle, rgba(200, 146, 42, 0.06) 0%, rgba(139, 74, 43, 0.02) 40%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(123, 107, 168, 0.06) 0%, rgba(123, 107, 168, 0.02) 40%, transparent 70%)",
           filter: "blur(60px)",
         }}
       />
@@ -27,7 +27,7 @@ export default function AmbientGlow({ breathScale = 1, isBreathing = false }) {
         }}
         transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
         style={{
-          background: "radial-gradient(circle, rgba(200, 146, 42, 0.02) 0%, transparent 60%)",
+          background: "radial-gradient(circle, rgba(123, 107, 168, 0.02) 0%, transparent 60%)",
           filter: "blur(80px)",
         }}
       />

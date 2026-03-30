@@ -13,7 +13,7 @@ export default function MainScreen({ onTap }) {
       <div className="pt-16 sm:pt-20">
         <h1
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.5em] uppercase"
-          style={{ color: "rgba(245, 236, 215, 0.3)" }}
+          style={{ color: "rgba(232, 224, 208, 0.3)" }}
         >
           PAUSE
         </h1>
@@ -30,7 +30,7 @@ export default function MainScreen({ onTap }) {
       <div className="pb-20 sm:pb-24">
         <motion.p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.45em]"
-          style={{ color: "rgba(245, 236, 215, 0.18)" }}
+          style={{ color: "rgba(232, 224, 208, 0.18)" }}
           animate={{ opacity: [0.18, 0.35, 0.18] }}
           transition={{
             duration: 5,

@@ -74,7 +74,7 @@ export default function Home() {
   return (
     <div
       className="fixed inset-0 overflow-hidden"
-      style={{ background: "#0A0806" }}
+      style={{ background: "#0D1B2A" }}
     >
       {/* Ambient glow behind orb */}
       <AmbientGlow breathScale={breathScale} isBreathing={mode === "breathing"} />

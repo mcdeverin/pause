@@ -119,8 +119,8 @@ export default function WireframeOrb({ breathScale = 1 }) {
         ctx.globalAlpha = 1;
       };
 
-      // Outer icosahedron — amber
-      drawGeo(outerGeo, "#C8922A", 0.45, 1);
+      // Outer icosahedron — lavender
+      drawGeo(outerGeo, "#7B6BA8", 0.45, 1);
       // Inner icosahedron — cream, counter-rotation handled via slightly different time offset
       const rx2 = -time * 0.00002;
       const ry2 = -time * 0.00004;
@@ -134,7 +134,7 @@ export default function WireframeOrb({ breathScale = 1 }) {
         return project(p, w, h, 500);
       });
 
-      ctx.strokeStyle = "#F5ECD7";
+      ctx.strokeStyle = "#E8E0D0";
       ctx.lineWidth = 0.4;
       ctx.globalAlpha = 0.15;
       ctx.beginPath();
