@@ -16,7 +16,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
   const colors = THEME_COLORS[theme] || THEME_COLORS.day;
   return (
     <motion.div
-      className="absolute inset-0 flex flex-col items-center justify-between z-10 pointer-events-none overflow-y-auto"
+      className="absolute inset-0 flex flex-col items-center z-10 pointer-events-none overflow-y-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -59,8 +59,9 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         aria-label="Tap to pause"
       />
 
-      {/* Tap prompt */}
-      <div className="pb-0 flex flex-col items-center min-h-screen">
+      {/* Tap prompt and support */}
+      <div className="flex-1 flex flex-col items-center justify-between w-full pt-16 pb-12 sm:pb-16 px-6">
+        {/* Tap to pause text */}
         <motion.p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.45em]"
           style={{ color: colors.text }}
@@ -74,15 +75,18 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           t a p &nbsp;&nbsp; t o &nbsp;&nbsp; p a u s e
         </motion.p>
 
+        {/* Divider */}
+        <div className="w-48 h-px my-8" style={{ background: colors.secondary, opacity: 0.3 }} />
+
         {/* Support button */}
         <button
           onClick={onSupportClick}
-          className="mt-auto mb-12 sm:mb-16 pointer-events-auto transition-opacity duration-500 hover:opacity-60"
+          className="pointer-events-auto transition-opacity duration-500 hover:opacity-60"
           style={{ color: colors.secondary }}
           aria-label="Support Always Pause"
         >
           <p className="font-cormorant text-[9px] font-light tracking-[0.3em]">
-            ♡ &nbsp; support this app
+            ♡ &nbsp; support
           </p>
         </button>
       </div>
