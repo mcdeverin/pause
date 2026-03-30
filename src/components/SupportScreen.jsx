@@ -2,8 +2,7 @@ import { motion } from "framer-motion";
 import { X } from "lucide-react";
 
 const THEME_COLORS = {
-  light: {
-    bg: "#F7F5F2",
+  day: {
     overlay: "rgba(247, 245, 242, 0.95)",
     text: "#2C2C2C",
     secondary: "#888888",
@@ -12,8 +11,7 @@ const THEME_COLORS = {
     buttonBorder: "rgba(91, 141, 184, 0.3)",
     buttonText: "#2C2C2C",
   },
-  dark: {
-    bg: "#0D1B2A",
+  night: {
     overlay: "rgba(13, 27, 42, 0.95)",
     text: "#E8E0D0",
     secondary: "#A0A0A0",

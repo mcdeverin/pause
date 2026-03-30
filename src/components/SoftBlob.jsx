@@ -1,67 +1,109 @@
 import { motion } from "framer-motion";
 
-export default function SoftBlob({ breathScale = 1, isBreathing = false }) {
+const COLORS = {
+  day: {
+    outer: "rgba(143, 175, 143, 0.25)",
+    middle: "rgba(107, 143, 113, 0.35)",
+    inner: "rgba(91, 141, 184, 0.7)",
+    center: "#3A6B9A",
+  },
+  night: {
+    outer: "rgba(46, 93, 142, 0.2)",
+    middle: "rgba(123, 107, 168, 0.3)",
+    inner: "rgba(123, 107, 168, 0.6)",
+    center: "#E8E0D0",
+  },
+};
+
+export default function SoftBlob({ breathScale = 1, isBreathing = false, theme = "day" }) {
+  const colors = COLORS[theme] || COLORS.day;
+  const baseSize = 180;
+  const outerRing = baseSize * 1.6;
+  const middleRing = baseSize * 1.2;
+  const innerCircle = baseSize * 0.7;
+
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+    <motion.div
+      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.5 }}
+    >
+      {/* Outer ring */}
       <motion.div
-        className="relative w-64 h-64 sm:w-80 sm:h-80"
+        className="absolute rounded-full"
         style={{
-          filter: "blur(0.5px)",
+          width: outerRing,
+          height: outerRing,
+          background: colors.outer,
+          filter: "blur(40px)",
         }}
-      >
-        {/* Outer soft glow layer */}
-        <motion.div
-          className="absolute inset-0 rounded-full"
-          animate={{
-            scale: breathScale * 1.15,
-            opacity: isBreathing ? 0.4 : 0.25,
-          }}
-          transition={{
-            type: "tween",
-            duration: 0.5,
-            ease: "easeInOut",
-          }}
-          style={{
-            background: `radial-gradient(circle at 40% 40%, rgba(91, 141, 184, 0.2) 0%, rgba(143, 175, 143, 0.1) 50%, transparent 80%)`,
-          }}
-        />
+        animate={
+          isBreathing
+            ? {
+                transform: [`scale(${1 - breathScale * 0.15})`, `scale(${1 + breathScale * 0.1})`],
+              }
+            : {}
+        }
+        transition={{ duration: 0.1 }}
+      />
 
-        {/* Main breathing blob */}
-        <motion.div
-          className="absolute inset-0 rounded-full"
-          animate={{
-            scale: breathScale,
-          }}
-          transition={{
-            type: "tween",
-            duration: 0.5,
-            ease: "easeInOut",
-          }}
-          style={{
-            background: `radial-gradient(circle at 35% 35%, #5B8DB8 0%, #7BA5A5 30%, #8FAF8F 65%, rgba(143, 175, 143, 0.5) 100%)`,
-            boxShadow: `0 20px 60px rgba(91, 141, 184, 0.15), inset -10px -10px 30px rgba(0, 0, 0, 0.05)`,
-            filter: "blur(1px)",
-          }}
-        />
+      {/* Middle ring */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: middleRing,
+          height: middleRing,
+          background: colors.middle,
+          filter: "blur(35px)",
+        }}
+        animate={
+          isBreathing
+            ? {
+                transform: [`scale(${1 - breathScale * 0.2})`, `scale(${1 + breathScale * 0.15})`],
+              }
+            : {}
+        }
+        transition={{ duration: 0.1 }}
+      />
 
-        {/* Subtle organic irregularity via noise effect */}
-        <motion.div
-          className="absolute inset-0 rounded-full"
-          animate={{
-            scale: breathScale,
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            type: "tween",
-            duration: 0.5,
-            ease: "easeInOut",
-          }}
-          style={{
-            background: `radial-gradient(ellipse 80% 100% at 45% 45%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`,
-            filter: "blur(2px)",
-          }}
-        />
-      </motion.div>
-    </div>
+      {/* Inner circle */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: innerCircle,
+          height: innerCircle,
+          background: colors.inner,
+          filter: "blur(20px)",
+        }}
+        animate={
+          isBreathing
+            ? {
+                transform: [`scale(${1 - breathScale * 0.25})`, `scale(${1 + breathScale * 0.2})`],
+              }
+            : {}
+        }
+        transition={{ duration: 0.1 }}
+      />
+
+      {/* Center dot */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: 12,
+          height: 12,
+          background: colors.center,
+          boxShadow: `0 0 20px ${colors.center}33`,
+        }}
+        animate={
+          isBreathing
+            ? {
+                scale: [1 - breathScale * 0.15, 1 + breathScale * 0.1],
+              }
+            : {}
+        }
+        transition={{ duration: 0.1 }}
+      />
+    </motion.div>
   );
 }

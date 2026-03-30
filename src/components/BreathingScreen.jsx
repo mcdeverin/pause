@@ -5,14 +5,14 @@ import { getTotalCycleDuration } from "../lib/breathingTechniques";
 const TOTAL_CYCLES = 4;
 
 const THEME_COLORS = {
-  light: {
+  day: {
     text: "#2C2C2C",
     secondary: "#888888",
     progressBar: "#5B8DB8",
     progressBg: "rgba(91, 141, 184, 0.15)",
     progressFill: "rgba(91, 141, 184, 0.6)",
   },
-  dark: {
+  night: {
     text: "#E8E0D0",
     secondary: "#A0A0A0",
     progressBar: "#7B6BA8",

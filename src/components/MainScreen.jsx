@@ -1,21 +1,19 @@
 import { motion } from "framer-motion";
-import { Circle } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 
 const THEME_COLORS = {
-  light: {
-    bg: "#F7F5F2",
+  day: {
     text: "#2C2C2C",
     secondary: "#888888",
   },
-  dark: {
-    bg: "#0D1B2A",
+  night: {
     text: "#E8E0D0",
     secondary: "#A0A0A0",
   },
 };
 
-export default function MainScreen({ onTap, onSupportClick, theme = "light", onToggleTheme }) {
-  const colors = THEME_COLORS[theme] || THEME_COLORS.light;
+export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme }) {
+  const colors = THEME_COLORS[theme] || THEME_COLORS.day;
   return (
     <motion.div
       className="absolute inset-0 flex flex-col items-center justify-between z-10 pointer-events-none"
@@ -36,20 +34,22 @@ export default function MainScreen({ onTap, onSupportClick, theme = "light", onT
           </h1>
         </div>
         {/* Theme toggle */}
-        <button
+        <motion.button
           onClick={onToggleTheme}
           className="pointer-events-auto p-2 rounded-full transition-all duration-300 hover:opacity-70"
           style={{
-            background: theme === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.08)",
+            background: theme === "day" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.08)",
           }}
           aria-label="Toggle theme"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <Circle
-            className="w-4 h-4"
-            style={{ color: colors.secondary }}
-            fill={theme === "light" ? "#5B8DB8" : "#7B6BA8"}
-          />
-        </button>
+          {theme === "day" ? (
+            <Sun className="w-4 h-4" style={{ color: colors.secondary }} />
+          ) : (
+            <Moon className="w-4 h-4" style={{ color: colors.secondary }} />
+          )}
+        </motion.button>
       </div>
 
       {/* Center tap area */}
