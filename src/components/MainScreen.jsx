@@ -144,7 +144,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         }}
       >
         <button
-          onClick={onSupportClick}
+          onClick={() => window.open('https://buymeacoffee.com/alwayspause', '_blank')}
           style={{
             fontSize: "10px",
             color: textColor,
