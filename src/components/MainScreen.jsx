@@ -6,52 +6,64 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
   const isDarkTheme = theme === "night";
   
   return (
-    <motion.div
-      className="relative w-screen h-screen flex flex-col items-center justify-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      className="relative"
+      style={{
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
     >
-      {/* App name - fixed at top center */}
+      {/* TOP ZONE - App name */}
       <div
         style={{
-          position: "fixed",
-          top: 0,
+          position: "absolute",
+          top: "48px",
           left: 0,
           right: 0,
-          width: "100%",
-          paddingTop: "52px",
           textAlign: "center",
           zIndex: 10,
-          display: "block",
         }}
       >
         <div
           style={{
-            fontSize: "18px",
-            letterSpacing: "6px",
+            fontSize: "13px",
+            letterSpacing: "5px",
             color: "#2C2C2C",
-            opacity: 0.6,
+            opacity: 0.5,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             margin: 0,
+            display: "block",
           }}
         >
           ALWAYS PAUSE
         </div>
       </div>
 
-      {/* Theme toggle - subtle, top right */}
+      {/* THEME TOGGLE - Top right */}
       <motion.button
         onClick={onToggleTheme}
-        className="fixed p-1 rounded-full transition-all duration-300 hover:opacity-60"
+        className="rounded-full transition-all duration-300 hover:opacity-60"
         style={{
-          top: "52px",
+          position: "absolute",
+          top: "44px",
           right: "24px",
+          width: "28px",
+          height: "28px",
           background: "transparent",
           opacity: 0.4,
           zIndex: 20,
+          border: "none",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 0,
         }}
         aria-label="Toggle theme"
         whileHover={{ scale: 1.1 }}
@@ -64,41 +76,60 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         )}
       </motion.button>
 
-      {/* Center: Orb - 200px diameter */}
-      <div style={{ width: "200px", height: "200px" }}>
-        <CrispOrb breathScale={1} isBreathing={false} theme={theme} />
-      </div>
-
-      {/* Tap to pause text - below orb with 28px gap */}
-      <motion.p
+      {/* MIDDLE ZONE - Orb centered */}
+      <motion.div
         style={{
-          fontSize: "11px",
-          letterSpacing: "2px",
-          color: "#2C2C2C",
-          opacity: 0.35,
-          fontFamily: "'Cormorant Garamond', serif",
-          fontWeight: 300,
-          margin: 0,
-          marginTop: "28px",
-          textAlign: "center",
-          wordSpacing: "normal",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 5,
         }}
-        animate={{ opacity: [0.25, 0.45, 0.25] }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
       >
-        tap to pause
-      </motion.p>
+        {/* Orb */}
+        <div style={{ width: "220px", height: "220px" }}>
+          <CrispOrb breathScale={1} isBreathing={false} theme={theme} />
+        </div>
 
-      {/* Support button - fixed at bottom center */}
+        {/* Tap to pause text - below orb */}
+        <motion.p
+          style={{
+            fontSize: "11px",
+            letterSpacing: "1.5px",
+            color: "#2C2C2C",
+            opacity: 0.35,
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            margin: 0,
+            marginTop: "24px",
+            textAlign: "center",
+            wordSpacing: "normal",
+          }}
+          animate={{ opacity: [0.25, 0.45, 0.25] }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          tap to pause
+        </motion.p>
+      </motion.div>
+
+      {/* BOTTOM ZONE - Support button */}
       <button
         onClick={onSupportClick}
-        className="fixed left-0 right-0 z-10 transition-opacity duration-500 hover:opacity-60"
+        className="transition-opacity duration-500 hover:opacity-60"
         style={{
-          bottom: "36px",
+          position: "absolute",
+          bottom: "40px",
+          left: 0,
+          right: 0,
+          zIndex: 10,
           fontSize: "10px",
           color: "#2C2C2C",
           opacity: 0.25,
@@ -107,10 +138,11 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           background: "none",
           border: "none",
           cursor: "pointer",
-          letterSpacing: "1px",
+          letterSpacing: "0.5px",
           textAlign: "center",
           margin: "0 auto",
           width: "100%",
+          padding: 0,
         }}
         aria-label="Support Always Pause"
       >
@@ -120,10 +152,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       {/* Tap overlay */}
       <button
         onClick={onTap}
-        className="fixed inset-0 cursor-pointer focus:outline-none"
+        className="fixed inset-0 cursor-pointer focus:outline-none z-0"
         style={{ background: "transparent" }}
         aria-label="Tap to pause"
       />
-    </motion.div>
+    </div>
   );
 }
