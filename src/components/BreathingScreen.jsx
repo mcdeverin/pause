@@ -17,57 +17,71 @@ export default function BreathingScreen({ technique, onDone, theme }) {
   useEffect(() => {
     let phaseIndex = 0;
     let cycleIndex = 0;
-    let currentCount = technique.phases[0].duration;
+    let secondsInCurrentPhase = 0;
+    const phaseDurations = technique.phases.map(p => p.duration);
+    const cycleDuration = getTotalCycleDuration(technique);
+    const totalSeconds = cycleDuration * TOTAL_CYCLES;
 
     const tick = () => {
-      const cycleDuration = getTotalCycleDuration(technique);
-      const totalSeconds = cycleDuration * TOTAL_CYCLES;
-      const totalElapsed = (cycleIndex * cycleDuration) + (technique.phases.slice(0, phaseIndex).reduce((sum, p) => sum + p.duration, 0)) + (technique.phases[phaseIndex].duration - currentCount);
-
-      // Update progress
+      // Calculate total elapsed
+      const totalElapsed = (cycleIndex * cycleDuration) + 
+        phaseDurations.slice(0, phaseIndex).reduce((a, b) => a + b, 0) + 
+        secondsInCurrentPhase;
       setProgress(Math.min(totalElapsed / totalSeconds, 1));
 
-      // Get current phase
-      const phase = technique.phases[phaseIndex];
-      setCurrentPhase(phase);
-      setCountdown(currentCount);
+      // Countdown: remaining seconds in phase
+      const remainingInPhase = phaseDurations[phaseIndex] - secondsInCurrentPhase;
+      setCountdown(Math.max(remainingInPhase, 1));
 
-      // Calculate orb scale based on phase and progress within phase
-      const phaseDuration = phase.duration;
-      const phaseProgress = (phaseDuration - currentCount) / phaseDuration;
+      // Set phase label
+      setCurrentPhase(technique.phases[phaseIndex]);
+
+      // Calculate orb scale based on phase type
+      const phase = technique.phases[phaseIndex];
+      const phaseDuration = phaseDurations[phaseIndex];
+      const progress = secondsInCurrentPhase / phaseDuration;
 
       let scale = 1;
       if (phase.label === "inhale") {
-        scale = 1 + phaseProgress * 0.2; // 1.0 to 1.2
-      } else if (phase.label === "hold" || phase.label === "hold2") {
-        scale = phase.label === "hold" ? 1.2 : 1;
+        scale = 1 + progress * 0.3; // 1.0 to 1.3
       } else if (phase.label === "exhale") {
-        scale = 1.2 - phaseProgress * 0.2; // 1.2 to 1.0
+        scale = 1.3 - progress * 0.3; // 1.3 to 1.0
+      } else if (phase.label === "hold") {
+        scale = 1.3; // Stay expanded
+      } else if (phase.label === "hold2") {
+        scale = 1; // Stay at rest
+      } else if (phase.label === "inhale2") {
+        // For Physiological Sigh second inhale, minor expansion
+        scale = 1 + progress * 0.1; // 1.0 to 1.1
       }
       setOrbScale(scale);
 
-      // Decrement count
-      currentCount--;
+      // Move to next second
+      secondsInCurrentPhase++;
 
-      // Move to next phase when count reaches 0
-      if (currentCount === 0) {
+      // Check if phase is complete
+      if (secondsInCurrentPhase >= phaseDuration) {
+        secondsInCurrentPhase = 0;
         phaseIndex++;
+
+        // Check if cycle is complete
         if (phaseIndex >= technique.phases.length) {
           phaseIndex = 0;
           cycleIndex++;
+
+          // Check if all cycles are complete
           if (cycleIndex >= TOTAL_CYCLES) {
             setProgress(1);
             setTimeout(onDone, 500);
             return;
           }
         }
-        currentCount = technique.phases[phaseIndex].duration;
       }
 
       timerRef.current = setTimeout(tick, 1000);
     };
 
-    timerRef.current = setTimeout(tick, 1000);
+    timerRef.current = setTimeout(tick, 0);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
