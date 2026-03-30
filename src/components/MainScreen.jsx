@@ -1,6 +1,8 @@
 import { Sun, Moon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme }) {
+  const navigate = useNavigate();
   const isDayTheme = theme === "day";
   const bgColor = isDayTheme ? "#F7F5F2" : "#0D1B2A";
   const textColor = isDayTheme ? "#2C2C2C" : "#E8E0D0";
@@ -177,30 +179,90 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         </button>
       </div>
 
-      {/* Support link - bottom center */}
-      <button
-        onClick={onSupportClick}
+      {/* Support and footer links - bottom center */}
+      <div
         style={{
           position: "absolute",
-          bottom: "36px",
+          bottom: "24px",
           left: 0,
           right: 0,
-          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "16px",
           zIndex: 10,
-          fontSize: "10px",
-          color: textColor,
-          opacity: 0.25,
-          fontFamily: "'Cormorant Garamond', serif",
-          fontWeight: 300,
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          margin: 0,
-          padding: 0,
         }}
       >
-        ♡ support this app
-      </button>
+        <button
+          onClick={onSupportClick}
+          style={{
+            fontSize: "10px",
+            color: textColor,
+            opacity: 0.25,
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            margin: 0,
+            padding: 0,
+          }}
+        >
+          ♡ support this app
+        </button>
+        <div
+          style={{
+            fontSize: "9px",
+            color: textColor,
+            opacity: 0.2,
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            display: "flex",
+            gap: "8px",
+            alignItems: "center",
+          }}
+        >
+          <button
+            onClick={() => navigate("/privacy")}
+            style={{
+              background: "none",
+              border: "none",
+              color: "inherit",
+              cursor: "pointer",
+              fontFamily: "inherit",
+              fontSize: "inherit",
+              fontWeight: "inherit",
+              padding: 0,
+              margin: 0,
+              transition: "opacity 300ms",
+            }}
+            onMouseEnter={(e) => (e.target.style.opacity = "0.5")}
+            onMouseLeave={(e) => (e.target.style.opacity = "0.2")}
+          >
+            Privacy
+          </button>
+          <span>|</span>
+          <button
+            onClick={() => navigate("/terms")}
+            style={{
+              background: "none",
+              border: "none",
+              color: "inherit",
+              cursor: "pointer",
+              fontFamily: "inherit",
+              fontSize: "inherit",
+              fontWeight: "inherit",
+              padding: 0,
+              margin: 0,
+              transition: "opacity 300ms",
+            }}
+            onMouseEnter={(e) => (e.target.style.opacity = "0.5")}
+            onMouseLeave={(e) => (e.target.style.opacity = "0.2")}
+          >
+            Terms
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
