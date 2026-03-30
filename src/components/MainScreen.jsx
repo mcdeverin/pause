@@ -23,7 +23,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
     >
       {/* Header */}
-      <div className="w-full pt-6 sm:pt-8 px-6 flex items-center justify-between">
+      <div className="relative z-20 w-full pt-6 sm:pt-8 px-6 flex items-center justify-between pointer-events-none">
         {/* App name */}
         <div>
           <h1
@@ -35,7 +35,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         </div>
         {/* Theme toggle */}
         <motion.button
-          onClick={(e) => { e.stopPropagation(); onToggleTheme(); }}
+          onClick={onToggleTheme}
           className="pointer-events-auto p-2 rounded-full transition-all duration-300 hover:opacity-70"
           style={{
             background: theme === "day" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.08)",
