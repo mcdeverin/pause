@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import Home from './pages/Home';
+import Home from './pages/Home.jsx';
 import Theme from './pages/Theme';
 // Add page imports here
 
@@ -35,7 +35,7 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Home />} /> {/* Home page */}
       <Route path="/theme" element={<Theme />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
