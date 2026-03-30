@@ -33,7 +33,7 @@ const techniques = [
   {
     name: "Extended Exhale",
     description: "Inhale 4, exhale 8",
-    science: "Doubling exhale length directly stimulates the vagus nerve, shifting your body from fight-or-flight to rest-and-digest instantly."
+    science: "Doubling exhale length directly stimulates the vagus nerve, shifting your body from fight-or-flight to rest-and-digest instantly.",
     phases: [
       { label: "inhale", duration: 4000 },
       { label: "exhale", duration: 8000 },

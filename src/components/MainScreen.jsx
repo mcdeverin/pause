@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function MainScreen({ onTap }) {
+export default function MainScreen({ onTap, onSupportClick }) {
   return (
     <motion.div
       className="absolute inset-0 flex flex-col items-center justify-between z-10 pointer-events-none"
@@ -40,7 +40,16 @@ export default function MainScreen({ onTap }) {
         >
           t a p &nbsp;&nbsp; t o &nbsp;&nbsp; p a u s e
         </motion.p>
+
+        {/* Support button */}
+        <button
+          onClick={onSupportClick}
+          className="mt-12 pointer-events-auto transition-opacity duration-500 hover:opacity-40"
+          style={{ color: "rgba(232, 224, 208, 0.12)" }}
+          aria-label="Support Always Pause"
+        >
+          <p className="font-cormorant text-[9px] font-light tracking-[0.3em]">
+            ♡ &nbsp; support this app
+          </p>
+        </button>
       </div>
-    </motion.div>
-  );
-}

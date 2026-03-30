@@ -4,12 +4,14 @@ import WireframeOrb from "../components/WireframeOrb";
 import AmbientGlow from "../components/AmbientGlow";
 import MainScreen from "../components/MainScreen";
 import BreathingScreen from "../components/BreathingScreen";
+import SupportScreen from "../components/SupportScreen";
 import { getRandomTechnique } from "../lib/breathingTechniques";
 
 export default function Home() {
   const [mode, setMode] = useState("idle"); // "idle" | "breathing"
   const [technique, setTechnique] = useState(null);
   const [breathScale, setBreathScale] = useState(1);
+  const [showSupport, setShowSupport] = useState(false);
   const animRef = useRef(null);
 
   const startBreathing = useCallback(() => {
@@ -85,7 +87,7 @@ export default function Home() {
       {/* UI overlays */}
       <AnimatePresence mode="wait">
         {mode === "idle" && (
-          <MainScreen key="main" onTap={startBreathing} />
+          <MainScreen key="main" onTap={startBreathing} onSupportClick={() => setShowSupport(true)} />
         )}
         {mode === "breathing" && technique && (
           <BreathingScreen
@@ -93,6 +95,13 @@ export default function Home() {
             technique={technique}
             onDone={stopBreathing}
           />
+        )}
+      </AnimatePresence>
+
+      {/* Support overlay */}
+      <AnimatePresence>
+        {showSupport && (
+          <SupportScreen key="support" onClose={() => setShowSupport(false)} />
         )}
       </AnimatePresence>
     </div>
