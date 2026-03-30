@@ -24,7 +24,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "48px",
+          top: "90px",
           left: 0,
           right: 0,
           textAlign: "center",
@@ -51,7 +51,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         onClick={onToggleTheme}
         style={{
           position: "absolute",
-          top: "44px",
+          top: "16px",
           right: "24px",
           background: "none",
           border: "none",
