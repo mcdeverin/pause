@@ -230,7 +230,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             maxWidth: "260px",
             lineHeight: 1.9,
             margin: 0,
-            opacity: 0.4,
+            opacity: theme === "day" ? 0.7 : 0.6,
           }}
         >
           {technique.science}
