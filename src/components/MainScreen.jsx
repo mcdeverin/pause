@@ -60,7 +60,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       />
 
       {/* Tap prompt */}
-      <div className="pb-20 sm:pb-24 flex flex-col items-center">
+      <div className="pb-0 flex flex-col items-center">
         <motion.p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.45em]"
           style={{ color: colors.text }}
