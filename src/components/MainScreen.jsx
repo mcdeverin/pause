@@ -24,6 +24,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           paddingTop: "52px",
           textAlign: "center",
           zIndex: 10,
+          display: "block",
         }}
       >
         <div
@@ -35,37 +36,40 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             margin: 0,
-            display: "block",
           }}
         >
           ALWAYS PAUSE
         </div>
       </div>
 
-      {/* Theme toggle - top right */}
+      {/* Theme toggle - subtle, top right */}
       <motion.button
         onClick={onToggleTheme}
-        className="absolute top-8 right-6 p-2 rounded-full transition-all duration-300 hover:opacity-70 z-20"
+        className="fixed p-1 rounded-full transition-all duration-300 hover:opacity-60"
         style={{
-          background: isDarkTheme ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)",
+          top: "52px",
+          right: "24px",
+          background: "transparent",
+          opacity: 0.4,
+          zIndex: 20,
         }}
         aria-label="Toggle theme"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
       >
         {isDarkTheme ? (
-          <Moon className="w-4 h-4" style={{ color: "#888888" }} />
+          <Moon className="w-6 h-6" style={{ color: "#888888" }} />
         ) : (
-          <Sun className="w-4 h-4" style={{ color: "#888888" }} />
+          <Sun className="w-6 h-6" style={{ color: "#888888" }} />
         )}
       </motion.button>
 
-      {/* Center: Orb */}
-      <div style={{ width: "280px", height: "280px" }}>
+      {/* Center: Orb - 200px diameter */}
+      <div style={{ width: "200px", height: "200px" }}>
         <CrispOrb breathScale={1} isBreathing={false} theme={theme} />
       </div>
 
-      {/* Tap to pause text - below orb */}
+      {/* Tap to pause text - below orb with 28px gap */}
       <motion.p
         style={{
           fontSize: "11px",
@@ -74,7 +78,8 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           opacity: 0.35,
           fontFamily: "'Cormorant Garamond', serif",
           fontWeight: 300,
-          margin: "32px 0 0 0",
+          margin: 0,
+          marginTop: "28px",
           textAlign: "center",
           wordSpacing: "normal",
         }}
@@ -91,8 +96,9 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       {/* Support button - fixed at bottom center */}
       <button
         onClick={onSupportClick}
-        className="fixed bottom-8 left-0 right-0 z-10 transition-opacity duration-500 hover:opacity-60"
+        className="fixed left-0 right-0 z-10 transition-opacity duration-500 hover:opacity-60"
         style={{
+          bottom: "36px",
           fontSize: "10px",
           color: "#2C2C2C",
           opacity: 0.25,
