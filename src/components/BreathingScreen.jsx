@@ -119,7 +119,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
       <div
         style={{
           position: "absolute",
-          top: "48px",
+          top: "52px",
           left: 0,
           right: 0,
           textAlign: "center",
@@ -129,7 +129,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         <p
           style={{
             fontSize: "13px",
-            letterSpacing: "5px",
+            letterSpacing: "0.35em",
             color: textColor,
             opacity: 0.75,
             fontFamily: "'Cormorant Garamond', serif",
@@ -151,7 +151,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "24px",
+          gap: "60px",
           zIndex: 5,
         }}
       >
@@ -173,15 +173,13 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               width: "100%",
               height: "100%",
               background: theme === "day"
-                ? "radial-gradient(circle at 35% 35%, rgba(91, 141, 184, 0.9) 0%, rgba(143, 175, 143, 0.7) 60%, rgba(143, 175, 143, 0.5) 100%)"
-                : "radial-gradient(circle at 35% 35%, rgba(74, 91, 140, 0.9) 0%, rgba(155, 142, 196, 0.7) 60%, rgba(155, 142, 196, 0.5) 100%)",
+                ? "radial-gradient(circle at 35% 35%, #4A8FBF 0%, #6BA888 100%)"
+                : "radial-gradient(circle at 35% 35%, #5B4E8C 0%, #7B6AAE 100%)",
               borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
               boxShadow: theme === "day"
-                ? "0 0 60px rgba(91, 141, 184, 0.25), inset 0 0 40px rgba(255, 255, 255, 0.1)"
-                : "0 0 60px rgba(74, 91, 140, 0.25), inset 0 0 40px rgba(255, 255, 255, 0.05)",
-              filter: theme === "day"
-                ? "drop-shadow(0 0 30px rgba(143, 175, 143, 0.15))"
-                : "drop-shadow(0 0 30px rgba(155, 142, 196, 0.15))",
+                ? "0 0 40px rgba(74, 143, 191, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.08)"
+                : "0 0 40px rgba(91, 78, 140, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.03)",
+              filter: "none",
               transform: `scale(${orbScale})`,
               transition: "transform 0.95s ease-in-out",
               animation: "liquidMorph 8s ease-in-out infinite",
@@ -207,7 +205,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         {/* Phase label */}
         <p
           style={{
-            fontSize: "22px",
+            fontSize: "28px",
             color: textColor,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
@@ -216,6 +214,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             textAlign: "center",
             minHeight: "32px",
             opacity: 0.85,
+            letterSpacing: "0.15em",
           }}
         >
           {labels[phaseIndex]}
@@ -231,7 +230,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             fontWeight: 300,
             textAlign: "center",
             maxWidth: "280px",
-            lineHeight: 1.6,
+            lineHeight: 1.8,
             margin: 0,
             opacity: 0.55,
           }}
@@ -260,8 +259,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             width: "180px",
             height: "1px",
             background: theme === "day"
-              ? "rgba(91, 141, 184, 0.15)"
-              : "rgba(123, 107, 168, 0.15)",
+              ? "rgba(74, 143, 191, 0.2)"
+              : "rgba(91, 78, 140, 0.2)",
             position: "relative",
             overflow: "hidden",
           }}
@@ -273,8 +272,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               left: 0,
               height: "100%",
               background: theme === "day"
-                ? "rgba(91, 141, 184, 0.6)"
-                : "rgba(123, 107, 168, 0.6)",
+                ? "rgba(74, 143, 191, 0.5)"
+                : "rgba(91, 78, 140, 0.5)",
               width: `${progress * 100}%`,
             }}
             transition={{ duration: 0.1 }}
@@ -285,11 +284,12 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         <button
           onClick={onDone}
           style={{
-            fontSize: "10px",
+            fontSize: "11px",
             color: textColor,
             opacity: 0.35,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
+            letterSpacing: "0.1em",
             background: "none",
             border: "none",
             cursor: "pointer",

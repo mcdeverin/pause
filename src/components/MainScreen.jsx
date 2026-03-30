@@ -38,10 +38,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         <p
           style={{
             fontSize: "13px",
-            letterSpacing: "5px",
+            letterSpacing: "0.4em",
             fontWeight: 300,
             color: textColor,
-            opacity: 0.7,
+            opacity: 0.6,
             fontFamily: "'Cormorant Garamond', serif",
             margin: 0,
           }}
@@ -111,11 +111,12 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         <button
           onClick={onTap}
           style={{
-            fontSize: "11px",
-            letterSpacing: "1.5px",
+            fontSize: "13px",
+            letterSpacing: "0.1em",
             color: textColor,
-            opacity: 0.45,
+            opacity: 0.4,
             fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: "italic",
             fontWeight: 300,
             background: "none",
             border: "none",
@@ -146,9 +147,9 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         <button
           onClick={() => window.open('https://buymeacoffee.com/alwayspause', '_blank')}
           style={{
-            fontSize: "10px",
+            fontSize: "9px",
             color: textColor,
-            opacity: 0.45,
+            opacity: 0.25,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             background: "none",
@@ -162,9 +163,9 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         </button>
         <div
           style={{
-            fontSize: "10px",
+            fontSize: "9px",
             color: textColor,
-            opacity: 0.45,
+            opacity: 0.25,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             display: "flex",
