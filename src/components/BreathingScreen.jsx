@@ -4,8 +4,10 @@ import { motion } from "framer-motion";
 const TOTAL_CYCLES = 4;
 
 export default function BreathingScreen({ technique, onDone, theme }) {
-  const phases = Array.isArray(technique.phases) ? technique.phases : technique.phases.split(',').map(Number);
-  const labels = Array.isArray(technique.phaseLabels) ? technique.phaseLabels : technique.phaseLabels.split(',').map(s => s.trim());
+  if (!technique || !technique.phases || !technique.phaseLabels) return null;
+  
+  const phases = typeof technique.phases === 'string' ? technique.phases.split(',').map(Number) : technique.phases;
+  const labels = typeof technique.phaseLabels === 'string' ? technique.phaseLabels.split(',') : technique.phaseLabels;
 
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(phases[0]);
