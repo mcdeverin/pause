@@ -88,7 +88,7 @@ export default function BreathingScreen({ technique, onDone }) {
       <div className="pt-16 sm:pt-20 text-center">
         <p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.35em] uppercase"
-          style={{ color: "#2E5D8E" }}
+          style={{ color: "#1C1C1E" }}
         >
           {technique.name}
         </p>
@@ -101,7 +101,7 @@ export default function BreathingScreen({ technique, onDone }) {
           <motion.p
             key={currentPhase.label + currentPhaseIndex}
             className="font-cormorant text-xl sm:text-2xl font-light tracking-[0.3em]"
-            style={{ color: "rgba(232, 224, 208, 0.6)" }}
+            style={{ color: "#1C1C1E" }}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
@@ -114,7 +114,7 @@ export default function BreathingScreen({ technique, onDone }) {
         {/* Science fact */}
         <motion.p
           className="font-cormorant italic text-[10px] sm:text-[11px] font-light max-w-[260px] sm:max-w-[300px] text-center leading-relaxed px-6"
-          style={{ color: "rgba(232, 224, 208, 0.12)" }}
+          style={{ color: "#6B6B6B" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 3, delay: 2 }}
@@ -126,11 +126,11 @@ export default function BreathingScreen({ technique, onDone }) {
       {/* Bottom: progress line + done */}
       <div className="pb-12 sm:pb-16 w-full flex flex-col items-center gap-6 pointer-events-auto">
         {/* Progress line */}
-        <div className="w-40 sm:w-52 h-px relative overflow-hidden" style={{ background: "rgba(245, 236, 215, 0.06)" }}>
+        <div className="w-40 sm:w-52 h-px relative overflow-hidden" style={{ background: "rgba(46, 93, 142, 0.15)" }}>
           <motion.div
             className="absolute top-0 left-0 h-full"
             style={{
-              background: "rgba(46, 93, 142, 0.4)",
+              background: "rgba(46, 93, 142, 0.6)",
               width: `${progress * 100}%`,
             }}
             transition={{ duration: 0.1 }}
@@ -141,7 +141,7 @@ export default function BreathingScreen({ technique, onDone }) {
         <button
           onClick={onDone}
           className="font-cormorant text-[10px] font-light tracking-[0.35em] cursor-pointer transition-colors duration-700 hover:opacity-60"
-          style={{ color: "rgba(232, 224, 208, 0.15)" }}
+          style={{ color: "#1C1C1E" }}
         >
           · &nbsp;done&nbsp; ·
         </button>

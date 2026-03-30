@@ -13,7 +13,7 @@ export default function MainScreen({ onTap, onSupportClick }) {
       <div className="pt-16 sm:pt-20">
         <h1
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.5em] uppercase"
-          style={{ color: "rgba(232, 224, 208, 0.3)" }}
+          style={{ color: "#1C1C1E" }}
         >
           PAUSE
         </h1>
@@ -30,8 +30,8 @@ export default function MainScreen({ onTap, onSupportClick }) {
       <div className="pb-20 sm:pb-24">
         <motion.p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.45em]"
-          style={{ color: "rgba(232, 224, 208, 0.18)" }}
-          animate={{ opacity: [0.18, 0.35, 0.18] }}
+          style={{ color: "#1C1C1E" }}
+          animate={{ opacity: [0.5, 0.7, 0.5] }}
           transition={{
             duration: 5,
             repeat: Infinity,
@@ -44,8 +44,8 @@ export default function MainScreen({ onTap, onSupportClick }) {
         {/* Support button */}
         <button
           onClick={onSupportClick}
-          className="mt-12 pointer-events-auto transition-opacity duration-500 hover:opacity-40"
-          style={{ color: "rgba(232, 224, 208, 0.12)" }}
+          className="mt-12 pointer-events-auto transition-opacity duration-500 hover:opacity-60"
+          style={{ color: "#6B6B6B" }}
           aria-label="Support Always Pause"
         >
           <p className="font-cormorant text-[9px] font-light tracking-[0.3em]">
