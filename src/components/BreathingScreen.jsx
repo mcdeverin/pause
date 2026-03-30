@@ -10,84 +10,69 @@ export default function BreathingScreen({ technique, onDone, theme }) {
   const [countdown, setCountdown] = useState(technique.phases[0].duration);
   const [orbScale, setOrbScale] = useState(1);
   const [progress, setProgress] = useState(0);
-  const totalDuration = getTotalCycleDuration(technique) * TOTAL_CYCLES;
   const timerRef = useRef(null);
-  const startTimeRef = useRef(Date.now());
 
   const textColor = theme === "day" ? "#2C2C2C" : "#E8E0D0";
 
   useEffect(() => {
+    let phaseIndex = 0;
+    let cycleIndex = 0;
+    let currentCount = technique.phases[0].duration;
+
     const tick = () => {
-      const elapsed = Date.now() - startTimeRef.current;
-      const totalMs = totalDuration * 1000;
+      const cycleDuration = getTotalCycleDuration(technique);
+      const totalSeconds = cycleDuration * TOTAL_CYCLES;
+      const totalElapsed = (cycleIndex * cycleDuration) + (technique.phases.slice(0, phaseIndex).reduce((sum, p) => sum + p.duration, 0)) + (technique.phases[phaseIndex].duration - currentCount);
 
-      // Overall progress
-      setProgress(Math.min(elapsed / totalMs, 1));
+      // Update progress
+      setProgress(Math.min(totalElapsed / totalSeconds, 1));
 
-      // Determine current cycle and phase
-      const cycleDurationMs = getTotalCycleDuration(technique) * 1000;
-      const cycleElapsed = elapsed % cycleDurationMs;
-      
-      let phaseElapsed = cycleElapsed;
-      let phaseIndex = 0;
-
-      for (let i = 0; i < technique.phases.length; i++) {
-        const phaseDurationMs = technique.phases[i].duration * 1000;
-        if (phaseElapsed < phaseDurationMs) {
-          phaseIndex = i;
-          break;
-        }
-        phaseElapsed -= phaseDurationMs;
-      }
-
+      // Get current phase
       const phase = technique.phases[phaseIndex];
-      const phaseDurationMs = phase.duration * 1000;
-      const phaseProgress = Math.min(phaseElapsed / phaseDurationMs, 1);
-
-      // Countdown: display remaining seconds in this phase
-      const remainingSeconds = Math.ceil((phaseDurationMs - phaseElapsed) / 1000);
-      setCountdown(Math.max(remainingSeconds, 1));
-
-      // Phase text
       setCurrentPhase(phase);
+      setCountdown(currentCount);
 
-      // Orb scale: smooth easing during inhale/exhale, static during hold
+      // Calculate orb scale based on phase and progress within phase
+      const phaseDuration = phase.duration;
+      const phaseProgress = (phaseDuration - currentCount) / phaseDuration;
+
       let scale = 1;
       if (phase.label === "inhale") {
-        // Easing function for smooth expansion
-        const eased = phaseProgress < 0.5
-          ? 2 * phaseProgress * phaseProgress
-          : 1 - Math.pow(-2 * phaseProgress + 2, 2) / 2;
-        scale = 1 + eased * 0.2; // 1.0 to 1.2
-      } else if (phase.label === "hold") {
-        scale = 1.2; // Stay expanded
+        scale = 1 + phaseProgress * 0.2; // 1.0 to 1.2
+      } else if (phase.label === "hold" || phase.label === "hold2") {
+        scale = phase.label === "hold" ? 1.2 : 1;
       } else if (phase.label === "exhale") {
-        // Easing function for smooth contraction
-        const eased = phaseProgress < 0.5
-          ? 2 * phaseProgress * phaseProgress
-          : 1 - Math.pow(-2 * phaseProgress + 2, 2) / 2;
-        scale = 1.2 - eased * 0.2; // 1.2 to 1.0
-      } else if (phase.label === "hold2") {
-        scale = 1; // Stay at rest
+        scale = 1.2 - phaseProgress * 0.2; // 1.2 to 1.0
       }
       setOrbScale(scale);
 
-      // Check if finished
-      if (elapsed >= totalMs) {
-        setProgress(1);
-        setTimeout(onDone, 500);
-        return;
+      // Decrement count
+      currentCount--;
+
+      // Move to next phase when count reaches 0
+      if (currentCount === 0) {
+        phaseIndex++;
+        if (phaseIndex >= technique.phases.length) {
+          phaseIndex = 0;
+          cycleIndex++;
+          if (cycleIndex >= TOTAL_CYCLES) {
+            setProgress(1);
+            setTimeout(onDone, 500);
+            return;
+          }
+        }
+        currentCount = technique.phases[phaseIndex].duration;
       }
 
-      timerRef.current = setTimeout(tick, 100); // Update 10x per second for smooth visual
+      timerRef.current = setTimeout(tick, 1000);
     };
 
-    timerRef.current = setTimeout(tick, 100);
+    timerRef.current = setTimeout(tick, 1000);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [technique, totalDuration, onDone]);
+  }, [technique, onDone]);
 
   return (
     <motion.div
