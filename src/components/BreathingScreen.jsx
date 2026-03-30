@@ -3,13 +3,34 @@ import { motion } from "framer-motion";
 
 const TOTAL_CYCLES = 4;
 
+const DEFAULT_TECHNIQUE = {
+  name: "Box Breathing",
+  phases: [4, 4, 4, 4],
+  phaseLabels: ["inhale", "hold", "exhale", "hold"],
+  science: "Used by Navy SEALs to control stress under pressure.",
+};
+
 export default function BreathingScreen({ technique, onDone, theme }) {
-  if (!technique) return null;
-  
-  const phases = Array.isArray(technique.phases) ? technique.phases : (typeof technique.phases === 'string' ? technique.phases.split(',').map(Number) : []);
-  const labels = Array.isArray(technique.phaseLabels) ? technique.phaseLabels : (typeof technique.phaseLabels === 'string' ? technique.phaseLabels.split(',') : []);
-  
-  if (!phases.length || !labels.length) return null;
+  try {
+    const activeTechnique = technique || DEFAULT_TECHNIQUE;
+    
+    const phases = Array.isArray(activeTechnique.phases) ? activeTechnique.phases : (typeof activeTechnique.phases === 'string' ? activeTechnique.phases.split(',').map(Number) : []);
+    const labels = Array.isArray(activeTechnique.phaseLabels) ? activeTechnique.phaseLabels : (typeof activeTechnique.phaseLabels === 'string' ? activeTechnique.phaseLabels.split(',') : []);
+    
+    if (!phases.length || !labels.length) {
+      return <BreathingScreenContent technique={DEFAULT_TECHNIQUE} onDone={onDone} theme={theme} />;
+    }
+    
+    return <BreathingScreenContent technique={activeTechnique} phases={phases} labels={labels} onDone={onDone} theme={theme} />;
+  } catch (error) {
+    console.error('BreathingScreen error:', error);
+    return <BreathingScreenContent technique={DEFAULT_TECHNIQUE} onDone={onDone} theme={theme} />;
+  }
+}
+
+function BreathingScreenContent({ technique, phases: propsPhases, labels: propsLabels, onDone, theme }) {
+  const phases = propsPhases || (Array.isArray(technique.phases) ? technique.phases : (typeof technique.phases === 'string' ? technique.phases.split(',').map(Number) : []));
+  const labels = propsLabels || (Array.isArray(technique.phaseLabels) ? technique.phaseLabels : (typeof technique.phaseLabels === 'string' ? technique.phaseLabels.split(',') : []));
 
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(phases[0]);
