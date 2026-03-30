@@ -1,50 +1,90 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import LiquidOrb from "./LiquidOrb";
+
+const TOTAL_CYCLES = 4;
 
 export default function BreathingScreen({ technique, onDone, theme }) {
-  const [phases] = useState(() => technique.phases.split(',').map(Number));
-  const [labels] = useState(() => technique.phaseLabels.split(','));
+  const phases = technique.phases.split(',').map(Number);
+  const labels = technique.phaseLabels.split(',').map(s => s.trim());
+
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(phases[0]);
   const [orbScale, setOrbScale] = useState(1.0);
+  const [progress, setProgress] = useState(0);
+
+  const timerRef = useRef(null);
+  const phaseIndexRef = useRef(0);
+  const secondsLeftRef = useRef(phases[0]);
+  const cycleCountRef = useRef(0);
+  const totalSecondsRef = useRef(phases.reduce((a, b) => a + b, 0) * TOTAL_CYCLES);
+  const elapsedSecondsRef = useRef(0);
 
   const textColor = theme === "day" ? "#2C2C2C" : "#E8E0D0";
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSecondsLeft(prev => {
-        if (prev <= 1) {
-          // Move to next phase
-          setPhaseIndex(prevPhase => {
-            const nextPhase = (prevPhase + 1) % phases.length;
-            const nextLabel = labels[nextPhase].toLowerCase();
-            if (nextLabel.includes('inhale')) setOrbScale(1.0);
-            else if (nextLabel.includes('exhale')) setOrbScale(1.3);
-            else setOrbScale(1.3);
-            return nextPhase;
-          });
-          return phases[(phaseIndex + 1) % phases.length];
+    timerRef.current = setInterval(() => {
+      secondsLeftRef.current -= 1;
+
+      // Get current phase info
+      const currentPhaseIdx = phaseIndexRef.current;
+      const currentLabel = labels[currentPhaseIdx].toLowerCase();
+      const currentDuration = phases[currentPhaseIdx];
+      const secondsElapsed = currentDuration - secondsLeftRef.current;
+      const phaseProgress = secondsElapsed / currentDuration;
+
+      // Calculate scale
+      let newScale = 1.0;
+      if (currentLabel.includes('inhale')) {
+        newScale = 1.0 + 0.35 * phaseProgress;
+      } else if (currentLabel.includes('exhale')) {
+        newScale = 1.35 - 0.35 * phaseProgress;
+      } else if (currentLabel.includes('hold')) {
+        const prevLabel = currentPhaseIdx > 0 ? labels[currentPhaseIdx - 1].toLowerCase() : '';
+        newScale = prevLabel.includes('inhale') ? 1.35 : 1.0;
+      }
+
+      setOrbScale(newScale);
+      setSecondsLeft(secondsLeftRef.current);
+
+      // Track overall progress
+      elapsedSecondsRef.current += 1;
+      const overallProgress = Math.min(elapsedSecondsRef.current / totalSecondsRef.current, 1);
+      setProgress(overallProgress);
+
+      // Advance phase when count reaches 0
+      if (secondsLeftRef.current <= 0) {
+        const nextPhaseIdx = (currentPhaseIdx + 1) % phases.length;
+        
+        // Check if we've completed a full cycle
+        if (nextPhaseIdx === 0) {
+          cycleCountRef.current += 1;
+          
+          // End after 4 cycles
+          if (cycleCountRef.current >= TOTAL_CYCLES) {
+            clearInterval(timerRef.current);
+            setProgress(1);
+            setTimeout(onDone, 500);
+            return;
+          }
         }
-        // Mid-phase scale update
-        const currentLabel = labels[phaseIndex].toLowerCase();
-        const phaseDuration = phases[phaseIndex];
-        const elapsed = phaseDuration - prev + 1;
-        const progress = elapsed / phaseDuration;
-        if (currentLabel.includes('inhale')) {
-          setOrbScale(1.0 + 0.35 * progress);
-        } else if (currentLabel.includes('exhale')) {
-          setOrbScale(1.35 - 0.35 * progress);
-        }
-        return prev - 1;
-      });
+
+        phaseIndexRef.current = nextPhaseIdx;
+        secondsLeftRef.current = phases[nextPhaseIdx];
+        setPhaseIndex(nextPhaseIdx);
+      }
     }, 1000);
-    return () => clearInterval(interval);
-  }, [phaseIndex, phases, labels, onDone]);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [phases, labels, onDone]);
 
   return (
     <motion.div
       className="relative w-screen h-screen overflow-hidden flex flex-col items-center justify-center"
+      style={{
+        background: theme === "day" ? "#F7F5F2" : "#0D1B2A",
+      }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -76,7 +116,7 @@ export default function BreathingScreen({ technique, onDone, theme }) {
         </p>
       </div>
 
-      {/* Center: Orb with countdown and phase text */}
+      {/* Center: Blob with countdown and phase label */}
       <div
         style={{
           position: "absolute",
@@ -90,7 +130,7 @@ export default function BreathingScreen({ technique, onDone, theme }) {
           zIndex: 5,
         }}
       >
-        {/* Blob with countdown */}
+        {/* Blob container */}
         <div
           style={{
             position: "relative",
@@ -101,11 +141,12 @@ export default function BreathingScreen({ technique, onDone, theme }) {
             justifyContent: "center",
           }}
         >
+          {/* Animated blob */}
           <div
             style={{
               position: "absolute",
-              width: "260px",
-              height: "260px",
+              width: "100%",
+              height: "100%",
               background: theme === "day"
                 ? "radial-gradient(circle at 35% 35%, rgba(91, 141, 184, 0.9) 0%, rgba(143, 175, 143, 0.7) 60%, rgba(143, 175, 143, 0.5) 100%)"
                 : "radial-gradient(circle at 35% 35%, rgba(74, 91, 140, 0.9) 0%, rgba(155, 142, 196, 0.7) 60%, rgba(155, 142, 196, 0.5) 100%)",
@@ -117,15 +158,17 @@ export default function BreathingScreen({ technique, onDone, theme }) {
                 ? "drop-shadow(0 0 30px rgba(143, 175, 143, 0.15))"
                 : "drop-shadow(0 0 30px rgba(155, 142, 196, 0.15))",
               transform: `scale(${orbScale})`,
-              transition: "transform 0.9s ease-in-out",
+              transition: "transform 0.95s ease-in-out",
               animation: "liquidMorph 8s ease-in-out infinite",
             }}
           />
+
+          {/* Countdown number */}
           <div
             style={{
               position: "absolute",
               zIndex: 10,
-              fontSize: "32px",
+              fontSize: "48px",
               fontWeight: 200,
               color: "rgba(255, 255, 255, 0.95)",
               fontFamily: "'Cormorant Garamond', serif",
@@ -135,6 +178,8 @@ export default function BreathingScreen({ technique, onDone, theme }) {
             {secondsLeft}
           </div>
         </div>
+
+        {/* Phase label */}
         <p
           style={{
             fontSize: "28px",
@@ -169,20 +214,46 @@ export default function BreathingScreen({ technique, onDone, theme }) {
         </p>
       </div>
 
-      {/* Bottom: Done button */}
+      {/* Bottom: Progress bar + done button */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "40px",
+          left: 0,
+          right: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "20px",
+          zIndex: 10,
+        }}
+      >
+        {/* Progress bar */}
         <div
           style={{
-            position: "absolute",
-            bottom: "40px",
-            left: 0,
-            right: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "20px",
-            zIndex: 10,
+            width: "180px",
+            height: "1px",
+            background: theme === "day"
+              ? "rgba(91, 141, 184, 0.15)"
+              : "rgba(123, 107, 168, 0.15)",
+            position: "relative",
+            overflow: "hidden",
           }}
         >
+          <motion.div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: "100%",
+              background: theme === "day"
+                ? "rgba(91, 141, 184, 0.6)"
+                : "rgba(123, 107, 168, 0.6)",
+              width: `${progress * 100}%`,
+            }}
+            transition={{ duration: 0.1 }}
+          />
+        </div>
 
         {/* Done button */}
         <button
