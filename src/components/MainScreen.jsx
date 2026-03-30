@@ -53,3 +53,6 @@ export default function MainScreen({ onTap, onSupportClick }) {
           </p>
         </button>
       </div>
+    </motion.div>
+  );
+}
