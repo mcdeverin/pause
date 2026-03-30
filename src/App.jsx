@@ -6,6 +6,8 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home.jsx';
+import Privacy from './pages/Privacy.jsx';
+import Terms from './pages/Terms.jsx';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -35,6 +37,8 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
