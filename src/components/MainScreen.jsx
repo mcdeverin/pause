@@ -30,6 +30,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           top: "90px",
           left: 0,
           right: 0,
+          width: "100%",
           textAlign: "center",
           zIndex: 10,
         }}
@@ -40,7 +41,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             letterSpacing: "5px",
             fontWeight: 300,
             color: textColor,
-            opacity: 0.55,
+            opacity: 0.7,
             fontFamily: "'Cormorant Garamond', serif",
             margin: 0,
           }}
@@ -111,9 +112,9 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           onClick={onTap}
           style={{
             fontSize: "11px",
-            letterSpacing: "2px",
+            letterSpacing: "1.5px",
             color: textColor,
-            opacity: 0.35,
+            opacity: 0.45,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             background: "none",
@@ -147,7 +148,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "10px",
             color: textColor,
-            opacity: 0.25,
+            opacity: 0.35,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             background: "none",
@@ -159,58 +160,6 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         >
           ♡ support this app
         </button>
-        <div
-          style={{
-            fontSize: "9px",
-            color: textColor,
-            opacity: 0.2,
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 300,
-            display: "flex",
-            gap: "8px",
-            alignItems: "center",
-          }}
-        >
-          <button
-            onClick={() => navigate("/privacy")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "inherit",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              fontSize: "inherit",
-              fontWeight: "inherit",
-              padding: 0,
-              margin: 0,
-              transition: "opacity 300ms",
-            }}
-            onMouseEnter={(e) => (e.target.style.opacity = "0.5")}
-            onMouseLeave={(e) => (e.target.style.opacity = "0.2")}
-          >
-            Privacy
-          </button>
-          <span>|</span>
-          <button
-            onClick={() => navigate("/terms")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "inherit",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              fontSize: "inherit",
-              fontWeight: "inherit",
-              padding: 0,
-              margin: 0,
-              transition: "opacity 300ms",
-            }}
-            onMouseEnter={(e) => (e.target.style.opacity = "0.5")}
-            onMouseLeave={(e) => (e.target.style.opacity = "0.2")}
-          >
-            Terms
-          </button>
-        </div>
       </div>
     </div>
   );
