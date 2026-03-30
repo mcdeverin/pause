@@ -113,8 +113,7 @@ export default function BreathingScreen({ technique, onDone, theme }) {
       </div>
 
       {/* Phase label — center */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-32 sm:gap-40">
-        <div className="h-8" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.p
             key={currentPhase.label + currentPhaseIndex}
@@ -128,8 +127,10 @@ export default function BreathingScreen({ technique, onDone, theme }) {
             {currentPhase.label}
           </motion.p>
         </AnimatePresence>
+      </div>
 
-        {/* Science fact */}
+      {/* Science fact — bottom */}
+      <div className="pb-40 sm:pb-48">
         <motion.p
           className="font-cormorant italic text-[10px] sm:text-[11px] font-light max-w-[260px] sm:max-w-[300px] text-center leading-relaxed px-6"
           style={{ color: colors.secondary }}
