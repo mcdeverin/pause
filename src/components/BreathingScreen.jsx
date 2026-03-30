@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { getTotalCycleDuration } from "../lib/breathingTechniques";
+import LiquidOrb from "./LiquidOrb";
 
 const TOTAL_CYCLES = 4;
 
@@ -136,87 +137,8 @@ export default function BreathingScreen({ technique, onDone, theme }) {
           zIndex: 5,
         }}
       >
-        {/* Orb container */}
-        <div
-          style={{
-            position: "relative",
-            width: "220px",
-            height: "220px",
-            transform: `scale(${orbScale})`,
-            transition: "transform 0.1s ease-out",
-          }}
-        >
-          {/* Outer circle */}
-          <div
-            style={{
-              position: "absolute",
-              width: "220px",
-              height: "220px",
-              borderRadius: "50%",
-              background: theme === "day" ? "#8FAF8F" : "#7B6BA8",
-              opacity: 0.2,
-              top: 0,
-              left: 0,
-            }}
-          />
-          {/* Middle circle */}
-          <div
-            style={{
-              position: "absolute",
-              width: "160px",
-              height: "160px",
-              borderRadius: "50%",
-              background: theme === "day" ? "#6B8F71" : "#7B6BA8",
-              opacity: 0.3,
-              top: "30px",
-              left: "30px",
-            }}
-          />
-          {/* Inner circle */}
-          <div
-            style={{
-              position: "absolute",
-              width: "100px",
-              height: "100px",
-              borderRadius: "50%",
-              background: theme === "day" ? "#5B8DB8" : "#7B6BA8",
-              opacity: 0.65,
-              top: "60px",
-              left: "60px",
-            }}
-          />
-          {/* Center dot */}
-          <div
-            style={{
-              position: "absolute",
-              width: "20px",
-              height: "20px",
-              borderRadius: "50%",
-              background: theme === "day" ? "#3A6B9A" : "#E8E0D0",
-              top: "100px",
-              left: "100px",
-            }}
-          />
-
-          {/* Countdown number - centered inside orb */}
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              fontSize: "28px",
-              fontWeight: 300,
-              color: textColor,
-              fontFamily: "'Cormorant Garamond', serif",
-              zIndex: 20,
-            }}
-          >
-            {countdown}
-          </div>
-        </div>
-
-        {/* Phase label - below orb */}
+        {/* Liquid Orb */}
+        <LiquidOrb theme={theme} countdown={countdown} orbScale={orbScale} />
         <p
           style={{
             fontSize: "28px",
