@@ -4,7 +4,7 @@ import SoftBlob from "../components/SoftBlob";
 import MainScreen from "../components/MainScreen";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
-import { getRandomTechnique } from "../lib/breathingTechniques";
+import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
 
 export default function Home() {
   const [mode, setMode] = useState("idle");
@@ -12,6 +12,8 @@ export default function Home() {
   const [breathScale, setBreathScale] = useState(1);
   const [showSupport, setShowSupport] = useState(false);
   const [theme, setTheme] = useState("day");
+  const [techniques, setTechniques] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const animRef = useRef(null);
 
   useEffect(() => {
@@ -19,11 +21,23 @@ export default function Home() {
     setTheme(saved);
   }, []);
 
+  useEffect(() => {
+    loadTechniques()
+      .then((loaded) => {
+        setTechniques(loaded);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
   const startBreathing = useCallback(() => {
-    const t = getRandomTechnique();
+    if (techniques.length === 0) return;
+    const t = getRandomTechnique(techniques);
     setTechnique(t);
     setMode("breathing");
-  }, []);
+  }, [techniques]);
 
   const stopBreathing = useCallback(() => {
     setMode("idle");
