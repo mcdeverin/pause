@@ -35,7 +35,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         </div>
         {/* Theme toggle */}
         <motion.button
-          onClick={onToggleTheme}
+          onClick={(e) => { e.stopPropagation(); onToggleTheme(); }}
           className="pointer-events-auto p-2 rounded-full transition-all duration-300 hover:opacity-70"
           style={{
             background: theme === "day" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.08)",
