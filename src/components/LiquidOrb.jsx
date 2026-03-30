@@ -1,6 +1,6 @@
-export default function LiquidOrb({ theme, countdown, orbScale }) {
+export default function LiquidOrb({ theme, countdown, orbScale, size = 260 }) {
   const isDayTheme = theme === "day";
-  const baseSize = 200;
+  const baseSize = size;
   const scaledSize = baseSize * orbScale;
 
   const dayGradient = "radial-gradient(circle at 35% 35%, rgba(91, 141, 184, 0.9) 0%, rgba(143, 175, 143, 0.7) 60%, rgba(143, 175, 143, 0.5) 100%)";

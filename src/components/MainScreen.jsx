@@ -160,6 +160,59 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         >
           ♡ support this app
         </button>
+        <div
+          style={{
+            fontSize: "10px",
+            color: textColor,
+            opacity: 0.25,
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            display: "flex",
+            gap: "8px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <button
+            onClick={() => navigate("/privacy")}
+            style={{
+              background: "none",
+              border: "none",
+              color: "inherit",
+              cursor: "pointer",
+              fontFamily: "inherit",
+              fontSize: "inherit",
+              fontWeight: "inherit",
+              padding: 0,
+              margin: 0,
+              transition: "opacity 300ms",
+            }}
+            onMouseEnter={(e) => (e.target.style.opacity = "0.5")}
+            onMouseLeave={(e) => (e.target.style.opacity = "0.25")}
+          >
+            Privacy
+          </button>
+          <span>|</span>
+          <button
+            onClick={() => navigate("/terms")}
+            style={{
+              background: "none",
+              border: "none",
+              color: "inherit",
+              cursor: "pointer",
+              fontFamily: "inherit",
+              fontSize: "inherit",
+              fontWeight: "inherit",
+              padding: 0,
+              margin: 0,
+              transition: "opacity 300ms",
+            }}
+            onMouseEnter={(e) => (e.target.style.opacity = "0.5")}
+            onMouseLeave={(e) => (e.target.style.opacity = "0.25")}
+          >
+            Terms
+          </button>
+        </div>
       </div>
     </div>
   );
