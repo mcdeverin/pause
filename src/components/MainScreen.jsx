@@ -1,5 +1,6 @@
 import { Sun, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import LiquidOrb from "./LiquidOrb";
 
 export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme }) {
   const navigate = useNavigate();
@@ -90,74 +91,22 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           zIndex: 5,
         }}
       >
-        {/* Orb */}
+        {/* Liquid Orb Button */}
         <button
           onClick={onTap}
           style={{
-            position: "relative",
-            width: "180px",
-            height: "180px",
             background: "none",
             border: "none",
             cursor: "pointer",
             padding: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
           aria-label="Start breathing"
         >
-          {/* Outer circle */}
-          <div
-            style={{
-              position: "absolute",
-              width: "180px",
-              height: "180px",
-              borderRadius: "50%",
-              background: isDayTheme ? "#8FAF8F" : "#7B6BA8",
-              opacity: 0.2,
-              top: 0,
-              left: 0,
-            }}
-          />
-          {/* Middle circle */}
-          <div
-            style={{
-              position: "absolute",
-              width: "130px",
-              height: "130px",
-              borderRadius: "50%",
-              background: isDayTheme ? "#6B8F71" : "#7B6BA8",
-              opacity: 0.3,
-              top: "25px",
-              left: "25px",
-            }}
-          />
-          {/* Inner circle */}
-          <div
-            style={{
-              position: "absolute",
-              width: "80px",
-              height: "80px",
-              borderRadius: "50%",
-              background: isDayTheme ? "#5B8DB8" : "#7B6BA8",
-              opacity: 0.65,
-              top: "50px",
-              left: "50px",
-            }}
-          />
-          {/* Center dot */}
-          <div
-            style={{
-              position: "absolute",
-              width: "20px",
-              height: "20px",
-              borderRadius: "50%",
-              background: isDayTheme ? "#3A6B9A" : "#E8E0D0",
-              top: "80px",
-              left: "80px",
-            }}
-          />
+          <LiquidOrb theme={theme} countdown={null} orbScale={1} />
         </button>
-
-        {/* Tap to pause text */}
         <button
           onClick={onTap}
           style={{
