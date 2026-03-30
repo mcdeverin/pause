@@ -5,8 +5,7 @@ import LiquidOrb from "./LiquidOrb";
 export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme }) {
   const navigate = useNavigate();
   const isDayTheme = theme === "day";
-  const bgColor = isDayTheme ? "#F7F5F2" : "#0D1B2A";
-  const textColor = isDayTheme ? "#2C2C2C" : "#E8E0D0";
+  const textColor = isDayTheme ? "#1a1a1a" : "#ffffff";
   const secondaryColor = isDayTheme ? "#888888" : "#A0A0A0";
 
   return (
@@ -16,7 +15,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         width: "100%",
         height: "100vh",
         overflow: "hidden",
-        background: bgColor,
+        background: theme === "day" ? "#FFFFFF" : "#0A1628",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -37,11 +36,11 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       >
         <p
           style={{
-            fontSize: "13px",
+            fontSize: "11px",
             letterSpacing: "0.4em",
             fontWeight: 300,
             color: textColor,
-            opacity: 0.6,
+            opacity: 0.5,
             fontFamily: "'Cormorant Garamond', serif",
             margin: 0,
           }}
@@ -52,30 +51,30 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
 
       {/* Theme toggle - top right */}
       <button
-        onClick={onToggleTheme}
-        style={{
-          position: "absolute",
-          top: "16px",
-          right: "24px",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          opacity: 0.4,
-          zIndex: 20,
-          padding: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "32px",
-          height: "32px",
-        }}
-        aria-label="Toggle theme"
+      onClick={onToggleTheme}
+      style={{
+        position: "absolute",
+        top: "16px",
+        right: "24px",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        opacity: 0.3,
+        zIndex: 20,
+        padding: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "32px",
+        height: "32px",
+      }}
+      aria-label="Toggle theme"
       >
-        {isDayTheme ? (
-          <Moon className="w-[22px] h-[22px]" style={{ color: secondaryColor }} />
-        ) : (
-          <Sun className="w-[22px] h-[22px]" style={{ color: secondaryColor }} />
-        )}
+      {isDayTheme ? (
+        <Moon className="w-[22px] h-[22px]" style={{ color: textColor }} />
+      ) : (
+        <Sun className="w-[22px] h-[22px]" style={{ color: textColor }} />
+      )}
       </button>
 
       {/* Center section - orb + tap text */}
@@ -111,10 +110,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         <button
           onClick={onTap}
           style={{
-            fontSize: "13px",
+            fontSize: "12px",
             letterSpacing: "0.1em",
             color: textColor,
-            opacity: 0.4,
+            opacity: 0.35,
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: "italic",
             fontWeight: 300,

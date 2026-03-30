@@ -108,7 +108,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
     <motion.div
       className="relative w-screen h-screen overflow-hidden flex flex-col items-center justify-center"
       style={{
-        background: theme === "day" ? "#F7F5F2" : "#0D1B2A",
+        background: theme === "day" ? "#FFFFFF" : "#0A1628",
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -119,7 +119,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
       <div
         style={{
           position: "absolute",
-          top: "52px",
+          top: "56px",
           left: 0,
           right: 0,
           textAlign: "center",
@@ -128,10 +128,10 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
       >
         <p
           style={{
-            fontSize: "13px",
-            letterSpacing: "0.35em",
-            color: textColor,
-            opacity: 0.75,
+            fontSize: "11px",
+            letterSpacing: "0.4em",
+            color: theme === "day" ? "#1a1a1a" : "#ffffff",
+            opacity: 0.5,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             margin: 0,
@@ -159,8 +159,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         <div
           style={{
             position: "relative",
-            width: "260px",
-            height: "260px",
+            width: "280px",
+            height: "280px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -173,12 +173,10 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               width: "100%",
               height: "100%",
               background: theme === "day"
-                ? "radial-gradient(circle at 35% 35%, #4A8FBF 0%, #6BA888 100%)"
-                : "radial-gradient(circle at 35% 35%, #5B4E8C 0%, #7B6AAE 100%)",
+                ? "radial-gradient(circle at 35% 35%, #2E7DB5 0%, #4A9E78 100%)"
+                : "radial-gradient(circle at 35% 35%, #5040A0 0%, #8060C0 100%)",
               borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
-              boxShadow: theme === "day"
-                ? "0 0 40px rgba(74, 143, 191, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.08)"
-                : "0 0 40px rgba(91, 78, 140, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.03)",
+              boxShadow: "none",
               filter: "none",
               transform: `scale(${orbScale})`,
               transition: "transform 0.95s ease-in-out",
@@ -191,11 +189,11 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             style={{
               position: "absolute",
               zIndex: 10,
-              fontSize: "48px",
-              fontWeight: 200,
-              color: "rgba(255, 255, 255, 1.0)",
+              fontSize: "56px",
+              fontWeight: 300,
+              color: "#ffffff",
               fontFamily: "'Cormorant Garamond', serif",
-              textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+              textShadow: "none",
             }}
           >
             {secondsLeft}
@@ -205,16 +203,16 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         {/* Phase label */}
         <p
           style={{
-            fontSize: "28px",
-            color: textColor,
+            fontSize: "24px",
+            color: theme === "day" ? "#1a1a1a" : "#ffffff",
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             margin: 0,
             textTransform: "lowercase",
             textAlign: "center",
             minHeight: "32px",
-            opacity: 0.85,
-            letterSpacing: "0.15em",
+            opacity: 0.8,
+            letterSpacing: "0.2em",
           }}
         >
           {labels[phaseIndex]}
@@ -224,15 +222,15 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         <p
           style={{
             fontSize: "13px",
-            color: theme === "day" ? "#888888" : "#A0A0A0",
+            color: theme === "day" ? "#1a1a1a" : "#ffffff",
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: "italic",
             fontWeight: 300,
             textAlign: "center",
-            maxWidth: "280px",
-            lineHeight: 1.8,
+            maxWidth: "260px",
+            lineHeight: 1.9,
             margin: 0,
-            opacity: 0.55,
+            opacity: 0.4,
           }}
         >
           {technique.science}
@@ -259,8 +257,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             width: "180px",
             height: "1px",
             background: theme === "day"
-              ? "rgba(74, 143, 191, 0.2)"
-              : "rgba(91, 78, 140, 0.2)",
+              ? "rgba(46, 125, 181, 0.15)"
+              : "rgba(80, 64, 160, 0.15)",
             position: "relative",
             overflow: "hidden",
           }}
@@ -272,8 +270,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               left: 0,
               height: "100%",
               background: theme === "day"
-                ? "rgba(74, 143, 191, 0.5)"
-                : "rgba(91, 78, 140, 0.5)",
+                ? "rgba(46, 125, 181, 0.4)"
+                : "rgba(80, 64, 160, 0.4)",
               width: `${progress * 100}%`,
             }}
             transition={{ duration: 0.1 }}
