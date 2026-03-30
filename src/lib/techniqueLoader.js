@@ -9,8 +9,8 @@ export async function loadTechniques() {
   const records = await base44.entities.Technique.list();
   
   cachedTechniques = records.map((record) => {
-    const phaseDurations = record.phases.split(",").map((d) => parseInt(d.trim()));
-    const phaseLabels = record.phaseLabels ? record.phaseLabels.split(",").map((l) => l.trim()) : phaseDurations.map(() => "hold");
+    const phaseDurations = (Array.isArray(record.phases) ? record.phases : (record.phases || "").split(",")).map((d) => parseInt(String(d).trim()));
+    const phaseLabels = Array.isArray(record.phaseLabels) ? record.phaseLabels : (record.phaseLabels ? record.phaseLabels.split(",").map((l) => l.trim()) : phaseDurations.map(() => "hold"));
 
     return {
       name: record.name,
