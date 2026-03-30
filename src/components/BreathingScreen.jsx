@@ -44,7 +44,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
   const totalSecondsRef = useRef(phases.reduce((a, b) => a + b, 0) * TOTAL_CYCLES);
   const elapsedSecondsRef = useRef(0);
 
-  const textColor = theme === "day" ? "#2C2C2C" : "#E8E0D0";
+  const isDayTheme = theme === "day";
 
   useEffect(() => {
     timerRef.current = setInterval(() => {
@@ -108,7 +108,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
     <motion.div
       className="relative w-screen h-screen overflow-hidden flex flex-col items-center justify-center"
       style={{
-        background: theme === "day" ? "#FFFFFF" : "#0A1628",
+        background: theme === "day" ? "#FAFAF9" : "#0C1720",
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -119,7 +119,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
       <div
         style={{
           position: "absolute",
-          top: "56px",
+          top: "48px",
           left: 0,
           right: 0,
           textAlign: "center",
@@ -129,11 +129,11 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         <p
           style={{
             fontSize: "11px",
-            letterSpacing: "0.4em",
-            color: theme === "day" ? "#1a1a1a" : "#ffffff",
-            opacity: 0.5,
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 300,
+            letterSpacing: "0.5em",
+            color: "#1C1C1C",
+            opacity: isDayTheme ? 0.5 : 1,
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontWeight: 200,
             margin: 0,
           }}
         >
@@ -151,7 +151,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "60px",
+          gap: "36px",
           zIndex: 5,
         }}
       >
@@ -159,8 +159,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         <div
           style={{
             position: "relative",
-            width: "280px",
-            height: "280px",
+            width: "270px",
+            height: "270px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -173,8 +173,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               width: "100%",
               height: "100%",
               background: theme === "day"
-                ? "radial-gradient(circle at 35% 35%, #2E7DB5 0%, #4A9E78 100%)"
-                : "radial-gradient(circle at 35% 35%, #5040A0 0%, #8060C0 100%)",
+                ? "radial-gradient(circle at 35% 35%, #4A7FA6 0%, #6BA888 100%)"
+                : "radial-gradient(circle at 35% 35%, #4A5B9C 0%, #7B9E8C 100%)",
               borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
               boxShadow: "none",
               filter: "none",
@@ -189,10 +189,10 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             style={{
               position: "absolute",
               zIndex: 10,
-              fontSize: "56px",
-              fontWeight: 300,
-              color: "#ffffff",
-              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "52px",
+              fontWeight: 200,
+              color: "#FFFFFF",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               textShadow: "none",
             }}
           >
@@ -203,16 +203,16 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         {/* Phase label */}
         <p
           style={{
-            fontSize: "24px",
-            color: theme === "day" ? "#1a1a1a" : "#ffffff",
-            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "18px",
+            color: "#1C1C1C",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
             margin: 0,
             textTransform: "lowercase",
             textAlign: "center",
-            minHeight: "32px",
-            opacity: 0.8,
-            letterSpacing: "0.2em",
+            minHeight: "24px",
+            opacity: isDayTheme ? 0.7 : 0.85,
+            letterSpacing: "0.25em",
           }}
         >
           {labels[phaseIndex]}
@@ -221,16 +221,16 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         {/* Science fact */}
         <p
           style={{
-            fontSize: "13px",
-            color: theme === "day" ? "#1a1a1a" : "#ffffff",
-            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "12px",
+            color: "#1C1C1C",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontStyle: "italic",
             fontWeight: 300,
             textAlign: "center",
-            maxWidth: "260px",
+            maxWidth: "270px",
             lineHeight: 1.9,
             margin: 0,
-            opacity: theme === "day" ? 0.7 : 0.6,
+            opacity: isDayTheme ? 0.45 : 0.55,
           }}
         >
           {technique.science}
@@ -241,7 +241,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
       <div
         style={{
           position: "absolute",
-          bottom: "40px",
+          bottom: "36px",
           left: 0,
           right: 0,
           display: "flex",
@@ -254,11 +254,10 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         {/* Progress bar */}
         <div
           style={{
-            width: "180px",
+            width: "120px",
             height: "1px",
-            background: theme === "day"
-              ? "rgba(46, 125, 181, 0.15)"
-              : "rgba(80, 64, 160, 0.15)",
+            background: "#1C1C1C",
+            opacity: isDayTheme ? 0.1 : 0.15,
             position: "relative",
             overflow: "hidden",
           }}
@@ -269,9 +268,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               top: 0,
               left: 0,
               height: "100%",
-              background: theme === "day"
-                ? "rgba(46, 125, 181, 0.4)"
-                : "rgba(80, 64, 160, 0.4)",
+              background: "#1C1C1C",
+              opacity: isDayTheme ? 0.25 : 0.35,
               width: `${progress * 100}%`,
             }}
             transition={{ duration: 0.1 }}
@@ -283,19 +281,19 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           onClick={onDone}
           style={{
             fontSize: "11px",
-            color: textColor,
-            opacity: 0.35,
-            fontFamily: "'Cormorant Garamond', serif",
+            color: "#1C1C1C",
+            opacity: isDayTheme ? 0.3 : 0.4,
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
-            letterSpacing: "0.1em",
+            letterSpacing: "0.2em",
             background: "none",
             border: "none",
             cursor: "pointer",
             transition: "opacity 700ms",
             padding: 0,
           }}
-          onMouseEnter={(e) => (e.target.style.opacity = "0.6")}
-          onMouseLeave={(e) => (e.target.style.opacity = "0.35")}
+          onMouseEnter={(e) => (e.target.style.opacity = isDayTheme ? "0.55" : "0.65")}
+          onMouseLeave={(e) => (e.target.style.opacity = isDayTheme ? "0.3" : "0.4")}
         >
           · done ·
         </button>

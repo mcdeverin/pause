@@ -5,8 +5,6 @@ import LiquidOrb from "./LiquidOrb";
 export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme }) {
   const navigate = useNavigate();
   const isDayTheme = theme === "day";
-  const textColor = isDayTheme ? "#1a1a1a" : "#ffffff";
-  const secondaryColor = isDayTheme ? "#888888" : "#A0A0A0";
 
   return (
     <div
@@ -15,7 +13,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         width: "100%",
         height: "100vh",
         overflow: "hidden",
-        background: theme === "day" ? "#FFFFFF" : "#0A1628",
+        background: theme === "day" ? "#FAFAF9" : "#0C1720",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -26,7 +24,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "90px",
+          top: "48px",
           left: 0,
           right: 0,
           width: "100%",
@@ -37,11 +35,11 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         <p
           style={{
             fontSize: "11px",
-            letterSpacing: "0.4em",
-            fontWeight: 300,
-            color: textColor,
-            opacity: 0.5,
-            fontFamily: "'Cormorant Garamond', serif",
+            letterSpacing: "0.5em",
+            fontWeight: 200,
+            color: "#1C1C1C",
+            opacity: isDayTheme ? 0.45 : 1,
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             margin: 0,
           }}
         >
@@ -51,30 +49,30 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
 
       {/* Theme toggle - top right */}
       <button
-      onClick={onToggleTheme}
-      style={{
-        position: "absolute",
-        top: "16px",
-        right: "24px",
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        opacity: 0.3,
-        zIndex: 20,
-        padding: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "32px",
-        height: "32px",
-      }}
-      aria-label="Toggle theme"
+        onClick={onToggleTheme}
+        style={{
+          position: "absolute",
+          top: "16px",
+          right: "24px",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          opacity: isDayTheme ? 0.25 : 0.35,
+          zIndex: 20,
+          padding: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "32px",
+          height: "32px",
+        }}
+        aria-label="Toggle theme"
       >
-      {isDayTheme ? (
-        <Moon className="w-[22px] h-[22px]" style={{ color: textColor }} />
-      ) : (
-        <Sun className="w-[22px] h-[22px]" style={{ color: textColor }} />
-      )}
+        {isDayTheme ? (
+          <Moon className="w-[22px] h-[22px]" style={{ color: "#1C1C1C" }} />
+        ) : (
+          <Sun className="w-[22px] h-[22px]" style={{ color: "#FFFFFF" }} />
+        )}
       </button>
 
       {/* Center section - orb + tap text */}
@@ -87,7 +85,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "24px",
+          gap: "28px",
           zIndex: 5,
         }}
       >
@@ -105,17 +103,17 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           }}
           aria-label="Start breathing"
         >
-          <LiquidOrb theme={theme} isBreathing={false} />
+          <LiquidOrb theme={theme} isBreathing={false} size={270} />
         </button>
         <button
           onClick={onTap}
           style={{
             fontSize: "12px",
-            letterSpacing: "0.1em",
-            color: textColor,
-            opacity: 0.35,
-            fontFamily: "'Cormorant Garamond', serif",
-            fontStyle: "italic",
+            letterSpacing: "0.12em",
+            color: "#1C1C1C",
+            opacity: isDayTheme ? 0.35 : 0.5,
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontStyle: "normal",
             fontWeight: 300,
             background: "none",
             border: "none",
@@ -125,7 +123,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             padding: 0,
           }}
         >
-          tap to pause
+          tap to breathe
         </button>
       </div>
 
@@ -133,7 +131,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          bottom: "24px",
+          bottom: "32px",
           left: 0,
           right: 0,
           display: "flex",
@@ -146,10 +144,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         <button
           onClick={() => window.open('https://buymeacoffee.com/alwayspause', '_blank')}
           style={{
-            fontSize: "9px",
-            color: textColor,
-            opacity: 0.25,
-            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "10px",
+            color: "#1C1C1C",
+            opacity: isDayTheme ? 0.2 : 0.25,
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
             background: "none",
             border: "none",
@@ -162,10 +160,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         </button>
         <div
           style={{
-            fontSize: "9px",
-            color: textColor,
-            opacity: 0.25,
-            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "10px",
+            color: "#1C1C1C",
+            opacity: isDayTheme ? 0.15 : 0.2,
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
             display: "flex",
             gap: "8px",
@@ -187,12 +185,12 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
               margin: 0,
               transition: "opacity 300ms",
             }}
-            onMouseEnter={(e) => (e.target.style.opacity = "0.7")}
-            onMouseLeave={(e) => (e.target.style.opacity = "0.45")}
+            onMouseEnter={(e) => (e.target.style.opacity = isDayTheme ? "0.4" : "0.5")}
+            onMouseLeave={(e) => (e.target.style.opacity = isDayTheme ? "0.15" : "0.2")}
           >
             Privacy
           </button>
-          <span>|</span>
+          <span>·</span>
           <button
             onClick={() => navigate("/terms")}
             style={{
@@ -207,8 +205,8 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
               margin: 0,
               transition: "opacity 300ms",
             }}
-            onMouseEnter={(e) => (e.target.style.opacity = "0.7")}
-            onMouseLeave={(e) => (e.target.style.opacity = "0.45")}
+            onMouseEnter={(e) => (e.target.style.opacity = isDayTheme ? "0.4" : "0.5")}
+            onMouseLeave={(e) => (e.target.style.opacity = isDayTheme ? "0.15" : "0.2")}
           >
             Terms
           </button>
