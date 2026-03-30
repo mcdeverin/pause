@@ -1,131 +1,242 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { getTotalCycleDuration } from "../lib/breathingTechniques";
-import CrispOrb from "./CrispOrb";
 
 const TOTAL_CYCLES = 4;
 
 export default function BreathingScreen({ technique, onDone, theme }) {
-  const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
-  const [cycleCount, setCycleCount] = useState(0);
+  const [currentPhase, setCurrentPhase] = useState(technique.phases[0]);
+  const [countdown, setCountdown] = useState(technique.phases[0].duration);
+  const [orbScale, setOrbScale] = useState(1);
   const [progress, setProgress] = useState(0);
-  const [breathScale, setBreathScale] = useState(1);
-  const animFrameRef = useRef(null);
   const totalDuration = getTotalCycleDuration(technique) * TOTAL_CYCLES;
+  const timerRef = useRef(null);
+  const startTimeRef = useRef(Date.now());
 
-  const currentPhase = technique.phases[currentPhaseIndex];
+  const textColor = theme === "day" ? "#2C2C2C" : "#E8E0D0";
 
   useEffect(() => {
-    const startTime = Date.now();
-    let phaseIdx = 0;
-    let cycles = 0;
-    let phaseStart = startTime;
-
     const tick = () => {
-      const now = Date.now();
-      const elapsed = now - startTime;
+      const elapsed = Date.now() - startTimeRef.current;
+      const totalMs = totalDuration * 1000;
 
-      setProgress(Math.min(elapsed / totalDuration, 1));
+      // Overall progress
+      setProgress(Math.min(elapsed / totalMs, 1));
 
-      const phaseElapsed = now - phaseStart;
-      const phaseDuration = technique.phases[phaseIdx].duration;
-      const phaseProgress = Math.min(phaseElapsed / phaseDuration, 1);
+      // Determine current cycle and phase
+      const cycleDurationMs = getTotalCycleDuration(technique) * 1000;
+      const cycleElapsed = elapsed % cycleDurationMs;
+      
+      let phaseElapsed = cycleElapsed;
+      let phaseIndex = 0;
 
-      const phase = technique.phases[phaseIdx];
-      if (phase.label === "inhale") {
-        setBreathScale(0.7 + phaseProgress * 0.9);
-      } else if (phase.label === "exhale") {
-        setBreathScale(1.6 - phaseProgress * 0.9);
-      }
-
-      if (phaseElapsed >= phaseDuration) {
-        phaseIdx++;
-        if (phaseIdx >= technique.phases.length) {
-          phaseIdx = 0;
-          cycles++;
-          if (cycles >= TOTAL_CYCLES) {
-            setProgress(1);
-            setCycleCount(cycles);
-            setTimeout(onDone, 1500);
-            return;
-          }
-          setCycleCount(cycles);
+      for (let i = 0; i < technique.phases.length; i++) {
+        const phaseDurationMs = technique.phases[i].duration * 1000;
+        if (phaseElapsed < phaseDurationMs) {
+          phaseIndex = i;
+          break;
         }
-        setCurrentPhaseIndex(phaseIdx);
-        phaseStart = now;
+        phaseElapsed -= phaseDurationMs;
       }
 
-      animFrameRef.current = requestAnimationFrame(tick);
+      const phase = technique.phases[phaseIndex];
+      const phaseDurationMs = phase.duration * 1000;
+      const phaseProgress = Math.min(phaseElapsed / phaseDurationMs, 1);
+
+      // Countdown: display remaining seconds in this phase
+      const remainingSeconds = Math.ceil((phaseDurationMs - phaseElapsed) / 1000);
+      setCountdown(Math.max(remainingSeconds, 1));
+
+      // Phase text
+      setCurrentPhase(phase);
+
+      // Orb scale: smooth easing during inhale/exhale, static during hold
+      let scale = 1;
+      if (phase.label === "inhale") {
+        // Easing function for smooth expansion
+        const eased = phaseProgress < 0.5
+          ? 2 * phaseProgress * phaseProgress
+          : 1 - Math.pow(-2 * phaseProgress + 2, 2) / 2;
+        scale = 1 + eased * 0.2; // 1.0 to 1.2
+      } else if (phase.label === "hold") {
+        scale = 1.2; // Stay expanded
+      } else if (phase.label === "exhale") {
+        // Easing function for smooth contraction
+        const eased = phaseProgress < 0.5
+          ? 2 * phaseProgress * phaseProgress
+          : 1 - Math.pow(-2 * phaseProgress + 2, 2) / 2;
+        scale = 1.2 - eased * 0.2; // 1.2 to 1.0
+      } else if (phase.label === "hold2") {
+        scale = 1; // Stay at rest
+      }
+      setOrbScale(scale);
+
+      // Check if finished
+      if (elapsed >= totalMs) {
+        setProgress(1);
+        setTimeout(onDone, 500);
+        return;
+      }
+
+      timerRef.current = setTimeout(tick, 100); // Update 10x per second for smooth visual
     };
 
-    animFrameRef.current = requestAnimationFrame(tick);
+    timerRef.current = setTimeout(tick, 100);
 
     return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [technique, totalDuration, onDone]);
 
   return (
     <motion.div
-      className="w-full min-h-screen flex flex-col items-center justify-between"
+      className="relative w-screen h-screen overflow-hidden flex flex-col items-center justify-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Technique name at top */}
-      <div style={{ paddingTop: "60px", width: "100%", textAlign: "center" }}>
+      {/* Technique name - top */}
+      <div
+        style={{
+          position: "absolute",
+          top: "48px",
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          zIndex: 10,
+        }}
+      >
         <p
           style={{
             fontSize: "13px",
-            letterSpacing: "2px",
-            color: "#2C2C2C",
-            opacity: 0.7,
+            letterSpacing: "5px",
+            color: textColor,
+            opacity: 0.55,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             margin: 0,
-            textTransform: "uppercase",
           }}
         >
-          {technique.name}
+          {technique.name.toUpperCase()}
         </p>
       </div>
 
-      {/* Center: Orb with phase word and science fact below */}
-      <div className="flex-1 flex flex-col items-center justify-center w-full" style={{ minHeight: "50vh", paddingLeft: "24px", paddingRight: "24px" }}>
-        {/* Orb */}
-        <div style={{ width: "280px", height: "280px", marginBottom: "24px" }}>
-          <CrispOrb breathScale={breathScale} isBreathing={true} theme={theme} />
+      {/* Center: Orb with countdown and phase text */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "24px",
+          zIndex: 5,
+        }}
+      >
+        {/* Orb container */}
+        <div
+          style={{
+            position: "relative",
+            width: "220px",
+            height: "220px",
+            transform: `scale(${orbScale})`,
+            transition: "transform 0.1s ease-out",
+          }}
+        >
+          {/* Outer circle */}
+          <div
+            style={{
+              position: "absolute",
+              width: "220px",
+              height: "220px",
+              borderRadius: "50%",
+              background: theme === "day" ? "#8FAF8F" : "#7B6BA8",
+              opacity: 0.2,
+              top: 0,
+              left: 0,
+            }}
+          />
+          {/* Middle circle */}
+          <div
+            style={{
+              position: "absolute",
+              width: "160px",
+              height: "160px",
+              borderRadius: "50%",
+              background: theme === "day" ? "#6B8F71" : "#7B6BA8",
+              opacity: 0.3,
+              top: "30px",
+              left: "30px",
+            }}
+          />
+          {/* Inner circle */}
+          <div
+            style={{
+              position: "absolute",
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              background: theme === "day" ? "#5B8DB8" : "#7B6BA8",
+              opacity: 0.65,
+              top: "60px",
+              left: "60px",
+            }}
+          />
+          {/* Center dot */}
+          <div
+            style={{
+              position: "absolute",
+              width: "20px",
+              height: "20px",
+              borderRadius: "50%",
+              background: theme === "day" ? "#3A6B9A" : "#E8E0D0",
+              top: "100px",
+              left: "100px",
+            }}
+          />
+
+          {/* Countdown number - centered inside orb */}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              fontSize: "28px",
+              fontWeight: 300,
+              color: textColor,
+              fontFamily: "'Cormorant Garamond', serif",
+              zIndex: 20,
+            }}
+          >
+            {countdown}
+          </div>
         </div>
 
-        {/* Phase label */}
-        <div style={{ marginTop: "24px", marginBottom: "16px" }}>
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={currentPhase.label + currentPhaseIndex}
-              style={{
-                fontSize: "28px",
-                color: "#2C2C2C",
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 300,
-                margin: 0,
-                textTransform: "lowercase",
-              }}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {currentPhase.label}
-            </motion.p>
-          </AnimatePresence>
-        </div>
+        {/* Phase label - below orb */}
+        <p
+          style={{
+            fontSize: "28px",
+            color: textColor,
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 300,
+            margin: 0,
+            textTransform: "lowercase",
+            textAlign: "center",
+            minHeight: "32px",
+          }}
+        >
+          {currentPhase.label}
+        </p>
 
         {/* Science fact */}
-        <motion.p
+        <p
           style={{
             fontSize: "12px",
-            color: "#888888",
+            color: theme === "day" ? "#888888" : "#A0A0A0",
             fontFamily: "'Cormorant Garamond', serif",
             fontStyle: "italic",
             fontWeight: 300,
@@ -133,26 +244,48 @@ export default function BreathingScreen({ technique, onDone, theme }) {
             maxWidth: "280px",
             lineHeight: 1.6,
             margin: 0,
+            opacity: 0.7,
           }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 3, delay: 2 }}
         >
           {technique.science}
-        </motion.p>
+        </p>
       </div>
 
       {/* Bottom: Progress bar + done button */}
-      <div className="w-full flex flex-col items-center" style={{ paddingBottom: "40px", gap: "20px" }}>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "40px",
+          left: 0,
+          right: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "20px",
+          zIndex: 10,
+        }}
+      >
         {/* Progress bar */}
-        <div style={{ width: "180px", height: "1px", background: "rgba(91, 141, 184, 0.15)", position: "relative", overflow: "hidden" }}>
+        <div
+          style={{
+            width: "180px",
+            height: "1px",
+            background: theme === "day"
+              ? "rgba(91, 141, 184, 0.15)"
+              : "rgba(123, 107, 168, 0.15)",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
           <motion.div
             style={{
               position: "absolute",
               top: 0,
               left: 0,
               height: "100%",
-              background: "rgba(91, 141, 184, 0.6)",
+              background: theme === "day"
+                ? "rgba(91, 141, 184, 0.6)"
+                : "rgba(123, 107, 168, 0.6)",
               width: `${progress * 100}%`,
             }}
             transition={{ duration: 0.1 }}
@@ -164,15 +297,18 @@ export default function BreathingScreen({ technique, onDone, theme }) {
           onClick={onDone}
           style={{
             fontSize: "10px",
-            color: "#2C2C2C",
+            color: textColor,
+            opacity: 0.35,
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 300,
             background: "none",
             border: "none",
             cursor: "pointer",
             transition: "opacity 700ms",
+            padding: 0,
           }}
-          className="hover:opacity-60"
+          onMouseEnter={(e) => (e.target.style.opacity = "0.6")}
+          onMouseLeave={(e) => (e.target.style.opacity = "0.35")}
         >
           · done ·
         </button>
