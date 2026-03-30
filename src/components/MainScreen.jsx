@@ -16,7 +16,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
   const colors = THEME_COLORS[theme] || THEME_COLORS.day;
   return (
     <motion.div
-      className="absolute inset-0 flex flex-col items-center justify-between z-10 pointer-events-none"
+      className="absolute inset-0 flex flex-col items-center justify-between z-10 pointer-events-none overflow-y-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
