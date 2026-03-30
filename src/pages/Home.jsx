@@ -1,7 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import WireframeOrb from "../components/WireframeOrb";
-import AmbientGlow from "../components/AmbientGlow";
+import SoftBlob from "../components/SoftBlob";
 import MainScreen from "../components/MainScreen";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
@@ -78,11 +77,8 @@ export default function Home() {
       className="fixed inset-0 overflow-hidden"
       style={{ background: "#F7F5F2" }}
     >
-      {/* Ambient glow behind orb */}
-      <AmbientGlow breathScale={breathScale} isBreathing={mode === "breathing"} />
-
-      {/* 3D wireframe orb */}
-      <WireframeOrb breathScale={breathScale} />
+      {/* Soft breathing blob */}
+      <SoftBlob breathScale={breathScale} isBreathing={mode === "breathing"} />
 
       {/* UI overlays */}
       <AnimatePresence mode="wait">

@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
+import SoftBlob from "./SoftBlob";
 
 export default function SupportScreen({ onClose }) {
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: "rgba(13, 27, 42, 0.95)" }}
+      style={{ background: "rgba(247, 245, 242, 0.98)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -22,26 +23,33 @@ export default function SupportScreen({ onClose }) {
         <button
           onClick={onClose}
           className="absolute -top-12 right-0 transition-opacity duration-300 hover:opacity-60"
-          style={{ color: "rgba(232, 224, 208, 0.4)" }}
+          style={{ color: "#888888" }}
           aria-label="Close support"
         >
           <X className="w-5 h-5" />
         </button>
 
+        {/* Small decorative blob at top */}
+        <div className="mb-8">
+          <div className="w-32 h-32 sm:w-40 sm:h-40">
+            <SoftBlob breathScale={1.2} isBreathing={true} />
+          </div>
+        </div>
+
         {/* Content */}
         <div className="text-center space-y-8">
           {/* App name */}
           <h1
-            className="font-cormorant text-4xl font-light tracking-[0.2em]"
-            style={{ color: "#E8E0D0" }}
+            className="font-serif text-2xl sm:text-3xl font-light tracking-[0.2em]"
+            style={{ color: "#2C2C2C" }}
           >
             Always Pause
           </h1>
 
           {/* Message */}
           <p
-            className="font-cormorant text-lg font-light italic leading-relaxed max-w-md"
-            style={{ color: "rgba(232, 224, 208, 0.85)" }}
+            className="font-serif text-base font-light italic leading-relaxed max-w-md"
+            style={{ color: "#666666" }}
           >
             This app is completely free. Always. If it's brought you even one moment of calm, consider supporting its existence.
           </p>
@@ -49,21 +57,21 @@ export default function SupportScreen({ onClose }) {
           {/* Tip buttons */}
           <div className="flex flex-col gap-3 pt-4">
             <button
-              className="px-8 py-3 rounded-sm transition-all duration-500 font-cormorant text-sm tracking-[0.15em] hover:opacity-80"
+              className="px-8 py-3 rounded-sm transition-all duration-500 font-serif text-sm tracking-[0.15em] hover:opacity-80"
               style={{
-                background: "rgba(46, 93, 142, 0.3)",
-                color: "#E8E0D0",
-                border: "1px solid rgba(46, 93, 142, 0.4)",
+                background: "rgba(91, 141, 184, 0.1)",
+                color: "#2C2C2C",
+                border: "1px solid rgba(91, 141, 184, 0.25)",
               }}
             >
               ♡ Leave a tip — $1.99
             </button>
             <button
-              className="px-8 py-3 rounded-sm transition-all duration-500 font-cormorant text-sm tracking-[0.15em] hover:opacity-80"
+              className="px-8 py-3 rounded-sm transition-all duration-500 font-serif text-sm tracking-[0.15em] hover:opacity-80"
               style={{
-                background: "rgba(123, 107, 168, 0.2)",
-                color: "#E8E0D0",
-                border: "1px solid rgba(123, 107, 168, 0.3)",
+                background: "rgba(143, 175, 143, 0.08)",
+                color: "#2C2C2C",
+                border: "1px solid rgba(143, 175, 143, 0.2)",
               }}
             >
               ☕ Buy us a coffee — $4.99
@@ -72,8 +80,8 @@ export default function SupportScreen({ onClose }) {
 
           {/* Footer text */}
           <p
-            className="font-cormorant text-xs font-light tracking-[0.1em]"
-            style={{ color: "rgba(232, 224, 208, 0.35)" }}
+            className="font-serif text-xs font-light tracking-[0.1em]"
+            style={{ color: "#AAAAAA" }}
           >
             100% goes toward keeping Always Pause free and ad-free forever.
           </p>

@@ -4,7 +4,25 @@ import { getTotalCycleDuration } from "../lib/breathingTechniques";
 
 const TOTAL_CYCLES = 4;
 
-export default function BreathingScreen({ technique, onDone }) {
+const THEME_COLORS = {
+  light: {
+    text: "#2C2C2C",
+    secondary: "#888888",
+    progressBar: "#5B8DB8",
+    progressBg: "rgba(91, 141, 184, 0.15)",
+    progressFill: "rgba(91, 141, 184, 0.6)",
+  },
+  dark: {
+    text: "#E8E0D0",
+    secondary: "#A0A0A0",
+    progressBar: "#7B6BA8",
+    progressBg: "rgba(123, 107, 168, 0.15)",
+    progressFill: "rgba(123, 107, 168, 0.6)",
+  },
+};
+
+export default function BreathingScreen({ technique, onDone, theme }) {
+  const colors = THEME_COLORS[theme];
   const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
   const [cycleCount, setCycleCount] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -88,7 +106,7 @@ export default function BreathingScreen({ technique, onDone }) {
       <div className="pt-16 sm:pt-20 text-center">
         <p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.35em] uppercase"
-          style={{ color: "#1C1C1E" }}
+          style={{ color: colors.text }}
         >
           {technique.name}
         </p>
@@ -101,7 +119,7 @@ export default function BreathingScreen({ technique, onDone }) {
           <motion.p
             key={currentPhase.label + currentPhaseIndex}
             className="font-cormorant text-xl sm:text-2xl font-light tracking-[0.3em]"
-            style={{ color: "#1C1C1E" }}
+            style={{ color: colors.text }}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
@@ -114,7 +132,7 @@ export default function BreathingScreen({ technique, onDone }) {
         {/* Science fact */}
         <motion.p
           className="font-cormorant italic text-[10px] sm:text-[11px] font-light max-w-[260px] sm:max-w-[300px] text-center leading-relaxed px-6"
-          style={{ color: "#6B6B6B" }}
+          style={{ color: colors.secondary }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 3, delay: 2 }}
@@ -126,11 +144,11 @@ export default function BreathingScreen({ technique, onDone }) {
       {/* Bottom: progress line + done */}
       <div className="pb-12 sm:pb-16 w-full flex flex-col items-center gap-6 pointer-events-auto">
         {/* Progress line */}
-        <div className="w-40 sm:w-52 h-px relative overflow-hidden" style={{ background: "rgba(46, 93, 142, 0.15)" }}>
+        <div className="w-40 sm:w-52 h-px relative overflow-hidden" style={{ background: colors.progressBg }}>
           <motion.div
             className="absolute top-0 left-0 h-full"
             style={{
-              background: "rgba(46, 93, 142, 0.6)",
+              background: colors.progressFill,
               width: `${progress * 100}%`,
             }}
             transition={{ duration: 0.1 }}
@@ -141,7 +159,7 @@ export default function BreathingScreen({ technique, onDone }) {
         <button
           onClick={onDone}
           className="font-cormorant text-[10px] font-light tracking-[0.35em] cursor-pointer transition-colors duration-700 hover:opacity-60"
-          style={{ color: "#1C1C1E" }}
+          style={{ color: colors.text }}
         >
           · &nbsp;done&nbsp; ·
         </button>
