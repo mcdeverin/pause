@@ -56,7 +56,7 @@ export default function LiquidOrb({ theme, countdown, orbScale, size = 260 }) {
               ? "drop-shadow(0 0 30px rgba(143, 175, 143, 0.15))"
               : "drop-shadow(0 0 30px rgba(155, 142, 196, 0.15))",
             transform: `scale(${orbScale})`,
-            transition: "transform 0.9s ease-in-out",
+            transition: "transform 1.1s ease-in-out",
           }}
         />
 
