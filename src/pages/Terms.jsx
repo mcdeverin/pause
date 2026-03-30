@@ -13,70 +13,79 @@ export default function Terms() {
       </button>
 
       <div className="max-w-2xl">
-        <h1 className="text-3xl font-light mb-8 font-cormorant">Terms of Service</h1>
+        <h1 className="text-3xl font-light mb-8 font-cormorant">Terms of Use</h1>
 
         <div className="space-y-6 text-sm text-foreground/80 leading-relaxed font-serif">
+          <p className="text-xs text-foreground/60 mb-6">
+            Last Updated: March 2026
+          </p>
+
           <section>
-            <h2 className="text-lg font-semibold mb-3">1. Acceptance of Terms</h2>
+            <h2 className="text-lg font-semibold mb-3">Acceptance of Terms</h2>
             <p>
-              By using the Always Pause application, you agree to these terms and conditions. If you do not agree with any part of these terms, you may not use this service.
+              By downloading or using Always Pause, you agree to be bound by these Terms. If you do not agree, do not use the app.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">2. Use License</h2>
+            <h2 className="text-lg font-semibold mb-3">Use of the App</h2>
             <p>
-              Permission is granted to temporarily download one copy of the materials (information or software) on Always Pause for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
-            </p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Modifying or copying the materials</li>
-              <li>Using the materials for any commercial purpose or for any public display</li>
-              <li>Attempting to decompile or reverse engineer any software contained on Always Pause</li>
-              <li>Removing any copyright or other proprietary notations from the materials</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold mb-3">3. Disclaimer</h2>
-            <p>
-              The materials on Always Pause are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
+              Always Pause is a wellness tool designed to guide breathing exercises for stress relief and relaxation. It is intended for general wellness purposes only.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">4. Limitations</h2>
+            <h2 className="text-lg font-semibold mb-3">Medical Disclaimer</h2>
             <p>
-              In no event shall Always Pause or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Always Pause.
+              Always Pause is <strong>NOT</strong> a medical device and is <strong>NOT</strong> intended to diagnose, treat, cure, or prevent any medical condition. The breathing techniques provided are for general wellness purposes only. If you have any medical conditions — particularly respiratory or cardiovascular conditions — consult a qualified healthcare provider before using this app. Do not use Always Pause as a substitute for professional medical advice, diagnosis, or treatment.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">5. Accuracy of Materials</h2>
+            <h2 className="text-lg font-semibold mb-3">Intellectual Property</h2>
             <p>
-              The materials appearing on Always Pause could include technical, typographical, or photographic errors. Always Pause does not warrant that any of the materials on its site are accurate, complete, or current. Always Pause may make changes to the materials contained on its site at any time without notice.
+              All content in Always Pause, including design, text, animations, and the Always Pause name and brand, are the property of Work OnDeck LLC and are protected by applicable intellectual property laws.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">6. Links</h2>
+            <h2 className="text-lg font-semibold mb-3">In-App Purchases</h2>
             <p>
-              Always Pause has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Always Pause of the site. Use of any such linked website is at the user's own risk.
+              Always Pause may offer optional in-app purchases. All purchases are final and subject to Apple's App Store terms. We do not offer refunds outside of Apple's standard refund policy.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">7. Modifications</h2>
+            <h2 className="text-lg font-semibold mb-3">Limitation of Liability</h2>
             <p>
-              Always Pause may revise these terms of service for its website at any time without notice. By using this website, you are agreeing to be bound by the then current version of these terms of service.
+              Work OnDeck LLC shall not be liable for any indirect, incidental, or consequential damages arising from your use of Always Pause. The app is provided "as is" without warranties of any kind.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">8. Governing Law</h2>
+            <h2 className="text-lg font-semibold mb-3">Changes to Terms</h2>
             <p>
-              These terms and conditions are governed by and construed in accordance with the laws of the jurisdiction in which Always Pause operates, and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
+              We reserve the right to modify these Terms at any time. Continued use of the app after changes constitutes acceptance of the new Terms.
             </p>
           </section>
+
+          <section>
+            <h2 className="text-lg font-semibold mb-3">Governing Law</h2>
+            <p>
+              These Terms are governed by the laws of the State of New Jersey, United States.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold mb-3">Contact Us</h2>
+            <p>
+              Questions? Email us at: <a href="mailto:support@workondeck.com" className="underline hover:opacity-70">support@workondeck.com</a>
+            </p>
+          </section>
+
+          <p className="text-xs text-foreground/60 mt-8 pt-4 border-t border-foreground/10">
+            © 2026 Work OnDeck LLC. All rights reserved.
+          </p>
         </div>
       </div>
     </div>
