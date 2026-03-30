@@ -60,7 +60,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       />
 
       {/* Tap prompt and support */}
-      <div className="flex-1 flex flex-col items-center justify-between w-full pt-16 pb-12 sm:pb-16 px-6">
+      <div className="flex-1 flex flex-col items-center w-full px-6">
+        {/* Spacer to push content below orb */}
+        <div className="flex-1" />
+
         {/* Tap to pause text */}
         <motion.p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.45em]"
@@ -78,10 +81,11 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         {/* Divider */}
         <div className="w-48 h-px my-8" style={{ background: colors.secondary, opacity: 0.3 }} />
 
-        {/* Support button */}
+        {/* Support button with spacer */}
+        <div className="flex-1" />
         <button
           onClick={onSupportClick}
-          className="pointer-events-auto transition-opacity duration-500 hover:opacity-60"
+          className="pointer-events-auto transition-opacity duration-500 hover:opacity-60 pb-12 sm:pb-16"
           style={{ color: colors.secondary }}
           aria-label="Support Always Pause"
         >
