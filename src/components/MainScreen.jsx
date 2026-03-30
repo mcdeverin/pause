@@ -60,7 +60,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       />
 
       {/* Tap prompt */}
-      <div className="pb-0 flex flex-col items-center">
+      <div className="pb-0 flex flex-col items-center min-h-screen">
         <motion.p
           className="font-cormorant text-[10px] sm:text-[11px] font-light tracking-[0.45em]"
           style={{ color: colors.text }}
@@ -77,7 +77,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         {/* Support button */}
         <button
           onClick={onSupportClick}
-          className="mt-40 sm:mt-48 pointer-events-auto transition-opacity duration-500 hover:opacity-60"
+          className="mt-auto mb-12 sm:mb-16 pointer-events-auto transition-opacity duration-500 hover:opacity-60"
           style={{ color: colors.secondary }}
           aria-label="Support Always Pause"
         >
