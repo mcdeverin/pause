@@ -45,6 +45,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
   const elapsedSecondsRef = useRef(0);
 
   const isDayTheme = theme === "day";
+  const textColor = isDayTheme ? "#1C1C1C" : "#F0EDE8";
 
   useEffect(() => {
     timerRef.current = setInterval(() => {
@@ -130,7 +131,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           style={{
             fontSize: "11px",
             letterSpacing: "0.5em",
-            color: "#1C1C1C",
+            color: textColor,
             opacity: isDayTheme ? 0.5 : 1,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 200,
@@ -204,7 +205,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         <p
           style={{
             fontSize: "18px",
-            color: "#1C1C1C",
+            color: textColor,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
             margin: 0,
@@ -222,7 +223,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         <p
           style={{
             fontSize: "12px",
-            color: "#1C1C1C",
+            color: textColor,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontStyle: "italic",
             fontWeight: 300,
@@ -256,8 +257,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           style={{
             width: "120px",
             height: "1px",
-            background: "#1C1C1C",
-            opacity: isDayTheme ? 0.1 : 0.15,
+            background: textColor,
+              opacity: isDayTheme ? 0.1 : 0.15,
             position: "relative",
             overflow: "hidden",
           }}
@@ -268,7 +269,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               top: 0,
               left: 0,
               height: "100%",
-              background: "#1C1C1C",
+              background: textColor,
               opacity: isDayTheme ? 0.25 : 0.35,
               width: `${progress * 100}%`,
             }}
@@ -281,7 +282,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           onClick={onDone}
           style={{
             fontSize: "11px",
-            color: "#1C1C1C",
+            color: textColor,
             opacity: isDayTheme ? 0.3 : 0.4,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,

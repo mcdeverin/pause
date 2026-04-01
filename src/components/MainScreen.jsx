@@ -5,6 +5,7 @@ import LiquidOrb from "./LiquidOrb";
 export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme }) {
   const navigate = useNavigate();
   const isDayTheme = theme === "day";
+  const textColor = isDayTheme ? "#1C1C1C" : "#F0EDE8";
 
   return (
     <div
@@ -37,7 +38,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             fontSize: "11px",
             letterSpacing: "0.5em",
             fontWeight: 200,
-            color: "#1C1C1C",
+            color: textColor,
             opacity: isDayTheme ? 0.45 : 1,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             margin: 0,
@@ -110,7 +111,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "12px",
             letterSpacing: "0.12em",
-            color: "#1C1C1C",
+            color: textColor,
             opacity: isDayTheme ? 0.35 : 0.5,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontStyle: "normal",
@@ -145,7 +146,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           onClick={() => window.open('https://buymeacoffee.com/alwayspause', '_blank')}
           style={{
             fontSize: "10px",
-            color: "#1C1C1C",
+            color: textColor,
             opacity: isDayTheme ? 0.2 : 0.25,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
@@ -161,7 +162,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         <div
           style={{
             fontSize: "10px",
-            color: "#1C1C1C",
+            color: textColor,
             opacity: isDayTheme ? 0.15 : 0.2,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
