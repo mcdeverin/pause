@@ -14,9 +14,17 @@ export default function BreathingScreen({ technique, onDone, theme }) {
   try {
     const activeTechnique = technique || DEFAULT_TECHNIQUE;
     
-    const phases = Array.isArray(activeTechnique.phases) ? activeTechnique.phases : (typeof activeTechnique.phases === 'string' ? activeTechnique.phases.split(',').map(Number) : []);
-    const labels = Array.isArray(activeTechnique.phaseLabels) ? activeTechnique.phaseLabels : (typeof activeTechnique.phaseLabels === 'string' ? activeTechnique.phaseLabels.split(',') : []);
-    
+    // Handle format from techniqueLoader: phases = [{label, duration}, ...]
+    let phases, labels;
+    if (Array.isArray(activeTechnique.phases) && activeTechnique.phases[0]?.duration !== undefined) {
+      // techniqueLoader format
+      phases = activeTechnique.phases.map(p => p.duration);
+      labels = activeTechnique.phases.map(p => p.label);
+    } else {
+      phases = Array.isArray(activeTechnique.phases) ? activeTechnique.phases : (typeof activeTechnique.phases === 'string' ? activeTechnique.phases.split(',').map(Number) : []);
+      labels = Array.isArray(activeTechnique.phaseLabels) ? activeTechnique.phaseLabels : (typeof activeTechnique.phaseLabels === 'string' ? activeTechnique.phaseLabels.split(',') : []);
+    }
+
     if (!phases.length || !labels.length) {
       return <BreathingScreenContent technique={DEFAULT_TECHNIQUE} onDone={onDone} theme={theme} />;
     }
