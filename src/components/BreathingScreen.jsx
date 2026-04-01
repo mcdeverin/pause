@@ -14,17 +14,9 @@ export default function BreathingScreen({ technique, onDone, theme }) {
   try {
     const activeTechnique = technique || DEFAULT_TECHNIQUE;
     
-    // Handle format from techniqueLoader: phases = [{label, duration}, ...]
-    let phases, labels;
-    if (Array.isArray(activeTechnique.phases) && activeTechnique.phases[0]?.duration !== undefined) {
-      // techniqueLoader format
-      phases = activeTechnique.phases.map(p => p.duration);
-      labels = activeTechnique.phases.map(p => p.label);
-    } else {
-      phases = Array.isArray(activeTechnique.phases) ? activeTechnique.phases : (typeof activeTechnique.phases === 'string' ? activeTechnique.phases.split(',').map(Number) : []);
-      labels = Array.isArray(activeTechnique.phaseLabels) ? activeTechnique.phaseLabels : (typeof activeTechnique.phaseLabels === 'string' ? activeTechnique.phaseLabels.split(',') : []);
-    }
-
+    const phases = Array.isArray(activeTechnique.phases) ? activeTechnique.phases : (typeof activeTechnique.phases === 'string' ? activeTechnique.phases.split(',').map(Number) : []);
+    const labels = Array.isArray(activeTechnique.phaseLabels) ? activeTechnique.phaseLabels : (typeof activeTechnique.phaseLabels === 'string' ? activeTechnique.phaseLabels.split(',') : []);
+    
     if (!phases.length || !labels.length) {
       return <BreathingScreenContent technique={DEFAULT_TECHNIQUE} onDone={onDone} theme={theme} />;
     }
@@ -140,7 +132,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             letterSpacing: "0.5em",
             color: "#1C1C1C",
             opacity: isDayTheme ? 0.5 : 1,
-            fontFamily: "'Nunito', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 200,
             margin: 0,
           }}
@@ -200,7 +192,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               fontSize: "52px",
               fontWeight: 200,
               color: "#FFFFFF",
-              fontFamily: "'Nunito', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               textShadow: "none",
             }}
           >
@@ -213,7 +205,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           style={{
             fontSize: "18px",
             color: "#1C1C1C",
-            fontFamily: "'Nunito', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
             margin: 0,
             textTransform: "lowercase",
@@ -231,7 +223,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           style={{
             fontSize: "12px",
             color: "#1C1C1C",
-            fontFamily: "'Nunito', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontStyle: "italic",
             fontWeight: 300,
             textAlign: "center",
@@ -291,7 +283,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             fontSize: "11px",
             color: "#1C1C1C",
             opacity: isDayTheme ? 0.3 : 0.4,
-            fontFamily: "'Nunito', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
             letterSpacing: "0.2em",
             background: "none",
