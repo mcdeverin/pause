@@ -141,17 +141,13 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
         </p>
       </div>
 
-      {/* Center: Blob with countdown and phase label */}
+      {/* Center: Blob only */}
       <div
         style={{
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "72px",
           zIndex: 5,
         }}
       >
@@ -199,8 +195,22 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             {secondsLeft}
           </div>
         </div>
+      </div>
 
-        {/* Phase label */}
+      {/* Phase label - positioned below orb center */}
+      <div
+        style={{
+          position: "absolute",
+          top: "calc(50% + 207px)",
+          left: 0,
+          right: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "24px",
+          zIndex: 5,
+        }}
+      >
         <p
           style={{
             fontSize: "18px",
@@ -229,7 +239,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             maxWidth: "270px",
             lineHeight: 1.9,
             margin: 0,
-            }}
+          }}
         >
           {technique.science}
         </p>
