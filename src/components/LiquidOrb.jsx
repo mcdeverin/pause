@@ -134,7 +134,7 @@ export default function LiquidOrb({ theme, isBreathing, technique, size = 260 })
               fontSize: "32px",
               fontWeight: 200,
               color: "rgba(255, 255, 255, 0.95)",
-              fontFamily: "'Cormorant Garamond', serif",
+              fontFamily: "'Nunito', sans-serif",
               textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
             }}
           >

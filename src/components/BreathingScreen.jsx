@@ -132,7 +132,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             fontSize: "11px",
             letterSpacing: "0.5em",
             color: textColor,
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontFamily: "'Nunito', sans-serif",
             fontWeight: 200,
             margin: 0,
           }}
@@ -192,7 +192,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               fontSize: "52px",
               fontWeight: 200,
               color: "#FFFFFF",
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontFamily: "'Nunito', sans-serif",
               textShadow: "none",
             }}
           >
@@ -205,7 +205,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           style={{
             fontSize: "18px",
             color: textColor,
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontFamily: "'Nunito', sans-serif",
             fontWeight: 300,
             margin: 0,
             textTransform: "lowercase",
@@ -222,7 +222,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           style={{
             fontSize: "12px",
             color: textColor,
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontFamily: "'Nunito', sans-serif",
             fontStyle: "italic",
             fontWeight: 300,
             textAlign: "center",
@@ -280,7 +280,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           style={{
             fontSize: "11px",
             color: textColor,
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontFamily: "'Nunito', sans-serif",
             fontWeight: 300,
             letterSpacing: "0.2em",
             background: "none",

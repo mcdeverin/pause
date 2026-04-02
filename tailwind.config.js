@@ -5,7 +5,7 @@ module.exports = {
   theme: {
   	extend: {
   		fontFamily: {
-  			cormorant: ['var(--font-cormorant)'],
+  			nunito: ['var(--font-nunito)'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
