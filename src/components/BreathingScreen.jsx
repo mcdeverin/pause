@@ -145,7 +145,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
       <div
         style={{
           position: "absolute",
-          top: "50%",
+          top: "47%",
           left: "50%",
           transform: "translate(-50%, -50%)",
           zIndex: 5,
