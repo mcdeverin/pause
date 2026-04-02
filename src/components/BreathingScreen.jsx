@@ -5,45 +5,28 @@ const TOTAL_CYCLES = 4;
 
 const DEFAULT_TECHNIQUE = {
   name: "Box Breathing",
-  phases: [
-    { label: "inhale", duration: 4 },
-    { label: "hold", duration: 4 },
-    { label: "exhale", duration: 4 },
-    { label: "hold", duration: 4 },
-  ],
+  phases: "4,4,4,4",
+  phaseLabels: "inhale,hold,exhale,hold",
   science: "Used by Navy SEALs to control stress under pressure.",
 };
 
 export default function BreathingScreen({ technique, onDone, theme }) {
   const activeTechnique = technique || DEFAULT_TECHNIQUE;
 
-  // Handle both formats:
-  // 1. From techniqueLoader: phases = [{label, duration}, ...]
-  // 2. Legacy: phases = [4,4,4,4] + phaseLabels = ["inhale","hold",...]
-  let phases, labels;
-  if (activeTechnique.phases && typeof activeTechnique.phases[0] === 'object') {
-    phases = activeTechnique.phases.map(p => p.duration);
-    labels = activeTechnique.phases.map(p => p.label);
-  } else {
-    phases = Array.isArray(activeTechnique.phases)
-      ? activeTechnique.phases
-      : (typeof activeTechnique.phases === 'string' ? activeTechnique.phases.split(',').map(Number) : []);
-    labels = Array.isArray(activeTechnique.phaseLabels)
-      ? activeTechnique.phaseLabels
-      : (typeof activeTechnique.phaseLabels === 'string' ? activeTechnique.phaseLabels.split(',') : []);
-  }
+  const phases = String(activeTechnique.phases || "").split(",").map(Number);
+  const labels = String(activeTechnique.phaseLabels || "").split(",").map(s => s.trim());
 
-  if (!phases.length || !labels.length) {
+  if (!phases.length || phases.some(isNaN)) {
     const fb = DEFAULT_TECHNIQUE;
-    return <BreathingScreenContent technique={fb} phases={fb.phases.map(p=>p.duration)} labels={fb.phases.map(p=>p.label)} onDone={onDone} theme={theme} />;
+    const fbPhases = fb.phases.split(",").map(Number);
+    const fbLabels = fb.phaseLabels.split(",");
+    return <BreathingScreenContent technique={fb} phases={fbPhases} labels={fbLabels} onDone={onDone} theme={theme} />;
   }
 
   return <BreathingScreenContent technique={activeTechnique} phases={phases} labels={labels} onDone={onDone} theme={theme} />;
 }
 
-function BreathingScreenContent({ technique, phases: propsPhases, labels: propsLabels, onDone, theme }) {
-  const phases = propsPhases || (Array.isArray(technique.phases) ? technique.phases : (typeof technique.phases === 'string' ? technique.phases.split(',').map(Number) : []));
-  const labels = propsLabels || (Array.isArray(technique.phaseLabels) ? technique.phaseLabels : (typeof technique.phaseLabels === 'string' ? technique.phaseLabels.split(',') : []));
+function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
 
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(phases[0]);

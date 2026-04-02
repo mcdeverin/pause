@@ -7,22 +7,15 @@ export async function loadTechniques() {
   if (cachedTechniques) return cachedTechniques;
 
   const records = await base44.entities.Technique.list();
-  
-  cachedTechniques = records.map((record) => {
-    const phaseDurations = (Array.isArray(record.phases) ? record.phases : (record.phases || "").split(",")).map((d) => parseInt(String(d).trim()));
-    const phaseLabels = Array.isArray(record.phaseLabels) ? record.phaseLabels : (record.phaseLabels ? record.phaseLabels.split(",").map((l) => l.trim()) : phaseDurations.map(() => "hold"));
 
-    return {
-      name: record.name,
-      science: record.science,
-      category: record.category,
-      difficulty: record.difficulty,
-      phases: phaseDurations.map((duration, idx) => ({
-        label: phaseLabels[idx] || "hold",
-        duration,
-      })),
-    };
-  });
+  cachedTechniques = records.map((record) => ({
+    name: record.name,
+    science: record.science,
+    category: record.category,
+    difficulty: record.difficulty,
+    phases: record.phases,
+    phaseLabels: record.phaseLabels,
+  }));
 
   return cachedTechniques;
 }
