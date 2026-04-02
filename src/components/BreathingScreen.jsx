@@ -45,7 +45,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
   const elapsedSecondsRef = useRef(0);
 
   const isDayTheme = theme === "day";
-  const textColor = isDayTheme ? "#1C1C1C" : "#F0EDE8";
+  const textColor = isDayTheme ? "#111111" : "#F0EDE8";
 
   useEffect(() => {
     timerRef.current = setInterval(() => {

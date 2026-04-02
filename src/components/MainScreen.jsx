@@ -5,7 +5,7 @@ import LiquidOrb from "./LiquidOrb";
 export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme }) {
   const navigate = useNavigate();
   const isDayTheme = theme === "day";
-  const textColor = isDayTheme ? "#2C2C2C" : "#F0EDE8";
+  const textColor = isDayTheme ? "#111111" : "#F0EDE8";
 
   return (
     <div
@@ -110,7 +110,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "12px",
             letterSpacing: "0.12em",
-            color: isDayTheme ? "#6B6B6B" : "#F0EDE8",
+            color: isDayTheme ? "#333333" : "#F0EDE8",
             opacity: 1,
             fontFamily: "'Nunito', sans-serif",
             fontStyle: "normal",
