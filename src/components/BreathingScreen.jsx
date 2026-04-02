@@ -151,7 +151,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "36px",
+          gap: "72px",
           zIndex: 5,
         }}
       >
