@@ -197,14 +197,14 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
       <div
         style={{
           position: "absolute",
-          top: "calc(45% + 150px)",
+          top: "calc(45% + 168px)",
           bottom: "20px",
           left: 0,
           right: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "20px",
+          gap: "16px",
           zIndex: 5,
           padding: "0 24px",
         }}
@@ -253,8 +253,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
           </p>
         </div>
 
-        {/* Spacer to push progress + done to bottom */}
-        <div style={{ flex: 1 }} />
+
 
         {/* Progress bar */}
         <div
