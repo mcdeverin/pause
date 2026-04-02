@@ -37,13 +37,13 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "11px",
             letterSpacing: "0.5em",
-            fontWeight: 300,
+            fontWeight: 600,
             color: textColor,
             fontFamily: "'Comfortaa', sans-serif",
             margin: 0,
           }}
         >
-          ALWAYS PAUSE
+          PAUSE
         </p>
       </div>
 
@@ -142,7 +142,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         }}
       >
         <button
-          onClick={() => window.open('https://buymeacoffee.com/alwayspause', '_blank')}
+          onClick={() => window.open('https://buymeacoffee.com/pause', '_blank')}
           style={{
             fontSize: "10px",
             color: textColor,
