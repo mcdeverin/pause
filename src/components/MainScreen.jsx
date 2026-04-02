@@ -39,7 +39,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             letterSpacing: "0.5em",
             fontWeight: 200,
             color: textColor,
-            opacity: isDayTheme ? 0.45 : 1,
+            opacity: isDayTheme ? 0.7 : 1,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             margin: 0,
           }}
@@ -112,7 +112,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             fontSize: "12px",
             letterSpacing: "0.12em",
             color: isDayTheme ? "#6B6B6B" : "#F0EDE8",
-            opacity: isDayTheme ? 0.35 : 0.5,
+            opacity: 1,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontStyle: "normal",
             fontWeight: 300,
@@ -147,7 +147,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "10px",
             color: textColor,
-            opacity: isDayTheme ? 0.2 : 0.25,
+            opacity: isDayTheme ? 0.4 : 0.35,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
             background: "none",
@@ -163,7 +163,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "10px",
             color: textColor,
-            opacity: isDayTheme ? 0.15 : 0.2,
+            opacity: isDayTheme ? 0.3 : 0.3,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
             display: "flex",
