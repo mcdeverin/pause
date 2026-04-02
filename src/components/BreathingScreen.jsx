@@ -120,7 +120,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
       <div
         style={{
           position: "absolute",
-          top: "48px",
+          top: "64px",
           left: 0,
           right: 0,
           textAlign: "center",
@@ -249,7 +249,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
       <div
         style={{
           position: "absolute",
-          bottom: "36px",
+          bottom: "20px",
           left: 0,
           right: 0,
           display: "flex",
