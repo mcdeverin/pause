@@ -173,12 +173,10 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               width: "100%",
               height: "100%",
               background: theme === "day"
-                ? "radial-gradient(circle at 30% 28%, #5A9FD4 0%, #2E6FA3 30%, #1A8C7A 65%, #4A7C59 100%)"
-                : "radial-gradient(circle at 30% 28%, #7B4FC9 0%, #4A2C8A 25%, #1E5FAD 60%, #0E8C7A 100%)",
+                ? "radial-gradient(circle at 35% 35%, #4A7FA6 0%, #6BA888 100%)"
+                : "radial-gradient(circle at 35% 35%, #4A5B9C 0%, #7B9E8C 100%)",
               borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
-              boxShadow: theme === "day"
-                ? "0 8px 48px rgba(46, 111, 163, 0.45), 0 2px 16px rgba(26, 140, 122, 0.3), inset 0 1px 0 rgba(255,255,255,0.25)"
-                : "0 8px 60px rgba(74, 44, 138, 0.6), 0 2px 20px rgba(14, 140, 122, 0.35), inset 0 1px 0 rgba(255,255,255,0.15)",
+              boxShadow: "none",
               filter: "none",
               transform: `scale(${orbScale})`,
               transition: "transform 0.95s ease-in-out",

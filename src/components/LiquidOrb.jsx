@@ -8,8 +8,8 @@ export default function LiquidOrb({ theme, isBreathing, technique, size = 260 })
   const isDayTheme = theme === "day";
   const baseSize = size;
 
-  const dayGradient = "radial-gradient(circle at 30% 28%, #5A9FD4 0%, #2E6FA3 30%, #1A8C7A 65%, #4A7C59 100%)";
-  const nightGradient = "radial-gradient(circle at 30% 28%, #7B4FC9 0%, #4A2C8A 25%, #1E5FAD 60%, #0E8C7A 100%)";
+  const dayGradient = "radial-gradient(circle at 35% 35%, rgba(91, 141, 184, 0.9) 0%, rgba(143, 175, 143, 0.7) 60%, rgba(143, 175, 143, 0.5) 100%)";
+  const nightGradient = "radial-gradient(circle at 35% 35%, rgba(74, 91, 140, 0.9) 0%, rgba(155, 142, 196, 0.7) 60%, rgba(155, 142, 196, 0.5) 100%)";
 
   useEffect(() => {
     if (!isBreathing || !technique) {
@@ -115,11 +115,11 @@ export default function LiquidOrb({ theme, isBreathing, technique, size = 260 })
             height: `${baseSize}px`,
             background: isDayTheme ? dayGradient : nightGradient,
             boxShadow: isDayTheme
-              ? "0 8px 48px rgba(46, 111, 163, 0.45), 0 2px 16px rgba(26, 140, 122, 0.3), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -2px 8px rgba(0,0,0,0.1)"
-              : "0 8px 60px rgba(74, 44, 138, 0.6), 0 2px 20px rgba(14, 140, 122, 0.35), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -2px 8px rgba(0,0,0,0.2)",
+              ? "0 0 60px rgba(91, 141, 184, 0.25), inset 0 0 40px rgba(255, 255, 255, 0.1)"
+              : "0 0 60px rgba(74, 91, 140, 0.25), inset 0 0 40px rgba(255, 255, 255, 0.05)",
             filter: isDayTheme
-              ? "drop-shadow(0 0 20px rgba(46, 111, 163, 0.3))"
-              : "drop-shadow(0 0 28px rgba(74, 44, 138, 0.5))",
+              ? "drop-shadow(0 0 30px rgba(143, 175, 143, 0.15))"
+              : "drop-shadow(0 0 30px rgba(155, 142, 196, 0.15))",
             transform: `scale(${scale})`,
             transition: "transform 0.95s ease-in-out",
           }}
