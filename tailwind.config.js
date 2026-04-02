@@ -6,6 +6,7 @@ module.exports = {
   	extend: {
   		fontFamily: {
   			nunito: ['var(--font-nunito)'],
+  			comfortaa: ['Comfortaa', 'sans-serif'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

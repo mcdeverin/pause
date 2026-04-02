@@ -37,9 +37,9 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "11px",
             letterSpacing: "0.5em",
-            fontWeight: 200,
+            fontWeight: 300,
             color: textColor,
-            fontFamily: "'Nunito', sans-serif",
+            fontFamily: "'Comfortaa', sans-serif",
             margin: 0,
           }}
         >
@@ -112,7 +112,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             letterSpacing: "0.12em",
             color: isDayTheme ? "#333333" : "#F0EDE8",
             opacity: 1,
-            fontFamily: "'Nunito', sans-serif",
+            fontFamily: "'Comfortaa', sans-serif",
             fontStyle: "normal",
             fontWeight: 300,
             background: "none",
@@ -146,7 +146,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "10px",
             color: textColor,
-            fontFamily: "'Nunito', sans-serif",
+            fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
             background: "none",
             border: "none",
@@ -161,7 +161,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "10px",
             color: textColor,
-            fontFamily: "'Nunito', sans-serif",
+            fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
             display: "flex",
             gap: "8px",
