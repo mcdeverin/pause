@@ -201,7 +201,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
       <div
         style={{
           position: "absolute",
-          top: "calc(50% + 175px)",
+          top: "calc(50% + 160px)",
           left: 0,
           right: 0,
           display: "flex",
