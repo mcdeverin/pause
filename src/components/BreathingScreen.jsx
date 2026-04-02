@@ -132,7 +132,6 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             fontSize: "11px",
             letterSpacing: "0.5em",
             color: textColor,
-            opacity: isDayTheme ? 0.5 : 1,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 200,
             margin: 0,
@@ -214,7 +213,6 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             textTransform: "lowercase",
             textAlign: "center",
             minHeight: "24px",
-            opacity: isDayTheme ? 0.7 : 0.85,
             letterSpacing: "0.25em",
           }}
         >
@@ -233,8 +231,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             maxWidth: "270px",
             lineHeight: 1.9,
             margin: 0,
-            opacity: isDayTheme ? 0.45 : 0.55,
-          }}
+            }}
         >
           {technique.science}
         </p>
@@ -260,7 +257,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             width: "120px",
             height: "1px",
             background: textColor,
-              opacity: isDayTheme ? 0.1 : 0.15,
+              opacity: 0.15,
             position: "relative",
             overflow: "hidden",
           }}
@@ -272,7 +269,7 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
               left: 0,
               height: "100%",
               background: textColor,
-              opacity: isDayTheme ? 0.25 : 0.35,
+              opacity: 0.5,
               width: `${progress * 100}%`,
             }}
             transition={{ duration: 0.1 }}
@@ -285,7 +282,6 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
           style={{
             fontSize: "11px",
             color: textColor,
-            opacity: isDayTheme ? 0.3 : 0.4,
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontWeight: 300,
             letterSpacing: "0.2em",
@@ -295,8 +291,8 @@ function BreathingScreenContent({ technique, phases: propsPhases, labels: propsL
             transition: "opacity 700ms",
             padding: 0,
           }}
-          onMouseEnter={(e) => (e.target.style.opacity = isDayTheme ? "0.55" : "0.65")}
-          onMouseLeave={(e) => (e.target.style.opacity = isDayTheme ? "0.3" : "0.4")}
+          onMouseEnter={(e) => (e.target.style.opacity = "0.6")}
+          onMouseLeave={(e) => (e.target.style.opacity = "1")}
         >
           · done ·
         </button>
