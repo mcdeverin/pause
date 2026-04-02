@@ -25,7 +25,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "48px",
+          top: "80px",
           left: 0,
           right: 0,
           width: "100%",
@@ -85,7 +85,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "28px",
+          gap: "48px",
           zIndex: 5,
         }}
       >
