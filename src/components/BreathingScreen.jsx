@@ -193,20 +193,23 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
         </div>
       </div>
 
-      {/* Phase label - positioned below orb center */}
+      {/* Bottom section: phase label + science + progress + done */}
       <div
         style={{
           position: "absolute",
-          top: "calc(50% + 160px)",
+          top: "calc(45% + 150px)",
+          bottom: "20px",
           left: 0,
           right: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "24px",
+          gap: "20px",
           zIndex: 5,
+          padding: "0 24px",
         }}
       >
+        {/* Phase label */}
         <p
           style={{
             fontSize: "18px",
@@ -218,52 +221,51 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
             textAlign: "center",
             minHeight: "24px",
             letterSpacing: "0.25em",
+            flexShrink: 0,
           }}
         >
           {labels[phaseIndex]}
         </p>
 
-        {/* Science fact */}
-        <p
+        {/* Scrollable science fact */}
+        <div
           style={{
-            fontSize: "12px",
-            color: textColor,
-            fontFamily: "'Comfortaa', sans-serif",
-            fontStyle: "italic",
-            fontWeight: 300,
-            textAlign: "center",
+            overflowY: "auto",
+            maxHeight: "80px",
+            width: "100%",
             maxWidth: "270px",
-            lineHeight: 1.9,
-            margin: 0,
+            flexShrink: 0,
           }}
         >
-          {technique.science}
-        </p>
-      </div>
+          <p
+            style={{
+              fontSize: "12px",
+              color: textColor,
+              fontFamily: "'Comfortaa', sans-serif",
+              fontStyle: "italic",
+              fontWeight: 300,
+              textAlign: "center",
+              lineHeight: 1.9,
+              margin: 0,
+            }}
+          >
+            {technique.science}
+          </p>
+        </div>
 
-      {/* Bottom: Progress bar + done button */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "20px",
-          left: 0,
-          right: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "20px",
-          zIndex: 10,
-        }}
-      >
+        {/* Spacer to push progress + done to bottom */}
+        <div style={{ flex: 1 }} />
+
         {/* Progress bar */}
         <div
           style={{
             width: "120px",
             height: "1px",
             background: textColor,
-              opacity: 0.15,
+            opacity: 0.15,
             position: "relative",
             overflow: "hidden",
+            flexShrink: 0,
           }}
         >
           <motion.div
@@ -294,6 +296,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
             cursor: "pointer",
             transition: "opacity 700ms",
             padding: 0,
+            flexShrink: 0,
           }}
           onMouseEnter={(e) => (e.target.style.opacity = "0.6")}
           onMouseLeave={(e) => (e.target.style.opacity = "1")}
