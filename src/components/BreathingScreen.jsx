@@ -128,7 +128,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
             fontSize: "11px",
             letterSpacing: "0.5em",
             color: textColor,
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
             margin: 0,
           }}
@@ -184,7 +184,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
               fontSize: "52px",
               fontWeight: 300,
               color: "#FFFFFF",
-              fontFamily: "'Poppins', sans-serif",
+              fontFamily: "'Comfortaa', sans-serif",
               textShadow: "none",
             }}
           >
@@ -214,7 +214,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
           style={{
             fontSize: "18px",
             color: textColor,
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
             margin: 0,
             textTransform: "lowercase",
@@ -241,7 +241,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
             style={{
               fontSize: "12px",
               color: textColor,
-              fontFamily: "'Poppins', sans-serif",
+              fontFamily: "'Comfortaa', sans-serif",
               fontStyle: "italic",
               fontWeight: 300,
               textAlign: "center",
@@ -287,7 +287,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
           style={{
             fontSize: "11px",
             color: textColor,
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
             letterSpacing: "0.2em",
             background: "none",
