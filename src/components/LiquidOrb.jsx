@@ -8,7 +8,7 @@ export default function LiquidOrb({ theme, isBreathing, technique, size = 260 })
   const isDayTheme = theme === "day";
   const baseSize = size;
 
-  const dayGradient = "radial-gradient(circle at 35% 35%, rgba(91, 141, 184, 0.9) 0%, rgba(143, 175, 143, 0.7) 60%, rgba(143, 175, 143, 0.5) 100%)";
+  const dayGradient = "radial-gradient(circle at 35% 35%, #4A7FA6 0%, #6BA888 100%)";
   const nightGradient = "radial-gradient(circle at 35% 35%, rgba(74, 91, 140, 0.9) 0%, rgba(155, 142, 196, 0.7) 60%, rgba(155, 142, 196, 0.5) 100%)";
 
   useEffect(() => {
@@ -114,12 +114,8 @@ export default function LiquidOrb({ theme, isBreathing, technique, size = 260 })
             width: `${baseSize}px`,
             height: `${baseSize}px`,
             background: isDayTheme ? dayGradient : nightGradient,
-            boxShadow: isDayTheme
-              ? "0 0 60px rgba(91, 141, 184, 0.25), inset 0 0 40px rgba(255, 255, 255, 0.1)"
-              : "0 0 60px rgba(74, 91, 140, 0.25), inset 0 0 40px rgba(255, 255, 255, 0.05)",
-            filter: isDayTheme
-              ? "drop-shadow(0 0 30px rgba(143, 175, 143, 0.15))"
-              : "drop-shadow(0 0 30px rgba(155, 142, 196, 0.15))",
+            boxShadow: "none",
+            filter: "none",
             transform: `scale(${scale})`,
             transition: "transform 0.95s ease-in-out",
           }}
