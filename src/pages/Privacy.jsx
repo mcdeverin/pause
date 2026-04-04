@@ -77,7 +77,7 @@ export default function Privacy() {
           <section>
             <h2 className="text-lg font-semibold mb-3">Contact Us</h2>
             <p>
-              Questions? Email us at: <a href="mailto:support@workondeck.com" className="underline hover:opacity-70">support@workondeck.com</a>
+              Questions? Email us at: <a href="mailto:hello@alwayspause.com" className="underline hover:opacity-70">hello@alwayspause.com</a>
             </p>
           </section>
 
