@@ -114,8 +114,8 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                 }}
               >
                 {isDayTheme
-                  ? <Moon size={14} color="rgba(0,0,0,0.4)" />
-                  : <Sun size={14} color="rgba(255,255,255,0.35)" />}
+                  ? <Sun size={14} color="rgba(0,0,0,0.4)" />
+                  : <Moon size={14} color="rgba(255,255,255,0.35)" />}
                 {/* Toggle pill */}
                 <div style={{
                   width: "32px",
