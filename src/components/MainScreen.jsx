@@ -171,7 +171,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "13vh",
+          top: "10vh",
           left: 0,
           right: 0,
           width: "100%",
@@ -198,13 +198,13 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "45vh",
+          top: "50vh",
           left: "50%",
           transform: "translate(-50%, -50%)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "6vh",
+          gap: "5vh",
           zIndex: 5,
         }}
       >
