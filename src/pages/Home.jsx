@@ -9,6 +9,7 @@ import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
 export default function Home() {
   const [mode, setMode] = useState("idle");
   const [technique, setTechnique] = useState(null);
+  const [hapticsEnabled, setHapticsEnabled] = useState(true);
 
   const [showSupport, setShowSupport] = useState(false);
   const [theme, setTheme] = useState("day");
@@ -74,6 +75,7 @@ export default function Home() {
             }}
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
+            onHapticsChange={() => setHapticsEnabled(!hapticsEnabled)}
           />
         )}
         {mode === "breathing" && technique && (
@@ -82,6 +84,7 @@ export default function Home() {
             technique={technique}
             onDone={stopBreathing}
             theme={theme}
+            hapticsEnabled={hapticsEnabled}
           />
         )}
       </AnimatePresence>

@@ -18,10 +18,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
   }, []);
 
   const handleHapticsToggle = () => {
-    const newState = !hapticsEnabled;
-    setHapticsEnabled(newState);
-    localStorage.setItem('hapticsEnabled', JSON.stringify(newState));
-    if (onHapticsChange) onHapticsChange(newState);
+    if (onHapticsChange) onHapticsChange();
   };
   const isDayTheme = theme === "day";
   const textColor = isDayTheme ? "#111111" : "#F0EDE8";
@@ -135,7 +132,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                   width: "32px",
                   height: "18px",
                   borderRadius: "9px",
-                  background: hapticsEnabled ? "#4A7FA6" : "rgba(0,0,0,0.15)",
+                  background: "#4A7FA6",
                   position: "relative",
                   transition: "background 0.25s",
                   flexShrink: 0,
@@ -144,7 +141,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                   <div style={{
                     position: "absolute",
                     top: "3px",
-                    left: hapticsEnabled ? "17px" : "3px",
+                    left: "17px",
                     width: "12px",
                     height: "12px",
                     borderRadius: "50%",
