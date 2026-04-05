@@ -223,7 +223,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "14vh",
+          top: "16vh",
           left: 0,
           right: 0,
           width: "100%",
