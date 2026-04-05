@@ -11,7 +11,7 @@ const DEFAULT_TECHNIQUE = {
   science: "Used by Navy SEALs to control stress under pressure.",
 };
 
-export default function BreathingScreen({ technique, onDone, theme }) {
+export default function BreathingScreen({ technique, onDone, theme, hapticsEnabled }) {
   const activeTechnique = technique || DEFAULT_TECHNIQUE;
 
   const phases = String(activeTechnique.phases || "").split(",").map(Number);
@@ -21,13 +21,13 @@ export default function BreathingScreen({ technique, onDone, theme }) {
     const fb = DEFAULT_TECHNIQUE;
     const fbPhases = fb.phases.split(",").map(Number);
     const fbLabels = fb.phaseLabels.split(",");
-    return <BreathingScreenContent technique={fb} phases={fbPhases} labels={fbLabels} onDone={onDone} theme={theme} />;
+    return <BreathingScreenContent technique={fb} phases={fbPhases} labels={fbLabels} onDone={onDone} theme={theme} hapticsEnabled={hapticsEnabled} />;
   }
 
-  return <BreathingScreenContent technique={activeTechnique} phases={phases} labels={labels} onDone={onDone} theme={theme} />;
+  return <BreathingScreenContent technique={activeTechnique} phases={phases} labels={labels} onDone={onDone} theme={theme} hapticsEnabled={hapticsEnabled} />;
 }
 
-function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
+function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapticsEnabled }) {
 
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(phases[0]);
@@ -47,7 +47,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
 
   // ── Haptic feedback ──────────────────────────────────────────────
   const triggerHaptic = (label) => {
-    if (!navigator.vibrate) return;
+    if (!hapticsEnabled || !navigator.vibrate) return;
     const l = label.toLowerCase();
     if (l.includes("inhale")) {
       navigator.vibrate([80, 40, 80]);        // soft double pulse — breathe in
