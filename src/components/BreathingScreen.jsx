@@ -135,7 +135,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
       <div
         style={{
           position: "absolute",
-          top: "101px",
+          top: "13vh",
           left: 0,
           right: 0,
           display: "flex",
@@ -171,7 +171,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
           onClick={() => setShowInfo(false)}
           style={{
             position: "absolute",
-            top: "96px",
+            top: "13vh",
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 30,
@@ -205,7 +205,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
       <div
         style={{
           position: "absolute",
-          top: "50%",
+          top: "45vh",
           left: "50%",
           transform: "translate(-50%, -50%)",
           zIndex: 5,
@@ -214,8 +214,8 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
         <div
           style={{
             position: "relative",
-            width: "270px",
-            height: "270px",
+            width: "min(270px, 72vw)",
+            height: "min(270px, 72vw)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -242,14 +242,14 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
       <div
         style={{
           position: "absolute",
-          top: "calc(53% + 170px)",
+          top: "72vh",
           bottom: "20px",
           left: 0,
           right: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "16px",
+          gap: "2vh",
           zIndex: 5,
           padding: "0 24px",
         }}
