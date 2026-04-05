@@ -10,17 +10,8 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const stored = localStorage.getItem('hapticsEnabled');
-    if (stored !== null) {
-      setHapticsEnabled(JSON.parse(stored));
-    }
-  }, []);
-
   const handleHapticsToggle = () => {
-    const newState = !hapticsEnabled;
-    setHapticsEnabled(newState);
-    localStorage.setItem('hapticsEnabled', JSON.stringify(newState));
+    setHapticsEnabled(v => !v);
     if (onHapticsChange) onHapticsChange();
   };
   const isDayTheme = theme === "day";
