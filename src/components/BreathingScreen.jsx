@@ -147,14 +147,15 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
       >
         <p
           style={{
-            fontSize: "clamp(9px, 2.5vw, 11px)",
+            fontSize: "11px",
             letterSpacing: "0.5em",
             color: textColor,
             fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
             margin: 0,
-            maxWidth: "calc(100vw - 48px)",
-            whiteSpace: "nowrap",
+            maxWidth: "calc(100vw - 80px)",
+            wordWrap: "break-word",
+            whiteSpace: "normal",
             textAlign: "center",
           }}
         >
@@ -260,7 +261,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
         {/* Phase label */}
         <p
           style={{
-            fontSize: "clamp(14px, 5vw, 18px)",
+            fontSize: "18px",
             color: textColor,
             fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
@@ -271,7 +272,8 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
             letterSpacing: "0.25em",
             flexShrink: 0,
             maxWidth: "calc(100vw - 48px)",
-            whiteSpace: "nowrap",
+            wordWrap: "break-word",
+            whiteSpace: "normal",
           }}
         >
           {labels[phaseIndex]}
