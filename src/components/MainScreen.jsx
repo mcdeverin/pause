@@ -250,7 +250,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "52vh",
+          top: "54vh",
           left: "50%",
           transform: "translate(-50%, -50%)",
           display: "flex",
