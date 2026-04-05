@@ -103,24 +103,43 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                 background: isDayTheme ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.1)",
               }} />
               {/* Theme Toggle */}
-              <button
+              <div
                 onClick={onToggleTheme}
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
+                  justifyContent: "space-between",
                   padding: "9px 18px",
-                  background: "none",
-                  border: "none",
                   cursor: "pointer",
-                  justifyContent: "flex-start",
                 }}
               >
                 {isDayTheme
-                  ? <Moon size={15} color={isDayTheme ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.35)"} />
-                  : <Sun size={15} color="rgba(255,255,255,0.35)" />}
-              </button>
+                  ? <Moon size={14} color="rgba(0,0,0,0.4)" />
+                  : <Sun size={14} color="rgba(255,255,255,0.35)" />}
+                {/* Toggle pill */}
+                <div style={{
+                  width: "32px",
+                  height: "18px",
+                  borderRadius: "9px",
+                  background: !isDayTheme ? "#4A7FA6" : "rgba(0,0,0,0.15)",
+                  position: "relative",
+                  transition: "background 0.25s",
+                  flexShrink: 0,
+                  marginLeft: "12px",
+                }}>
+                  <div style={{
+                    position: "absolute",
+                    top: "3px",
+                    left: !isDayTheme ? "17px" : "3px",
+                    width: "12px",
+                    height: "12px",
+                    borderRadius: "50%",
+                    background: "#fff",
+                    transition: "left 0.25s",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                  }} />
+                </div>
+              </div>
               {[{ label: "Privacy", path: "/privacy" }, { label: "Terms", path: "/terms" }].map(({ label, path }) => (
                 <button
                   key={label}
