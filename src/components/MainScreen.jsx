@@ -33,16 +33,21 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             background: "none",
             border: "none",
             cursor: "pointer",
-            fontFamily: "'Comfortaa', sans-serif",
-            fontSize: "11px",
-            letterSpacing: "0.2em",
-            color: isDayTheme ? "#333" : "rgba(255,255,255,0.6)",
-            fontWeight: 300,
             padding: 0,
-            opacity: 0.7,
+            opacity: 0.45,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "32px",
+            height: "32px",
           }}
+          aria-label="Menu"
         >
-          menu
+          <svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="18" height="1.5" rx="0.75" fill={isDayTheme ? "#1C1C1C" : "#FFFFFF"} />
+            <rect y="5.75" width="18" height="1.5" rx="0.75" fill={isDayTheme ? "#1C1C1C" : "#FFFFFF"} />
+            <rect y="11.5" width="18" height="1.5" rx="0.75" fill={isDayTheme ? "#1C1C1C" : "#FFFFFF"} />
+          </svg>
         </button>
         {menuOpen && (
           <>
