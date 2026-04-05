@@ -188,7 +188,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
       <div
         style={{
           position: "absolute",
-          top: "42%",
+          top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
           zIndex: 5,
@@ -244,7 +244,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
       <div
         style={{
           position: "absolute",
-          top: "calc(45% + 168px)",
+          top: "calc(53% + 168px)",
           bottom: "20px",
           left: 0,
           right: 0,
