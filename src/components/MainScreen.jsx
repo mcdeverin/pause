@@ -7,6 +7,7 @@ const CATEGORIES = ["All", "Calm", "Sleep", "Focus", "Energy", "Advanced"];
 
 export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange, previewTechnique }) {
   const [showInfo, setShowInfo] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const isDayTheme = theme === "day";
   const textColor = isDayTheme ? "#111111" : "#F0EDE8";
@@ -25,6 +26,76 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         justifyContent: "center",
       }}
     >
+      {/* Menu - top left */}
+      <div style={{ position: "absolute", top: "16px", left: "24px", zIndex: 20 }}>
+        <button
+          onClick={() => setMenuOpen((v) => !v)}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontFamily: "'Comfortaa', sans-serif",
+            fontSize: "11px",
+            letterSpacing: "0.2em",
+            color: isDayTheme ? "#333" : "rgba(255,255,255,0.6)",
+            fontWeight: 300,
+            padding: 0,
+            opacity: 0.7,
+          }}
+        >
+          menu
+        </button>
+        {menuOpen && (
+          <>
+            <div
+              onClick={() => setMenuOpen(false)}
+              style={{ position: "fixed", inset: 0, zIndex: 19 }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: "28px",
+                left: 0,
+                background: isDayTheme ? "rgba(255,255,255,0.7)" : "rgba(20,30,50,0.75)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: `1px solid ${isDayTheme ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.15)"}`,
+                borderRadius: "14px",
+                padding: "8px 0",
+                minWidth: "130px",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+                zIndex: 20,
+              }}
+            >
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => { onCategoryChange(cat); setMenuOpen(false); }}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    textAlign: "left",
+                    padding: "9px 18px",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "'Comfortaa', sans-serif",
+                    fontSize: "12px",
+                    letterSpacing: "0.1em",
+                    fontWeight: selectedCategory === cat ? 600 : 300,
+                    color: selectedCategory === cat
+                      ? isDayTheme ? "#1C3A5E" : "#FFFFFF"
+                      : isDayTheme ? "#444" : "rgba(255,255,255,0.65)",
+                  }}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
       {/* App name - top center */}
       <div
         style={{
@@ -89,7 +160,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "72px",
+          gap: "48px",
           zIndex: 5,
         }}
       >
@@ -109,9 +180,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         >
           <LiquidOrb theme={theme} isBreathing={false} size={270} />
         </button>
-        {/* Technique name + info button */}
+
+        {/* Technique name + info */}
         {previewTechnique && (
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", position: "relative" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <p style={{
               fontSize: "11px",
               letterSpacing: "0.2em",
@@ -151,61 +223,14 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           </div>
         )}
 
-        {/* Category filter strip */}
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            overflowX: "auto",
-            padding: "4px 0",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            maxWidth: "320px",
-          }}
-        >
-          {CATEGORIES.map((cat) => {
-            const isSelected = selectedCategory === cat;
-            return (
-              <button
-                key={cat}
-                onClick={() => onCategoryChange(cat)}
-                style={{
-                  flexShrink: 0,
-                  padding: "6px 14px",
-                  borderRadius: "999px",
-                  border: `1px solid ${isDayTheme ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.2)"}`,
-                  background: isSelected
-                    ? isDayTheme ? "rgba(50,80,120,0.18)" : "rgba(255,255,255,0.15)"
-                    : isDayTheme ? "rgba(255,255,255,0.45)" : "rgba(255,255,255,0.06)",
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
-                  boxShadow: isSelected ? "0 2px 12px rgba(0,0,0,0.08)" : "0 1px 4px rgba(0,0,0,0.05)",
-                  color: isSelected
-                    ? isDayTheme ? "#1C3A5E" : "#FFFFFF"
-                    : isDayTheme ? "#555555" : "rgba(255,255,255,0.55)",
-                  fontFamily: "'Comfortaa', sans-serif",
-                  fontSize: "10px",
-                  fontWeight: isSelected ? 600 : 300,
-                  letterSpacing: "0.08em",
-                  cursor: "pointer",
-                  transition: "all 300ms ease",
-                }}
-              >
-                {cat}
-              </button>
-            );
-          })}
-        </div>
-
+        {/* Tap to breathe */}
         <button
           onClick={onTap}
           style={{
             fontSize: "12px",
             letterSpacing: "0.12em",
             color: isDayTheme ? "#333333" : "#F0EDE8",
-            opacity: 1,
             fontFamily: "'Comfortaa', sans-serif",
-            fontStyle: "normal",
             fontWeight: 300,
             background: "none",
             border: "none",
