@@ -19,6 +19,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         height: "100vh",
         overflow: "hidden",
         background: theme === "day" ? "#FAFAF8" : "#0D1117",
+        paddingTop: "env(safe-area-inset-top, 16px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
