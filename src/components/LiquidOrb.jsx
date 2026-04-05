@@ -9,7 +9,7 @@ export default function LiquidOrb({ theme, isBreathing, technique, size = 260 })
   const baseSize = size;
 
   const dayGradient = "radial-gradient(circle at 35% 35%, #4A7FA6 0%, #6BA888 100%)";
-  const nightGradient = "radial-gradient(circle at 35% 35%, #4A5B9C 0%, #7B9E8C 100%)";
+  const nightGradient = "radial-gradient(circle at 35% 35%, rgba(74, 91, 140, 0.9) 0%, rgba(155, 142, 196, 0.7) 60%, rgba(155, 142, 196, 0.5) 100%)";
 
   useEffect(() => {
     if (!isBreathing || !technique) {
