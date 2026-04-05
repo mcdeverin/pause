@@ -90,6 +90,34 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                   {cat}
                 </button>
               ))}
+              {/* Separator */}
+              <div style={{
+                margin: "6px 14px",
+                height: "1px",
+                background: isDayTheme ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.1)",
+              }} />
+              {[{ label: "Privacy", path: "/privacy" }, { label: "Terms", path: "/terms" }].map(({ label, path }) => (
+                <button
+                  key={label}
+                  onClick={() => { setMenuOpen(false); navigate(path); }}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    textAlign: "left",
+                    padding: "7px 18px",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "'Comfortaa', sans-serif",
+                    fontSize: "11px",
+                    letterSpacing: "0.1em",
+                    fontWeight: 300,
+                    color: isDayTheme ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.35)",
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </>
         )}
@@ -201,73 +229,6 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         </button>
       </div>
 
-      {/* Support and footer links - bottom center */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "32px",
-          left: 0,
-          right: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "16px",
-          zIndex: 10,
-        }}
-      >
-        <div
-          style={{
-            fontSize: "10px",
-            color: textColor,
-            fontFamily: "'Comfortaa', sans-serif",
-            fontWeight: 300,
-            display: "flex",
-            gap: "8px",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <button
-            onClick={() => navigate("/privacy")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "inherit",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              fontSize: "inherit",
-              fontWeight: "inherit",
-              padding: 0,
-              margin: 0,
-              transition: "opacity 300ms",
-            }}
-            onMouseEnter={(e) => (e.target.style.opacity = isDayTheme ? "0.4" : "0.5")}
-            onMouseLeave={(e) => (e.target.style.opacity = isDayTheme ? "0.15" : "0.2")}
-          >
-            Privacy
-          </button>
-          <span>·</span>
-          <button
-            onClick={() => navigate("/terms")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "inherit",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              fontSize: "inherit",
-              fontWeight: "inherit",
-              padding: 0,
-              margin: 0,
-              transition: "opacity 300ms",
-            }}
-            onMouseEnter={(e) => (e.target.style.opacity = isDayTheme ? "0.4" : "0.5")}
-            onMouseLeave={(e) => (e.target.style.opacity = isDayTheme ? "0.15" : "0.2")}
-          >
-            Terms
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
