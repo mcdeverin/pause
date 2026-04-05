@@ -223,20 +223,6 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
             }}
           />
 
-          {/* Countdown number */}
-          <div
-            style={{
-              position: "absolute",
-              zIndex: 10,
-              fontSize: "52px",
-              fontWeight: 300,
-              color: "#FFFFFF",
-              fontFamily: "'Comfortaa', sans-serif",
-              textShadow: "none",
-            }}
-          >
-            {secondsLeft}
-          </div>
         </div>
       </div>
 
