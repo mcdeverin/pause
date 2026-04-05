@@ -1,13 +1,28 @@
-import { useState } from "react";
-import { Sun, Moon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Sun, Moon, Vibrate } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LiquidOrb from "./LiquidOrb";
 
 const CATEGORIES = ["All", "Calm", "Sleep", "Focus", "Energy", "Advanced"];
 
-export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange }) {
+export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange, onHapticsChange }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const stored = localStorage.getItem('hapticsEnabled');
+    if (stored !== null) {
+      setHapticsEnabled(JSON.parse(stored));
+    }
+  }, []);
+
+  const handleHapticsToggle = () => {
+    const newState = !hapticsEnabled;
+    setHapticsEnabled(newState);
+    localStorage.setItem('hapticsEnabled', JSON.stringify(newState));
+    if (onHapticsChange) onHapticsChange(newState);
+  };
   const isDayTheme = theme === "day";
   const textColor = isDayTheme ? "#111111" : "#F0EDE8";
 
@@ -103,6 +118,42 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                 height: "1px",
                 background: isDayTheme ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.1)",
               }} />
+              {/* Haptics Toggle */}
+              <div
+                onClick={handleHapticsToggle}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "9px 18px",
+                  cursor: "pointer",
+                }}
+              >
+                <Vibrate size={14} color={isDayTheme ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.35)"} />
+                {/* Toggle pill */}
+                <div style={{
+                  width: "32px",
+                  height: "18px",
+                  borderRadius: "9px",
+                  background: hapticsEnabled ? "#4A7FA6" : "rgba(0,0,0,0.15)",
+                  position: "relative",
+                  transition: "background 0.25s",
+                  flexShrink: 0,
+                  marginLeft: "12px",
+                }}>
+                  <div style={{
+                    position: "absolute",
+                    top: "3px",
+                    left: hapticsEnabled ? "17px" : "3px",
+                    width: "12px",
+                    height: "12px",
+                    borderRadius: "50%",
+                    background: "#fff",
+                    transition: "left 0.25s",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                  }} />
+                </div>
+              </div>
               {/* Theme Toggle */}
               <div
                 onClick={onToggleTheme}
