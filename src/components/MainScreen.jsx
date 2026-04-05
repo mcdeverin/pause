@@ -187,7 +187,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "48px",
+          gap: "64px",
           zIndex: 5,
         }}
       >
