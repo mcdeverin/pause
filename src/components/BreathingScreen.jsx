@@ -257,14 +257,14 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
         {/* Phase label */}
         <p
           style={{
-            fontSize: "14px",
+            fontSize: "18px",
             color: textColor,
             fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
             margin: 0,
             textTransform: "lowercase",
             textAlign: "center",
-            minHeight: "20px",
+            minHeight: "24px",
             letterSpacing: "0.25em",
             flexShrink: 0,
           }}
