@@ -147,7 +147,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
       >
         <p
           style={{
-            fontSize: "11px",
+            fontSize: "clamp(9px, 2.5vw, 11px)",
             letterSpacing: "0.5em",
             color: textColor,
             fontFamily: "'Comfortaa', sans-serif",
@@ -260,7 +260,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
         {/* Phase label */}
         <p
           style={{
-            fontSize: "clamp(10px, 2.5vw, 18px)",
+            fontSize: "clamp(14px, 5vw, 18px)",
             color: textColor,
             fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
