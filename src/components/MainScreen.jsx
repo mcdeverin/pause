@@ -19,7 +19,8 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         height: "100vh",
         overflow: "hidden",
         background: theme === "day" ? "#FAFAF8" : "#0D1117",
-        paddingTop: "env(safe-area-inset-top, 16px)",
+        paddingTop: "env(safe-area-inset-top, 44px)",
+        boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -27,7 +28,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       }}
     >
       {/* Menu - top left */}
-      <div style={{ position: "absolute", top: "9vh", left: "24px", zIndex: 20 }}>
+      <div style={{ position: "absolute", top: "6vh", left: "24px", zIndex: 20 }}>
         <button
           onClick={() => setMenuOpen((v) => !v)}
           style={{
@@ -171,7 +172,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "12vh",
+          top: "8vh",
           left: 0,
           right: 0,
           width: "100%",
@@ -198,7 +199,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "54vh",
+          top: "52vh",
           left: "50%",
           transform: "translate(-50%, -50%)",
           display: "flex",
