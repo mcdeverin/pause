@@ -135,7 +135,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
       <div
         style={{
           position: "absolute",
-          top: "13vh",
+          top: "16vh",
           left: 0,
           right: 0,
           display: "flex",
