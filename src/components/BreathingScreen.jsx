@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Info } from "lucide-react";
 import { motion } from "framer-motion";
 
 const TOTAL_CYCLES = 4;
@@ -32,6 +33,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
   const [secondsLeft, setSecondsLeft] = useState(phases[0]);
   const [orbScale, setOrbScale] = useState(1.0);
   const [progress, setProgress] = useState(0);
+  const [showInfo, setShowInfo] = useState(false);
 
   const timerRef = useRef(null);
   const phaseIndexRef = useRef(0);
@@ -112,14 +114,17 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Technique name - top */}
+      {/* Technique name + info - top */}
       <div
         style={{
           position: "absolute",
           top: "64px",
           left: 0,
           right: 0,
-          textAlign: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
           zIndex: 10,
         }}
       >
@@ -135,7 +140,49 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
         >
           {technique.name.toUpperCase()}
         </p>
+        <button
+          onClick={() => setShowInfo((v) => !v)}
+          style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", opacity: 0.45 }}
+        >
+          <Info size={13} color={textColor} />
+        </button>
       </div>
+
+      {/* Science fact popup */}
+      {showInfo && (
+        <div
+          onClick={() => setShowInfo(false)}
+          style={{
+            position: "absolute",
+            top: "96px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 30,
+            background: isDayTheme ? "rgba(255,255,255,0.6)" : "rgba(20,30,50,0.7)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            border: `1px solid ${isDayTheme ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.12)"}`,
+            borderRadius: "14px",
+            padding: "16px 20px",
+            maxWidth: "260px",
+            width: "calc(100vw - 48px)",
+            cursor: "pointer",
+          }}
+        >
+          <p style={{
+            fontSize: "12px",
+            color: textColor,
+            fontFamily: "'Comfortaa', sans-serif",
+            fontStyle: "italic",
+            fontWeight: 300,
+            lineHeight: 1.8,
+            margin: 0,
+            textAlign: "center",
+          }}>
+            {technique.science}
+          </p>
+        </div>
+      )}
 
       {/* Center: Blob only */}
       <div
@@ -227,31 +274,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
           {labels[phaseIndex]}
         </p>
 
-        {/* Scrollable science fact */}
-        <div
-          style={{
-            overflowY: "auto",
-            maxHeight: "80px",
-            width: "100%",
-            maxWidth: "270px",
-            flexShrink: 0,
-          }}
-        >
-          <p
-            style={{
-              fontSize: "12px",
-              color: textColor,
-              fontFamily: "'Comfortaa', sans-serif",
-              fontStyle: "italic",
-              fontWeight: 300,
-              textAlign: "center",
-              lineHeight: 1.9,
-              margin: 0,
-            }}
-          >
-            {technique.science}
-          </p>
-        </div>
+
 
 
 
