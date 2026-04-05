@@ -242,7 +242,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
       <div
         style={{
           position: "absolute",
-          top: "72vh",
+          top: "75vh",
           bottom: "20px",
           left: 0,
           right: 0,
