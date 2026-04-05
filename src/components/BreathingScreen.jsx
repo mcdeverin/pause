@@ -50,11 +50,11 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
     if (!hapticsEnabled || !navigator.vibrate) return;
     const l = label.toLowerCase();
     if (l.includes("inhale")) {
-      navigator.vibrate([60, 30, 60]);        // soft double pulse — breathe in
+      navigator.vibrate([80, 40, 80]);        // soft double pulse — breathe in
     } else if (l.includes("exhale")) {
-      navigator.vibrate([30, 20, 30, 20, 30]); // gentle triple fade — breathe out
+      navigator.vibrate([40, 30, 40, 30, 40]); // gentle triple fade — breathe out
     } else if (l.includes("hold")) {
-      navigator.vibrate(110);                  // single sustained — stay still
+      navigator.vibrate(150);                  // single sustained — stay still
     }
   };
   // ────────────────────────────────────────────────────────────────
@@ -257,14 +257,14 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
         {/* Phase label */}
         <p
           style={{
-            fontSize: "18px",
+            fontSize: "14px",
             color: textColor,
             fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
             margin: 0,
             textTransform: "lowercase",
             textAlign: "center",
-            minHeight: "24px",
+            minHeight: "20px",
             letterSpacing: "0.25em",
             flexShrink: 0,
           }}
