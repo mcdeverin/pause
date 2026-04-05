@@ -9,13 +9,13 @@ import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
 export default function Home() {
   const [mode, setMode] = useState("idle");
   const [technique, setTechnique] = useState(null);
-  const [breathScale, setBreathScale] = useState(1);
+
   const [showSupport, setShowSupport] = useState(false);
   const [theme, setTheme] = useState("day");
   const [techniques, setTechniques] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isLoading, setIsLoading] = useState(true);
-  const animRef = useRef(null);
+
 
   useEffect(() => {
     const saved = localStorage.getItem("pauseTheme") || "day";
@@ -46,55 +46,10 @@ export default function Home() {
 
   const stopBreathing = useCallback(() => {
     setMode("idle");
-    setBreathScale(1);
     setTechnique(null);
   }, []);
 
-  useEffect(() => {
-    if (mode !== "breathing" || !technique) return;
 
-    const phaseDurations = String(technique.phases).split(",").map(Number);
-    const phaseLabels = String(technique.phaseLabels).split(",").map(s => s.trim().toLowerCase());
-
-    let phaseIdx = 0;
-    let phaseStart = Date.now();
-    let currentScale = 1;
-
-    const tick = () => {
-      const now = Date.now();
-      const phaseElapsed = now - phaseStart;
-      const duration = phaseDurations[phaseIdx] * 1000;
-      const label = phaseLabels[phaseIdx];
-
-      if (!duration) return;
-
-      const phaseProgress = Math.min(phaseElapsed / duration, 1);
-      const eased = phaseProgress < 0.5
-        ? 2 * phaseProgress * phaseProgress
-        : 1 - Math.pow(-2 * phaseProgress + 2, 2) / 2;
-
-      if (label.includes("inhale")) {
-        currentScale = 0.7 + eased * 0.9;
-      } else if (label.includes("exhale")) {
-        currentScale = 1.6 - eased * 0.9;
-      }
-
-      setBreathScale(currentScale);
-
-      if (phaseElapsed >= duration) {
-        phaseIdx = (phaseIdx + 1) % phaseDurations.length;
-        phaseStart = now;
-      }
-
-      animRef.current = requestAnimationFrame(tick);
-    };
-
-    animRef.current = requestAnimationFrame(tick);
-
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-    };
-  }, [mode, technique]);
 
   const bgColor = theme === "day" ? "#F7F5F2" : "#0D1B2A";
 
