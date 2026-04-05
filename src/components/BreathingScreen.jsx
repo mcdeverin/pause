@@ -153,6 +153,10 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
             fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
             margin: 0,
+            maxWidth: "calc(100vw - 80px)",
+            wordWrap: "break-word",
+            whiteSpace: "normal",
+            textAlign: "center",
           }}
         >
           {technique.name.toUpperCase()}
@@ -267,6 +271,9 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
             minHeight: "24px",
             letterSpacing: "0.25em",
             flexShrink: 0,
+            maxWidth: "calc(100vw - 48px)",
+            wordWrap: "break-word",
+            whiteSpace: "normal",
           }}
         >
           {labels[phaseIndex]}
