@@ -276,7 +276,8 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
         <div
           style={{
             width: "120px",
-            height: "1px",
+            height: "3px",
+            borderRadius: "999px",
             background: textColor,
             opacity: 0.15,
             position: "relative",
@@ -290,11 +291,12 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
               top: 0,
               left: 0,
               height: "100%",
+              borderRadius: "999px",
               background: textColor,
               opacity: 0.5,
               width: `${progress * 100}%`,
             }}
-            transition={{ duration: 0.1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           />
         </div>
 
