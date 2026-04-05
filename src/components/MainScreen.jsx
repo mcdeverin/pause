@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { Sun, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LiquidOrb from "./LiquidOrb";
 
 const CATEGORIES = ["All", "Calm", "Sleep", "Focus", "Energy", "Advanced"];
 
-export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange }) {
+export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange, previewTechnique }) {
+  const [showInfo, setShowInfo] = useState(false);
   const navigate = useNavigate();
   const isDayTheme = theme === "day";
   const textColor = isDayTheme ? "#111111" : "#F0EDE8";
@@ -107,6 +109,48 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         >
           <LiquidOrb theme={theme} isBreathing={false} size={270} />
         </button>
+        {/* Technique name + info button */}
+        {previewTechnique && (
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", position: "relative" }}>
+            <p style={{
+              fontSize: "11px",
+              letterSpacing: "0.2em",
+              color: isDayTheme ? "#555" : "rgba(255,255,255,0.55)",
+              fontFamily: "'Comfortaa', sans-serif",
+              fontWeight: 300,
+              margin: 0,
+              textTransform: "lowercase",
+            }}>
+              {previewTechnique.name}
+            </p>
+            <button
+              onClick={() => setShowInfo(true)}
+              style={{
+                background: isDayTheme ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.1)",
+                border: `1px solid ${isDayTheme ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.2)"}`,
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                borderRadius: "50%",
+                width: "18px",
+                height: "18px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                padding: 0,
+                fontSize: "10px",
+                color: isDayTheme ? "#3A6B9A" : "rgba(255,255,255,0.6)",
+                fontFamily: "serif",
+                lineHeight: 1,
+                flexShrink: 0,
+              }}
+              aria-label="Info"
+            >
+              i
+            </button>
+          </div>
+        )}
+
         {/* Category filter strip */}
         <div
           style={{
@@ -174,6 +218,60 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           tap to breathe
         </button>
       </div>
+
+      {/* Info popup */}
+      {showInfo && previewTechnique && (
+        <div
+          onClick={() => setShowInfo(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 100,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "32px",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: isDayTheme ? "rgba(255,255,255,0.65)" : "rgba(20,30,50,0.65)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
+              border: `1px solid ${isDayTheme ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.15)"}`,
+              borderRadius: "20px",
+              padding: "28px 28px",
+              maxWidth: "300px",
+              width: "100%",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+            }}
+          >
+            <p style={{
+              fontSize: "11px",
+              letterSpacing: "0.25em",
+              color: isDayTheme ? "#3A6B9A" : "rgba(255,255,255,0.5)",
+              fontFamily: "'Comfortaa', sans-serif",
+              fontWeight: 600,
+              margin: "0 0 12px 0",
+              textTransform: "uppercase",
+            }}>
+              {previewTechnique.name}
+            </p>
+            <p style={{
+              fontSize: "13px",
+              color: isDayTheme ? "#333333" : "rgba(255,255,255,0.8)",
+              fontFamily: "'Comfortaa', sans-serif",
+              fontWeight: 300,
+              lineHeight: 1.8,
+              margin: 0,
+              fontStyle: "italic",
+            }}>
+              {previewTechnique.science}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Support and footer links - bottom center */}
       <div

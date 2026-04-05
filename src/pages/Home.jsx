@@ -14,6 +14,7 @@ export default function Home() {
   const [theme, setTheme] = useState("day");
   const [techniques, setTechniques] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [previewTechnique, setPreviewTechnique] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const animRef = useRef(null);
 
@@ -27,11 +28,20 @@ export default function Home() {
       .then((loaded) => {
         setTechniques(loaded);
         setIsLoading(false);
+        const t = getRandomTechnique(loaded);
+        setPreviewTechnique(t);
       })
       .catch(() => {
         setIsLoading(false);
       });
   }, []);
+
+  const handleCategoryChange = (cat) => {
+    setSelectedCategory(cat);
+    const filtered = cat === "All" ? techniques : techniques.filter(t => t.category === cat);
+    const pool = filtered.length > 0 ? filtered : techniques;
+    setPreviewTechnique(getRandomTechnique(pool));
+  };
 
   const startBreathing = useCallback(() => {
     if (techniques.length === 0) return;
@@ -116,7 +126,8 @@ export default function Home() {
               localStorage.setItem("pauseTheme", newTheme);
             }}
             selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
+            onCategoryChange={handleCategoryChange}
+            previewTechnique={previewTechnique}
           />
         )}
         {mode === "breathing" && technique && (
