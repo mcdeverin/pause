@@ -27,7 +27,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       }}
     >
       {/* Menu - top left */}
-      <div style={{ position: "absolute", top: "7vh", left: "24px", zIndex: 20 }}>
+      <div style={{ position: "absolute", top: "9vh", left: "24px", zIndex: 20 }}>
         <button
           onClick={() => setMenuOpen((v) => !v)}
           style={{
@@ -171,7 +171,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       <div
         style={{
           position: "absolute",
-          top: "10vh",
+          top: "12vh",
           left: 0,
           right: 0,
           width: "100%",
