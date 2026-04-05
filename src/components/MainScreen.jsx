@@ -113,7 +113,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
               <div
                 onClick={handleHapticsToggle}
                 style={{
-                  display: "flex",
+                  display: "none",
                   alignItems: "center",
                   justifyContent: "space-between",
                   padding: "9px 18px",
