@@ -278,10 +278,8 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
             width: "120px",
             height: "3px",
             borderRadius: "999px",
-            background: textColor,
-            opacity: 0.15,
+            background: isDayTheme ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.12)",
             position: "relative",
-            overflow: "hidden",
             flexShrink: 0,
           }}
         >
@@ -293,7 +291,6 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
               height: "100%",
               borderRadius: "999px",
               background: isDayTheme ? "#4A7FA6" : "#4A5B9C",
-              opacity: 0.8,
             }}
             animate={{ width: `${progress * 100}%` }}
             transition={{ duration: 0.8, ease: "easeOut" }}
