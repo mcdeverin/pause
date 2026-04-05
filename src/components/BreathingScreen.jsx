@@ -292,8 +292,8 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
               left: 0,
               height: "100%",
               borderRadius: "999px",
-              background: textColor,
-              opacity: 0.5,
+              background: isDayTheme ? "#4A7FA6" : "#4A5B9C",
+              opacity: 0.8,
             }}
             animate={{ width: `${progress * 100}%` }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -305,6 +305,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
           onClick={onDone}
           style={{
             fontSize: "11px",
+            marginTop: "2px",
             color: textColor,
             fontFamily: "'Comfortaa', sans-serif",
             fontWeight: 300,
