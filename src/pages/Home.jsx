@@ -48,6 +48,9 @@ export default function Home() {
   useEffect(() => {
     if (mode !== "breathing" || !technique) return;
 
+    const phaseDurations = String(technique.phases).split(",").map(Number);
+    const phaseLabels = String(technique.phaseLabels).split(",").map(s => s.trim().toLowerCase());
+
     let phaseIdx = 0;
     let phaseStart = Date.now();
     let currentScale = 1;
@@ -55,28 +58,26 @@ export default function Home() {
     const tick = () => {
       const now = Date.now();
       const phaseElapsed = now - phaseStart;
-      const phase = technique.phases[phaseIdx];
+      const duration = phaseDurations[phaseIdx] * 1000;
+      const label = phaseLabels[phaseIdx];
 
-      if (!phase) return;
+      if (!duration) return;
 
-      const phaseProgress = Math.min(phaseElapsed / phase.duration, 1);
+      const phaseProgress = Math.min(phaseElapsed / duration, 1);
       const eased = phaseProgress < 0.5
         ? 2 * phaseProgress * phaseProgress
         : 1 - Math.pow(-2 * phaseProgress + 2, 2) / 2;
 
-      if (phase.label === "inhale") {
+      if (label.includes("inhale")) {
         currentScale = 0.7 + eased * 0.9;
-      } else if (phase.label === "exhale") {
+      } else if (label.includes("exhale")) {
         currentScale = 1.6 - eased * 0.9;
       }
 
       setBreathScale(currentScale);
 
-      if (phaseElapsed >= phase.duration) {
-        phaseIdx++;
-        if (phaseIdx >= technique.phases.length) {
-          phaseIdx = 0;
-        }
+      if (phaseElapsed >= duration) {
+        phaseIdx = (phaseIdx + 1) % phaseDurations.length;
         phaseStart = now;
       }
 
