@@ -141,22 +141,6 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           zIndex: 10,
         }}
       >
-        <button
-          onClick={() => window.open('https://buymeacoffee.com/pause', '_blank')}
-          style={{
-            fontSize: "10px",
-            color: textColor,
-            fontFamily: "'Comfortaa', sans-serif",
-            fontWeight: 300,
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            margin: 0,
-            padding: 0,
-          }}
-        >
-          ♡ support this app
-        </button>
         <div
           style={{
             fontSize: "10px",
