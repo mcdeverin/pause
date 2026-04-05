@@ -2,7 +2,9 @@ import { Sun, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LiquidOrb from "./LiquidOrb";
 
-export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme }) {
+const CATEGORIES = ["All", "Calm", "Sleep", "Focus", "Energy", "Advanced"];
+
+export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange }) {
   const navigate = useNavigate();
   const isDayTheme = theme === "day";
   const textColor = isDayTheme ? "#111111" : "#F0EDE8";
@@ -105,6 +107,52 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         >
           <LiquidOrb theme={theme} isBreathing={false} size={270} />
         </button>
+        {/* Category filter strip */}
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            overflowX: "auto",
+            padding: "4px 0",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            maxWidth: "320px",
+          }}
+        >
+          {CATEGORIES.map((cat) => {
+            const isSelected = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => onCategoryChange(cat)}
+                style={{
+                  flexShrink: 0,
+                  padding: "6px 14px",
+                  borderRadius: "999px",
+                  border: `1px solid ${isDayTheme ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.2)"}`,
+                  background: isSelected
+                    ? isDayTheme ? "rgba(50,80,120,0.18)" : "rgba(255,255,255,0.15)"
+                    : isDayTheme ? "rgba(255,255,255,0.45)" : "rgba(255,255,255,0.06)",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                  boxShadow: isSelected ? "0 2px 12px rgba(0,0,0,0.08)" : "0 1px 4px rgba(0,0,0,0.05)",
+                  color: isSelected
+                    ? isDayTheme ? "#1C3A5E" : "#FFFFFF"
+                    : isDayTheme ? "#555555" : "rgba(255,255,255,0.55)",
+                  fontFamily: "'Comfortaa', sans-serif",
+                  fontSize: "10px",
+                  fontWeight: isSelected ? 600 : 300,
+                  letterSpacing: "0.08em",
+                  cursor: "pointer",
+                  transition: "all 300ms ease",
+                }}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+
         <button
           onClick={onTap}
           style={{
