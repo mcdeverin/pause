@@ -45,45 +45,58 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
   const isDayTheme = theme === "day";
   const textColor = isDayTheme ? "#111111" : "#F0EDE8";
 
+  // ── Haptic feedback ──────────────────────────────────────────────
+  const triggerHaptic = (label) => {
+    if (!navigator.vibrate) return;
+    const l = label.toLowerCase();
+    if (l.includes("inhale")) {
+      navigator.vibrate([80, 40, 80]);        // soft double pulse — breathe in
+    } else if (l.includes("exhale")) {
+      navigator.vibrate([40, 30, 40, 30, 40]); // gentle triple fade — breathe out
+    } else if (l.includes("hold")) {
+      navigator.vibrate(150);                  // single sustained — stay still
+    }
+  };
+  // ────────────────────────────────────────────────────────────────
+
   useEffect(() => {
+    // Haptic on the very first phase when session starts
+    triggerHaptic(labels[0]);
+
     timerRef.current = setInterval(() => {
       secondsLeftRef.current -= 1;
 
-      // Get current phase info
       const currentPhaseIdx = phaseIndexRef.current;
       const currentLabel = labels[currentPhaseIdx].toLowerCase();
       const currentDuration = phases[currentPhaseIdx];
       const secondsElapsed = currentDuration - secondsLeftRef.current;
       const phaseProgress = secondsElapsed / currentDuration;
 
-      // Calculate scale
+      // Calculate orb scale
       let newScale = 1.0;
-      if (currentLabel.includes('inhale')) {
+      if (currentLabel.includes("inhale")) {
         newScale = 1.0 + 0.35 * phaseProgress;
-      } else if (currentLabel.includes('exhale')) {
+      } else if (currentLabel.includes("exhale")) {
         newScale = 1.35 - 0.35 * phaseProgress;
-      } else if (currentLabel.includes('hold')) {
-        const prevLabel = currentPhaseIdx > 0 ? labels[currentPhaseIdx - 1].toLowerCase() : '';
-        newScale = prevLabel.includes('inhale') ? 1.35 : 1.0;
+      } else if (currentLabel.includes("hold")) {
+        const prevLabel = currentPhaseIdx > 0 ? labels[currentPhaseIdx - 1].toLowerCase() : "";
+        newScale = prevLabel.includes("inhale") ? 1.35 : 1.0;
       }
 
       setOrbScale(newScale);
       setSecondsLeft(secondsLeftRef.current);
 
-      // Track overall progress
+      // Overall progress
       elapsedSecondsRef.current += 1;
       const overallProgress = Math.min(elapsedSecondsRef.current / totalSecondsRef.current, 1);
       setProgress(overallProgress);
 
-      // Advance phase when count reaches 0
+      // Advance phase when countdown hits 0
       if (secondsLeftRef.current <= 0) {
         const nextPhaseIdx = (currentPhaseIdx + 1) % phases.length;
-        
-        // Check if we've completed a full cycle
+
         if (nextPhaseIdx === 0) {
           cycleCountRef.current += 1;
-          
-          // End after 4 cycles
           if (cycleCountRef.current >= TOTAL_CYCLES) {
             clearInterval(timerRef.current);
             setProgress(1);
@@ -95,6 +108,10 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
         phaseIndexRef.current = nextPhaseIdx;
         secondsLeftRef.current = phases[nextPhaseIdx];
         setPhaseIndex(nextPhaseIdx);
+
+        // ── Haptic fires on every phase transition ──
+        triggerHaptic(labels[nextPhaseIdx]);
+        // ────────────────────────────────────────────
       }
     }, 1000);
 
@@ -114,7 +131,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Technique name + info - top */}
+      {/* Technique name + info */}
       <div
         style={{
           position: "absolute",
@@ -184,7 +201,7 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
         </div>
       )}
 
-      {/* Center: Blob only */}
+      {/* Orb */}
       <div
         style={{
           position: "absolute",
@@ -194,7 +211,6 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
           zIndex: 5,
         }}
       >
-        {/* Blob container */}
         <div
           style={{
             position: "relative",
@@ -205,7 +221,6 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
             justifyContent: "center",
           }}
         >
-          {/* Animated blob */}
           <div
             style={{
               position: "absolute",
@@ -215,18 +230,15 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
                 ? "radial-gradient(circle at 35% 35%, #4A7FA6 0%, #6BA888 100%)"
                 : "radial-gradient(circle at 35% 35%, #4A5B9C 0%, #7B9E8C 100%)",
               borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
-              boxShadow: "none",
-              filter: "none",
               transform: `scale(${orbScale})`,
               transition: "transform 0.95s ease-in-out",
               animation: "liquidMorph 8s ease-in-out infinite",
             }}
           />
-
         </div>
       </div>
 
-      {/* Bottom section: phase label + science + progress + done */}
+      {/* Bottom: phase label + progress bar + done */}
       <div
         style={{
           position: "absolute",
@@ -259,10 +271,6 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme }) {
         >
           {labels[phaseIndex]}
         </p>
-
-
-
-
 
         {/* Progress bar */}
         <div
