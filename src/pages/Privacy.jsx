@@ -54,6 +54,13 @@ export default function Privacy() {
           </section>
 
           <section>
+            <h2 className="text-lg font-semibold mb-3">Health &amp; Fitness Data</h2>
+            <p>
+              Always Pause uses Apple HealthKit to log your breathing sessions as Mindful Minutes and to read your heart rate during sessions. This data is stored exclusively in your personal Apple Health app on your device. We never collect, transmit, or share your health data with any third party. You can revoke access at any time in iPhone Settings → Privacy &amp; Security → Health → Always Pause.
+            </p>
+          </section>
+
+          <section>
             <h2 className="text-lg font-semibold mb-3">Third Party Services</h2>
             <p>
               Pause may use Apple's built-in App Analytics which collects anonymous usage data subject to Apple's own privacy policy.
