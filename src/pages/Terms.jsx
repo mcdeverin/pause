@@ -56,6 +56,13 @@ export default function Terms() {
           </section>
 
           <section>
+            <h2 className="text-lg font-semibold mb-3">Health Data</h2>
+            <p>
+              Always Pause integrates with Apple HealthKit solely to enhance your in-app experience. Health data is never used for advertising, marketing, analytics, or shared with third parties. By enabling HealthKit permissions, you consent to the app reading heart rate data and writing mindfulness session data to Apple Health on your device.
+            </p>
+          </section>
+
+          <section>
             <h2 className="text-lg font-semibold mb-3">Limitation of Liability</h2>
             <p>
               Work OnDeck LLC shall not be liable for any indirect, incidental, or consequential damages arising from your use of Pause. The app is provided "as is" without warranties of any kind.
