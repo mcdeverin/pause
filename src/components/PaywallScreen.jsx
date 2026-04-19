@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import LiquidOrb from "./LiquidOrb";
 import { getOfferings, purchasePackage, restorePurchases, checkEntitlement } from '../lib/revenuecat';
 
@@ -9,6 +10,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const [offerings, setOfferings] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getOfferings().then(o => {
@@ -314,7 +316,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           {loading ? '· processing ·' : 'unlock always pause+'}
         </button>
 
-        {/* Bottom row: restore + maybe later */}
+        {/* Bottom row: restore + privacy + terms */}
         <div
           style={{
             display: "flex",
@@ -325,46 +327,35 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             marginBottom: "32px",
           }}
         >
-          <button
-            onClick={handleRestore}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontFamily: "'Comfortaa', sans-serif",
-              fontSize: "10px",
-              letterSpacing: "0.12em",
-              fontWeight: 300,
-              color: textColor,
-              opacity: 0.3,
-              padding: 0,
-            }}
-          >
-            restore purchases
-          </button>
-
-          <span style={{ color: textColor, opacity: 0.2, fontSize: "10px" }}>·</span>
-
-          <button
-            onClick={onClose}
-            style={{
-              fontSize: "10px",
-              color: textColor,
-              fontFamily: "'Comfortaa', sans-serif",
-              fontWeight: 300,
-              letterSpacing: "0.2em",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-              opacity: 0.4,
-              transition: "opacity 0.3s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.4")}
-          >
-            · maybe later ·
-          </button>
+          {[
+            { label: "Restore", action: handleRestore },
+            { label: "Privacy", action: () => { onClose(); navigate("/privacy"); } },
+            { label: "Terms", action: () => { onClose(); navigate("/terms"); } },
+          ].map(({ label, action }, i, arr) => (
+            <>
+              <button
+                key={label}
+                onClick={action}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "'Comfortaa', sans-serif",
+                  fontSize: "10px",
+                  letterSpacing: "0.12em",
+                  fontWeight: 300,
+                  color: textColor,
+                  opacity: 0.3,
+                  padding: 0,
+                }}
+              >
+                {label}
+              </button>
+              {i < arr.length - 1 && (
+                <span key={label + "-sep"} style={{ color: textColor, opacity: 0.2, fontSize: "10px" }}>·</span>
+              )}
+            </>
+          ))}
         </div>
 
         {error && (
