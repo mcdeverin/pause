@@ -32,8 +32,13 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const ctaLabel = () => {
     if (loading) return '· processing ·';
     if (selected === "alwayspause_lifetime") return 'get pause+ forever';
-    if (selected === "com.workondeck.alwayspause.annual") return 'start 7-day free trial';
-    return 'unlock pause+';
+    return 'start 7-day free trial';
+  };
+
+  const disclosureText = () => {
+    if (selected === "alwayspause_lifetime") return 'one-time purchase. yours forever.';
+    if (selected === "com.workondeck.alwayspause.monthly") return '7 days free, then $4.99/month. auto-renews monthly until canceled. cancel anytime in Settings.';
+    return '7 days free, then $29.99/year. auto-renews yearly until canceled. cancel anytime in Settings.';
   };
 
   const handlePurchase = async () => {
@@ -291,13 +296,13 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           </div>
           <PricePill
             id="com.workondeck.alwayspause.annual"
-            label="· $29.99 / year ·"
+            label="· $29.99 / year · 7 days free ·"
             sublabel="$2.50 / month, billed annually"
             badge="save 50%"
           />
           <PricePill
             id="com.workondeck.alwayspause.monthly"
-            label="· $4.99 / month ·"
+            label="· $4.99 / month · 7 days free ·"
             sublabel="billed monthly"
           />
         </div>
@@ -336,7 +341,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           />
         </div>
 
-        {/* Auto-renewal compliance */}
+        {/* Tier-aware disclosure */}
         <p
           style={{
             fontSize: "10px",
@@ -350,7 +355,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             lineHeight: 1.6,
           }}
         >
-          subscriptions auto-renew until canceled.<br />cancel anytime in Settings.
+          {disclosureText()}
         </p>
 
         {/* CTA Button */}
