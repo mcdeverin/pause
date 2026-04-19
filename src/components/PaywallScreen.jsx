@@ -124,7 +124,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         }}
       >
         {/* Orb */}
-        <div style={{ marginBottom: "20px", marginTop: "40px" }}>
+        <div style={{ marginBottom: "20px", marginTop: "60px" }}>
           <LiquidOrb theme={theme} isBreathing={false} size={120} />
         </div>
 
@@ -261,7 +261,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             justifyContent: "center",
             gap: "18px",
             marginTop: "16px",
-            marginBottom: "20px",
+            marginBottom: "48px",
           }}
         >
           <button
