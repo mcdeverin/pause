@@ -216,7 +216,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               lineHeight: 1.7,
             }}
           >
-            17 more techniques — for focus,<br />energy, and hard moments.
+            box, 4-7-8, coherence, physiological sigh,<br />and more — for focus, energy,<br />and hard moments.
           </p>
         </div>
 
@@ -243,7 +243,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
                 textTransform: "lowercase",
               }}
             >
-              · best value ·
+              · best value · save 50% ·
             </span>
           </div>
           <PricePill
@@ -285,11 +285,28 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <PricePill
             id="alwayspause_lifetime"
             label="· $49.99 · forever ·"
-            sublabel="one-time purchase"
+            sublabel="no subscription · yours forever"
           />
         </div>
 
-        {/* CTA Button — sticky at bottom */}
+        {/* Auto-renewal compliance */}
+        <p
+          style={{
+            fontSize: "10px",
+            letterSpacing: "0.08em",
+            fontWeight: 300,
+            color: textColor,
+            opacity: 0.3,
+            fontFamily: "'Comfortaa', sans-serif",
+            textAlign: "center",
+            margin: "16px 0 0 0",
+            lineHeight: 1.6,
+          }}
+        >
+          subscriptions auto-renew until canceled.<br />cancel anytime in Settings.
+        </p>
+
+        {/* CTA Button */}
         <button
           onClick={handlePurchase}
           style={{
@@ -313,7 +330,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
           onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
         >
-          {loading ? '· processing ·' : 'unlock always pause+'}
+          {loading ? '· processing ·' : 'unlock pause+'}
         </button>
 
         {/* Bottom row: restore + privacy + terms */}
