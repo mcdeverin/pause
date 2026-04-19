@@ -114,8 +114,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         }}
       >
         {/* Orb */}
-        <div style={{ marginBottom: "20px" }}>
-          <LiquidOrb theme={theme} isBreathing={false} size={150} />
+        <div style={{ marginBottom: "20px", marginTop: "16px" }}>
+          <LiquidOrb theme={theme} isBreathing={false} size={120} />
         </div>
 
         {/* Headline */}
@@ -159,7 +159,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           }}
         >
           {/* Best value label */}
-          <div style={{ textAlign: "center", marginBottom: "2px" }}>
+          <div style={{ textAlign: "center", marginBottom: "8px" }}>
             <span
               style={{
                 fontSize: "9px",
@@ -182,6 +182,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <PricePill
             id="com.workondeck.alwayspause.monthly"
             label="· $4.99 / month ·"
+            sublabel="billed monthly"
           />
         </div>
 
@@ -191,10 +192,10 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             width: "100%",
             marginTop: "20px",
             paddingTop: "18px",
-            borderTop: `1px solid ${isDayTheme ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.07)"}`,
+            borderTop: `1px solid ${isDayTheme ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.04)"}`,
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "6px" }}>
+          <div style={{ textAlign: "center", marginBottom: "8px" }}>
             <span
               style={{
                 fontSize: "9px",
@@ -202,11 +203,11 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
                 fontWeight: 300,
                 color: textColor,
                 fontFamily: "'Comfortaa', sans-serif",
-                opacity: 0.35,
+                opacity: 0.45,
                 textTransform: "lowercase",
               }}
             >
-              own it
+              · own it ·
             </span>
           </div>
           <PricePill
@@ -222,7 +223,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           style={{
             width: "100%",
             marginTop: "24px",
-            background: primaryColor,
+            background: isDayTheme ? "linear-gradient(135deg, #4A7FA6 0%, #6BA888 100%)" : "linear-gradient(135deg, #4A5B9C 0%, #6BA888 100%)",
             border: "none",
             borderRadius: "50px",
             padding: "15px 24px",
