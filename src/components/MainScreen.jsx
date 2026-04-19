@@ -6,7 +6,7 @@ import LiquidOrb from "./LiquidOrb";
 const CATEGORIES = ["All", "Calm", "Sleep", "Focus", "Energy", "Advanced"];
 const LOCKED_CATEGORIES = ["Focus", "Energy", "Advanced"];
 
-export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange, onHapticsChange, isPro = false, onTechniqueSelect }) {
+export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange, onHapticsChange, isPro = false, onTechniqueSelect, onLockedCategoryTap }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const navigate = useNavigate();
@@ -89,7 +89,15 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                 return (
                   <button
                     key={cat}
-                    onClick={() => { onCategoryChange(cat); setMenuOpen(false); }}
+                    onClick={() => {
+                      if (isLocked) {
+                        setMenuOpen(false);
+                        if (onLockedCategoryTap) onLockedCategoryTap(cat);
+                        return;
+                      }
+                      onCategoryChange(cat);
+                      setMenuOpen(false);
+                    }}
                     style={{
                       display: "flex",
                       alignItems: "center",

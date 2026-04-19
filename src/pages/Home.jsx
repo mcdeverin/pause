@@ -101,6 +101,7 @@ export default function Home() {
             onHapticsChange={() => setHapticsEnabled(!hapticsEnabled)}
             isPro={isPro}
             onTechniqueSelect={(t) => startBreathing(t)}
+            onLockedCategoryTap={() => { setPendingTechnique(null); setShowPaywall(true); }}
           />
         )}
         {mode === "breathing" && technique && (
