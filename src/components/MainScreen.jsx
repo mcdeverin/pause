@@ -234,6 +234,34 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                   {label}
                 </button>
               ))}
+              {/* Separator */}
+              <div style={{
+                margin: "6px 14px",
+                height: "1px",
+                background: isDayTheme ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.1)",
+              }} />
+              {/* Pause+ row */}
+              <button
+                onClick={() => { setMenuOpen(false); if (onLockedCategoryTap) onLockedCategoryTap(); }}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  textAlign: "left",
+                  padding: "7px 18px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "'Comfortaa', sans-serif",
+                  fontSize: "11px",
+                  letterSpacing: "0.1em",
+                  fontWeight: isPro ? 300 : 400,
+                  color: isPro
+                    ? (isDayTheme ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.35)")
+                    : (isDayTheme ? "#4A7FA6" : "#6BA888"),
+                }}
+              >
+                {isPro ? "· pause+ · manage" : "unlock pause+"}
+              </button>
             </div>
           </>
         )}
