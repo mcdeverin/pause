@@ -293,28 +293,44 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             marginTop: "14px",
           }}
         >
-          {/* Save 50% label */}
-          <div style={{ textAlign: "center", marginBottom: "6px" }}>
-            <span
-              style={{
-                fontSize: "9px",
-                letterSpacing: "0.25em",
+          {/* Yearly tier with attached label + badge */}
+          <div style={{ width: "100%" }}>
+            {/* · save 50% · sits directly above the yearly card */}
+            <div style={{ textAlign: "center", marginBottom: "5px" }}>
+              <span
+                style={{
+                  fontSize: "9px",
+                  letterSpacing: "0.25em",
+                  fontWeight: 300,
+                  color: primaryColor,
+                  fontFamily: "'Comfortaa', sans-serif",
+                  opacity: 0.8,
+                  textTransform: "lowercase",
+                }}
+              >
+                · save 50% ·
+              </span>
+            </div>
+            <PricePill
+              id="com.workondeck.alwayspause.annual"
+              label="· $29.99 / year ·"
+              sublabel="$2.50 / month, billed annually"
+            />
+            {/* 7 days free caption — right-aligned, outside the pill */}
+            <div style={{ textAlign: "right", marginTop: "4px", paddingRight: "4px" }}>
+              <span style={{
+                fontSize: "8px",
+                letterSpacing: "0.14em",
                 fontWeight: 300,
                 color: primaryColor,
                 fontFamily: "'Comfortaa', sans-serif",
-                opacity: 0.8,
-                textTransform: "lowercase",
-              }}
-            >
-              · save 50% ·
-            </span>
+                opacity: 0.65,
+              }}>
+                7 days free
+              </span>
+            </div>
           </div>
-          <PricePill
-            id="com.workondeck.alwayspause.annual"
-            label="· $29.99 / year ·"
-            sublabel="$2.50 / month, billed annually"
-            badge="7 days free"
-          />
+
           <PricePill
             id="com.workondeck.alwayspause.monthly"
             label="· $4.99 / month ·"
