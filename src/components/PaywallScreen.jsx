@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
 import LiquidOrb from "./LiquidOrb";
 import { getOfferings, purchasePackage, restorePurchases, checkEntitlement } from '../lib/revenuecat';
@@ -27,6 +27,14 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const primaryColor = isDayTheme ? "#4A7FA6" : "#4A5B9C";
   const primaryTint = isDayTheme ? "rgba(74,127,166,0.07)" : "rgba(74,91,156,0.12)";
   const primaryBorder = primaryColor;
+  const lifetimeBorder = isDayTheme ? "rgba(210,185,160,0.55)" : "rgba(210,185,160,0.3)";
+
+  const ctaLabel = () => {
+    if (loading) return '· processing ·';
+    if (selected === "alwayspause_lifetime") return 'get pause+ forever';
+    if (selected === "com.workondeck.alwayspause.annual") return 'start 7-day free trial';
+    return 'unlock pause+';
+  };
 
   const handlePurchase = async () => {
     setLoading(true);
@@ -79,10 +87,13 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
     }
   };
 
-  const PricePill = ({ id, label, sublabel }) => {
+  const PricePill = ({ id, label, sublabel, badge, isLifetime }) => {
     const isSelected = selected === id;
     const selectedBg = isSelected ? primaryTint : glassBackground;
-    const selectedBorder = isSelected ? primaryBorder : glassBorder;
+    const unselectedBorder = isLifetime
+      ? lifetimeBorder
+      : glassBorder;
+    const selectedBorder = isSelected ? primaryBorder : unselectedBorder;
     return (
       <button
         onClick={() => setSelected(id)}
@@ -101,18 +112,33 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           color: textColor,
           opacity: isSelected ? 1 : 0.55,
           transition: "all 0.25s ease",
-          textAlign: "center",
           width: "100%",
           boxSizing: "border-box",
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
           alignItems: "center",
-          gap: "2px",
+          justifyContent: "space-between",
+          gap: "8px",
         }}
       >
-        <span>{label}</span>
-        {sublabel && (
-          <span style={{ fontSize: "10px", opacity: 0.6, letterSpacing: "0.1em" }}>{sublabel}</span>
+        <span style={{ flex: 1, textAlign: "center" }}>
+          <span style={{ display: "block" }}>{label}</span>
+          {sublabel && (
+            <span style={{ display: "block", fontSize: "10px", opacity: 0.6, letterSpacing: "0.1em", marginTop: "2px" }}>{sublabel}</span>
+          )}
+        </span>
+        {badge && (
+          <span style={{
+            fontSize: "8px",
+            letterSpacing: "0.12em",
+            color: primaryColor,
+            opacity: 0.85,
+            whiteSpace: "nowrap",
+            fontWeight: 300,
+            flexShrink: 0,
+          }}>
+            {badge}
+          </span>
         )}
       </button>
     );
@@ -154,22 +180,25 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         onClick={onClose}
         style={{
           position: "absolute",
-          top: "calc(env(safe-area-inset-top, 44px) + 12px)",
+          top: "calc(env(safe-area-inset-top, 44px) + 16px)",
           right: "20px",
           background: "none",
           border: "none",
           cursor: "pointer",
-          opacity: 0.3,
+          opacity: 0.28,
           padding: "4px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          fontFamily: "'Comfortaa', sans-serif",
+          fontSize: "9px",
+          letterSpacing: "0.22em",
+          fontWeight: 300,
+          color: textColor,
           transition: "opacity 0.2s",
+          textTransform: "lowercase",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
-        onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.3")}
+        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.55")}
+        onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.28")}
       >
-        <X size={16} color={textColor} />
+        close
       </button>
 
       <div
@@ -212,11 +241,25 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               color: textColor,
               opacity: 0.5,
               fontFamily: "'Comfortaa', sans-serif",
-              margin: 0,
-              lineHeight: 1.7,
+              margin: "0 0 5px 0",
+              lineHeight: 1.6,
             }}
           >
-            box, 4-7-8, coherence, physiological sigh,<br />and more — for focus, energy,<br />and hard moments.
+            box, 4-7-8, coherence, physiological sigh.
+          </p>
+          <p
+            style={{
+              fontSize: "10px",
+              letterSpacing: "0.16em",
+              fontWeight: 300,
+              color: textColor,
+              opacity: 0.35,
+              fontFamily: "'Comfortaa', sans-serif",
+              margin: 0,
+              lineHeight: 1.6,
+            }}
+          >
+            for focus, energy, and hard moments.
           </p>
         </div>
 
@@ -243,13 +286,14 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
                 textTransform: "lowercase",
               }}
             >
-              · best value · save 50% ·
+              · best value ·
             </span>
           </div>
           <PricePill
             id="com.workondeck.alwayspause.annual"
             label="· $29.99 / year ·"
             sublabel="$2.50 / month, billed annually"
+            badge="save 50%"
           />
           <PricePill
             id="com.workondeck.alwayspause.monthly"
@@ -264,10 +308,12 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             width: "100%",
             marginTop: "14px",
             paddingTop: "14px",
-            borderTop: `1px solid ${isDayTheme ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.04)"}`,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "6px" }}>
+          <div style={{ marginBottom: "6px" }}>
             <span
               style={{
                 fontSize: "9px",
@@ -275,17 +321,18 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
                 fontWeight: 300,
                 color: textColor,
                 fontFamily: "'Comfortaa', sans-serif",
-                opacity: 0.45,
+                opacity: 0.35,
                 textTransform: "lowercase",
               }}
             >
-              · own it ·
+              · · ·
             </span>
           </div>
           <PricePill
             id="alwayspause_lifetime"
             label="· $49.99 · forever ·"
             sublabel="no subscription · yours forever"
+            isLifetime
           />
         </div>
 
@@ -299,7 +346,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             opacity: 0.3,
             fontFamily: "'Comfortaa', sans-serif",
             textAlign: "center",
-            margin: "16px 0 0 0",
+            margin: "20px 0 0 0",
             lineHeight: 1.6,
           }}
         >
@@ -311,11 +358,13 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           onClick={handlePurchase}
           style={{
             width: "100%",
-            marginTop: "20px",
-            background: isDayTheme ? "linear-gradient(135deg, #4A7FA6 0%, #6BA888 100%)" : "linear-gradient(135deg, #4A5B9C 0%, #6BA888 100%)",
+            marginTop: "28px",
+            background: isDayTheme
+              ? "linear-gradient(135deg, #5C8FAF 0%, #7DB898 100%)"
+              : "linear-gradient(135deg, #5A6BAA 0%, #7DB898 100%)",
             border: "none",
             borderRadius: "50px",
-            padding: "15px 24px",
+            padding: "16px 24px 14px 24px",
             cursor: "pointer",
             fontFamily: "'Comfortaa', sans-serif",
             fontSize: "12px",
@@ -330,7 +379,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
           onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
         >
-          {loading ? '· processing ·' : 'unlock pause+'}
+          {ctaLabel()}
         </button>
 
         {/* Bottom row: restore + privacy + terms */}
