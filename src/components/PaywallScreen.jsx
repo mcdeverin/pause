@@ -71,11 +71,10 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent: "center",
         zIndex: 50,
-        paddingTop: "env(safe-area-inset-top, 44px)",
-        paddingBottom: "env(safe-area-inset-bottom, 40px)",
-        overflowY: "scroll",
+        padding: "env(safe-area-inset-top, 44px) 0 env(safe-area-inset-bottom, 34px) 0",
+        overflowY: "auto",
         overflowX: "hidden",
         boxSizing: "border-box",
         scrollbarWidth: "none",
@@ -119,12 +118,11 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           maxWidth: "320px",
           padding: "0 28px",
           boxSizing: "border-box",
-          minHeight: "100vh",
           justifyContent: "center",
         }}
       >
         {/* Orb */}
-        <div style={{ marginBottom: "20px", marginTop: "60px" }}>
+        <div style={{ marginBottom: "20px", marginTop: "0px" }}>
           <LiquidOrb theme={theme} isBreathing={false} size={120} />
         </div>
 
