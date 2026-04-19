@@ -21,15 +21,16 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
 
   const PricePill = ({ id, label, sublabel }) => {
     const isSelected = selected === id;
-    const isBestValue = id === "com.workondeck.alwayspause.annual";
+    const selectedBg = isSelected ? primaryTint : glassBackground;
+    const selectedBorder = isSelected ? primaryBorder : glassBorder;
     return (
       <button
         onClick={() => setSelected(id)}
         style={{
-          background: isSelected ? primaryTint : glassBackground,
+          background: selectedBg,
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          border: `1px solid ${isSelected ? primaryBorder : glassBorder}`,
+          border: `1px solid ${selectedBorder}`,
           borderRadius: "50px",
           padding: "13px 24px",
           cursor: "pointer",
@@ -125,20 +126,20 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         }}
       >
         {/* Orb */}
-        <div style={{ marginBottom: "20px", marginTop: "40px" }}>
-          <LiquidOrb theme={theme} isBreathing={false} size={120} />
+        <div style={{ marginBottom: "14px", marginTop: "32px" }}>
+          <LiquidOrb theme={theme} isBreathing={false} size={100} />
         </div>
 
         {/* Headline */}
-        <div style={{ textAlign: "center", marginBottom: "6px" }}>
+        <div style={{ textAlign: "center", marginBottom: "4px" }}>
           <p
             style={{
-              fontSize: "20px",
+              fontSize: "18px",
               letterSpacing: "0.35em",
               fontWeight: 300,
               color: textColor,
               fontFamily: "'Comfortaa', sans-serif",
-              margin: "0 0 10px 0",
+              margin: "0 0 8px 0",
             }}
           >
             go deeper with pause+
@@ -166,11 +167,11 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             flexDirection: "column",
             gap: "8px",
             width: "100%",
-            marginTop: "24px",
+            marginTop: "18px",
           }}
         >
           {/* Best value label */}
-          <div style={{ textAlign: "center", marginBottom: "8px" }}>
+          <div style={{ textAlign: "center", marginBottom: "6px" }}>
             <span
               style={{
                 fontSize: "9px",
@@ -188,7 +189,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <PricePill
             id="com.workondeck.alwayspause.annual"
             label="· $29.99 / year ·"
-            sublabel="~$2.50 / month"
+            sublabel="$2.50 / month, billed annually"
           />
           <PricePill
             id="com.workondeck.alwayspause.monthly"
@@ -197,16 +198,16 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           />
         </div>
 
-        {/* Forever option — separated with extra breathing room */}
+        {/* Forever option */}
         <div
           style={{
             width: "100%",
-            marginTop: "20px",
-            paddingTop: "18px",
+            marginTop: "14px",
+            paddingTop: "14px",
             borderTop: `1px solid ${isDayTheme ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.04)"}`,
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "8px" }}>
+          <div style={{ textAlign: "center", marginBottom: "6px" }}>
             <span
               style={{
                 fontSize: "9px",
@@ -228,12 +229,12 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           />
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button — sticky at bottom */}
         <button
           onClick={handlePurchase}
           style={{
             width: "100%",
-            marginTop: "24px",
+            marginTop: "20px",
             background: isDayTheme ? "linear-gradient(135deg, #4A7FA6 0%, #6BA888 100%)" : "linear-gradient(135deg, #4A5B9C 0%, #6BA888 100%)",
             border: "none",
             borderRadius: "50px",
@@ -261,8 +262,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             alignItems: "center",
             justifyContent: "center",
             gap: "18px",
-            marginTop: "16px",
-            marginBottom: "48px",
+            marginTop: "14px",
+            marginBottom: "32px",
           }}
         >
           <button
