@@ -223,7 +223,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             </span>
           </div>
           <PricePill
-            id="com.workondeck.alwayspause.lifetime"
+            id="alwayspause_lifetime"
             label="· $49.99 · forever ·"
             sublabel="one-time purchase"
           />
