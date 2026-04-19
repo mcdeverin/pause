@@ -82,6 +82,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             >
               {CATEGORIES.map((cat) => {
                 const isLocked = !isPro && LOCKED_CATEGORIES.includes(cat);
+                const isSelected = selectedCategory === cat;
+                const accentColor = isDayTheme ? "#4A7FA6" : "#6BA888";
+                const baseColor = isDayTheme ? "#333" : "rgba(255,255,255,0.85)";
+                const lockedColor = isDayTheme ? "rgba(0,0,0,0.35)" : "rgba(255,255,255,0.35)";
                 return (
                   <button
                     key={cat}
@@ -91,7 +95,6 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                       alignItems: "center",
                       justifyContent: "space-between",
                       width: "100%",
-                      textAlign: "left",
                       padding: "9px 18px",
                       background: "none",
                       border: "none",
@@ -99,15 +102,25 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                       fontFamily: "'Comfortaa', sans-serif",
                       fontSize: "12px",
                       letterSpacing: "0.1em",
-                      fontWeight: selectedCategory === cat ? 600 : 300,
-                      color: selectedCategory === cat
-                        ? isDayTheme ? "#1C3A5E" : "#FFFFFF"
-                        : isDayTheme ? "#444" : "rgba(255,255,255,0.65)",
-                      opacity: isLocked ? 0.5 : 1,
+                      fontWeight: isSelected ? 600 : 300,
+                      color: isLocked ? lockedColor : baseColor,
                     }}
                   >
-                    <span>{cat}</span>
-                    {isLocked && <Lock size={10} style={{ flexShrink: 0, marginLeft: "6px", opacity: 0.6 }} />}
+                    {/* fixed-width dot gutter so text never shifts */}
+                    <span style={{ display: "flex", alignItems: "center", gap: "0px" }}>
+                      <span style={{
+                        display: "inline-block",
+                        width: "16px",
+                        textAlign: "left",
+                        color: accentColor,
+                        opacity: isSelected ? 1 : 0,
+                        fontSize: "14px",
+                        lineHeight: 1,
+                        transition: "opacity 0.2s",
+                      }}>·</span>
+                      <span>{cat}</span>
+                    </span>
+                    {isLocked && <Lock size={10} style={{ flexShrink: 0, marginLeft: "6px", opacity: 0.5 }} />}
                   </button>
                 );
               })}
