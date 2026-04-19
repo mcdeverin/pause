@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-
 import { useNavigate } from "react-router-dom";
 import LiquidOrb from "./LiquidOrb";
 import { getOfferings, purchasePackage, restorePurchases, checkEntitlement } from '../lib/revenuecat';
@@ -23,11 +22,10 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const textColor = isDayTheme ? "#111111" : "#F0EDE8";
   const bg = isDayTheme ? "#FAFAF8" : "#0D1117";
   const glassBackground = isDayTheme ? "rgba(255,255,255,0.55)" : "rgba(20,30,50,0.7)";
-  const glassBorder = isDayTheme ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.15)";
+  const glassBorder = isDayTheme ? "rgba(0,0,0,0.10)" : "rgba(255,255,255,0.13)";
   const primaryColor = isDayTheme ? "#4A7FA6" : "#4A5B9C";
   const primaryTint = isDayTheme ? "rgba(74,127,166,0.07)" : "rgba(74,91,156,0.12)";
-  const primaryBorder = primaryColor;
-  const lifetimeBorder = isDayTheme ? "rgba(210,185,160,0.55)" : "rgba(210,185,160,0.3)";
+  const lifetimeBorder = isDayTheme ? "rgba(210,185,160,0.45)" : "rgba(210,185,160,0.25)";
 
   const ctaLabel = () => {
     if (loading) return '· processing ·';
@@ -36,8 +34,9 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   };
 
   const disclosureText = () => {
-    if (selected === "alwayspause_lifetime") return 'one-time purchase. yours forever.';
-    return 'cancel anytime. auto-renews until canceled.';
+    if (selected === "alwayspause_lifetime") return 'one-time purchase · yours forever · no subscription.';
+    if (selected === "com.workondeck.alwayspause.monthly") return '7 days free, then $4.99/month. auto-renews until canceled. cancel anytime in Settings.';
+    return '7 days free, then $29.99/year. auto-renews until canceled. cancel anytime in Settings.';
   };
 
   const handlePurchase = async () => {
@@ -53,9 +52,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         productId: p.product?.identifier
       }))));
 
-      const pkg = packages?.find(
-        p => p.product?.identifier === selected
-      );
+      const pkg = packages?.find(p => p.product?.identifier === selected);
 
       console.log('selected:', selected);
       console.log('found pkg:', pkg?.identifier);
@@ -91,390 +88,351 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
     }
   };
 
-  const PricePill = ({ id, label, sublabel, badge, isLifetime }) => {
+  const TierPill = ({ id, label, caption, price, badge, isLifetime }) => {
     const isSelected = selected === id;
-    const selectedBg = isSelected ? primaryTint : glassBackground;
-    const unselectedBorder = isLifetime
-      ? lifetimeBorder
-      : glassBorder;
-    const selectedBorder = isSelected ? primaryBorder : unselectedBorder;
+    const border = isSelected
+      ? primaryColor
+      : isLifetime ? lifetimeBorder : glassBorder;
+    const pillBg = isSelected ? primaryTint : glassBackground;
+
     return (
       <button
         onClick={() => setSelected(id)}
         style={{
-          background: selectedBg,
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          border: `1px solid ${selectedBorder}`,
-          borderRadius: "50px",
-          padding: "13px 24px",
-          cursor: "pointer",
-          fontFamily: "'Comfortaa', sans-serif",
-          fontSize: "12px",
-          fontWeight: 300,
-          letterSpacing: "0.15em",
-          color: textColor,
-          opacity: isSelected ? 1 : 0.55,
-          transition: "all 0.25s ease",
           width: "100%",
           boxSizing: "border-box",
+          background: pillBg,
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: `1px solid ${border}`,
+          borderRadius: "18px",
+          padding: "14px 20px",
+          cursor: "pointer",
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: "8px",
+          gap: "12px",
+          opacity: isSelected ? 1 : 0.55,
+          transition: "all 0.22s ease",
+          textAlign: "left",
         }}
       >
-        <span style={{ flex: 1, textAlign: "center" }}>
-          <span style={{ display: "block" }}>{label}</span>
-          {sublabel && (
-            <span style={{ display: "block", fontSize: "10px", opacity: 0.6, letterSpacing: "0.1em", marginTop: "2px" }}>{sublabel}</span>
+        {/* Left: label + badge + caption */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "3px", flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
+            <span style={{
+              fontFamily: "'Comfortaa', sans-serif",
+              fontSize: "13px",
+              fontWeight: 300,
+              letterSpacing: "0.12em",
+              color: textColor,
+            }}>
+              {label}
+            </span>
+            {badge && (
+              <span style={{
+                fontFamily: "'Comfortaa', sans-serif",
+                fontSize: "7px",
+                fontWeight: 600,
+                letterSpacing: "0.16em",
+                color: primaryColor,
+                border: `1px solid ${primaryColor}`,
+                borderRadius: "100px",
+                padding: "2px 6px",
+                opacity: 0.85,
+                textTransform: "uppercase",
+                lineHeight: 1.4,
+                flexShrink: 0,
+              }}>
+                {badge}
+              </span>
+            )}
+          </div>
+          {caption && (
+            <span style={{
+              fontFamily: "'Comfortaa', sans-serif",
+              fontSize: "9px",
+              fontWeight: 300,
+              letterSpacing: "0.1em",
+              color: textColor,
+              opacity: 0.45,
+              lineHeight: 1.4,
+            }}>
+              {caption}
+            </span>
           )}
+        </div>
+
+        {/* Right: price */}
+        <span style={{
+          fontFamily: "'Comfortaa', sans-serif",
+          fontSize: "17px",
+          fontWeight: 300,
+          letterSpacing: "0.04em",
+          color: textColor,
+          flexShrink: 0,
+        }}>
+          {price}
         </span>
-        {badge && (
-          <span style={{
-            fontSize: "8px",
-            letterSpacing: "0.12em",
-            color: primaryColor,
-            opacity: 0.85,
-            whiteSpace: "nowrap",
-            fontWeight: 300,
-            flexShrink: 0,
-          }}>
-            {badge}
-          </span>
-        )}
       </button>
     );
   };
 
   return (
     <>
-    <style>{`
-      .paywall-scroll::-webkit-scrollbar { display: none; }
-      .paywall-scroll { overflow-y: auto !important; }
-      html, body { overflow: visible !important; }
-    `}</style>
-    <motion.div
-      className="paywall-scroll"
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: bg,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        zIndex: 50,
-        paddingTop: "env(safe-area-inset-top, 44px)",
-        paddingBottom: "env(safe-area-inset-bottom, 34px)",
-        overflowY: "auto",
-        overflowX: "hidden",
-        boxSizing: "border-box",
-        scrollbarWidth: "none",
-        msOverflowStyle: "none",
-      }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {/* Close button */}
-      <button
-        onClick={onClose}
+      <style>{`
+        .paywall-scroll::-webkit-scrollbar { display: none; }
+        .paywall-scroll { overflow-y: auto !important; }
+        html, body { overflow: visible !important; }
+      `}</style>
+      <motion.div
+        className="paywall-scroll"
         style={{
-          position: "absolute",
-          top: "calc(env(safe-area-inset-top, 44px) + 16px)",
-          right: "20px",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          opacity: 0.28,
-          padding: "4px",
-          fontFamily: "'Comfortaa', sans-serif",
-          fontSize: "9px",
-          letterSpacing: "0.22em",
-          fontWeight: 300,
-          color: textColor,
-          transition: "opacity 0.2s",
-          textTransform: "lowercase",
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.55")}
-        onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.28")}
-      >
-        close
-      </button>
-
-      <div
-        style={{
+          position: "fixed",
+          inset: 0,
+          background: bg,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "0px",
-          width: "100%",
-          maxWidth: "320px",
-          padding: "0 28px",
+          justifyContent: "flex-start",
+          zIndex: 50,
+          paddingTop: "env(safe-area-inset-top, 44px)",
+          paddingBottom: "env(safe-area-inset-bottom, 34px)",
+          overflowY: "auto",
+          overflowX: "hidden",
           boxSizing: "border-box",
-          justifyContent: "center",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
         }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
       >
-        {/* Orb */}
-        <div style={{ marginBottom: "14px", marginTop: "32px" }}>
-          <LiquidOrb theme={theme} isBreathing={false} size={100} />
-        </div>
-
-        {/* Headline */}
-        <div style={{ textAlign: "center", marginBottom: "4px" }}>
-          <p
-            style={{
-              fontSize: "18px",
-              letterSpacing: "0.35em",
-              fontWeight: 300,
-              color: textColor,
-              fontFamily: "'Comfortaa', sans-serif",
-              margin: "0 0 8px 0",
-            }}
-          >
-            go deeper with pause+
-          </p>
-          <p
-            style={{
-              fontSize: "11px",
-              letterSpacing: "0.18em",
-              fontWeight: 300,
-              color: textColor,
-              opacity: 0.5,
-              fontFamily: "'Comfortaa', sans-serif",
-              margin: "0 0 5px 0",
-              lineHeight: 1.6,
-            }}
-          >
-            box, 4-7-8, coherence, physiological sigh.
-          </p>
-          <p
-            style={{
-              fontSize: "10px",
-              letterSpacing: "0.16em",
-              fontWeight: 300,
-              color: textColor,
-              opacity: 0.35,
-              fontFamily: "'Comfortaa', sans-serif",
-              margin: 0,
-              lineHeight: 1.6,
-            }}
-          >
-            for focus, energy, and hard moments.
-          </p>
-        </div>
-
-        {/* Trial intro line */}
-        <p
+        {/* Close button */}
+        <button
+          onClick={onClose}
           style={{
+            position: "absolute",
+            top: "calc(env(safe-area-inset-top, 44px) + 16px)",
+            right: "20px",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            opacity: 0.28,
+            padding: "4px",
+            fontFamily: "'Comfortaa', sans-serif",
             fontSize: "9px",
             letterSpacing: "0.22em",
             fontWeight: 300,
-            color: primaryColor,
-            fontFamily: "'Comfortaa', sans-serif",
-            opacity: 0.75,
-            textAlign: "center",
-            margin: "16px 0 0 0",
+            color: textColor,
+            transition: "opacity 0.2s",
           }}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.55")}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.28")}
         >
-          · 7 days free, then choose your plan ·
-        </p>
+          close
+        </button>
 
-        {/* Subscription group */}
+        {/* Content */}
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-            width: "100%",
-            marginTop: "14px",
-          }}
-        >
-          {/* Yearly tier with attached label + badge */}
-          <div style={{ width: "100%" }}>
-            {/* · save 50% · sits directly above the yearly card */}
-            <div style={{ textAlign: "center", marginBottom: "5px" }}>
-              <span
-                style={{
-                  fontSize: "9px",
-                  letterSpacing: "0.25em",
-                  fontWeight: 300,
-                  color: primaryColor,
-                  fontFamily: "'Comfortaa', sans-serif",
-                  opacity: 0.8,
-                  textTransform: "lowercase",
-                }}
-              >
-                · save 50% ·
-              </span>
-            </div>
-            <PricePill
-              id="com.workondeck.alwayspause.annual"
-              label="· $29.99 / year ·"
-              sublabel="$2.50 / month, billed annually"
-            />
-            {/* 7 days free caption — right-aligned, outside the pill */}
-            <div style={{ textAlign: "right", marginTop: "4px", paddingRight: "4px" }}>
-              <span style={{
-                fontSize: "8px",
-                letterSpacing: "0.14em",
-                fontWeight: 300,
-                color: primaryColor,
-                fontFamily: "'Comfortaa', sans-serif",
-                opacity: 0.65,
-              }}>
-                7 days free
-              </span>
-            </div>
-          </div>
-
-          <PricePill
-            id="com.workondeck.alwayspause.monthly"
-            label="· $4.99 / month ·"
-            sublabel="billed monthly"
-          />
-        </div>
-
-        {/* Forever option */}
-        <div
-          style={{
-            width: "100%",
-            marginTop: "22px",
-            paddingTop: "22px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-          }}
-        >
-          <div style={{ marginBottom: "10px" }}>
-            <span
-              style={{
-                fontSize: "9px",
-                letterSpacing: "0.25em",
-                fontWeight: 300,
-                color: textColor,
-                fontFamily: "'Comfortaa', sans-serif",
-                opacity: 0.35,
-                textTransform: "lowercase",
-              }}
-            >
-              · · ·
-            </span>
-          </div>
-          <PricePill
-            id="alwayspause_lifetime"
-            label="· $49.99 · once ·"
-            sublabel="yours forever"
-            isLifetime
-          />
-        </div>
-
-        {/* Tier-aware disclosure */}
-        <p
-          style={{
-            fontSize: "10px",
-            letterSpacing: "0.08em",
-            fontWeight: 300,
-            color: textColor,
-            opacity: 0.3,
-            fontFamily: "'Comfortaa', sans-serif",
-            textAlign: "center",
-            margin: "20px 0 0 0",
-            lineHeight: 1.6,
-          }}
-        >
-          {disclosureText()}
-        </p>
-
-        {/* CTA Button */}
-        <button
-          onClick={handlePurchase}
-          style={{
             width: "100%",
-            marginTop: "28px",
-            background: isDayTheme
-              ? "linear-gradient(135deg, #7AA8C4 0%, #96C4AE 100%)"
-              : "linear-gradient(135deg, #7481B8 0%, #96C4AE 100%)",
-            border: "none",
-            borderRadius: "50px",
-            padding: "16px 24px 14px 24px",
-            cursor: "pointer",
-            fontFamily: "'Comfortaa', sans-serif",
-            fontSize: "12px",
-            fontWeight: 300,
-            letterSpacing: "0.2em",
-            color: isDayTheme ? "#FAFAF8" : "#F0EDE8",
-            textAlign: "center",
+            maxWidth: "320px",
+            padding: "0 24px",
             boxSizing: "border-box",
-            transition: "opacity 0.2s",
+            marginTop: "28px",
           }}
-          disabled={loading}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
         >
-          {ctaLabel()}
-        </button>
+          {/* 1. Orb */}
+          <LiquidOrb theme={theme} isBreathing={false} size={100} />
 
-        {/* Bottom row: restore + privacy + terms */}
-        <div
-          style={{
+          {/* 32pt gap */}
+          <div style={{ height: "32px" }} />
+
+          {/* 2. Headline */}
+          <p style={{
+            fontFamily: "'Comfortaa', sans-serif",
+            fontSize: "18px",
+            fontWeight: 300,
+            letterSpacing: "0.3em",
+            color: textColor,
+            margin: 0,
+            textAlign: "center",
+            lineHeight: 1.4,
+          }}>
+            unlock all of pause+
+          </p>
+
+          {/* 20pt gap */}
+          <div style={{ height: "20px" }} />
+
+          {/* 3. Subhead */}
+          <p style={{
+            fontFamily: "'Comfortaa', sans-serif",
+            fontSize: "11px",
+            fontWeight: 300,
+            letterSpacing: "0.15em",
+            color: textColor,
+            opacity: 0.45,
+            margin: 0,
+            textAlign: "center",
+            lineHeight: 1.7,
+          }}>
+            box, 4-7-8, coherence, physiological sigh, and more.{" "}
+            for focus, energy, and the hardest moments.
+          </p>
+
+          {/* 40pt gap */}
+          <div style={{ height: "40px" }} />
+
+          {/* 4. Yearly pill */}
+          <div style={{ width: "100%" }}>
+            <TierPill
+              id="com.workondeck.alwayspause.annual"
+              label="yearly"
+              caption="7-day free trial · $2.50/mo billed annually"
+              price="$29.99"
+              badge="save 50%"
+            />
+          </div>
+
+          {/* 12pt gap */}
+          <div style={{ height: "12px" }} />
+
+          {/* 5. Monthly pill */}
+          <div style={{ width: "100%" }}>
+            <TierPill
+              id="com.workondeck.alwayspause.monthly"
+              label="monthly"
+              caption="7-day free trial · billed monthly"
+              price="$4.99"
+            />
+          </div>
+
+          {/* 12pt gap */}
+          <div style={{ height: "12px" }} />
+
+          {/* 6. Forever pill */}
+          <div style={{ width: "100%" }}>
+            <TierPill
+              id="alwayspause_lifetime"
+              label="forever"
+              caption="one-time · yours to keep"
+              price="$49.99"
+              isLifetime
+            />
+          </div>
+
+          {/* 32pt gap */}
+          <div style={{ height: "32px" }} />
+
+          {/* 7. CTA */}
+          <button
+            onClick={handlePurchase}
+            disabled={loading}
+            style={{
+              width: "100%",
+              background: isDayTheme
+                ? "linear-gradient(135deg, #7AA8C4 0%, #96C4AE 100%)"
+                : "linear-gradient(135deg, #7481B8 0%, #96C4AE 100%)",
+              border: "none",
+              borderRadius: "50px",
+              padding: "16px 24px 14px 24px",
+              cursor: "pointer",
+              fontFamily: "'Comfortaa', sans-serif",
+              fontSize: "12px",
+              fontWeight: 300,
+              letterSpacing: "0.2em",
+              color: isDayTheme ? "#FAFAF8" : "#F0EDE8",
+              textAlign: "center",
+              boxSizing: "border-box",
+              transition: "opacity 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.82")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+          >
+            {ctaLabel()}
+          </button>
+
+          {/* 16pt gap */}
+          <div style={{ height: "16px" }} />
+
+          {/* 8. Disclosure */}
+          <p style={{
+            fontFamily: "'Comfortaa', sans-serif",
+            fontSize: "9px",
+            fontWeight: 300,
+            letterSpacing: "0.08em",
+            color: textColor,
+            opacity: 0.28,
+            margin: 0,
+            textAlign: "center",
+            lineHeight: 1.7,
+          }}>
+            {disclosureText()}
+          </p>
+
+          {/* 12pt gap */}
+          <div style={{ height: "12px" }} />
+
+          {/* 9. Bottom row */}
+          <div style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "18px",
-            marginTop: "14px",
+            gap: "14px",
             marginBottom: "32px",
-          }}
-        >
-          {[
-            { label: "Restore", action: handleRestore },
-            { label: "Privacy", action: () => { onClose(); navigate("/privacy"); } },
-            { label: "Terms", action: () => { onClose(); navigate("/terms"); } },
-          ].map(({ label, action }, i, arr) => (
-            <>
-              <button
-                key={label}
-                onClick={action}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: "'Comfortaa', sans-serif",
-                  fontSize: "10px",
-                  letterSpacing: "0.12em",
-                  fontWeight: 300,
-                  color: textColor,
-                  opacity: 0.3,
-                  padding: 0,
-                }}
-              >
-                {label}
-              </button>
-              {i < arr.length - 1 && (
-                <span key={label + "-sep"} style={{ color: textColor, opacity: 0.2, fontSize: "10px" }}>·</span>
-              )}
-            </>
-          ))}
-        </div>
-
-        {error && (
-          <p style={{
-            fontSize: '10px',
-            color: '#ff6b6b',
-            opacity: 0.8,
-            fontFamily: 'Comfortaa',
-            letterSpacing: '0.1em',
-            marginTop: '4px',
-            textAlign: 'center',
           }}>
-            {error}
-          </p>
-        )}
-      </div>
-    </motion.div>
+            {[
+              { label: "restore", action: handleRestore },
+              { label: "terms", action: () => { onClose(); navigate("/terms"); } },
+              { label: "privacy", action: () => { onClose(); navigate("/privacy"); } },
+            ].map(({ label, action }, i, arr) => (
+              <span key={label} style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                <button
+                  onClick={action}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "'Comfortaa', sans-serif",
+                    fontSize: "9px",
+                    letterSpacing: "0.14em",
+                    fontWeight: 300,
+                    color: textColor,
+                    opacity: 0.28,
+                    padding: 0,
+                  }}
+                >
+                  {label}
+                </button>
+                {i < arr.length - 1 && (
+                  <span style={{ color: textColor, opacity: 0.18, fontSize: "9px" }}>·</span>
+                )}
+              </span>
+            ))}
+          </div>
+
+          {error && (
+            <p style={{
+              fontSize: '10px',
+              color: '#ff6b6b',
+              opacity: 0.8,
+              fontFamily: 'Comfortaa',
+              letterSpacing: '0.1em',
+              marginTop: '4px',
+              textAlign: 'center',
+            }}>
+              {error}
+            </p>
+          )}
+        </div>
+      </motion.div>
     </>
   );
 }
