@@ -1,24 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { X } from "lucide-react";
 import LiquidOrb from "./LiquidOrb";
-
-const PLANS = [
-  {
-    id: "com.workondeck.alwayspause.annual",
-    label: "· $29.99 / year · best value ·",
-    key: "annual",
-  },
-  {
-    id: "com.workondeck.alwayspause.monthly",
-    label: "· $4.99 / month ·",
-    key: "monthly",
-  },
-  {
-    id: "com.workondeck.alwayspause.lifetime",
-    label: "· $49.99 · forever ·",
-    key: "lifetime",
-  },
-];
 
 export default function PaywallScreen({ theme = "day", onClose, onPurchase, triggerCategory }) {
   const [selected, setSelected] = useState("com.workondeck.alwayspause.annual");
@@ -26,12 +9,52 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const isDayTheme = theme === "day";
   const textColor = isDayTheme ? "#111111" : "#F0EDE8";
   const bg = isDayTheme ? "#FAFAF8" : "#0D1117";
-  const glassBackground = isDayTheme ? "rgba(255,255,255,0.6)" : "rgba(20,30,50,0.75)";
-  const glassBorder = isDayTheme ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.15)";
-  const selectedBorder = isDayTheme ? "#4A7FA6" : "#4A5B9C";
+  const glassBackground = isDayTheme ? "rgba(255,255,255,0.55)" : "rgba(20,30,50,0.7)";
+  const glassBorder = isDayTheme ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.15)";
+  const primaryColor = isDayTheme ? "#4A7FA6" : "#4A5B9C";
+  const primaryTint = isDayTheme ? "rgba(74,127,166,0.07)" : "rgba(74,91,156,0.12)";
+  const primaryBorder = primaryColor;
 
   const handlePurchase = () => {
     if (onPurchase) onPurchase(selected);
+  };
+
+  const PricePill = ({ id, label, sublabel }) => {
+    const isSelected = selected === id;
+    const isBestValue = id === "com.workondeck.alwayspause.annual";
+    return (
+      <button
+        onClick={() => setSelected(id)}
+        style={{
+          background: isSelected ? primaryTint : glassBackground,
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: `1px solid ${isSelected ? primaryBorder : glassBorder}`,
+          borderRadius: "50px",
+          padding: "13px 24px",
+          cursor: "pointer",
+          fontFamily: "'Comfortaa', sans-serif",
+          fontSize: "12px",
+          fontWeight: 300,
+          letterSpacing: "0.15em",
+          color: textColor,
+          opacity: isSelected ? 1 : 0.55,
+          transition: "all 0.25s ease",
+          textAlign: "center",
+          width: "100%",
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "2px",
+        }}
+      >
+        <span>{label}</span>
+        {sublabel && (
+          <span style={{ fontSize: "10px", opacity: 0.6, letterSpacing: "0.1em" }}>{sublabel}</span>
+        )}
+      </button>
+    );
   };
 
   return (
@@ -55,90 +78,142 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
       exit={{ opacity: 0 }}
       transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
     >
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        style={{
+          position: "absolute",
+          top: "calc(env(safe-area-inset-top, 44px) + 12px)",
+          right: "20px",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          opacity: 0.3,
+          padding: "4px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "opacity 0.2s",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
+        onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.3")}
+      >
+        <X size={16} color={textColor} />
+      </button>
+
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "20px",
+          gap: "0px",
           width: "100%",
           maxWidth: "320px",
-          padding: "0 24px",
+          padding: "0 28px",
           boxSizing: "border-box",
         }}
       >
         {/* Orb */}
-        <LiquidOrb theme={theme} isBreathing={false} size={160} />
+        <div style={{ marginBottom: "20px" }}>
+          <LiquidOrb theme={theme} isBreathing={false} size={150} />
+        </div>
 
         {/* Headline */}
-        <div style={{ textAlign: "center", marginTop: "4px" }}>
+        <div style={{ textAlign: "center", marginBottom: "6px" }}>
           <p
             style={{
-              fontSize: "22px",
-              letterSpacing: "0.4em",
+              fontSize: "20px",
+              letterSpacing: "0.35em",
               fontWeight: 300,
               color: textColor,
               fontFamily: "'Comfortaa', sans-serif",
               margin: "0 0 10px 0",
             }}
           >
-            go deeper.
+            go deeper with pause+
           </p>
           <p
             style={{
               fontSize: "11px",
-              letterSpacing: "0.2em",
+              letterSpacing: "0.18em",
               fontWeight: 300,
               color: textColor,
-              opacity: 0.55,
+              opacity: 0.5,
               fontFamily: "'Comfortaa', sans-serif",
               margin: 0,
+              lineHeight: 1.7,
             }}
           >
-            unlock focus, energy, and advanced.
+            17 more techniques — for focus,<br />energy, and hard moments.
           </p>
         </div>
 
-        {/* Pricing cards */}
+        {/* Subscription group */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "10px",
+            gap: "8px",
             width: "100%",
-            maxWidth: "280px",
+            marginTop: "24px",
           }}
         >
-          {PLANS.map((plan) => {
-            const isSelected = selected === plan.id;
-            return (
-              <button
-                key={plan.id}
-                onClick={() => setSelected(plan.id)}
-                style={{
-                  background: glassBackground,
-                  backdropFilter: "blur(20px)",
-                  WebkitBackdropFilter: "blur(20px)",
-                  border: `1px solid ${isSelected ? selectedBorder : glassBorder}`,
-                  borderRadius: "14px",
-                  padding: "14px 20px",
-                  cursor: "pointer",
-                  fontFamily: "'Comfortaa', sans-serif",
-                  fontSize: "12px",
-                  fontWeight: 300,
-                  letterSpacing: "0.15em",
-                  color: textColor,
-                  opacity: isSelected ? 1 : 0.5,
-                  transition: "opacity 0.25s, border-color 0.25s",
-                  textAlign: "center",
-                  width: "100%",
-                  boxSizing: "border-box",
-                }}
-              >
-                {plan.label}
-              </button>
-            );
-          })}
+          {/* Best value label */}
+          <div style={{ textAlign: "center", marginBottom: "2px" }}>
+            <span
+              style={{
+                fontSize: "9px",
+                letterSpacing: "0.25em",
+                fontWeight: 300,
+                color: primaryColor,
+                fontFamily: "'Comfortaa', sans-serif",
+                opacity: 0.8,
+                textTransform: "lowercase",
+              }}
+            >
+              · best value ·
+            </span>
+          </div>
+          <PricePill
+            id="com.workondeck.alwayspause.annual"
+            label="· $29.99 / year ·"
+            sublabel="~$2.50 / month"
+          />
+          <PricePill
+            id="com.workondeck.alwayspause.monthly"
+            label="· $4.99 / month ·"
+          />
+        </div>
+
+        {/* Forever option — separated with extra breathing room */}
+        <div
+          style={{
+            width: "100%",
+            marginTop: "20px",
+            paddingTop: "18px",
+            borderTop: `1px solid ${isDayTheme ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.07)"}`,
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "6px" }}>
+            <span
+              style={{
+                fontSize: "9px",
+                letterSpacing: "0.25em",
+                fontWeight: 300,
+                color: textColor,
+                fontFamily: "'Comfortaa', sans-serif",
+                opacity: 0.35,
+                textTransform: "lowercase",
+              }}
+            >
+              own it
+            </span>
+          </div>
+          <PricePill
+            id="com.workondeck.alwayspause.lifetime"
+            label="· $49.99 · forever ·"
+            sublabel="one-time purchase"
+          />
         </div>
 
         {/* CTA Button */}
@@ -146,70 +221,77 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           onClick={handlePurchase}
           style={{
             width: "100%",
-            maxWidth: "280px",
-            background: glassBackground,
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: `1px solid ${selectedBorder}`,
-            borderRadius: "14px",
-            padding: "15px 20px",
+            marginTop: "24px",
+            background: primaryColor,
+            border: "none",
+            borderRadius: "50px",
+            padding: "15px 24px",
             cursor: "pointer",
             fontFamily: "'Comfortaa', sans-serif",
             fontSize: "12px",
             fontWeight: 300,
             letterSpacing: "0.2em",
-            color: textColor,
+            color: isDayTheme ? "#FAFAF8" : "#F0EDE8",
             textAlign: "center",
             boxSizing: "border-box",
             transition: "opacity 0.2s",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.75")}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
           onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
         >
-          unlock always pause+
+          unlock pause+
         </button>
 
-        {/* Restore purchases */}
-        <button
+        {/* Bottom row: restore + maybe later */}
+        <div
           style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            fontFamily: "'Comfortaa', sans-serif",
-            fontSize: "10px",
-            letterSpacing: "0.15em",
-            fontWeight: 300,
-            color: textColor,
-            opacity: 0.4,
-            padding: 0,
-            marginTop: "-8px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "18px",
+            marginTop: "16px",
           }}
-          onClick={() => {/* restore logic */}}
         >
-          restore purchases
-        </button>
+          <button
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "'Comfortaa', sans-serif",
+              fontSize: "10px",
+              letterSpacing: "0.12em",
+              fontWeight: 300,
+              color: textColor,
+              opacity: 0.3,
+              padding: 0,
+            }}
+          >
+            restore purchases
+          </button>
 
-        {/* Maybe later */}
-        <button
-          onClick={onClose}
-          style={{
-            fontSize: "11px",
-            color: textColor,
-            fontFamily: "'Comfortaa', sans-serif",
-            fontWeight: 300,
-            letterSpacing: "0.2em",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
-            marginTop: "4px",
-            transition: "opacity 700ms",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-        >
-          · maybe later ·
-        </button>
+          <span style={{ color: textColor, opacity: 0.2, fontSize: "10px" }}>·</span>
+
+          <button
+            onClick={onClose}
+            style={{
+              fontSize: "10px",
+              color: textColor,
+              fontFamily: "'Comfortaa', sans-serif",
+              fontWeight: 300,
+              letterSpacing: "0.2em",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+              opacity: 0.4,
+              transition: "opacity 0.3s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.4")}
+          >
+            · maybe later ·
+          </button>
+        </div>
       </div>
     </motion.div>
   );
