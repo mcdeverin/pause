@@ -1,25 +1,32 @@
-import { Purchases } from "@revenuecat/purchases-js";
+import { Purchases, LOG_LEVEL } from '@revenuecat/purchases-capacitor';
 
-const API_KEY = "appl_vfxpRLXujuSdAhnusNWvmAxrnYH";
 export const ENTITLEMENT_ID = "always_pause_plus";
 
-export const initRevenueCat = () => {
-  Purchases.configure(API_KEY);
-};
-
-export const getCustomerInfo = async () => {
-  return await Purchases.getSharedInstance().getCustomerInfo();
-};
-
-export const purchasePackage = async (pkg) => {
-  return await Purchases.getSharedInstance().purchasePackage(pkg);
-};
-
-export const restorePurchases = async () => {
-  return await Purchases.getSharedInstance().restorePurchases();
+export const initRevenueCat = async () => {
+  await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG });
+  await Purchases.configure({
+    apiKey: "appl_vfxpRLXujuSdAhnusNWvmAxrnYH"
+  });
 };
 
 export const checkEntitlement = async () => {
-  const info = await getCustomerInfo();
-  return !!info.entitlements.active[ENTITLEMENT_ID];
+  const { customerInfo } = await Purchases.getCustomerInfo();
+  return !!customerInfo.entitlements.active[ENTITLEMENT_ID];
+};
+
+export const getOfferings = async () => {
+  const { offerings } = await Purchases.getOfferings();
+  return offerings;
+};
+
+export const purchasePackage = async (rcPackage) => {
+  const { customerInfo } = await Purchases.purchasePackage({ 
+    aPackage: rcPackage 
+  });
+  return customerInfo;
+};
+
+export const restorePurchases = async () => {
+  const { customerInfo } = await Purchases.restorePurchases();
+  return customerInfo;
 };
