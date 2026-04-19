@@ -58,7 +58,12 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   };
 
   return (
+    <>
+    <style>{`
+      .paywall-scroll::-webkit-scrollbar { display: none; }
+    `}</style>
     <motion.div
+      className="paywall-scroll"
       style={{
         position: "fixed",
         inset: 0,
@@ -66,12 +71,15 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         zIndex: 50,
         paddingTop: "env(safe-area-inset-top, 44px)",
-        paddingBottom: "env(safe-area-inset-bottom, 24px)",
-        overflowY: "auto",
+        paddingBottom: "env(safe-area-inset-bottom, 40px)",
+        overflowY: "scroll",
+        overflowX: "hidden",
         boxSizing: "border-box",
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -111,10 +119,12 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           maxWidth: "320px",
           padding: "0 28px",
           boxSizing: "border-box",
+          minHeight: "100%",
+          justifyContent: "center",
         }}
       >
         {/* Orb */}
-        <div style={{ marginBottom: "20px", marginTop: "16px" }}>
+        <div style={{ marginBottom: "20px", marginTop: "40px" }}>
           <LiquidOrb theme={theme} isBreathing={false} size={120} />
         </div>
 
@@ -251,6 +261,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             justifyContent: "center",
             gap: "18px",
             marginTop: "16px",
+            marginBottom: "20px",
           }}
         >
           <button
@@ -295,5 +306,6 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         </div>
       </div>
     </motion.div>
+    </>
   );
 }
