@@ -119,7 +119,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           maxWidth: "320px",
           padding: "0 28px",
           boxSizing: "border-box",
-          minHeight: "100%",
+          minHeight: "100vh",
           justifyContent: "center",
         }}
       >
