@@ -13,12 +13,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   useEffect(() => {
     getOfferings().then(o => {
       setOfferings(o);
-      console.log('PACKAGES:', JSON.stringify(
-        o?.current?.availablePackages?.map(p => ({
-          identifier: p.identifier,
-          productId: p.product.identifier
-        }))
-      ));
+      console.log('DEFAULT OFFERING:', JSON.stringify(o?.all?.default));
     }).catch(console.error);
   }, []);
 
@@ -32,18 +27,30 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const primaryBorder = primaryColor;
 
   const handlePurchase = async () => {
-    if (!offerings) return;
     setLoading(true);
     setError(null);
     try {
-      const pkg = offerings.current.availablePackages.find(
-        p => p.product.identifier === selected
-      );
-      if (!pkg) throw new Error('Package not found');
+      const freshOfferings = await getOfferings();
+      const defaultOffering = freshOfferings?.all?.default;
+
+      const packageMap = {
+        'com.workondeck.alwayspause.monthly': defaultOffering?.monthly,
+        'com.workondeck.alwayspause.annual': defaultOffering?.annual,
+        'alwayspause_lifetime': defaultOffering?.lifetime,
+      };
+
+      const pkg = packageMap[selected];
+      console.log('selected:', selected);
+      console.log('found pkg:', JSON.stringify(pkg?.identifier));
+
+      if (!pkg) throw new Error('Package not found for: ' + selected);
+
       await purchasePackage(pkg);
       const isPro = await checkEntitlement();
       if (isPro) onPurchase(selected);
+      else setError('purchase completed but entitlement not found.');
     } catch (e) {
+      console.log('PURCHASE ERROR:', JSON.stringify(e));
       if (!e.userCancelled) {
         setError('purchase failed. please try again.');
       }
