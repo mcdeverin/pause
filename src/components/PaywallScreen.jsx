@@ -37,8 +37,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
 
   const disclosureText = () => {
     if (selected === "alwayspause_lifetime") return 'one-time purchase. yours forever.';
-    if (selected === "com.workondeck.alwayspause.monthly") return '7 days free, then $4.99/month. auto-renews monthly until canceled. cancel anytime in Settings.';
-    return '7 days free, then $29.99/year. auto-renews yearly until canceled. cancel anytime in Settings.';
+    return 'cancel anytime. auto-renews until canceled.';
   };
 
   const handlePurchase = async () => {
@@ -268,6 +267,22 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           </p>
         </div>
 
+        {/* Trial intro line */}
+        <p
+          style={{
+            fontSize: "9px",
+            letterSpacing: "0.22em",
+            fontWeight: 300,
+            color: primaryColor,
+            fontFamily: "'Comfortaa', sans-serif",
+            opacity: 0.75,
+            textAlign: "center",
+            margin: "16px 0 0 0",
+          }}
+        >
+          · 7 days free, then choose your plan ·
+        </p>
+
         {/* Subscription group */}
         <div
           style={{
@@ -275,10 +290,10 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             flexDirection: "column",
             gap: "8px",
             width: "100%",
-            marginTop: "18px",
+            marginTop: "14px",
           }}
         >
-          {/* Best value label */}
+          {/* Save 50% label */}
           <div style={{ textAlign: "center", marginBottom: "6px" }}>
             <span
               style={{
@@ -291,18 +306,18 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
                 textTransform: "lowercase",
               }}
             >
-              · best value ·
+              · save 50% ·
             </span>
           </div>
           <PricePill
             id="com.workondeck.alwayspause.annual"
-            label="· $29.99 / year · 7 days free ·"
+            label="· $29.99 / year ·"
             sublabel="$2.50 / month, billed annually"
-            badge="save 50%"
+            badge="7 days free"
           />
           <PricePill
             id="com.workondeck.alwayspause.monthly"
-            label="· $4.99 / month · 7 days free ·"
+            label="· $4.99 / month ·"
             sublabel="billed monthly"
           />
         </div>
@@ -311,14 +326,14 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         <div
           style={{
             width: "100%",
-            marginTop: "14px",
-            paddingTop: "14px",
+            marginTop: "22px",
+            paddingTop: "22px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <div style={{ marginBottom: "6px" }}>
+          <div style={{ marginBottom: "10px" }}>
             <span
               style={{
                 fontSize: "9px",
@@ -335,8 +350,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           </div>
           <PricePill
             id="alwayspause_lifetime"
-            label="· $49.99 · forever ·"
-            sublabel="no subscription · yours forever"
+            label="· $49.99 · once ·"
+            sublabel="yours forever"
             isLifetime
           />
         </div>
@@ -365,8 +380,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             width: "100%",
             marginTop: "28px",
             background: isDayTheme
-              ? "linear-gradient(135deg, #5C8FAF 0%, #7DB898 100%)"
-              : "linear-gradient(135deg, #5A6BAA 0%, #7DB898 100%)",
+              ? "linear-gradient(135deg, #7AA8C4 0%, #96C4AE 100%)"
+              : "linear-gradient(135deg, #7481B8 0%, #96C4AE 100%)",
             border: "none",
             borderRadius: "50px",
             padding: "16px 24px 14px 24px",
