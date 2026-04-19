@@ -4,6 +4,7 @@ import SoftBlob from "../components/SoftBlob";
 import MainScreen from "../components/MainScreen";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
+import PaywallScreen from "../components/PaywallScreen";
 import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
 
   const [showSupport, setShowSupport] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(true);
   const [theme, setTheme] = useState("day");
   const [techniques, setTechniques] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -85,6 +87,18 @@ export default function Home() {
             onDone={stopBreathing}
             theme={theme}
             hapticsEnabled={hapticsEnabled}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Paywall overlay */}
+      <AnimatePresence>
+        {showPaywall && (
+          <PaywallScreen
+            key="paywall"
+            theme={theme}
+            onClose={() => setShowPaywall(false)}
+            onPurchase={(productId) => { console.log("purchase", productId); setShowPaywall(false); }}
           />
         )}
       </AnimatePresence>
