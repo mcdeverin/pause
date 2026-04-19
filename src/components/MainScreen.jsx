@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Sun, Moon, Vibrate } from "lucide-react";
+import { Sun, Moon, Vibrate, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LiquidOrb from "./LiquidOrb";
 
 const CATEGORIES = ["All", "Calm", "Sleep", "Focus", "Energy", "Advanced"];
+const LOCKED_CATEGORIES = ["Focus", "Energy", "Advanced"];
 
-export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange, onHapticsChange }) {
+export default function MainScreen({ onTap, onSupportClick, theme = "day", onToggleTheme, selectedCategory = "All", onCategoryChange, onHapticsChange, isPro = false, onTechniqueSelect }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const navigate = useNavigate();
@@ -79,30 +80,37 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                 zIndex: 20,
               }}
             >
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => { onCategoryChange(cat); setMenuOpen(false); }}
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    textAlign: "left",
-                    padding: "9px 18px",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    fontFamily: "'Comfortaa', sans-serif",
-                    fontSize: "12px",
-                    letterSpacing: "0.1em",
-                    fontWeight: selectedCategory === cat ? 600 : 300,
-                    color: selectedCategory === cat
-                      ? isDayTheme ? "#1C3A5E" : "#FFFFFF"
-                      : isDayTheme ? "#444" : "rgba(255,255,255,0.65)",
-                  }}
-                >
-                  {cat}
-                </button>
-              ))}
+              {CATEGORIES.map((cat) => {
+                const isLocked = !isPro && LOCKED_CATEGORIES.includes(cat);
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => { onCategoryChange(cat); setMenuOpen(false); }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      textAlign: "left",
+                      padding: "9px 18px",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontFamily: "'Comfortaa', sans-serif",
+                      fontSize: "12px",
+                      letterSpacing: "0.1em",
+                      fontWeight: selectedCategory === cat ? 600 : 300,
+                      color: selectedCategory === cat
+                        ? isDayTheme ? "#1C3A5E" : "#FFFFFF"
+                        : isDayTheme ? "#444" : "rgba(255,255,255,0.65)",
+                      opacity: isLocked ? 0.5 : 1,
+                    }}
+                  >
+                    <span>{cat}</span>
+                    {isLocked && <Lock size={10} style={{ flexShrink: 0, marginLeft: "6px", opacity: 0.6 }} />}
+                  </button>
+                );
+              })}
               {/* Separator */}
               <div style={{
                 margin: "6px 14px",

@@ -6,6 +6,7 @@ import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
 import PaywallScreen from "../components/PaywallScreen";
 import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
+import { initRevenueCat, checkEntitlement } from "../lib/revenuecat";
 
 export default function Home() {
   const [mode, setMode] = useState("idle");
@@ -13,7 +14,9 @@ export default function Home() {
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
 
   const [showSupport, setShowSupport] = useState(false);
-  const [showPaywall, setShowPaywall] = useState(true);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [pendingTechnique, setPendingTechnique] = useState(null);
+  const [isPro, setIsPro] = useState(false);
   const [theme, setTheme] = useState("day");
   const [techniques, setTechniques] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -23,6 +26,13 @@ export default function Home() {
   useEffect(() => {
     const saved = localStorage.getItem("pauseTheme") || "day";
     setTheme(saved);
+  }, []);
+
+  useEffect(() => {
+    initRevenueCat()
+      .then(() => checkEntitlement())
+      .then(pro => setIsPro(pro))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -38,14 +48,25 @@ export default function Home() {
 
 
 
-  const startBreathing = useCallback(() => {
+  const LOCKED_CATEGORIES = ["Focus", "Energy", "Advanced"];
+
+  const startBreathing = useCallback((forcedTechnique = null) => {
     if (techniques.length === 0) return;
-    const filtered = selectedCategory === "All" ? techniques : techniques.filter(t => t.category === selectedCategory);
+    const filtered = selectedCategory === "All"
+      ? (isPro ? techniques : techniques.filter(t => !LOCKED_CATEGORIES.includes(t.category)))
+      : techniques.filter(t => t.category === selectedCategory);
     const pool = filtered.length > 0 ? filtered : techniques;
-    const t = getRandomTechnique(pool);
+    const t = forcedTechnique || getRandomTechnique(pool);
+
+    if (!isPro && LOCKED_CATEGORIES.includes(t.category)) {
+      setPendingTechnique(t);
+      setShowPaywall(true);
+      return;
+    }
+
     setTechnique(t);
     setMode("breathing");
-  }, [techniques, selectedCategory]);
+  }, [techniques, selectedCategory, isPro]);
 
   const stopBreathing = useCallback(() => {
     setMode("idle");
@@ -78,6 +99,8 @@ export default function Home() {
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
             onHapticsChange={() => setHapticsEnabled(!hapticsEnabled)}
+            isPro={isPro}
+            onTechniqueSelect={(t) => startBreathing(t)}
           />
         )}
         {mode === "breathing" && technique && (
@@ -97,8 +120,17 @@ export default function Home() {
           <PaywallScreen
             key="paywall"
             theme={theme}
-            onClose={() => setShowPaywall(false)}
-            onPurchase={(productId) => { console.log("purchase", productId); setShowPaywall(false); }}
+            triggerCategory={pendingTechnique?.category}
+            onClose={() => { setShowPaywall(false); setPendingTechnique(null); }}
+            onPurchase={() => {
+              setIsPro(true);
+              setShowPaywall(false);
+              if (pendingTechnique) {
+                setTechnique(pendingTechnique);
+                setMode("breathing");
+                setPendingTechnique(null);
+              }
+            }}
           />
         )}
       </AnimatePresence>
