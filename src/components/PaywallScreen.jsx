@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import LiquidOrb from "./LiquidOrb";
+import { getOfferings, purchasePackage, restorePurchases, checkEntitlement } from '../lib/revenuecat';
 
 export default function PaywallScreen({ theme = "day", onClose, onPurchase, triggerCategory }) {
   const [selected, setSelected] = useState("com.workondeck.alwayspause.annual");
+  const [offerings, setOfferings] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getOfferings().then(o => setOfferings(o)).catch(console.error);
+  }, []);
 
   const isDayTheme = theme === "day";
   const textColor = isDayTheme ? "#111111" : "#F0EDE8";
@@ -15,8 +23,40 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const primaryTint = isDayTheme ? "rgba(74,127,166,0.07)" : "rgba(74,91,156,0.12)";
   const primaryBorder = primaryColor;
 
-  const handlePurchase = () => {
-    if (onPurchase) onPurchase(selected);
+  const handlePurchase = async () => {
+    if (!offerings) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const pkg = offerings.current.availablePackages.find(
+        p => p.product.identifier === selected
+      );
+      if (!pkg) throw new Error('Package not found');
+      await purchasePackage(pkg);
+      const isPro = await checkEntitlement();
+      if (isPro) onPurchase(selected);
+    } catch (e) {
+      if (!e.userCancelled) {
+        setError('purchase failed. please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await restorePurchases();
+      const isPro = await checkEntitlement();
+      if (isPro) onPurchase('restored');
+      else setError('no previous purchase found.');
+    } catch (e) {
+      setError('restore failed. please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const PricePill = ({ id, label, sublabel }) => {
@@ -249,10 +289,11 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             boxSizing: "border-box",
             transition: "opacity 0.2s",
           }}
+          disabled={loading}
           onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
           onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
         >
-          unlock pause+
+          {loading ? '· processing ·' : 'unlock always pause+'}
         </button>
 
         {/* Bottom row: restore + maybe later */}
@@ -267,6 +308,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           }}
         >
           <button
+            onClick={handleRestore}
             style={{
               background: "none",
               border: "none",
@@ -306,6 +348,20 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             · maybe later ·
           </button>
         </div>
+
+        {error && (
+          <p style={{
+            fontSize: '10px',
+            color: '#ff6b6b',
+            opacity: 0.8,
+            fontFamily: 'Comfortaa',
+            letterSpacing: '0.1em',
+            marginTop: '4px',
+            textAlign: 'center',
+          }}>
+            {error}
+          </p>
+        )}
       </div>
     </motion.div>
     </>
