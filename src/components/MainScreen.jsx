@@ -107,10 +107,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                     }}
                   >
                     {/* fixed-width dot gutter so text never shifts */}
-                    <span style={{ display: "flex", alignItems: "center", gap: "0px" }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "0px", letterSpacing: "0" }}>
                       <span style={{
                         display: "inline-block",
-                        width: "16px",
+                        width: "12px",
                         textAlign: "left",
                         color: accentColor,
                         opacity: isSelected ? 1 : 0,
