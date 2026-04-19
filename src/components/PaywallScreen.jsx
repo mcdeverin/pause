@@ -32,18 +32,21 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
     try {
       const freshOfferings = await getOfferings();
       const defaultOffering = freshOfferings?.all?.default;
+      const packages = defaultOffering?.availablePackages;
 
-      const packageMap = {
-        'com.workondeck.alwayspause.monthly': defaultOffering?.monthly,
-        'com.workondeck.alwayspause.annual': defaultOffering?.annual,
-        'alwayspause_lifetime': defaultOffering?.lifetime,
-      };
+      console.log('packages:', JSON.stringify(packages?.map(p => ({
+        identifier: p.identifier,
+        productId: p.product?.identifier
+      }))));
 
-      const pkg = packageMap[selected];
+      const pkg = packages?.find(
+        p => p.product?.identifier === selected
+      );
+
       console.log('selected:', selected);
-      console.log('found pkg:', JSON.stringify(pkg?.identifier));
+      console.log('found pkg:', pkg?.identifier);
 
-      if (!pkg) throw new Error('Package not found for: ' + selected);
+      if (!pkg) throw new Error('Package not found: ' + selected);
 
       await purchasePackage(pkg);
       const isPro = await checkEntitlement();
