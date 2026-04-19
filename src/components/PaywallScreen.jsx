@@ -11,7 +11,15 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    getOfferings().then(o => setOfferings(o)).catch(console.error);
+    getOfferings().then(o => {
+      setOfferings(o);
+      console.log('PACKAGES:', JSON.stringify(
+        o?.current?.availablePackages?.map(p => ({
+          identifier: p.identifier,
+          productId: p.product.identifier
+        }))
+      ));
+    }).catch(console.error);
   }, []);
 
   const isDayTheme = theme === "day";
