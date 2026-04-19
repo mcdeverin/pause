@@ -113,7 +113,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           alignItems: "center",
           justifyContent: "space-between",
           gap: "12px",
-          opacity: isSelected ? 1 : 0.55,
+          opacity: 1,
           transition: "all 0.22s ease",
           textAlign: "left",
         }}
@@ -127,6 +127,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               fontWeight: 300,
               letterSpacing: "0.12em",
               color: textColor,
+              opacity: 1,
             }}>
               {label}
             </span>
@@ -140,7 +141,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
                 border: `1px solid ${primaryColor}`,
                 borderRadius: "100px",
                 padding: "2px 6px",
-                opacity: 0.85,
+                opacity: 1,
                 textTransform: "uppercase",
                 lineHeight: 1.4,
                 flexShrink: 0,
@@ -156,7 +157,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               fontWeight: 300,
               letterSpacing: "0.1em",
               color: textColor,
-              opacity: 0.45,
+              opacity: 0.75,
               lineHeight: 1.4,
             }}>
               {caption}
@@ -171,6 +172,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           fontWeight: 300,
           letterSpacing: "0.04em",
           color: textColor,
+          opacity: 1,
           flexShrink: 0,
         }}>
           {price}
