@@ -392,8 +392,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           }}>
             {[
               { label: "restore", action: handleRestore },
-              { label: "terms", action: () => { onClose(); navigate("/terms"); } },
-              { label: "privacy", action: () => { onClose(); navigate("/privacy"); } },
+              { label: "terms", action: () => window.open("https://alwayspause.com/terms", "_blank") },
+              { label: "privacy", action: () => window.open("https://alwayspause.com/privacy", "_blank") },
             ].map(({ label, action }, i, arr) => (
               <span key={label} style={{ display: "flex", alignItems: "center", gap: "14px" }}>
                 <button
