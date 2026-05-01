@@ -212,10 +212,13 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                   }} />
                 </div>
               </div>
-              {[{ label: "Privacy", path: "/privacy" }, { label: "Terms", path: "/terms" }].map(({ label, path }) => (
+              {[
+                { label: "Privacy", url: "https://alwayspause.com/privacy" },
+                { label: "Terms", url: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" }
+              ].map(({ label, url }) => (
                 <button
                   key={label}
-                  onClick={() => { setMenuOpen(false); navigate(path); }}
+                  onClick={() => { setMenuOpen(false); window.open(url, "_blank"); }}
                   style={{
                     display: "block",
                     width: "100%",
