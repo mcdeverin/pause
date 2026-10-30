@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Eye, Menu } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
-import LiquidOrb from "./LiquidOrb";
+import BreathingVisual from "./visuals/BreathingVisual";
 import NavigationSheet from "./NavigationSheet";
 import MomentShortcuts from "./MomentShortcuts";
 import { FONT, getColors } from "../lib/design";
@@ -25,6 +25,8 @@ export default function MainScreen({
   shortcutNotice = "",
   backgroundSettings = {},
   photo = null,
+  visual = "orb",
+  visualOptions = {},
   onHideShortcuts,
   onShowShortcuts,
 }) {
@@ -175,7 +177,15 @@ export default function MainScreen({
             justifyContent: "center",
           }}
         >
-          <LiquidOrb theme={theme} isBreathing={false} size={orbSize} />
+          {/* The resting visual is whichever one they chose — at rest, not breathing. */}
+          <div style={{ width: orbSize, height: orbSize }}>
+            <BreathingVisual
+              id={visual}
+              breath={0}
+              theme={theme}
+              options={visualOptions?.[visual]}
+            />
+          </div>
         </button>
 
         <button

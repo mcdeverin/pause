@@ -203,6 +203,8 @@ export default function Home() {
             isPro={isPro}
             backgroundSettings={preferences}
             photo={photo}
+            visual={preferences.visual}
+            visualOptions={preferences.visualOptions}
             onHideShortcuts={() => updatePreference("showShortcuts", false)}
             onShowShortcuts={() => updatePreference("showShortcuts", true)}
             onOpenPersonalize={() => setShowPersonalize(true)}
