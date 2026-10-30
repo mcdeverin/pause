@@ -9,7 +9,8 @@ import AboutLegalSheet from "../components/AboutLegalSheet";
 import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
 import { initRevenueCat, checkEntitlement } from "../lib/revenuecat";
 import { loadPreferences, savePreferences } from "../lib/preferences";
-import { getBackgroundStyle } from "../lib/design";
+import { clearStoredPhoto, getStoredPhoto, saveStoredPhoto } from "../lib/backgroundPhoto";
+import BackgroundLayer from "../components/BackgroundLayer";
 import { MOMENTS, addMoment } from "../lib/moments";
 import MomentsScreen from "../components/moments/MomentsScreen";
 
@@ -33,6 +34,7 @@ export default function Home() {
   const [techniques, setTechniques] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [preferences, setPreferences] = useState(loadPreferences);
+  const [photo, setPhoto] = useState(getStoredPhoto);
   const sessionMomentRef = useRef(null);
   const noticeTimerRef = useRef(null);
 
@@ -74,6 +76,27 @@ export default function Home() {
     savePreferences(nextPreferences);
     applyTheme(nextTheme);
   }, [applyTheme]);
+
+  // Hiding the moment shortcuts happens straight from the home screen, outside
+  // the personalization draft, so it saves immediately.
+  const updatePreference = useCallback((key, value) => {
+    setPreferences((current) => {
+      const next = { ...current, [key]: value };
+      savePreferences(next);
+      return next;
+    });
+  }, []);
+
+  const handlePhotoPicked = useCallback((dataUrl) => {
+    const stored = saveStoredPhoto(dataUrl);
+    setPhoto(dataUrl);
+    return stored;
+  }, []);
+
+  const handlePhotoRemoved = useCallback(() => {
+    clearStoredPhoto();
+    setPhoto(null);
+  }, []);
 
   const beginSession = useCallback((chosenTechnique, moment) => {
     sessionMomentRef.current = moment || null;
@@ -162,8 +185,10 @@ export default function Home() {
   return (
     <div
       className="w-full min-h-screen flex flex-col"
-      style={{ ...getBackgroundStyle(preferences.background, theme), transition: "background 0.4s ease" }}
+      style={{ position: "relative", isolation: "isolate" }}
     >
+      <BackgroundLayer settings={preferences} theme={theme} photo={photo} />
+
       <AnimatePresence mode="wait">
         {mode === "idle" && (
           <MainScreen
@@ -176,7 +201,9 @@ export default function Home() {
             onCategoryChange={setSelectedCategory}
             onHapticsChange={() => setHapticsEnabled(!hapticsEnabled)}
             isPro={isPro}
-            background={preferences.background}
+            backgroundSettings={preferences}
+            photo={photo}
+            onHideShortcuts={() => updatePreference("showShortcuts", false)}
             onOpenPersonalize={() => setShowPersonalize(true)}
             onOpenMoments={() => setShowMoments(true)}
             onOpenPausePlus={openPaywall}
@@ -194,7 +221,8 @@ export default function Home() {
             theme={theme}
             hapticsEnabled={hapticsEnabled}
             visual={preferences.visual}
-            background={preferences.background}
+            backgroundSettings={preferences}
+            photo={photo}
             showTimer={preferences.showTimer}
             showInstructions={preferences.showInstructions}
           />
@@ -208,7 +236,10 @@ export default function Home() {
             key="personalize"
             theme={theme}
             prefs={preferences}
+            photo={photo}
             onSave={commitPreferences}
+            onPhotoPicked={handlePhotoPicked}
+            onPhotoRemoved={handlePhotoRemoved}
             onClose={() => setShowPersonalize(false)}
           />
         )}
@@ -241,7 +272,8 @@ export default function Home() {
           <MomentsScreen
             key="moments"
             theme={theme}
-            background={preferences.background}
+            backgroundSettings={preferences}
+            photo={photo}
             saveEnabled={preferences.saveMoments}
             onClose={() => setShowMoments(false)}
           />

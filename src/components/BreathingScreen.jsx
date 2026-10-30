@@ -3,7 +3,8 @@ import { Info } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import BreathingRing from "./BreathingRing";
 import SessionTimerPill from "./SessionTimerPill";
-import { FONT, getBackgroundStyle, getColors } from "../lib/design";
+import { FONT, getColors } from "../lib/design";
+import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
 
 const TOTAL_CYCLES = 4;
@@ -28,7 +29,8 @@ export default function BreathingScreen({
   theme = "day",
   hapticsEnabled = true,
   visual = "orb",
-  background = "classic",
+  backgroundSettings = {},
+  photo = null,
   showTimer = true,
   showInstructions = true,
 }) {
@@ -123,16 +125,17 @@ export default function BreathingScreen({
       style={{
         position: "relative",
         boxSizing: "border-box",
-        ...getBackgroundStyle(background, theme),
+        isolation: "isolate",
         paddingTop: "calc(env(safe-area-inset-top, 44px) + 6px)",
         paddingBottom: "calc(env(safe-area-inset-bottom, 20px) + 12px)",
-        transition: "background 0.4s ease",
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: reducedMotion ? 0.3 : 1.4, ease: [0.22, 1, 0.36, 1] }}
     >
+      <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
+
       {/* Top bar: timer + info */}
       <div
         style={{

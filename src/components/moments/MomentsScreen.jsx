@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import { FONT, getBackgroundStyle, getColors } from "../../lib/design";
+import { FONT, getColors } from "../../lib/design";
+import BackgroundLayer from "../BackgroundLayer";
 import {
   PERIODS,
   loadMoments,
@@ -17,7 +18,13 @@ import MomentBars from "./MomentBars";
 import ReflectionCard from "./ReflectionCard";
 import ActivityGrid from "./ActivityGrid";
 
-export default function MomentsScreen({ theme = "day", background = "classic", saveEnabled = false, onClose }) {
+export default function MomentsScreen({
+  theme = "day",
+  backgroundSettings = {},
+  photo = null,
+  saveEnabled = false,
+  onClose,
+}) {
   const colors = getColors(theme);
   const [moments, setMoments] = useState(loadMoments);
   const [period, setPeriod] = useState("month");
@@ -41,7 +48,7 @@ export default function MomentsScreen({ theme = "day", background = "classic", s
         inset: 0,
         zIndex: 62,
         boxSizing: "border-box",
-        ...getBackgroundStyle(background, theme),
+        isolation: "isolate",
         overflowY: "auto",
         fontFamily: FONT,
         paddingTop: "calc(env(safe-area-inset-top, 44px) + 6px)",
@@ -52,6 +59,8 @@ export default function MomentsScreen({ theme = "day", background = "classic", s
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
+      <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} fixed />
+
       <div style={{ width: "100%", maxWidth: 520, margin: "0 auto", padding: "0 22px", boxSizing: "border-box" }}>
         {/* Header */}
         <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 44 }}>

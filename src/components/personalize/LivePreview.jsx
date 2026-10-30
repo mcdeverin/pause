@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import BackgroundLayer from "../BackgroundLayer";
 import BreathingRing from "../BreathingRing";
 import SessionTimerPill from "../SessionTimerPill";
-import { FONT, getBackgroundStyle, getColors } from "../../lib/design";
+import { clampPhotoOffset } from "../../lib/background";
+import { FONT, getColors, isPhotoBackground } from "../../lib/design";
 import useBreathingClock from "../../hooks/useBreathingClock";
 
 // Equal Breathing (Sama Vritti) already exists in the technique library. Its 5s
@@ -16,17 +18,13 @@ const ORB_MIN_SCALE = 1;
 const ORB_RANGE = 0.22;
 
 // A compact, always-labelled preview of the user's draft choices. It runs on the
-// same shared clock and breath maths as a real session, but it has no completion
-// path: nothing here reports a session, so it never reaches Your Moments.
-export default function LivePreview({
-  theme,
-  visual = "orb",
-  background = "classic",
-  showTimer = true,
-  showInstructions = true,
-}) {
+// same shared clock, breath maths and background layer as a real session, but it
+// has no completion path: nothing here reports a session, so it never reaches
+// Your Moments.
+export default function LivePreview({ theme, settings = {}, photo = null, onPhotoPan }) {
   const colors = getColors(theme);
   const [loop, setLoop] = useState(0);
+  const panRef = useRef(null);
 
   // Fresh array identities are what restart the shared clock for the next loop.
   // The clock itself, and every technique duration, is untouched.
@@ -42,12 +40,50 @@ export default function LivePreview({
 
   const breath = Math.min(Math.max(clock.breath || 0, 0), 1);
   const orbScale = ORB_MIN_SCALE + ORB_RANGE * breath;
+  const isRing = settings.visual === "ring";
+  const canPan = isPhotoBackground(settings.background) && Boolean(photo) && Boolean(onPhotoPan);
+
+  const handlePanStart = (event) => {
+    if (!canPan) return;
+    panRef.current = {
+      x: event.clientX,
+      y: event.clientY,
+      offsetX: settings.photoOffsetX || 0,
+      offsetY: settings.photoOffsetY || 0,
+      width: event.currentTarget.clientWidth || 1,
+      height: event.currentTarget.clientHeight || 1,
+    };
+    if (event.currentTarget.setPointerCapture) {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+  };
+
+  const handlePanMove = (event) => {
+    const start = panRef.current;
+    if (!start) return;
+    // A larger crop offset shifts the photo the other way, so the drag is
+    // inverted to keep the photo under the finger.
+    const x = clampPhotoOffset(start.offsetX - ((event.clientX - start.x) / start.width) * 100);
+    const y = clampPhotoOffset(start.offsetY - ((event.clientY - start.y) / start.height) * 100);
+    onPhotoPan({ x, y });
+  };
+
+  const handlePanEnd = () => {
+    panRef.current = null;
+  };
 
   return (
     <div
-      role="img"
-      aria-label={`Live preview of your pause using ${visual === "ring" ? "the breathing ring" : "the organic orb"}. This is not a real session.`}
+      role="group"
+      aria-label={`Live preview of your pause using ${isRing ? "the breathing ring" : "the organic orb"}. This is not a real session.`}
+      onPointerDown={handlePanStart}
+      onPointerMove={handlePanMove}
+      onPointerUp={handlePanEnd}
+      onPointerCancel={handlePanEnd}
+      onPointerLeave={handlePanEnd}
       style={{
+        position: "relative",
+        isolation: "isolate",
         height: "clamp(150px, 25vh, 204px)",
         boxSizing: "border-box",
         padding: "10px 12px",
@@ -56,10 +92,12 @@ export default function LivePreview({
         display: "flex",
         flexDirection: "column",
         border: `1px solid ${colors.glassBorder}`,
-        transition: "background 0.35s ease",
-        ...getBackgroundStyle(background, theme),
+        touchAction: canPan ? "none" : "auto",
+        cursor: canPan ? "grab" : "default",
       }}
     >
+      <BackgroundLayer settings={settings} theme={theme} photo={photo} />
+
       <div
         style={{
           display: "flex",
@@ -69,7 +107,7 @@ export default function LivePreview({
           minHeight: 26,
         }}
       >
-        {showTimer ? <SessionTimerPill seconds={clock.timeRemaining} theme={theme} /> : <span />}
+        {settings.showTimer ? <SessionTimerPill seconds={clock.timeRemaining} theme={theme} /> : <span />}
         <span
           style={{
             fontFamily: FONT,
@@ -99,7 +137,7 @@ export default function LivePreview({
           justifyContent: "center",
         }}
       >
-        {visual === "ring" ? (
+        {isRing ? (
           <div style={{ width: "min(118px, 22vh)", aspectRatio: "1 / 1" }}>
             <BreathingRing theme={theme} fill={breath} showLabel={false} />
           </div>
@@ -131,7 +169,7 @@ export default function LivePreview({
           textTransform: "lowercase",
           color: colors.text,
           lineHeight: 1.3,
-          visibility: showInstructions ? "visible" : "hidden",
+          visibility: settings.showInstructions ? "visible" : "hidden",
         }}
       >
         {clock.label}

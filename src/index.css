@@ -129,6 +129,53 @@
     font-feature-settings: "tnum";
   }
 
+  /* Background adjustment sliders — theme colours arrive as custom properties */
+  .pause-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 28px;
+    margin: 0;
+    background: transparent;
+  }
+
+  .pause-slider::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--pause-track, rgba(0, 0, 0, 0.12));
+  }
+
+  .pause-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    margin-top: -8px;
+    border: none;
+    border-radius: 50%;
+    background: var(--pause-thumb, #ffffff);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+  }
+
+  .pause-slider::-moz-range-track {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--pause-track, rgba(0, 0, 0, 0.12));
+  }
+
+  .pause-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 50%;
+    background: var(--pause-thumb, #ffffff);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+  }
+
+  .pause-slider:disabled {
+    opacity: 0.45;
+  }
+
   /* Screen-reader only: keeps phase cues available when labels are hidden */
   .sr-only {
     position: absolute;

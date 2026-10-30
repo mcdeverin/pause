@@ -2,17 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import {
-  BACKGROUNDS,
   BREATHING_VISUALS,
   FONT,
-  getBackgroundStyle,
   getColors,
   getVisualLabel,
-  getBackgroundLabel,
+  isSolidBackground,
+  MY_PHOTO_ID,
 } from "../../lib/design";
+import { BLUR_MAX, DIM_MAX, clampBlur, clampDim, clampPhotoOffset, clampPhotoZoom } from "../../lib/background";
 import PreferenceToggle from "./PreferenceToggle";
 import PreviewCard from "./PreviewCard";
 import LivePreview from "./LivePreview";
+import BackgroundSection from "./BackgroundSection";
+import AdjustmentSlider from "./AdjustmentSlider";
 
 function SectionLabel({ children, theme, isFirst }) {
   const colors = getColors(theme);
@@ -69,7 +71,15 @@ function VisualPreview({ id, theme }) {
   );
 }
 
-export default function PersonalizePanel({ theme, prefs, onSave, onClose }) {
+export default function PersonalizePanel({
+  theme,
+  prefs,
+  photo = null,
+  onSave,
+  onPhotoPicked,
+  onPhotoRemoved,
+  onClose,
+}) {
   // Everything below edits a draft. The stored preferences only change through
   // Save My Pause, so closing this panel simply discards the draft.
   const [draft, setDraft] = useState(prefs);
@@ -79,6 +89,7 @@ export default function PersonalizePanel({ theme, prefs, onSave, onClose }) {
 
   const colors = getColors(draftTheme);
   const isDay = draftTheme === "day";
+  const solidBackground = isSolidBackground(draft.background, draftTheme);
 
   useEffect(() => () => clearTimeout(savedTimerRef.current), []);
 
@@ -89,6 +100,48 @@ export default function PersonalizePanel({ theme, prefs, onSave, onClose }) {
 
   const updateTheme = (nextTheme) => {
     setDraftTheme(nextTheme);
+    setJustSaved(false);
+  };
+
+  const selectBackground = (id) => {
+    setDraft((current) => {
+      const next = { ...current, background: id };
+      // Blur means nothing on a flat colour, so it isn't carried into one.
+      if (isSolidBackground(id, draftTheme)) next.backgroundBlur = 0;
+      return next;
+    });
+    setJustSaved(false);
+  };
+
+  const panPhoto = ({ x, y }) => {
+    setDraft((current) => ({
+      ...current,
+      photoOffsetX: clampPhotoOffset(x),
+      photoOffsetY: clampPhotoOffset(y),
+    }));
+    setJustSaved(false);
+  };
+
+  const handlePhotoPicked = (dataUrl) => {
+    const stored = onPhotoPicked(dataUrl);
+    setDraft((current) => ({
+      ...current,
+      background: MY_PHOTO_ID,
+      photoZoom: 1,
+      photoOffsetX: 0,
+      photoOffsetY: 0,
+    }));
+    setJustSaved(false);
+    return stored;
+  };
+
+  const handlePhotoRemoved = () => {
+    onPhotoRemoved();
+    setDraft((current) =>
+      current.background === MY_PHOTO_ID
+        ? { ...current, background: "classic", photoZoom: 1, photoOffsetX: 0, photoOffsetY: 0 }
+        : current
+    );
     setJustSaved(false);
   };
 
@@ -186,13 +239,7 @@ export default function PersonalizePanel({ theme, prefs, onSave, onClose }) {
           <SectionLabel theme={draftTheme} isFirst>
             Live preview
           </SectionLabel>
-          <LivePreview
-            theme={draftTheme}
-            visual={draft.visual}
-            background={draft.background}
-            showTimer={draft.showTimer}
-            showInstructions={draft.showInstructions}
-          />
+          <LivePreview theme={draftTheme} settings={draft} photo={photo} onPhotoPan={panPhoto} />
 
           {/* Breathing Visual */}
           <SectionLabel theme={draftTheme}>Breathing visual</SectionLabel>
@@ -216,23 +263,39 @@ export default function PersonalizePanel({ theme, prefs, onSave, onClose }) {
 
           {/* Background */}
           <SectionLabel theme={draftTheme}>Background</SectionLabel>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            {BACKGROUNDS.map((option) => (
-              <PreviewCard
-                key={option.id}
-                theme={draftTheme}
-                compact
-                label={option.label}
-                selected={draft.background === option.id}
-                onSelect={() => update("background", option.id)}
-                previewBackground={getBackgroundStyle(option.id, draftTheme).background}
-                preview={null}
-              />
-            ))}
-          </div>
-          <p style={{ margin: "8px 0 0", fontSize: "13px", fontWeight: 600, color: colors.secondary }}>
-            Selected: {getBackgroundLabel(draft.background)}
-          </p>
+          <BackgroundSection
+            draft={draft}
+            theme={draftTheme}
+            onSelectBackground={selectBackground}
+            onCustomColor={(hex) => update("customColor", hex)}
+            photo={photo}
+            onPhotoPicked={handlePhotoPicked}
+            onPhotoRemoved={handlePhotoRemoved}
+            onPhotoZoom={(zoom) => update("photoZoom", clampPhotoZoom(zoom))}
+          />
+
+          {/* Background adjustments */}
+          <SectionLabel theme={draftTheme}>Background adjustments</SectionLabel>
+          <AdjustmentSlider
+            label="Dimming"
+            value={clampDim(draft.backgroundDim)}
+            max={DIM_MAX}
+            onChange={(value) => update("backgroundDim", value)}
+            theme={draftTheme}
+          />
+          <AdjustmentSlider
+            label="Soft Blur"
+            value={clampBlur(draft.backgroundBlur)}
+            max={BLUR_MAX}
+            disabled={solidBackground}
+            onChange={(value) => update("backgroundBlur", value)}
+            hint={
+              solidBackground
+                ? "A solid color has nothing to soften, so blur stays off."
+                : "Softens the background only. Your breathing visual stays sharp."
+            }
+            theme={draftTheme}
+          />
 
           {/* Appearance */}
           <SectionLabel theme={draftTheme}>Appearance</SectionLabel>

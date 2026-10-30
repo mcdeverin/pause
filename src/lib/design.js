@@ -45,6 +45,34 @@ export const BACKGROUNDS = [
     day: "linear-gradient(180deg, #FBF9FC 0%, #F0ECF6 55%, #E6E0F0 100%)",
     night: "linear-gradient(180deg, #100E18 0%, #181427 60%, #1F1933 100%)",
   },
+  {
+    id: "first-light",
+    label: "First Light",
+    description: "Warm and unhurried.",
+    day: "linear-gradient(180deg, #FDF7EF 0%, #F8E9DC 50%, #F2DFD4 100%)",
+    night: "linear-gradient(180deg, #18120E 0%, #231A15 55%, #2B201A 100%)",
+  },
+  {
+    id: "slow-sunday",
+    label: "Slow Sunday",
+    description: "Cream, sage and nothing urgent.",
+    day: "linear-gradient(180deg, #FBF8F1 0%, #F3EFE2 50%, #E8EFE7 100%)",
+    night: "linear-gradient(180deg, #13120F 0%, #1B1D17 55%, #1F241C 100%)",
+  },
+  {
+    id: "stillwater",
+    label: "Stillwater",
+    description: "One steady, even tone.",
+    day: "#DFE8E6",
+    night: "#101A1C",
+  },
+  {
+    id: "nightfall",
+    label: "Nightfall",
+    description: "Deep and enclosing.",
+    day: "linear-gradient(180deg, #F0F2F8 0%, #E4E8F1 55%, #D8DEEB 100%)",
+    night: "linear-gradient(180deg, #090D17 0%, #111A2B 55%, #17243A 100%)",
+  },
 ];
 
 const DAY = {
@@ -127,13 +155,46 @@ export function getColors(theme) {
   return theme === "day" ? DAY : NIGHT;
 }
 
-export function getBackgroundStyle(id, theme) {
-  const found = BACKGROUNDS.find((b) => b.id === id) || BACKGROUNDS[0];
-  return { background: theme === "day" ? found.day : found.night };
+// Backgrounds come from three places: a curated preset, any colour the user
+// picks, or their own photo. Presets are starting points, never limits.
+export const CUSTOM_COLOR_ID = "custom";
+export const MY_PHOTO_ID = "photo";
+export const DEFAULT_CUSTOM_COLOR = "#E7EDEA";
+
+const BASE_TONE = { day: "#FAFAF8", night: "#0D1117" };
+
+export function getBackgroundOption(id) {
+  return BACKGROUNDS.find((option) => option.id === id) || null;
 }
 
-export function getBackgroundLabel(id) {
-  const found = BACKGROUNDS.find((b) => b.id === id) || BACKGROUNDS[0];
+export function isPhotoBackground(id) {
+  return id === MY_PHOTO_ID;
+}
+
+// A flat colour has nothing to soften, so blur is switched off for it.
+export function isSolidBackground(id, theme) {
+  if (id === MY_PHOTO_ID) return false;
+  if (id === CUSTOM_COLOR_ID) return true;
+  const preset = getBackgroundOption(id) || BACKGROUNDS[0];
+  const value = theme === "day" ? preset.day : preset.night;
+  return !String(value).includes("gradient");
+}
+
+export function getBackgroundTone(id, theme, customColor) {
+  if (id === CUSTOM_COLOR_ID) return customColor || DEFAULT_CUSTOM_COLOR;
+  if (id === MY_PHOTO_ID) return theme === "day" ? BASE_TONE.day : BASE_TONE.night;
+  const preset = getBackgroundOption(id) || BACKGROUNDS[0];
+  return theme === "day" ? preset.day : preset.night;
+}
+
+export function getBackgroundStyle(id, theme, customColor) {
+  return { background: getBackgroundTone(id, theme, customColor) };
+}
+
+export function getBackgroundLabel(id, customColor) {
+  if (id === CUSTOM_COLOR_ID) return customColor ? `Custom ${customColor}` : "Custom Color";
+  if (id === MY_PHOTO_ID) return "My Photo";
+  const found = getBackgroundOption(id) || BACKGROUNDS[0];
   return found.label;
 }
 

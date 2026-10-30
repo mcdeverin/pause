@@ -4,7 +4,8 @@ import { AnimatePresence } from "framer-motion";
 import LiquidOrb from "./LiquidOrb";
 import NavigationSheet from "./NavigationSheet";
 import MomentShortcuts from "./MomentShortcuts";
-import { FONT, getBackgroundStyle, getColors } from "../lib/design";
+import { FONT, getColors } from "../lib/design";
+import BackgroundLayer from "./BackgroundLayer";
 
 const ORB_MAX = 300;
 
@@ -22,7 +23,9 @@ export default function MainScreen({
   showShortcuts = true,
   onSelectMoment,
   shortcutNotice = "",
-  background = "classic",
+  backgroundSettings = {},
+  photo = null,
+  onHideShortcuts,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   // The orb stays dominant: it scales with the viewport, and shrinks further
@@ -57,12 +60,13 @@ export default function MainScreen({
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        ...getBackgroundStyle(background, theme),
+        isolation: "isolate",
         paddingTop: "calc(env(safe-area-inset-top, 44px) + 6px)",
         paddingBottom: "calc(env(safe-area-inset-bottom, 20px) + 18px)",
-        transition: "background 0.4s ease",
       }}
     >
+      <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
+
       {/* Header: wordmark + menu */}
       <div
         style={{
@@ -194,7 +198,12 @@ export default function MainScreen({
       </div>
 
       {showShortcuts && (
-        <MomentShortcuts theme={theme} onSelect={onSelectMoment} notice={shortcutNotice} />
+        <MomentShortcuts
+          theme={theme}
+          onSelect={onSelectMoment}
+          notice={shortcutNotice}
+          onHide={onHideShortcuts}
+        />
       )}
 
       <p
