@@ -51,6 +51,7 @@ export default function MainScreen({
   }, [measureOrb]);
 
   const colors = getColors(theme);
+  const categoryLabel = selectedCategory === "All" ? "all breaths" : selectedCategory.toLowerCase();
 
   return (
     <div
@@ -215,6 +216,20 @@ export default function MainScreen({
           onHide={onHideShortcuts}
         />
       )}
+
+      <p
+        style={{
+          margin: showShortcuts ? "10px 0 0" : 0,
+          textAlign: "center",
+          fontFamily: FONT,
+          fontSize: "13.5px",
+          fontWeight: 600,
+          color: colors.tertiary,
+          padding: "0 32px",
+        }}
+      >
+        {categoryLabel} · about a minute
+      </p>
 
       {/* Hidden shortcuts leave a discreet way back — the orb already takes the
           freed space, so nothing sits empty. */}

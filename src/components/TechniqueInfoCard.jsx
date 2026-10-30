@@ -1,10 +1,5 @@
-import { useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { FONT, getColors } from "../lib/design";
-
-// The card can be dragged shorter or taller, but never past the space it was
-// measured to have, so the text can still never cover the breathing visual.
-const MIN_HEIGHT = 120;
 
 // The ⓘ fact card, in a fixed order: approved blurb first, then exactly one
 // source line — a real "View source ↗" hyperlink when the technique has a
@@ -19,38 +14,6 @@ export default function TechniqueInfoCard({
   cardRef,
 }) {
   const colors = getColors(theme);
-  const dragRef = useRef(null);
-  const [draggedHeight, setDraggedHeight] = useState(null);
-
-  // Without a measurement yet, the card keeps its natural height.
-  const ceiling = maxHeight || null;
-  const height = draggedHeight ? Math.min(draggedHeight, ceiling || draggedHeight) : null;
-
-  const startDrag = (event) => {
-    const card = cardRef?.current;
-    if (!card || !ceiling) return;
-    event.preventDefault();
-    event.stopPropagation();
-    dragRef.current = {
-      startY: event.clientY,
-      startHeight: card.getBoundingClientRect().height,
-    };
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-  };
-
-  const drag = (event) => {
-    const state = dragRef.current;
-    if (!state) return;
-    event.stopPropagation();
-    const next = state.startHeight + (event.clientY - state.startY);
-    setDraggedHeight(Math.max(MIN_HEIGHT, Math.min(next, ceiling)));
-  };
-
-  const endDrag = (event) => {
-    if (!dragRef.current) return;
-    dragRef.current = null;
-    event.stopPropagation();
-  };
 
   return (
     <div
@@ -64,7 +27,7 @@ export default function TechniqueInfoCard({
         zIndex: 30,
         width: "calc(100vw - 48px)",
         maxWidth: 300,
-        padding: "16px 20px 30px",
+        padding: "16px 20px",
         borderRadius: 18,
         background: colors.glass,
         backdropFilter: "blur(20px)",
@@ -73,8 +36,7 @@ export default function TechniqueInfoCard({
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
-        height: height ? `${height}px` : undefined,
-        maxHeight: ceiling ? `${ceiling}px` : undefined,
+        maxHeight: maxHeight ? `${maxHeight}px` : undefined,
         overflow: "hidden",
         boxSizing: "border-box",
       }}
@@ -153,39 +115,6 @@ export default function TechniqueInfoCard({
           </p>
         )
       )}
-
-      {/* Drag grip — pulls the card taller or shorter. */}
-      <div
-        onPointerDown={startDrag}
-        onPointerMove={drag}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-        onClick={(event) => event.stopPropagation()}
-        role="separator"
-        aria-label="Drag to resize"
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 26,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "ns-resize",
-          touchAction: "none",
-        }}
-      >
-        <span
-          style={{
-            width: 34,
-            height: 4,
-            borderRadius: 999,
-            background: colors.tertiary,
-            opacity: 0.45,
-          }}
-        />
-      </div>
     </div>
   );
 }
