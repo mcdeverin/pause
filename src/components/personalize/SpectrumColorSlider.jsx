@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { FONT, getColors } from "../../lib/design";
-import { MUTED_SPECTRUM_GRADIENT, colorFromHue, hueFromHex, isHexColor } from "../../lib/visualColors";
+import { SPECTRUM_GRADIENT, colorFromHue, hueFromHex, isHexColor } from "../../lib/visualColors";
 
 // A horizontal rainbow slider. Dragging picks a colour from the spectrum, and the
 // swatch beside the label shows exactly what was picked — no hex value is ever
@@ -104,8 +104,8 @@ export default function SpectrumColorSlider({ label, value, theme, onChange }) {
             width: "100%",
             height: 10,
             borderRadius: 999,
-            background: MUTED_SPECTRUM_GRADIENT,
-            boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.06)",
+            background: SPECTRUM_GRADIENT,
+            boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.08)",
           }}
         />
         <div
@@ -115,12 +115,12 @@ export default function SpectrumColorSlider({ label, value, theme, onChange }) {
             top: "50%",
             left: `${(hue / 360) * 100}%`,
             transform: "translate(-50%, -50%)",
-            width: 18,
-            height: 18,
+            width: 22,
+            height: 22,
             borderRadius: 999,
             background: current,
-            border: "2px solid rgba(255, 255, 255, 0.92)",
-            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.20), inset 0 0 0 1px rgba(0, 0, 0, 0.05)",
+            border: "2.5px solid #FFFFFF",
+            boxShadow: "0 1px 5px rgba(0, 0, 0, 0.30)",
           }}
         />
       </div>
