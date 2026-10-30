@@ -34,10 +34,10 @@ function SectionLabel({ children, theme, isFirst }) {
 export default function PersonalizePanel({
   theme,
   prefs,
-  photo = null,
+  photos = [],
   onSave,
-  onPhotoPicked,
-  onPhotoRemoved,
+  onAddPhoto,
+  onRemovePhoto,
   onClose,
 }) {
   // Everything below edits a draft. The stored preferences only change through
@@ -45,16 +45,29 @@ export default function PersonalizePanel({
   const [draft, setDraft] = useState(prefs);
   const [draftTheme, setDraftTheme] = useState(theme);
   const [justSaved, setJustSaved] = useState(false);
+  // The preview folds away once the sheet is scrolled, handing the screen to the
+  // controls, and returns as soon as the sheet is back at the top.
+  const [previewOpen, setPreviewOpen] = useState(true);
   const savedTimerRef = useRef(0);
+  const manualPreviewRef = useRef(false);
 
   const colors = getColors(draftTheme);
   const isDay = draftTheme === "day";
   const solidBackground = isSolidBackground(draft.background, draftTheme);
 
+  const activePhotoId = draft.photoId || (photos[0] ? photos[0].id : null);
+  const activePhoto = photos.find((entry) => entry.id === activePhotoId) || null;
+  const previewPhoto = activePhoto ? activePhoto.dataUrl : null;
+
   useEffect(() => () => clearTimeout(savedTimerRef.current), []);
 
   const update = (key, value) => {
     setDraft((current) => ({ ...current, [key]: value }));
+    setJustSaved(false);
+  };
+
+  const updateGradient = (patch) => {
+    setDraft((current) => ({ ...current, ...patch }));
     setJustSaved(false);
   };
 
@@ -98,27 +111,64 @@ export default function PersonalizePanel({
     setJustSaved(false);
   };
 
-  const handlePhotoPicked = (dataUrl) => {
-    const stored = onPhotoPicked(dataUrl);
+  const handlePhotoAdded = (dataUrl) => {
+    const result = onAddPhoto(dataUrl);
     setDraft((current) => ({
       ...current,
       background: MY_PHOTO_ID,
+      photoId: result.id,
       photoZoom: 1,
       photoOffsetX: 0,
       photoOffsetY: 0,
     }));
     setJustSaved(false);
-    return stored;
+    return result;
   };
 
-  const handlePhotoRemoved = () => {
-    onPhotoRemoved();
+  const handlePhotoSelected = (id) => {
+    setDraft((current) => ({
+      ...current,
+      background: MY_PHOTO_ID,
+      photoId: id,
+      photoZoom: 1,
+      photoOffsetX: 0,
+      photoOffsetY: 0,
+    }));
+    setJustSaved(false);
+  };
+
+  const handlePhotoRemoved = (id) => {
+    onRemovePhoto(id);
     setDraft((current) =>
-      current.background === MY_PHOTO_ID
-        ? { ...current, background: "classic", photoZoom: 1, photoOffsetX: 0, photoOffsetY: 0 }
+      current.background === MY_PHOTO_ID || current.photoId === id
+        ? {
+            ...current,
+            background: current.background === MY_PHOTO_ID ? "classic" : current.background,
+            photoId: null,
+            photoZoom: 1,
+            photoOffsetX: 0,
+            photoOffsetY: 0,
+          }
         : current
     );
     setJustSaved(false);
+  };
+
+  // Scrolling folds the preview away; going back to the top brings it back, and
+  // reopening it by hand keeps it open until the sheet is scrolled again.
+  const handleScroll = (event) => {
+    const scrolled = event.currentTarget.scrollTop > 120;
+    if (!scrolled) {
+      manualPreviewRef.current = false;
+      setPreviewOpen(true);
+      return;
+    }
+    if (!manualPreviewRef.current) setPreviewOpen(false);
+  };
+
+  const reopenPreview = () => {
+    manualPreviewRef.current = true;
+    setPreviewOpen(true);
   };
 
   const handleSave = () => {
@@ -197,12 +247,13 @@ export default function PersonalizePanel({
             </button>
           </div>
           <p style={{ margin: "2px 0 0", fontSize: "15px", fontWeight: 500, color: colors.secondary, lineHeight: 1.5 }}>
-            Try your choices below, then save the pause that feels right.
+            Make this pause your own.
           </p>
         </div>
 
         {/* Scrollable content */}
         <div
+          onScroll={handleScroll}
           style={{
             flex: 1,
             minHeight: 0,
@@ -215,7 +266,46 @@ export default function PersonalizePanel({
           <SectionLabel theme={draftTheme} isFirst>
             Live preview
           </SectionLabel>
-          <LivePreview theme={draftTheme} settings={draft} photo={photo} onPhotoPan={panPhoto} />
+          <div
+            aria-hidden={!previewOpen}
+            style={{
+              maxHeight: previewOpen ? 260 : 0,
+              opacity: previewOpen ? 1 : 0,
+              overflow: "hidden",
+              transition: "max-height 0.32s ease, opacity 0.24s ease",
+            }}
+          >
+            <LivePreview
+              theme={draftTheme}
+              settings={draft}
+              photo={previewPhoto}
+              onPhotoPan={panPhoto}
+            />
+          </div>
+          {!previewOpen && (
+            <button
+              type="button"
+              onClick={reopenPreview}
+              style={{
+                width: "100%",
+                minHeight: 44,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                borderRadius: 16,
+                border: `1px solid ${colors.glassBorder}`,
+                background: colors.glass,
+                cursor: "pointer",
+                fontFamily: FONT,
+                fontSize: "13.5px",
+                fontWeight: 700,
+                color: colors.secondary,
+              }}
+            >
+              Show preview
+            </button>
+          )}
 
           {/* Breathing visuals */}
           <SectionLabel theme={draftTheme}>Breathing visuals</SectionLabel>
@@ -239,9 +329,11 @@ export default function PersonalizePanel({
             theme={draftTheme}
             onSelectBackground={selectBackground}
             onCustomColor={(hex) => update("customColor", hex)}
-            photo={photo}
-            onPhotoPicked={handlePhotoPicked}
-            onPhotoRemoved={handlePhotoRemoved}
+            onGradientColors={updateGradient}
+            photos={photos}
+            onSelectPhoto={handlePhotoSelected}
+            onAddPhoto={handlePhotoAdded}
+            onRemovePhoto={handlePhotoRemoved}
             onPhotoZoom={(zoom) => update("photoZoom", clampPhotoZoom(zoom))}
           />
 

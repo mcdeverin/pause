@@ -9,7 +9,7 @@ import AboutLegalSheet from "../components/AboutLegalSheet";
 import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
 import { initRevenueCat, checkEntitlement } from "../lib/revenuecat";
 import { loadPreferences, savePreferences } from "../lib/preferences";
-import { clearStoredPhoto, getStoredPhoto, saveStoredPhoto } from "../lib/backgroundPhoto";
+import { addStoredPhoto, getStoredPhotos, removeStoredPhoto } from "../lib/backgroundPhoto";
 import BackgroundLayer from "../components/BackgroundLayer";
 import { MOMENTS, addMoment } from "../lib/moments";
 import MomentsScreen from "../components/moments/MomentsScreen";
@@ -34,7 +34,13 @@ export default function Home() {
   const [techniques, setTechniques] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [preferences, setPreferences] = useState(loadPreferences);
-  const [photo, setPhoto] = useState(getStoredPhoto);
+  const [photos, setPhotos] = useState(getStoredPhotos);
+
+  // The photo in use is whichever one the saved preferences point at, falling
+  // back to the most recently added.
+  const activePhotoEntry =
+    photos.find((entry) => entry.id === preferences.photoId) || photos[0] || null;
+  const photo = activePhotoEntry ? activePhotoEntry.dataUrl : null;
   const sessionMomentRef = useRef(null);
   const noticeTimerRef = useRef(null);
 
@@ -87,15 +93,16 @@ export default function Home() {
     });
   }, []);
 
-  const handlePhotoPicked = useCallback((dataUrl) => {
-    const stored = saveStoredPhoto(dataUrl);
-    setPhoto(dataUrl);
-    return stored;
+  // Photos are stored on the device as soon as they're picked, so the library
+  // survives a restart; which one is in use is part of the saved preferences.
+  const handlePhotoAdded = useCallback((dataUrl) => {
+    const result = addStoredPhoto(dataUrl);
+    setPhotos(result.photos);
+    return result;
   }, []);
 
-  const handlePhotoRemoved = useCallback(() => {
-    clearStoredPhoto();
-    setPhoto(null);
+  const handlePhotoRemoved = useCallback((id) => {
+    setPhotos(removeStoredPhoto(id));
   }, []);
 
   const beginSession = useCallback((chosenTechnique, moment) => {
@@ -240,10 +247,10 @@ export default function Home() {
             key="personalize"
             theme={theme}
             prefs={preferences}
-            photo={photo}
+            photos={photos}
             onSave={commitPreferences}
-            onPhotoPicked={handlePhotoPicked}
-            onPhotoRemoved={handlePhotoRemoved}
+            onAddPhoto={handlePhotoAdded}
+            onRemovePhoto={handlePhotoRemoved}
             onClose={() => setShowPersonalize(false)}
           />
         )}

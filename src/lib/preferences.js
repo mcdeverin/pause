@@ -1,8 +1,8 @@
 // Personalization preferences, persisted locally so they survive app launches.
 // No account or subscription is required to change any of these.
 
-import { clampBlur, clampDim, clampPhotoOffset, clampPhotoZoom } from "./background";
-import { DEFAULT_CUSTOM_COLOR } from "./design";
+import { clampBlur, clampDim, clampPhotoOffset, clampPhotoZoom, sanitizeHex } from "./background";
+import { DEFAULT_CUSTOM_COLOR, DEFAULT_GRADIENT_FROM, DEFAULT_GRADIENT_TO } from "./design";
 import { isStyleSelectable, normalizeVisualOptions } from "./visuals";
 
 const STORAGE_KEY = "pausePreferences";
@@ -17,6 +17,11 @@ export const DEFAULT_PREFERENCES = {
   backgroundDim: 0,
   backgroundBlur: 0,
   customColor: DEFAULT_CUSTOM_COLOR,
+  // A two-colour gradient the user builds themselves.
+  gradientFrom: DEFAULT_GRADIENT_FROM,
+  gradientTo: DEFAULT_GRADIENT_TO,
+  // Which of the locally stored photos is in use.
+  photoId: null,
   photoZoom: 1,
   photoOffsetX: 0,
   photoOffsetY: 0,
@@ -43,6 +48,9 @@ export function loadPreferences() {
         typeof merged.customColor === "string" && merged.customColor
           ? merged.customColor
           : DEFAULT_CUSTOM_COLOR,
+      gradientFrom: sanitizeHex(merged.gradientFrom) || DEFAULT_GRADIENT_FROM,
+      gradientTo: sanitizeHex(merged.gradientTo) || DEFAULT_GRADIENT_TO,
+      photoId: typeof merged.photoId === "string" ? merged.photoId : null,
       // Selections saved before the collection existed simply have no options.
       visualOptions: normalizeVisualOptions(merged.visualOptions),
       // A style whose collection isn't offered right now falls back to Original.

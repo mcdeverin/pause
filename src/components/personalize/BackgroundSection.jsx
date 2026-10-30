@@ -1,162 +1,102 @@
 import { useState } from "react";
-import { ImagePlus } from "lucide-react";
+import { BACKGROUNDS, CUSTOM_COLOR_ID, CUSTOM_GRADIENT_ID, MY_PHOTO_ID } from "../../lib/design";
 import {
-  BACKGROUNDS,
-  CUSTOM_COLOR_ID,
-  MY_PHOTO_ID,
-  FONT,
-  getBackgroundTone,
-  getColors,
-  isSolidBackground,
-} from "../../lib/design";
-import { sanitizeHex } from "../../lib/background";
-import PreviewCard from "./PreviewCard";
-import MyPhotoCard from "./MyPhotoCard";
+  EMPTY_CATEGORY_COPY,
+  NATURE_IMAGES,
+  PLACES_IMAGES,
+  SEASONS,
+  SEASON_IMAGES,
+} from "../../lib/backgroundGallery";
+import CategoryTabs from "./CategoryTabs";
+import ColorBackgrounds from "./ColorBackgrounds";
+import PhotoGallery from "./PhotoGallery";
+import PhotoLibrary from "./PhotoLibrary";
 
-const TILE_GRID = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 };
+// Which category a saved background belongs to, so reopening the panel lands on
+// the collection the user last chose from.
+function categoryFor(background) {
+  if (background === MY_PHOTO_ID) return "photos";
+  if (background === CUSTOM_COLOR_ID || background === CUSTOM_GRADIENT_ID) return "color";
+  if (BACKGROUNDS.some((option) => option.id === background)) return "color";
+  return "nature";
+}
 
-// Presets are starting points: any colour is allowed, and your own photo sits
-// alongside them as an equal option.
 export default function BackgroundSection({
   draft,
   theme,
   onSelectBackground,
   onCustomColor,
-  photo,
-  onPhotoPicked,
-  onPhotoRemoved,
+  onGradientColors,
+  photos = [],
+  onSelectPhoto,
+  onAddPhoto,
+  onRemovePhoto,
   onPhotoZoom,
 }) {
-  const colors = getColors(theme);
-  const [hexText, setHexText] = useState(draft.customColor || "");
-
-  const selectCustom = () => onSelectBackground(CUSTOM_COLOR_ID);
-
-  const applyHex = (raw) => {
-    setHexText(raw);
-    const clean = sanitizeHex(raw);
-    if (clean) onCustomColor(clean);
-  };
+  const [category, setCategory] = useState(() => categoryFor(draft.background));
+  const [season, setSeason] = useState(SEASONS[0].id);
 
   return (
     <>
-      <div style={TILE_GRID}>
-        {BACKGROUNDS.map((option) => (
-          <PreviewCard
-            key={option.id}
+      <CategoryTabs theme={theme} value={category} onChange={setCategory} />
+
+      <div style={{ marginTop: 12 }}>
+        {category === "color" && (
+          <ColorBackgrounds
+            draft={draft}
             theme={theme}
-            compact
-            label={option.label}
-            selected={draft.background === option.id}
-            onSelect={() => onSelectBackground(option.id)}
-            previewBackground={getBackgroundTone(option.id, theme)}
-            preview={null}
+            onSelectBackground={onSelectBackground}
+            onCustomColor={onCustomColor}
+            onGradientColors={onGradientColors}
           />
-        ))}
+        )}
 
-        <PreviewCard
-          theme={theme}
-          compact
-          label="Custom Color"
-          selected={draft.background === CUSTOM_COLOR_ID}
-          onSelect={selectCustom}
-          previewBackground={draft.customColor}
-          preview={null}
-        />
+        {category === "photos" && (
+          <PhotoLibrary
+            theme={theme}
+            photos={photos}
+            selectedId={
+              draft.background === MY_PHOTO_ID ? draft.photoId || (photos[0] && photos[0].id) : null
+            }
+            onSelect={onSelectPhoto}
+            onAdd={onAddPhoto}
+            onRemove={onRemovePhoto}
+            zoom={draft.photoZoom}
+            onZoomChange={onPhotoZoom}
+          />
+        )}
 
-        <PreviewCard
-          theme={theme}
-          compact
-          label="Your View"
-          selected={draft.background === MY_PHOTO_ID}
-          onSelect={() => onSelectBackground(MY_PHOTO_ID)}
-          previewBackground={colors.track}
-          preview={
-            photo ? (
-              <img src={photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            ) : (
-              <ImagePlus size={19} strokeWidth={2.1} color={colors.tertiary} />
-            )
-          }
-        />
+        {category === "nature" && (
+          <PhotoGallery
+            theme={theme}
+            images={NATURE_IMAGES}
+            value={draft.background}
+            onSelect={onSelectBackground}
+            emptyCopy={EMPTY_CATEGORY_COPY.nature}
+          />
+        )}
+
+        {category === "places" && (
+          <PhotoGallery
+            theme={theme}
+            images={PLACES_IMAGES}
+            value={draft.background}
+            onSelect={onSelectBackground}
+            emptyCopy={EMPTY_CATEGORY_COPY.places}
+          />
+        )}
+
+        {category === "seasons" && (
+          <PhotoGallery
+            theme={theme}
+            images={SEASON_IMAGES[season] || []}
+            value={draft.background}
+            onSelect={onSelectBackground}
+            emptyCopy={EMPTY_CATEGORY_COPY.seasons}
+            seasonTabs={{ seasons: SEASONS, value: season, onChange: setSeason }}
+          />
+        )}
       </div>
-
-      {draft.background === CUSTOM_COLOR_ID && (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 12 }}>
-          <input
-            type="color"
-            aria-label="Pick a background color"
-            value={draft.customColor}
-            onChange={(event) => {
-              const next = event.target.value.toUpperCase();
-              setHexText(next);
-              onCustomColor(next);
-            }}
-            style={{
-              width: 48,
-              height: 44,
-              padding: 3,
-              borderRadius: 12,
-              border: `1px solid ${colors.border}`,
-              background: colors.sheet,
-              cursor: "pointer",
-              flexShrink: 0,
-            }}
-          />
-          <input
-            type="text"
-            aria-label="Background color hex value"
-            value={hexText}
-            onChange={(event) => applyHex(event.target.value)}
-            onBlur={() => setHexText(draft.customColor)}
-            placeholder="#E7EDEA"
-            maxLength={7}
-            spellCheck={false}
-            autoComplete="off"
-            style={{
-              flex: 1,
-              minWidth: 0,
-              height: 44,
-              boxSizing: "border-box",
-              padding: "0 12px",
-              borderRadius: 12,
-              border: `1px solid ${colors.border}`,
-              background: colors.sheet,
-              color: colors.text,
-              fontFamily: FONT,
-              fontSize: "15px",
-              fontWeight: 600,
-              letterSpacing: "0.02em",
-              textTransform: "uppercase",
-            }}
-          />
-        </div>
-      )}
-
-      {draft.background === CUSTOM_COLOR_ID && (
-        <p style={{ margin: "6px 0 0", fontFamily: FONT, fontSize: "12.5px", fontWeight: 500, color: colors.tertiary, lineHeight: 1.5 }}>
-          Any colour works. Blur stays off for solid colours.
-        </p>
-      )}
-
-      {draft.background === MY_PHOTO_ID && (
-        <MyPhotoCard
-          theme={theme}
-          photo={photo}
-          zoom={draft.photoZoom}
-          onPicked={onPhotoPicked}
-          onRemove={onPhotoRemoved}
-          onZoomChange={onPhotoZoom}
-        />
-      )}
-
-      <p style={{ margin: "10px 0 0", fontFamily: FONT, fontSize: "13px", fontWeight: 600, color: colors.secondary, lineHeight: 1.5 }}>
-        {isSolidBackground(draft.background, theme)
-          ? "Selected: a single, even tone."
-          : draft.background === MY_PHOTO_ID
-            ? "Selected: your own photo."
-            : "Selected: a soft gradient."}
-      </p>
     </>
   );
 }

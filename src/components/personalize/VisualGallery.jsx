@@ -69,8 +69,8 @@ export default function VisualGallery({ theme, value, optionsFor, onChange }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 8,
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 6,
           marginTop: collections.length > 1 ? 12 : 0,
         }}
       >
@@ -88,8 +88,8 @@ export default function VisualGallery({ theme, value, optionsFor, onChange }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: 7,
-                padding: "9px 6px 10px",
+                gap: 6,
+                padding: "8px 4px 9px",
                 borderRadius: 18,
                 border: `2px solid ${selected ? colors.accent : "transparent"}`,
                 background: selected ? colors.accentSoft : "transparent",
@@ -98,10 +98,10 @@ export default function VisualGallery({ theme, value, optionsFor, onChange }) {
                 transition: "border-color 0.2s ease, background 0.2s ease",
               }}
             >
-              <VisualThumb id={style.id} theme={theme} options={optionsFor(style.id)} size={62} />
+              <VisualThumb id={style.id} theme={theme} options={optionsFor(style.id)} size={50} />
               <span
                 style={{
-                  fontSize: "12.5px",
+                  fontSize: "11.5px",
                   fontWeight: selected ? 800 : 600,
                   color: selected ? colors.text : colors.secondary,
                   lineHeight: 1.25,

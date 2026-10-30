@@ -1,44 +1,76 @@
-// My Photo storage. The image never leaves the device: it is downscaled in the
+// Your Photos storage. Images never leave the device: they are downscaled in the
 // WebView and kept in the app's own local storage — no upload, no account.
 // On iOS the file picker opens the native photo library.
 
-const STORAGE_KEY = "pauseBackgroundPhoto";
-const MAX_SIDE = 1600;
-const QUALITY = 0.82;
-// Base64 runs ~4/3 of the byte size; this keeps us well inside the ~5MB budget.
-const MAX_STORED_CHARS = 2400000;
+const STORAGE_KEY = "pauseBackgroundPhotos";
+const LEGACY_KEY = "pauseBackgroundPhoto";
+export const MAX_PHOTOS = 4;
+const MAX_SIDE = 1400;
+const QUALITY = 0.8;
+// Base64 runs ~4/3 of the byte size; this keeps the whole library inside the
+// WebView's local storage budget.
+const MAX_STORED_CHARS = 460000;
 
 let cache;
 
-export function getStoredPhoto() {
-  if (cache !== undefined) return cache;
-  try {
-    cache = localStorage.getItem(STORAGE_KEY) || null;
-  } catch {
-    cache = null;
-  }
-  return cache;
+function newId() {
+  return `p${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
 }
 
-// Returns false when the photo could not be written to storage (it stays usable
-// for this run), so the caller can say so instead of silently losing it.
-export function saveStoredPhoto(dataUrl) {
-  cache = dataUrl;
+function persist(photos) {
+  cache = photos;
   try {
-    localStorage.setItem(STORAGE_KEY, dataUrl);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
     return true;
   } catch {
     return false;
   }
 }
 
-export function clearStoredPhoto() {
-  cache = null;
+export function getStoredPhotos() {
+  if (cache) return cache;
+
+  let photos = [];
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if (Array.isArray(raw)) {
+      photos = raw.filter((entry) => entry && entry.id && typeof entry.dataUrl === "string");
+    }
   } catch {
-    // Nothing to clear if storage is unavailable.
+    photos = [];
   }
+
+  // A photo saved by an earlier version becomes the first photo in the library.
+  if (photos.length === 0) {
+    try {
+      const legacy = localStorage.getItem(LEGACY_KEY);
+      if (legacy) {
+        photos = [{ id: newId(), dataUrl: legacy }];
+        localStorage.removeItem(LEGACY_KEY);
+        persist(photos);
+      }
+    } catch {
+      // Storage unavailable — nothing to restore.
+    }
+  }
+
+  cache = photos;
+  return photos;
+}
+
+// Adds a photo at the front of the library. `stored` is false when the device was
+// short on space, so the caller can say so instead of losing it silently.
+export function addStoredPhoto(dataUrl) {
+  const entry = { id: newId(), dataUrl };
+  const next = [entry, ...getStoredPhotos()].slice(0, MAX_PHOTOS);
+  const stored = persist(next);
+  return { photos: next, id: entry.id, stored };
+}
+
+export function removeStoredPhoto(id) {
+  const next = getStoredPhotos().filter((entry) => entry.id !== id);
+  persist(next);
+  return next;
 }
 
 function encode(image) {

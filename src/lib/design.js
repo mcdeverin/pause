@@ -147,8 +147,11 @@ export function getColors(theme) {
 // Backgrounds come from three places: a curated preset, any colour the user
 // picks, or their own photo. Presets are starting points, never limits.
 export const CUSTOM_COLOR_ID = "custom";
+export const CUSTOM_GRADIENT_ID = "custom-gradient";
 export const MY_PHOTO_ID = "photo";
 export const DEFAULT_CUSTOM_COLOR = "#E7EDEA";
+export const DEFAULT_GRADIENT_FROM = "#E9F2EC";
+export const DEFAULT_GRADIENT_TO = "#DCE7F1";
 
 const BASE_TONE = { day: "#FAFAF8", night: "#0D1117" };
 
@@ -163,14 +166,22 @@ export function isPhotoBackground(id) {
 // A flat colour has nothing to soften, so blur is switched off for it.
 export function isSolidBackground(id, theme) {
   if (id === MY_PHOTO_ID) return false;
+  if (id === CUSTOM_GRADIENT_ID) return false;
   if (id === CUSTOM_COLOR_ID) return true;
   const preset = getBackgroundOption(id) || BACKGROUNDS[0];
   const value = theme === "day" ? preset.day : preset.night;
   return !String(value).includes("gradient");
 }
 
-export function getBackgroundTone(id, theme, customColor) {
-  if (id === CUSTOM_COLOR_ID) return customColor || DEFAULT_CUSTOM_COLOR;
+// `palette` carries the user's own colour choices: { customColor, gradientFrom,
+// gradientTo }. Anything missing falls back to the curated default.
+export function getBackgroundTone(id, theme, palette = {}) {
+  if (id === CUSTOM_GRADIENT_ID) {
+    const from = palette.gradientFrom || DEFAULT_GRADIENT_FROM;
+    const to = palette.gradientTo || DEFAULT_GRADIENT_TO;
+    return `linear-gradient(180deg, ${from} 0%, ${to} 100%)`;
+  }
+  if (id === CUSTOM_COLOR_ID) return palette.customColor || DEFAULT_CUSTOM_COLOR;
   if (id === MY_PHOTO_ID) return theme === "day" ? BASE_TONE.day : BASE_TONE.night;
   const preset = getBackgroundOption(id) || BACKGROUNDS[0];
   return theme === "day" ? preset.day : preset.night;
@@ -182,7 +193,8 @@ export function getBackgroundStyle(id, theme, customColor) {
 
 export function getBackgroundLabel(id, customColor) {
   if (id === CUSTOM_COLOR_ID) return customColor ? `Custom ${customColor}` : "Custom Color";
-  if (id === MY_PHOTO_ID) return "Your View";
+  if (id === CUSTOM_GRADIENT_ID) return "Custom Gradient";
+  if (id === MY_PHOTO_ID) return "Your Photos";
   const found = getBackgroundOption(id) || BACKGROUNDS[0];
   return found.label;
 }

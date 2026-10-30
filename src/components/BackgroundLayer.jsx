@@ -10,6 +10,8 @@ export default function BackgroundLayer({ settings = {}, theme = "day", photo = 
     backgroundDim = 0,
     backgroundBlur = 0,
     customColor,
+    gradientFrom,
+    gradientTo,
     photoZoom = 1,
     photoOffsetX = 0,
     photoOffsetY = 0,
@@ -18,7 +20,7 @@ export default function BackgroundLayer({ settings = {}, theme = "day", photo = 
   const hasPhoto = isPhotoBackground(background) && Boolean(photo);
   const blur = isSolidBackground(background, theme) ? 0 : blurPixels(clampBlur(backgroundBlur));
   const dim = clampDim(backgroundDim);
-  const tone = getBackgroundTone(background, theme, customColor);
+  const tone = getBackgroundTone(background, theme, { customColor, gradientFrom, gradientTo });
   const zoom = clampPhotoZoom(photoZoom);
 
   return (
