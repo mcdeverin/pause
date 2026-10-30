@@ -4,7 +4,6 @@ import { FONT, getColors } from "../../lib/design";
 import {
   availableCollections,
   collectionForStyle,
-  getStyle,
   isCollectionVisible,
   stylesInCollection,
 } from "../../lib/visuals";
@@ -22,7 +21,6 @@ export default function VisualGallery({ theme, value, optionsFor, onChange }) {
     return isCollectionVisible(saved) ? saved : collections[0].id;
   });
   const styles = stylesInCollection(collection);
-  const active = getStyle(value);
 
   return (
     <div>
@@ -135,10 +133,6 @@ export default function VisualGallery({ theme, value, optionsFor, onChange }) {
           );
         })}
       </div>
-
-      <p style={{ margin: "10px 0 0", fontFamily: FONT, fontSize: "13px", fontWeight: 500, color: colors.secondary, lineHeight: 1.5 }}>
-        <strong style={{ fontWeight: 700, color: colors.text }}>{active.label}</strong> — {active.description}
-      </p>
     </div>
   );
 }
