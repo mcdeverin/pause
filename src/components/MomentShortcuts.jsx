@@ -1,0 +1,77 @@
+import { Crosshair, Leaf, Moon, Sun } from "lucide-react";
+import { FONT, getColors } from "../lib/design";
+import { MOMENTS } from "../lib/moments";
+
+const ICONS = { calm: Leaf, focus: Crosshair, wind_down: Moon, reset: Sun };
+
+export default function MomentShortcuts({ theme, onSelect, notice }) {
+  const colors = getColors(theme);
+
+  return (
+    <div style={{ padding: "0 20px" }}>
+      <p
+        style={{
+          margin: "0 0 10px",
+          textAlign: "center",
+          fontFamily: FONT,
+          fontSize: "14.5px",
+          fontWeight: 700,
+          letterSpacing: "0.005em",
+          color: colors.secondary,
+        }}
+      >
+        What do you need right now?
+      </p>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {MOMENTS.map((moment) => {
+          const Icon = ICONS[moment.id];
+          return (
+            <button
+              key={moment.id}
+              type="button"
+              onClick={() => onSelect(moment.id)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 9,
+                minHeight: 54,
+                padding: "11px 13px",
+                borderRadius: 16,
+                border: "none",
+                cursor: "pointer",
+                background: colors.momentTints[moment.id],
+                color: colors.momentInk[moment.id],
+                fontFamily: FONT,
+                fontSize: "14px",
+                fontWeight: 700,
+                letterSpacing: "0.005em",
+                lineHeight: 1.25,
+                textAlign: "left",
+              }}
+            >
+              <Icon size={18} strokeWidth={2.2} />
+              <span>{moment.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {notice && (
+        <p
+          style={{
+            margin: "8px 2px 0",
+            textAlign: "center",
+            fontFamily: FONT,
+            fontSize: "12.5px",
+            fontWeight: 600,
+            color: colors.secondary,
+            lineHeight: 1.45,
+          }}
+        >
+          {notice}
+        </p>
+      )}
+    </div>
+  );
+}

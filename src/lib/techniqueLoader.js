@@ -9,6 +9,7 @@ export async function loadTechniques() {
   const records = await base44.entities.Technique.list();
 
   cachedTechniques = records.map((record) => ({
+    id: record.id,
     name: record.name,
     science: record.science,
     category: record.category,

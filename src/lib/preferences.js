@@ -8,6 +8,8 @@ export const DEFAULT_PREFERENCES = {
   background: "classic",
   showTimer: true,
   showInstructions: true,
+  showShortcuts: true,
+  saveMoments: false,
 };
 
 export function loadPreferences() {

@@ -62,6 +62,12 @@ export default function BreathingScreen({
   const [showInfo, setShowInfo] = useState(false);
 
   const timerRef = useRef(null);
+  const finishedRef = useRef(false);
+  const sessionIdRef = useRef(
+    typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`
+  );
   const phaseIndexRef = useRef(0);
   const secondsLeftRef = useRef(activePhases[0]);
   const cycleCountRef = useRef(0);
@@ -81,6 +87,18 @@ export default function BreathingScreen({
     }
   };
   // ────────────────────────────────────────────────────────────────
+
+  // Ends the session exactly once and reports the real elapsed breathing time,
+  // so a repeated callback can never record the same pause twice.
+  const finish = (completed) => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
+    onDone({
+      sessionId: sessionIdRef.current,
+      completed,
+      elapsedSeconds: elapsedSecondsRef.current,
+    });
+  };
 
   useEffect(() => {
     triggerHaptic(activeLabels[0]);
@@ -124,7 +142,7 @@ export default function BreathingScreen({
           if (cycleCountRef.current >= TOTAL_CYCLES) {
             clearInterval(timerRef.current);
             setProgress(1);
-            setTimeout(onDone, 500);
+            setTimeout(() => finish(true), 500);
             return;
           }
         }
@@ -358,7 +376,7 @@ export default function BreathingScreen({
 
         <button
           type="button"
-          onClick={onDone}
+          onClick={() => finish(false)}
           style={{
             minHeight: 44,
             padding: "10px 28px",

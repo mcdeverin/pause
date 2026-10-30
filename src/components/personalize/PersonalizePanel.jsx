@@ -199,6 +199,26 @@ export default function PersonalizePanel({ theme, prefs, onChange, onThemeChange
           checked={prefs.showInstructions}
           onChange={(value) => onChange("showInstructions", value)}
         />
+        <PreferenceToggle
+          theme={theme}
+          label="Show Moment Shortcuts"
+          description="Choose a breathing exercise based on what you need."
+          checked={prefs.showShortcuts}
+          onChange={(value) => onChange("showShortcuts", value)}
+        />
+        <PreferenceToggle
+          theme={theme}
+          label="Save My Moments"
+          description="Privately save your breathing sessions to see your patterns over time."
+          checked={prefs.saveMoments}
+          onChange={(value) => onChange("saveMoments", value)}
+        />
+        {prefs.saveMoments && (
+          <p style={{ margin: "10px 0 0", fontSize: "12.5px", fontWeight: 500, color: colors.tertiary, lineHeight: 1.55 }}>
+            Saved only on this device. Uninstalling the app or moving to a new device clears your
+            history, and you can delete it any time in Your Moments.
+          </p>
+        )}
 
         {/* Appearance */}
         <SectionLabel theme={theme}>Appearance</SectionLabel>

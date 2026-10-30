@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Menu } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import LiquidOrb from "./LiquidOrb";
 import NavigationSheet from "./NavigationSheet";
+import MomentShortcuts from "./MomentShortcuts";
 import { FONT, getBackgroundStyle, getColors } from "../lib/design";
 
 const ORB_MAX = 300;
@@ -16,19 +17,32 @@ export default function MainScreen({
   isPro = false,
   onLockedCategoryTap,
   onOpenPersonalize,
+  onOpenMoments,
   onOpenPausePlus,
+  showShortcuts = true,
+  onSelectMoment,
+  shortcutNotice = "",
   background = "classic",
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [orbSize, setOrbSize] = useState(() =>
-    Math.min(ORB_MAX, Math.round((typeof window !== "undefined" ? window.innerWidth : 390) * 0.72))
-  );
+  // The orb stays dominant: it scales with the viewport, and shrinks further
+  // when the moment shortcuts share the screen.
+  const measureOrb = useCallback(() => {
+    if (typeof window === "undefined") return ORB_MAX;
+    const heightShare = showShortcuts ? 0.3 : 0.42;
+    return Math.round(
+      Math.min(ORB_MAX, window.innerWidth * 0.62, window.innerHeight * heightShare)
+    );
+  }, [showShortcuts]);
+
+  const [orbSize, setOrbSize] = useState(measureOrb);
 
   useEffect(() => {
-    const handleResize = () => setOrbSize(Math.min(ORB_MAX, Math.round(window.innerWidth * 0.72)));
+    const handleResize = () => setOrbSize(measureOrb());
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [measureOrb]);
 
   const colors = getColors(theme);
   const categoryLabel = selectedCategory === "All" ? "all breaths" : selectedCategory.toLowerCase();
@@ -138,7 +152,7 @@ export default function MainScreen({
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 34,
+          gap: 18,
           padding: "0 24px",
         }}
       >
@@ -179,9 +193,13 @@ export default function MainScreen({
         </button>
       </div>
 
+      {showShortcuts && (
+        <MomentShortcuts theme={theme} onSelect={onSelectMoment} notice={shortcutNotice} />
+      )}
+
       <p
         style={{
-          margin: 0,
+          margin: showShortcuts ? "10px 0 0" : 0,
           textAlign: "center",
           fontFamily: FONT,
           fontSize: "13.5px",
@@ -203,6 +221,7 @@ export default function MainScreen({
             isPro={isPro}
             onLockedCategoryTap={onLockedCategoryTap}
             onOpenPersonalize={onOpenPersonalize}
+            onOpenMoments={onOpenMoments}
             onOpenPausePlus={onOpenPausePlus}
             onOpenAbout={onOpenAbout}
             onClose={() => setMenuOpen(false)}

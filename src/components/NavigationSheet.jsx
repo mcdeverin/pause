@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import {
+  BarChart3,
   Crosshair,
   Flame,
   Info,
@@ -66,6 +67,7 @@ export default function NavigationSheet({
   isPro,
   onLockedCategoryTap,
   onOpenPersonalize,
+  onOpenMoments,
   onOpenPausePlus,
   onOpenAbout,
   onClose,
@@ -196,6 +198,16 @@ export default function NavigationSheet({
             onClick={() => {
               onClose();
               onOpenPersonalize();
+            }}
+          />
+
+          <SheetRow
+            theme={theme}
+            icon={BarChart3}
+            label="Your Moments"
+            onClick={() => {
+              onClose();
+              onOpenMoments();
             }}
           />
 
