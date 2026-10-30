@@ -63,13 +63,13 @@ export default function TechniqueInfoCard({
             textAlign: "center",
           }}
         >
-          {science}
+          {scienceBlurb}
         </p>
       </div>
 
-      {sourceUrl ? (
+      {scienceBlurbSourceUrl ? (
         <a
-          href={sourceUrl}
+          href={scienceBlurbSourceUrl}
           target="_blank"
           rel="noopener noreferrer"
           onClick={(event) => {
@@ -97,7 +97,7 @@ export default function TechniqueInfoCard({
           <ArrowUpRight size={12} strokeWidth={2.4} aria-hidden="true" />
         </a>
       ) : (
-        sourceLabel && (
+        scienceBlurbSource && (
           <p
             style={{
               flexShrink: 0,
@@ -111,7 +111,7 @@ export default function TechniqueInfoCard({
               textAlign: "center",
             }}
           >
-            Source: {sourceLabel}
+            Source: {scienceBlurbSource}
           </p>
         )
       )}
