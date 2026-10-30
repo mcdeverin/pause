@@ -35,7 +35,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       }}
     >
       {/* Menu - top left */}
-      <div style={{ position: "absolute", top: "7.5vh", left: "24px", zIndex: 20 }}>
+      <div style={{ position: "absolute", top: "7.5vh", right: "24px", zIndex: 20 }}>
         <button
           onClick={() => setMenuOpen((v) => !v)}
           style={{
@@ -68,7 +68,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
               style={{
                 position: "absolute",
                 top: "28px",
-                left: 0,
+                right: 0,
                 background: isDayTheme ? "rgba(255,255,255,0.7)" : "rgba(20,30,50,0.75)",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
