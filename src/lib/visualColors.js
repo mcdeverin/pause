@@ -48,10 +48,20 @@ export function colorFromHue(hue) {
   return hslToHex(clamped);
 }
 
-// The rainbow the slider is drawn on — made of the very colours it produces, so
-// dragging never jumps to an unexpected shade.
-const SPECTRUM_STOPS = [0, 45, 90, 135, 180, 225, 270, 315, 360];
+// The slider's track is drawn in a dustier version of the same hues, so it reads
+// as a soft spectrum instead of a bright rainbow. Only the track changes: the
+// handle and the swatch keep showing the exact colour a drag produces.
+const MUTED_SATURATION = 34;
+const MUTED_LIGHTNESS = 58;
 
-export const SPECTRUM_GRADIENT = `linear-gradient(90deg, ${SPECTRUM_STOPS.map(
-  (hue) => `${colorFromHue(hue)} ${(hue / 360) * 100}%`
-).join(", ")})`;
+// Dusty rose → soft ochre → sage green → seafoam → muted blue → lavender → mauve,
+// placed at their own hue positions so the track stays continuous and every hue
+// keeps its place on the slider.
+const MUTED_STOPS = [348, 38, 110, 168, 212, 258, 305];
+
+const mutedColor = (hue) => hslToHex(hue, MUTED_SATURATION, MUTED_LIGHTNESS);
+
+export const MUTED_SPECTRUM_GRADIENT = `linear-gradient(90deg, ${[
+  ...MUTED_STOPS.map((hue) => `${mutedColor(hue)} ${(hue / 360) * 100}%`),
+  `${mutedColor(MUTED_STOPS[0])} 100%`,
+].join(", ")})`;
