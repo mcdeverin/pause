@@ -107,10 +107,10 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                       background: "none",
                       border: "none",
                       cursor: "pointer",
-                      fontFamily: "'Comfortaa', sans-serif",
-                      fontSize: "12px",
-                      letterSpacing: "0.1em",
-                      fontWeight: isSelected ? 600 : 300,
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "13px",
+                      letterSpacing: "0.005em",
+                      fontWeight: isSelected ? 600 : 400,
                       color: isLocked ? lockedColor : baseColor,
                     }}
                   >
@@ -227,11 +227,11 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                     background: "none",
                     border: "none",
                     cursor: "pointer",
-                    fontFamily: "'Comfortaa', sans-serif",
-                    fontSize: "11px",
-                    letterSpacing: "0.1em",
-                    fontWeight: 300,
-                    color: isDayTheme ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.35)",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "12px",
+                    letterSpacing: "0.005em",
+                    fontWeight: 400,
+                    color: isDayTheme ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.55)",
                   }}
                 >
                   {label}
@@ -254,7 +254,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  fontFamily: "'Comfortaa', sans-serif",
+                  fontFamily: "'DM Sans', sans-serif",
                   fontSize: "11px",
                   letterSpacing: "0.1em",
                   fontWeight: isPro ? 300 : 400,
@@ -284,11 +284,11 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
       >
         <p
           style={{
-            fontSize: "11px",
-            letterSpacing: "0.5em",
+            fontSize: "12px",
+            letterSpacing: "0.22em",
             fontWeight: 600,
             color: textColor,
-            fontFamily: "'Comfortaa', sans-serif",
+            fontFamily: "'DM Sans', sans-serif",
             margin: 0,
           }}
         >
@@ -332,11 +332,11 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
         <button
           onClick={onTap}
           style={{
-            fontSize: "12px",
-            letterSpacing: "0.12em",
+            fontSize: "13px",
+            letterSpacing: "0.015em",
             color: isDayTheme ? "#333333" : "#F0EDE8",
-            fontFamily: "'Comfortaa', sans-serif",
-            fontWeight: 300,
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 500,
             background: "none",
             border: "none",
             cursor: "pointer",

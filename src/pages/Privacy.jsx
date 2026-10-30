@@ -13,9 +13,9 @@ export default function Privacy() {
       </button>
 
       <div className="max-w-2xl">
-        <h1 className="text-3xl font-light mb-8 font-nunito">Privacy Policy</h1>
+        <h1 className="text-3xl font-semibold mb-8 font-sans">Privacy Policy</h1>
 
-        <div className="space-y-6 text-sm text-foreground/80 leading-relaxed font-nunito">
+        <div className="space-y-6 text-sm text-foreground/85 leading-relaxed font-sans">
           <p className="text-xs text-foreground/60 mb-6">
             Last Updated: March 2026
           </p>

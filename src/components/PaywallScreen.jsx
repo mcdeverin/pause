@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import LiquidOrb from "./LiquidOrb";
 import { getOfferings, purchasePackage, restorePurchases, checkEntitlement } from '../lib/revenuecat';
+import { PRODUCT_IDS, getLocalizedPrice, formatDailyPrice } from '../lib/pricing';
+
+const FONT = "'DM Sans', sans-serif";
 
 export default function PaywallScreen({ theme = "day", onClose, onPurchase, triggerCategory }) {
-  const [selected, setSelected] = useState("com.workondeck.alwayspause.annual");
+  const [selected, setSelected] = useState(PRODUCT_IDS.annual);
   const [offerings, setOfferings] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     getOfferings().then(o => {
@@ -27,15 +28,22 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const primaryTint = isDayTheme ? "rgba(74,127,166,0.07)" : "rgba(74,91,156,0.12)";
   const lifetimeBorder = isDayTheme ? "rgba(210,185,160,0.45)" : "rgba(210,185,160,0.25)";
 
+  // Localized store prices — display only.
+  const annualPrice = getLocalizedPrice(offerings, "annual");
+  const monthlyPrice = getLocalizedPrice(offerings, "monthly");
+  const lifetimePrice = getLocalizedPrice(offerings, "lifetime");
+  const annualDaily = formatDailyPrice(annualPrice, "annual");
+  const monthlyDaily = formatDailyPrice(monthlyPrice, "monthly");
+
   const ctaLabel = () => {
     if (loading) return '· processing ·';
-    if (selected === "alwayspause_lifetime") return 'get pause+ forever';
+    if (selected === PRODUCT_IDS.lifetime) return 'get pause+ forever';
     return 'start 7-day free trial';
   };
 
   const disclosureText = () => {
-    if (selected === "alwayspause_lifetime") return 'one-time purchase · yours forever · no subscription.';
-    if (selected === "com.workondeck.alwayspause.monthly") return '7 days free, then $4.99/month. auto-renews until canceled. cancel anytime in Settings.';
+    if (selected === PRODUCT_IDS.lifetime) return 'one-time purchase · yours forever · no subscription.';
+    if (selected === PRODUCT_IDS.monthly) return '7 days free, then $4.99/month. auto-renews until canceled. cancel anytime in Settings.';
     return '7 days free, then $29.99/year. auto-renews until canceled. cancel anytime in Settings.';
   };
 
@@ -88,7 +96,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
     }
   };
 
-  const TierPill = ({ id, label, caption, price, badge, isLifetime }) => {
+  const TierPill = ({ id, label, caption, amount, unit, secondary, badge, isLifetime }) => {
     const isSelected = selected === id;
     const border = isSelected
       ? primaryColor
@@ -106,42 +114,41 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           WebkitBackdropFilter: "blur(20px)",
           border: `1px solid ${border}`,
           borderRadius: "18px",
-          padding: "14px 20px",
+          padding: "15px 18px",
           cursor: "pointer",
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: "12px",
+          gap: "10px",
           opacity: 1,
           transition: "all 0.22s ease",
           textAlign: "left",
         }}
       >
-        {/* Left: label + badge + caption */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "3px", flex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
+        {/* Left: plan name + badge + trial caption */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", minWidth: 0, flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "7px", flexWrap: "wrap" }}>
             <span style={{
-              fontFamily: "'Comfortaa', sans-serif",
-              fontSize: "13px",
-              fontWeight: 300,
-              letterSpacing: "0.12em",
+              fontFamily: FONT,
+              fontSize: "14px",
+              fontWeight: 500,
+              letterSpacing: "0.01em",
               color: textColor,
-              opacity: 1,
+              lineHeight: 1.3,
             }}>
               {label}
             </span>
             {badge && (
               <span style={{
-                fontFamily: "'Comfortaa', sans-serif",
-                fontSize: "7px",
+                fontFamily: FONT,
+                fontSize: "9px",
                 fontWeight: 600,
-                letterSpacing: "0.16em",
+                letterSpacing: "0.03em",
                 color: primaryColor,
                 border: `1px solid ${primaryColor}`,
                 borderRadius: "100px",
                 padding: "2px 6px",
-                opacity: 1,
                 textTransform: "uppercase",
                 lineHeight: 1.4,
                 flexShrink: 0,
@@ -152,31 +159,56 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           </div>
           {caption && (
             <span style={{
-              fontFamily: "'Comfortaa', sans-serif",
-              fontSize: "9px",
-              fontWeight: 300,
-              letterSpacing: "0.1em",
+              fontFamily: FONT,
+              fontSize: "11px",
+              fontWeight: 400,
+              letterSpacing: "0.005em",
               color: textColor,
-              opacity: 0.75,
-              lineHeight: 1.4,
+              opacity: 0.62,
+              lineHeight: 1.45,
             }}>
               {caption}
             </span>
           )}
         </div>
 
-        {/* Right: price */}
-        <span style={{
-          fontFamily: "'Comfortaa', sans-serif",
-          fontSize: "17px",
-          fontWeight: 300,
-          letterSpacing: "0.04em",
-          color: textColor,
-          opacity: 1,
+        {/* Right: daily equivalent + billed amount */}
+        <div style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: "2px",
           flexShrink: 0,
         }}>
-          {price}
-        </span>
+          <span style={{
+            fontFamily: FONT,
+            fontSize: "18px",
+            fontWeight: 600,
+            letterSpacing: "-0.01em",
+            color: textColor,
+            whiteSpace: "nowrap",
+            lineHeight: 1.15,
+          }}>
+            {amount}
+            {unit && (
+              <span style={{ fontSize: "11px", fontWeight: 500, opacity: 0.6, letterSpacing: "0" }}>
+                {unit}
+              </span>
+            )}
+          </span>
+          <span style={{
+            fontFamily: FONT,
+            fontSize: "10px",
+            fontWeight: 400,
+            letterSpacing: "0.005em",
+            color: textColor,
+            opacity: 0.62,
+            whiteSpace: "nowrap",
+            lineHeight: 1.3,
+          }}>
+            {secondary}
+          </span>
+        </div>
       </button>
     );
   };
@@ -222,17 +254,17 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             background: "none",
             border: "none",
             cursor: "pointer",
-            opacity: 0.28,
+            opacity: 0.4,
             padding: "4px",
-            fontFamily: "'Comfortaa', sans-serif",
-            fontSize: "9px",
-            letterSpacing: "0.22em",
-            fontWeight: 300,
+            fontFamily: FONT,
+            fontSize: "11px",
+            letterSpacing: "0.06em",
+            fontWeight: 500,
             color: textColor,
             transition: "opacity 0.2s",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.55")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.28")}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.4")}
         >
           close
         </button>
@@ -244,8 +276,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             flexDirection: "column",
             alignItems: "center",
             width: "100%",
-            maxWidth: "320px",
-            padding: "0 24px",
+            maxWidth: "340px",
+            padding: "0 22px",
             boxSizing: "border-box",
             marginTop: "28px",
           }}
@@ -254,51 +286,53 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <LiquidOrb theme={theme} isBreathing={false} size={100} />
 
           {/* 32pt gap */}
-          <div style={{ height: "32px" }} />
+          <div style={{ height: "30px" }} />
 
           {/* 2. Headline */}
           <p style={{
-            fontFamily: "'Comfortaa', sans-serif",
-            fontSize: "18px",
-            fontWeight: 300,
-            letterSpacing: "0.3em",
+            fontFamily: FONT,
+            fontSize: "24px",
+            fontWeight: 600,
+            letterSpacing: "-0.015em",
             color: textColor,
             margin: 0,
             textAlign: "center",
-            lineHeight: 1.4,
+            lineHeight: 1.25,
           }}>
             unlock all of pause+
           </p>
 
           {/* 20pt gap */}
-          <div style={{ height: "20px" }} />
+          <div style={{ height: "14px" }} />
 
           {/* 3. Subhead */}
           <p style={{
-            fontFamily: "'Comfortaa', sans-serif",
-            fontSize: "11px",
-            fontWeight: 300,
-            letterSpacing: "0.15em",
+            fontFamily: FONT,
+            fontSize: "13px",
+            fontWeight: 400,
+            letterSpacing: "0.005em",
             color: textColor,
-            opacity: 0.45,
+            opacity: 0.62,
             margin: 0,
             textAlign: "center",
-            lineHeight: 1.7,
+            lineHeight: 1.6,
           }}>
             box, 4-7-8, coherence, physiological sigh, and more.{" "}
             for focus, energy, and the hardest moments.
           </p>
 
-          {/* 40pt gap */}
-          <div style={{ height: "40px" }} />
+          {/* 32pt gap */}
+          <div style={{ height: "32px" }} />
 
           {/* 4. Yearly pill */}
           <div style={{ width: "100%" }}>
             <TierPill
-              id="com.workondeck.alwayspause.annual"
+              id={PRODUCT_IDS.annual}
               label="yearly"
-              caption="7-day free trial · $2.50/mo billed annually"
-              price="$29.99"
+              caption="7-day free trial"
+              amount={annualDaily || annualPrice}
+              unit="/day"
+              secondary={`${annualPrice} billed annually`}
               badge="save 50%"
             />
           </div>
@@ -309,10 +343,12 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           {/* 5. Monthly pill */}
           <div style={{ width: "100%" }}>
             <TierPill
-              id="com.workondeck.alwayspause.monthly"
+              id={PRODUCT_IDS.monthly}
               label="monthly"
-              caption="7-day free trial · billed monthly"
-              price="$4.99"
+              caption="7-day free trial"
+              amount={monthlyDaily || monthlyPrice}
+              unit="/day"
+              secondary={`${monthlyPrice} billed monthly`}
             />
           </div>
 
@@ -322,10 +358,11 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           {/* 6. Forever pill */}
           <div style={{ width: "100%" }}>
             <TierPill
-              id="alwayspause_lifetime"
+              id={PRODUCT_IDS.lifetime}
               label="forever"
-              caption="one-time · yours to keep"
-              price="$49.99"
+              caption="yours to keep"
+              amount={lifetimePrice}
+              secondary="One-time purchase"
               isLifetime
             />
           </div>
@@ -344,12 +381,12 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
                 : "linear-gradient(135deg, #7481B8 0%, #96C4AE 100%)",
               border: "none",
               borderRadius: "50px",
-              padding: "16px 24px 14px 24px",
+              padding: "16px 24px 15px 24px",
               cursor: "pointer",
-              fontFamily: "'Comfortaa', sans-serif",
-              fontSize: "12px",
-              fontWeight: 300,
-              letterSpacing: "0.2em",
+              fontFamily: FONT,
+              fontSize: "14px",
+              fontWeight: 500,
+              letterSpacing: "0.01em",
               color: isDayTheme ? "#FAFAF8" : "#F0EDE8",
               textAlign: "center",
               boxSizing: "border-box",
@@ -366,15 +403,15 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
 
           {/* 8. Disclosure */}
           <p style={{
-            fontFamily: "'Comfortaa', sans-serif",
-            fontSize: "9px",
-            fontWeight: 300,
-            letterSpacing: "0.08em",
+            fontFamily: FONT,
+            fontSize: "11px",
+            fontWeight: 400,
+            letterSpacing: "0.005em",
             color: textColor,
-            opacity: 0.28,
+            opacity: 0.55,
             margin: 0,
             textAlign: "center",
-            lineHeight: 1.7,
+            lineHeight: 1.6,
           }}>
             {disclosureText()}
           </p>
@@ -387,7 +424,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "14px",
+            flexWrap: "wrap",
+            gap: "12px",
             marginBottom: "32px",
           }}>
             {[
@@ -395,26 +433,26 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               { label: "terms", action: () => window.open("https://www.apple.com/legal/internet-services/itunes/dev/stdeula/", "_blank") },
               { label: "privacy", action: () => window.open("https://alwayspause.com/privacy", "_blank") },
             ].map(({ label, action }, i, arr) => (
-              <span key={label} style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+              <span key={label} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 <button
                   onClick={action}
                   style={{
                     background: "none",
                     border: "none",
                     cursor: "pointer",
-                    fontFamily: "'Comfortaa', sans-serif",
-                    fontSize: "9px",
-                    letterSpacing: "0.14em",
-                    fontWeight: 300,
+                    fontFamily: FONT,
+                    fontSize: "11px",
+                    letterSpacing: "0.01em",
+                    fontWeight: 500,
                     color: textColor,
-                    opacity: 0.28,
+                    opacity: 0.55,
                     padding: 0,
                   }}
                 >
                   {label}
                 </button>
                 {i < arr.length - 1 && (
-                  <span style={{ color: textColor, opacity: 0.18, fontSize: "9px" }}>·</span>
+                  <span style={{ color: textColor, opacity: 0.3, fontSize: "11px" }}>·</span>
                 )}
               </span>
             ))}
@@ -422,11 +460,12 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
 
           {error && (
             <p style={{
-              fontSize: '10px',
+              fontSize: '12px',
               color: '#ff6b6b',
-              opacity: 0.8,
-              fontFamily: 'Comfortaa',
-              letterSpacing: '0.1em',
+              opacity: 0.9,
+              fontFamily: FONT,
+              fontWeight: 400,
+              letterSpacing: '0.005em',
               marginTop: '4px',
               textAlign: 'center',
             }}>

@@ -147,11 +147,11 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
       >
         <p
           style={{
-            fontSize: "11px",
-            letterSpacing: "0.5em",
+            fontSize: "12px",
+            letterSpacing: "0.18em",
             color: textColor,
-            fontFamily: "'Comfortaa', sans-serif",
-            fontWeight: 300,
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 500,
             margin: 0,
             maxWidth: "calc(100vw - 80px)",
             wordWrap: "break-word",
@@ -191,11 +191,11 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
           }}
         >
           <p style={{
-            fontSize: "12px",
+            fontSize: "13px",
             color: textColor,
-            fontFamily: "'Comfortaa', sans-serif",
-            fontStyle: "italic",
-            fontWeight: 300,
+            fontFamily: "'DM Sans', sans-serif",
+            fontStyle: "normal",
+            fontWeight: 400,
             lineHeight: 1.8,
             margin: 0,
             textAlign: "center",
@@ -261,15 +261,15 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
         {/* Phase label */}
         <p
           style={{
-            fontSize: "18px",
+            fontSize: "22px",
             color: textColor,
-            fontFamily: "'Comfortaa', sans-serif",
-            fontWeight: 300,
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 500,
             margin: 0,
             textTransform: "lowercase",
             textAlign: "center",
             minHeight: "24px",
-            letterSpacing: "0.25em",
+            letterSpacing: "0.05em",
             flexShrink: 0,
             maxWidth: "calc(100vw - 48px)",
             wordWrap: "break-word",
@@ -308,12 +308,12 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
         <button
           onClick={onDone}
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             marginTop: "2px",
             color: textColor,
-            fontFamily: "'Comfortaa', sans-serif",
-            fontWeight: 300,
-            letterSpacing: "0.2em",
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 500,
+            letterSpacing: "0.06em",
             background: "none",
             border: "none",
             cursor: "pointer",

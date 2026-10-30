@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "phases": {
+      "type": "string"
+    },
+    "phaseLabels": {
+      "type": "string"
+    },
+    "science": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "difficulty": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "phases",
+    "science"
+  ],
+  "name": "Technique"
+}
