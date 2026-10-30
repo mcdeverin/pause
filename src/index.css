@@ -90,18 +90,6 @@
 }
 
 @layer base {
-  @keyframes liquidDrift {
-    0% {
-      transform: rotate(0deg) scale(1);
-    }
-    50% {
-      transform: rotate(180deg) scale(1.04);
-    }
-    100% {
-      transform: rotate(360deg) scale(1);
-    }
-  }
-
   * {
     @apply border-border outline-ring/50;
   }
@@ -114,11 +102,6 @@
     overflow: hidden;
     overscroll-behavior: none;
   }
-}
-
-.liquid-blob-shape {
-  animation: liquidDrift 38s ease-in-out infinite;
-  transform-origin: 50% 50%;
 }
 
 /* Custom selection color */

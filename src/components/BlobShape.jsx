@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { motion } from "framer-motion";
 
 // Organic blob outline drawn as a real curve, so no edge can render as a straight cut.
 const BLOB_PATH =
@@ -6,17 +7,21 @@ const BLOB_PATH =
 
 let idCounter = 0;
 
-export default function BlobShape({ theme = "day", animate = true }) {
+export default function BlobShape({ theme = "day" }) {
   const isDayTheme = theme === "day";
   const gradientId = useMemo(() => `orb-grad-${++idCounter}`, []);
 
   return (
-    <svg
-      className={animate ? "liquid-blob-shape" : undefined}
+    <motion.svg
       viewBox="0 0 200 200"
       width="100%"
       height="100%"
       style={{ display: "block", overflow: "visible" }}
+      animate={{ rotate: 360, scale: [1, 1.045, 1] }}
+      transition={{
+        rotate: { duration: 34, repeat: Infinity, ease: "linear" },
+        scale: { duration: 9, repeat: Infinity, ease: "easeInOut" },
+      }}
       aria-hidden="true"
     >
       <defs>
@@ -36,6 +41,6 @@ export default function BlobShape({ theme = "day", animate = true }) {
         </radialGradient>
       </defs>
       <path d={BLOB_PATH} fill={`url(#${gradientId})`} />
-    </svg>
+    </motion.svg>
   );
 }
