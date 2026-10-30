@@ -93,7 +93,7 @@ export default function TechniqueInfoCard({
             borderBottom: `1px dotted ${colors.tertiary}`,
           }}
         >
-          <span>View source ↗</span>
+          <span>View source</span>
           <ArrowUpRight size={12} strokeWidth={2.4} aria-hidden="true" />
         </a>
       ) : (
