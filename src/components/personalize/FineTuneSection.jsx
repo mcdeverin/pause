@@ -114,13 +114,8 @@ export default function FineTuneSection({ theme, styleId, options, onChange }) {
           textAlign: "left",
         }}
       >
-        <span>
-          <span style={{ display: "block", fontSize: "14.5px", fontWeight: 700, color: colors.text }}>
-            Fine-tune {style.label.toLowerCase()}
-          </span>
-          <span style={{ display: "block", marginTop: 2, fontSize: "12.5px", fontWeight: 500, color: colors.tertiary }}>
-            Optional. It looks lovely as it is.
-          </span>
+        <span style={{ fontSize: "14.5px", fontWeight: 700, color: colors.text }}>
+          Customize colors
         </span>
         <ChevronDown
           size={18}
