@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Menu } from "lucide-react";
+import { Eye, Menu } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import LiquidOrb from "./LiquidOrb";
 import NavigationSheet from "./NavigationSheet";
@@ -26,6 +26,7 @@ export default function MainScreen({
   backgroundSettings = {},
   photo = null,
   onHideShortcuts,
+  onShowShortcuts,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   // The orb stays dominant: it scales with the viewport, and shrinks further
@@ -219,6 +220,37 @@ export default function MainScreen({
       >
         {categoryLabel} · about a minute
       </p>
+
+      {/* Hidden shortcuts leave a discreet way back — the orb already takes the
+          freed space, so nothing sits empty. */}
+      {!showShortcuts && (
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+          <button
+            type="button"
+            onClick={onShowShortcuts}
+            aria-label="Show moment shortcuts"
+            title="Show moment shortcuts"
+            style={{
+              width: 44,
+              height: 44,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "none",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              color: colors.tertiary,
+              opacity: 0.55,
+              transition: "opacity 0.2s ease",
+            }}
+            onMouseEnter={(event) => (event.currentTarget.style.opacity = "0.9")}
+            onMouseLeave={(event) => (event.currentTarget.style.opacity = "0.55")}
+          >
+            <Eye size={18} strokeWidth={2.2} />
+          </button>
+        </div>
+      )}
 
       <AnimatePresence>
         {menuOpen && (

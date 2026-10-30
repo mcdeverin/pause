@@ -204,6 +204,7 @@ export default function Home() {
             backgroundSettings={preferences}
             photo={photo}
             onHideShortcuts={() => updatePreference("showShortcuts", false)}
+            onShowShortcuts={() => updatePreference("showShortcuts", true)}
             onOpenPersonalize={() => setShowPersonalize(true)}
             onOpenMoments={() => setShowMoments(true)}
             onOpenPausePlus={openPaywall}
