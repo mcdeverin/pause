@@ -115,7 +115,9 @@ export default function BreathingScreen({
     onComplete: finish,
   });
 
-  const { label: currentLabel, breath, progress, timeRemaining } = clock;
+  // The bar fills across the phase being spoken above it (inhale, hold, exhale),
+  // so the two always agree instead of the bar showing whole-session progress.
+  const { label: currentLabel, breath, phaseProgress, timeRemaining } = clock;
 
   // Haptics fire on phase changes, from the same clock as the visuals.
   useEffect(() => {
@@ -398,7 +400,7 @@ export default function BreathingScreen({
               borderRadius: 999,
               background: `linear-gradient(90deg, ${colors.ringFrom} 0%, ${colors.ringTo} 100%)`,
             }}
-            animate={{ width: `${progress * 100}%` }}
+            animate={{ width: `${phaseProgress * 100}%` }}
             transition={{ duration: reducedMotion ? 0.2 : 0.15, ease: "linear" }}
           />
         </div>
