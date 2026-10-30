@@ -11,7 +11,7 @@ export async function loadTechniques() {
   cachedTechniques = records.map((record) => ({
     id: record.id,
     name: record.name,
-    science: record.science,
+    scienceBlurb: record.scienceBlurb,
     category: record.category,
     difficulty: record.difficulty,
     phases: record.phases,

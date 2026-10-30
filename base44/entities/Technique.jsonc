@@ -11,7 +11,7 @@
     "phaseLabels": {
       "type": "string"
     },
-    "science": {
+    "scienceBlurb": {
       "type": "string"
     },
     "category": {
@@ -20,17 +20,17 @@
     "difficulty": {
       "type": "string"
     },
-    "sourceLabel": {
+    "scienceBlurbSource": {
       "type": "string"
     },
-    "sourceUrl": {
+    "scienceBlurbSourceUrl": {
       "type": "string"
     }
   },
   "required": [
     "name",
     "phases",
-    "science"
+    "scienceBlurb"
   ],
   "rls": {
     "read": {},

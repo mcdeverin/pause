@@ -5,9 +5,9 @@ import { FONT, getColors } from "../lib/design";
 // source line — a real "View source ↗" hyperlink when the technique has a
 // stored URL, otherwise "Source: [name]".
 export default function TechniqueInfoCard({
-  science,
-  sourceUrl,
-  sourceLabel,
+  scienceBlurb,
+  scienceBlurbSourceUrl,
+  scienceBlurbSource,
   theme,
   maxHeight,
   onClose,

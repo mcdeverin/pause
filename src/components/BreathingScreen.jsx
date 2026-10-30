@@ -14,7 +14,7 @@ const DEFAULT_TECHNIQUE = {
   name: "Box Breathing",
   phases: "4,4,4,4",
   phaseLabels: "inhale,hold,exhale,hold",
-  science: "When your mind is busy, four predictable phases give you something steady to follow.",
+  scienceBlurb: "When your mind is busy, four predictable phases give you something steady to follow.",
 };
 
 const FALLBACK_PHASES = DEFAULT_TECHNIQUE.phases.split(",").map(Number);
@@ -57,15 +57,15 @@ export default function BreathingScreen({
 
   // Only a real stored http(s) link is shown — never a placeholder.
   const sourceUrl = useMemo(() => {
-    const raw = activeTechnique.sourceUrl;
+    const raw = activeTechnique.scienceBlurbSourceUrl;
     if (typeof raw !== "string") return null;
     const trimmed = raw.trim();
     return /^https?:\/\//i.test(trimmed) ? trimmed : null;
-  }, [activeTechnique.sourceUrl]);
+  }, [activeTechnique.scienceBlurbSourceUrl]);
 
   const sourceTitle =
-    typeof activeTechnique.sourceLabel === "string" && activeTechnique.sourceLabel.trim()
-      ? activeTechnique.sourceLabel.trim()
+    typeof activeTechnique.scienceBlurbSource === "string" && activeTechnique.scienceBlurbSource.trim()
+      ? activeTechnique.scienceBlurbSource.trim()
       : null;
 
   const [showInfo, setShowInfo] = useState(false);
@@ -222,9 +222,9 @@ export default function BreathingScreen({
       {showInfo && (
         <TechniqueInfoCard
           cardRef={infoCardRef}
-          science={activeTechnique.science}
-          sourceUrl={sourceUrl}
-          sourceLabel={sourceTitle}
+          scienceBlurb={activeTechnique.scienceBlurb}
+          scienceBlurbSourceUrl={sourceUrl}
+          scienceBlurbSource={sourceTitle}
           theme={theme}
           maxHeight={infoMaxHeight}
           onClose={() => setShowInfo(false)}
