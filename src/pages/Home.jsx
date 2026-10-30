@@ -222,6 +222,7 @@ export default function Home() {
             theme={theme}
             hapticsEnabled={hapticsEnabled}
             visual={preferences.visual}
+            visualOptions={preferences.visualOptions}
             backgroundSettings={preferences}
             photo={photo}
             showTimer={preferences.showTimer}

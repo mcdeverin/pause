@@ -1,20 +1,9 @@
 // Shared visual language for Pause — typography, colour and background tokens.
 // Every screen reads from here so the app stays visually consistent.
 
-export const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
+import { getStyleLabel } from "./visuals";
 
-export const BREATHING_VISUALS = [
-  {
-    id: "orb",
-    label: "Organic Orb",
-    description: "Pause's original soft, shifting form.",
-  },
-  {
-    id: "ring",
-    label: "Breathing Ring",
-    description: "A clean ring that fills with your breath.",
-  },
-];
+export const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
 export const BACKGROUNDS = [
   {
@@ -199,8 +188,7 @@ export function getBackgroundLabel(id, customColor) {
 }
 
 export function getVisualLabel(id) {
-  const found = BREATHING_VISUALS.find((v) => v.id === id) || BREATHING_VISUALS[0];
-  return found.label;
+  return getStyleLabel(id);
 }
 
 export function formatClock(totalSeconds) {

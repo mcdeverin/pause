@@ -1,18 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
-import {
-  BREATHING_VISUALS,
-  FONT,
-  getColors,
-  getVisualLabel,
-  isSolidBackground,
-  MY_PHOTO_ID,
-} from "../../lib/design";
+import { FONT, getColors, isSolidBackground, MY_PHOTO_ID } from "../../lib/design";
+import { resolveOptions } from "../../lib/visuals";
 import { BLUR_MAX, DIM_MAX, clampBlur, clampDim, clampPhotoOffset, clampPhotoZoom } from "../../lib/background";
 import PreferenceToggle from "./PreferenceToggle";
-import PreviewCard from "./PreviewCard";
 import LivePreview from "./LivePreview";
+import VisualGallery from "./VisualGallery";
+import FineTuneSection from "./FineTuneSection";
 import BackgroundSection from "./BackgroundSection";
 import AdjustmentSlider from "./AdjustmentSlider";
 
@@ -35,41 +30,6 @@ function SectionLabel({ children, theme, isFirst }) {
   );
 }
 
-function VisualPreview({ id, theme }) {
-  const colors = getColors(theme);
-
-  if (id === "ring") {
-    return (
-      <svg viewBox="0 0 64 64" width="44" height="44" aria-hidden="true">
-        <circle cx="32" cy="32" r="25" fill="none" stroke={colors.track} strokeWidth="6" />
-        <circle
-          cx="32"
-          cy="32"
-          r="25"
-          fill="none"
-          stroke={colors.ringFrom}
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeDasharray="157"
-          strokeDashoffset="58"
-          transform="rotate(-90 32 32)"
-        />
-      </svg>
-    );
-  }
-
-  return (
-    <div
-      style={{
-        width: 46,
-        height: 46,
-        borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
-        background: colors.orbGradient,
-        animation: "liquidMorph 8s ease-in-out infinite",
-      }}
-    />
-  );
-}
 
 export default function PersonalizePanel({
   theme,
@@ -100,6 +60,22 @@ export default function PersonalizePanel({
 
   const updateTheme = (nextTheme) => {
     setDraftTheme(nextTheme);
+    setJustSaved(false);
+  };
+
+  // Fine-tuning edits the draft options of the style in use, nothing else.
+  const updateVisualOption = (key, value) => {
+    setDraft((current) => {
+      const styleId = current.visual;
+      const merged = {
+        ...resolveOptions(styleId, current.visualOptions?.[styleId]),
+        [key]: value,
+      };
+      return {
+        ...current,
+        visualOptions: { ...current.visualOptions, [styleId]: merged },
+      };
+    });
     setJustSaved(false);
   };
 
@@ -241,25 +217,20 @@ export default function PersonalizePanel({
           </SectionLabel>
           <LivePreview theme={draftTheme} settings={draft} photo={photo} onPhotoPan={panPhoto} />
 
-          {/* Breathing Visual */}
-          <SectionLabel theme={draftTheme}>Breathing visual</SectionLabel>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            {BREATHING_VISUALS.map((option) => (
-              <PreviewCard
-                key={option.id}
-                theme={draftTheme}
-                label={option.label}
-                description={option.description}
-                selected={draft.visual === option.id}
-                onSelect={() => update("visual", option.id)}
-                previewBackground={colors.track}
-                preview={<VisualPreview id={option.id} theme={draftTheme} />}
-              />
-            ))}
-          </div>
-          <p style={{ margin: "8px 0 0", fontSize: "13px", fontWeight: 600, color: colors.secondary }}>
-            Selected: {getVisualLabel(draft.visual)}
-          </p>
+          {/* Breathing visuals */}
+          <SectionLabel theme={draftTheme}>Breathing visuals</SectionLabel>
+          <VisualGallery
+            theme={draftTheme}
+            value={draft.visual}
+            optionsFor={(id) => resolveOptions(id, draft.visualOptions?.[id])}
+            onChange={(id) => update("visual", id)}
+          />
+          <FineTuneSection
+            theme={draftTheme}
+            styleId={draft.visual}
+            options={resolveOptions(draft.visual, draft.visualOptions?.[draft.visual])}
+            onChange={updateVisualOption}
+          />
 
           {/* Background */}
           <SectionLabel theme={draftTheme}>Background</SectionLabel>

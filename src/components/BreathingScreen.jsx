@@ -1,17 +1,13 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Info } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import BreathingRing from "./BreathingRing";
+import BreathingVisual from "./visuals/BreathingVisual";
 import SessionTimerPill from "./SessionTimerPill";
 import { FONT, getColors } from "../lib/design";
 import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
 
 const TOTAL_CYCLES = 4;
-
-// Orb geometry: resting scale with empty lungs, plus this much at full lungs.
-const ORB_MIN_SCALE = 1.0;
-const ORB_RANGE = 0.35;
 
 const DEFAULT_TECHNIQUE = {
   name: "Box Breathing",
@@ -29,6 +25,7 @@ export default function BreathingScreen({
   theme = "day",
   hapticsEnabled = true,
   visual = "orb",
+  visualOptions = {},
   backgroundSettings = {},
   photo = null,
   showTimer = true,
@@ -103,7 +100,6 @@ export default function BreathingScreen({
   });
 
   const { label: currentLabel, breath, progress, timeRemaining } = clock;
-  const orbScale = ORB_MIN_SCALE + ORB_RANGE * breath;
 
   // Haptics fire on phase changes, from the same clock as the visuals.
   useEffect(() => {
@@ -234,43 +230,17 @@ export default function BreathingScreen({
           padding: "8px 24px",
         }}
       >
-        {visual === "ring" ? (
-          <div style={{ width: "min(300px, 74vw)", aspectRatio: "1 / 1" }}>
-            <BreathingRing
-              theme={theme}
-              fill={breath}
-              label={currentLabel}
-              showLabel={showRingLabel}
-              reducedMotion={reducedMotion}
-            />
-          </div>
-        ) : (
-          <div
-            style={{
-              position: "relative",
-              width: "min(290px, 74vw)",
-              height: "min(290px, 74vw)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                background: colors.orbGradient,
-                borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
-                transform: `scale(${orbScale})`,
-                // The scale already tracks the clock continuously; this only
-                // smooths the last few frames.
-                transition: reducedMotion ? "none" : "transform 0.12s linear",
-                animation: reducedMotion ? "none" : "liquidMorph 8s ease-in-out infinite",
-              }}
-            />
-          </div>
-        )}
+        <div style={{ width: "min(290px, 74vw)", aspectRatio: "1 / 1" }}>
+          <BreathingVisual
+            id={visual}
+            breath={breath}
+            theme={theme}
+            options={visualOptions?.[visual]}
+            reducedMotion={reducedMotion}
+            label={currentLabel}
+            showLabel={showRingLabel}
+          />
+        </div>
       </div>
 
       {/* Bottom: instruction + progress + done */}

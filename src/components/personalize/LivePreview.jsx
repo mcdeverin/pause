@@ -1,9 +1,11 @@
 import { useMemo, useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 import BackgroundLayer from "../BackgroundLayer";
-import BreathingRing from "../BreathingRing";
+import BreathingVisual from "../visuals/BreathingVisual";
 import SessionTimerPill from "../SessionTimerPill";
 import { clampPhotoOffset } from "../../lib/background";
 import { FONT, getColors, isPhotoBackground } from "../../lib/design";
+import { getStyleLabel } from "../../lib/visuals";
 import useBreathingClock from "../../hooks/useBreathingClock";
 
 // Equal Breathing (Sama Vritti) already exists in the technique library. Its 5s
@@ -12,10 +14,6 @@ import useBreathingClock from "../../hooks/useBreathingClock";
 const PREVIEW_PHASES = [5, 5];
 const PREVIEW_LABELS = ["inhale", "exhale"];
 const PREVIEW_CYCLES = 4;
-
-// Orb geometry, matching the real session's resting scale and travel.
-const ORB_MIN_SCALE = 1;
-const ORB_RANGE = 0.22;
 
 // A compact, always-labelled preview of the user's draft choices. It runs on the
 // same shared clock, breath maths and background layer as a real session, but it
@@ -38,9 +36,9 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
     onComplete: () => setLoop((value) => value + 1),
   });
 
+  const reducedMotion = useReducedMotion();
   const breath = Math.min(Math.max(clock.breath || 0, 0), 1);
-  const orbScale = ORB_MIN_SCALE + ORB_RANGE * breath;
-  const isRing = settings.visual === "ring";
+  const visualLabel = getStyleLabel(settings.visual || "orb");
   const canPan = isPhotoBackground(settings.background) && Boolean(photo) && Boolean(onPhotoPan);
 
   const handlePanStart = (event) => {
@@ -75,7 +73,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
   return (
     <div
       role="group"
-      aria-label={`Live preview of your pause using ${isRing ? "the breathing ring" : "the organic orb"}. This is not a real session.`}
+      aria-label={`Live preview of your pause using the ${visualLabel} visual. This is not a real session.`}
       onPointerDown={handlePanStart}
       onPointerMove={handlePanMove}
       onPointerUp={handlePanEnd}
@@ -137,23 +135,16 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
           justifyContent: "center",
         }}
       >
-        {isRing ? (
-          <div style={{ width: "min(118px, 22vh)", aspectRatio: "1 / 1" }}>
-            <BreathingRing theme={theme} fill={breath} showLabel={false} />
-          </div>
-        ) : (
-          <div
-            style={{
-              width: "min(104px, 20vh)",
-              height: "min(104px, 20vh)",
-              borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
-              background: colors.orbGradient,
-              transform: `scale(${orbScale})`,
-              transition: "transform 0.12s linear",
-              animation: "liquidMorph 8s ease-in-out infinite",
-            }}
+        <div style={{ width: "min(112px, 22vh)", aspectRatio: "1 / 1" }}>
+          <BreathingVisual
+            id={settings.visual}
+            breath={breath}
+            theme={theme}
+            options={settings.visualOptions?.[settings.visual]}
+            reducedMotion={reducedMotion}
+            showLabel={false}
           />
-        )}
+        </div>
       </div>
 
       <p

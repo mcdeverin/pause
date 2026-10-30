@@ -3,11 +3,15 @@
 
 import { clampBlur, clampDim, clampPhotoOffset, clampPhotoZoom } from "./background";
 import { DEFAULT_CUSTOM_COLOR } from "./design";
+import { normalizeVisualOptions } from "./visuals";
 
 const STORAGE_KEY = "pausePreferences";
 
 export const DEFAULT_PREFERENCES = {
   visual: "orb",
+  // Per-style fine-tuning, keyed by visual id. Styles keep their defaults until
+  // the user changes them.
+  visualOptions: {},
   background: "classic",
   // Background adjustments — applied to the background layer only.
   backgroundDim: 0,
@@ -39,6 +43,8 @@ export function loadPreferences() {
         typeof merged.customColor === "string" && merged.customColor
           ? merged.customColor
           : DEFAULT_CUSTOM_COLOR,
+      // Selections saved before the collection existed simply have no options.
+      visualOptions: normalizeVisualOptions(merged.visualOptions),
     };
   } catch {
     return { ...DEFAULT_PREFERENCES };
