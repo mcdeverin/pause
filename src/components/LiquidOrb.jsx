@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import BlobShape from "./BlobShape";
 
 export default function LiquidOrb({ theme, isBreathing, technique, size = 260 }) {
   const [scale, setScale] = useState(1.0);
   const [countdown, setCountdown] = useState(0);
   const [currentPhase, setCurrentPhase] = useState(null);
 
+  const isDayTheme = theme === "day";
   const baseSize = size;
+
+  const dayGradient = "radial-gradient(circle at 35% 35%, #4A7FA6 0%, #6BA888 100%)";
+  const nightGradient = "radial-gradient(circle at 35% 35%, rgba(74, 91, 140, 0.9) 0%, rgba(155, 142, 196, 0.7) 60%, rgba(155, 142, 196, 0.5) 100%)";
 
   useEffect(() => {
     if (!isBreathing || !technique) {
@@ -68,45 +71,73 @@ export default function LiquidOrb({ theme, isBreathing, technique, size = 260 })
   }, [isBreathing, technique]);
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: `${baseSize}px`,
-        height: `${baseSize}px`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "visible",
-      }}
-    >
-      {/* Liquid blob */}
+    <>
+      <style>{`
+        @keyframes liquidMorph {
+          0% {
+            border-radius: 60% 40% 70% 30% / 50% 60% 40% 70%;
+          }
+          25% {
+            border-radius: 50% 50% 60% 40% / 40% 70% 50% 60%;
+          }
+          50% {
+            border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%;
+          }
+          75% {
+            border-radius: 70% 30% 50% 50% / 30% 70% 60% 40%;
+          }
+          100% {
+            border-radius: 60% 40% 70% 30% / 50% 60% 40% 70%;
+          }
+        }
+
+        .liquid-blob {
+          animation: liquidMorph 8s ease-in-out infinite;
+        }
+      `}</style>
+
       <div
         style={{
-          position: "absolute",
-          inset: 0,
-          transform: `scale(${scale})`,
-          transition: "transform 0.95s ease-in-out",
+          position: "relative",
+          width: `${baseSize}px`,
+          height: `${baseSize}px`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <BlobShape theme={theme} />
-      </div>
-
-      {/* Countdown number - only show when breathing */}
-      {isBreathing && (
+        {/* Liquid blob */}
         <div
+          className="liquid-blob"
           style={{
             position: "absolute",
-            zIndex: 10,
-            fontSize: "32px",
-            fontWeight: 500,
-            color: "rgba(255, 255, 255, 0.95)",
-            fontFamily: "'Poppins', sans-serif",
-            textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+            width: `${baseSize}px`,
+            height: `${baseSize}px`,
+            background: isDayTheme ? dayGradient : nightGradient,
+            boxShadow: "none",
+            filter: "none",
+            transform: `scale(${scale})`,
+            transition: "transform 0.95s ease-in-out",
           }}
-        >
-          {countdown}
-        </div>
-      )}
-    </div>
+        />
+
+        {/* Countdown number - only show when breathing */}
+        {isBreathing && (
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 10,
+              fontSize: "32px",
+              fontWeight: 500,
+              color: "rgba(255, 255, 255, 0.95)",
+              fontFamily: "'Poppins', sans-serif",
+              textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            {countdown}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
