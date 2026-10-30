@@ -108,6 +108,51 @@
     }
   }
 
+  /* Decorative-only motion for the breathing visuals. None of it drives
+     breathing progress — the shared clock does that. */
+  @keyframes pauseSpin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes pauseDrift {
+    0% {
+      transform: translate3d(-6px, 2px, 0) scaleY(1);
+    }
+    50% {
+      transform: translate3d(6px, -3px, 0) scaleY(1.06);
+    }
+    100% {
+      transform: translate3d(-6px, 2px, 0) scaleY(1);
+    }
+  }
+
+  @keyframes pauseSway {
+    0% {
+      transform: rotate(-1.4deg);
+    }
+    50% {
+      transform: rotate(1.4deg);
+    }
+    100% {
+      transform: rotate(-1.4deg);
+    }
+  }
+
+  @keyframes pauseShimmer {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
