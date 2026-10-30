@@ -5,9 +5,9 @@ module.exports = {
   theme: {
   	extend: {
   		fontFamily: {
-  			sans: ['DM Sans', 'sans-serif'],
+  			sans: ['Poppins', 'sans-serif'],
   			nunito: ['var(--font-nunito)'],
-  			comfortaa: ['DM Sans', 'sans-serif'],
+  			comfortaa: ['Poppins', 'sans-serif'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

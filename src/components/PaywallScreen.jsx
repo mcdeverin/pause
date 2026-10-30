@@ -4,7 +4,7 @@ import LiquidOrb from "./LiquidOrb";
 import { getOfferings, purchasePackage, restorePurchases, checkEntitlement } from '../lib/revenuecat';
 import { PRODUCT_IDS, getLocalizedPrice, formatDailyPrice } from '../lib/pricing';
 
-const FONT = "'DM Sans', sans-serif";
+const FONT = "'Poppins', sans-serif";
 
 export default function PaywallScreen({ theme = "day", onClose, onPurchase, triggerCategory }) {
   const [selected, setSelected] = useState(PRODUCT_IDS.annual);
