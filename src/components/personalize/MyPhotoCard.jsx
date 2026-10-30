@@ -83,8 +83,8 @@ export default function MyPhotoCard({ theme, photo, zoom = 1, onPicked, onRemove
           lineHeight: 1.55,
         }}
       >
-        Preview your own photo behind the breathing visual. Drag the preview above to reposition it,
-        and use the adjustments below to dim or soften it.
+        Choose a photo that feels like you. Drag the preview above to reposition it, and use the
+        adjustments below to dim or soften it.
       </p>
 
       <input
@@ -116,7 +116,7 @@ export default function MyPhotoCard({ theme, photo, zoom = 1, onPicked, onRemove
             opacity: busy ? 0.7 : 1,
           }}
         >
-          {busy ? "preparing…" : photo ? "Change My Photo" : "Choose My Photo"}
+          {busy ? "preparing…" : photo ? "Change Photo" : "Choose a Photo"}
         </button>
 
         {photo && (

@@ -193,7 +193,7 @@ export function getBackgroundStyle(id, theme, customColor) {
 
 export function getBackgroundLabel(id, customColor) {
   if (id === CUSTOM_COLOR_ID) return customColor ? `Custom ${customColor}` : "Custom Color";
-  if (id === MY_PHOTO_ID) return "My Photo";
+  if (id === MY_PHOTO_ID) return "Your View";
   const found = getBackgroundOption(id) || BACKGROUNDS[0];
   return found.label;
 }

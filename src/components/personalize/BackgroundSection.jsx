@@ -67,7 +67,7 @@ export default function BackgroundSection({
         <PreviewCard
           theme={theme}
           compact
-          label="My Photo"
+          label="Your View"
           selected={draft.background === MY_PHOTO_ID}
           onSelect={() => onSelectBackground(MY_PHOTO_ID)}
           previewBackground={colors.track}
