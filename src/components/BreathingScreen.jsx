@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Info } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
+import InfoCard from "./InfoCard";
 import SessionTimerPill from "./SessionTimerPill";
 import { FONT, getColors } from "../lib/design";
 import BackgroundLayer from "./BackgroundLayer";
@@ -160,126 +160,30 @@ export default function BreathingScreen({
     >
       <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
 
-      {/* Top bar: timer + info */}
+      {/* Top bar: timer */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
-          gap: 12,
           minHeight: 44,
           padding: "0 16px",
         }}
       >
         <div style={{ minWidth: 84 }}>{showTimer && <SessionTimerPill seconds={timeRemaining} theme={theme} />}</div>
-
-        <button
-          type="button"
-          onClick={() => setShowInfo((value) => !value)}
-          aria-label="About this technique"
-          style={{
-            width: 44,
-            height: 44,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: colors.tertiary,
-          }}
-        >
-          <Info size={17} strokeWidth={2.2} />
-        </button>
       </div>
 
-      {/* Technique name */}
-      <p
-        style={{
-          margin: "4px 24px 0",
-          textAlign: "center",
-          fontFamily: FONT,
-          fontSize: "19px",
-          fontWeight: 700,
-          letterSpacing: "0.01em",
-          textTransform: "lowercase",
-          color: colors.text,
-          lineHeight: 1.35,
-        }}
-      >
-        {activeTechnique.name}
-      </p>
-
-      {/* Science fact */}
-      {showInfo && (
-        <div
-          ref={infoCardRef}
-          onClick={() => setShowInfo(false)}
-          style={{
-            position: "absolute",
-            top: "calc(env(safe-area-inset-top, 44px) + 104px)",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 30,
-            width: "calc(100vw - 48px)",
-            maxWidth: 300,
-            padding: "16px 20px",
-            borderRadius: 18,
-            background: colors.glass,
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: `1px solid ${colors.glassBorder}`,
-            cursor: "pointer",
-            maxHeight: infoMaxHeight ? `${infoMaxHeight}px` : undefined,
-            overflowY: "auto",
-            overscrollBehavior: "contain",
-            WebkitOverflowScrolling: "touch",
-          }}
-        >
-          <p
-            style={{
-              margin: 0,
-              fontFamily: FONT,
-              fontSize: "14px",
-              fontWeight: 500,
-              lineHeight: 1.65,
-              color: colors.text,
-              textAlign: "center",
-            }}
-          >
-            {activeTechnique.science}
-          </p>
-
-          {sourceUrl && (
-            <button
-              type="button"
-              onClick={(event) => {
-                // Tapping the source must not count as tapping the card closed.
-                event.stopPropagation();
-                window.open(sourceUrl, "_blank");
-              }}
-              style={{
-                display: "block",
-                margin: "6px auto 0",
-                minHeight: 32,
-                padding: "8px 8px 0",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: FONT,
-                fontSize: "12.5px",
-                fontWeight: 600,
-                letterSpacing: "0.01em",
-                color: colors.tertiary,
-                textDecoration: "underline",
-                textUnderlineOffset: "3px",
-              }}
-            >
-              View source ↗
-            </button>
-          )}
-        </div>
-      )}
+      {/* Technique name + research fact card */}
+      <div style={{ height: 52, flexShrink: 0 }} />
+      <InfoCard
+        cardRef={infoCardRef}
+        name={activeTechnique.name}
+        science={activeTechnique.science}
+        sourceUrl={sourceUrl}
+        colors={colors}
+        open={showInfo}
+        onToggle={() => setShowInfo((value) => !value)}
+        maxHeight={infoMaxHeight ? Math.max(72, infoMaxHeight - 66) : null}
+      />
 
       {/* Visualisation */}
       <div
