@@ -235,25 +235,37 @@ export default function BreathingScreen({
             WebkitBackdropFilter: "blur(20px)",
             border: `1px solid ${colors.glassBorder}`,
             cursor: "pointer",
+            display: "flex",
+            flexDirection: "column",
             maxHeight: infoMaxHeight ? `${infoMaxHeight}px` : undefined,
-            overflowY: "auto",
-            overscrollBehavior: "contain",
-            WebkitOverflowScrolling: "touch",
+            overflow: "hidden",
           }}
         >
-          <p
+          {/* Only the blurb scrolls when space runs short, so the source line
+              below is never clipped out of view. */}
+          <div
             style={{
-              margin: 0,
-              fontFamily: FONT,
-              fontSize: "14px",
-              fontWeight: 500,
-              lineHeight: 1.65,
-              color: colors.text,
-              textAlign: "center",
+              flex: 1,
+              minHeight: 0,
+              overflowY: "auto",
+              overscrollBehavior: "contain",
+              WebkitOverflowScrolling: "touch",
             }}
           >
-            {activeTechnique.science}
-          </p>
+            <p
+              style={{
+                margin: 0,
+                fontFamily: FONT,
+                fontSize: "14px",
+                fontWeight: 500,
+                lineHeight: 1.65,
+                color: colors.text,
+                textAlign: "center",
+              }}
+            >
+              {activeTechnique.science}
+            </p>
+          </div>
 
           {sourceUrl ? (
             <button
@@ -264,6 +276,7 @@ export default function BreathingScreen({
                 window.open(sourceUrl, "_blank");
               }}
               style={{
+                flexShrink: 0,
                 display: "flex",
                 alignItems: "center",
                 gap: 4,
@@ -289,6 +302,7 @@ export default function BreathingScreen({
             sourceTitle && (
               <p
                 style={{
+                  flexShrink: 0,
                   margin: "8px 0 0",
                   fontFamily: FONT,
                   fontSize: "12.5px",
