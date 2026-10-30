@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Check } from "lucide-react";
 import { FONT, getColors } from "../../lib/design";
 import {
   availableCollections,
@@ -110,25 +109,6 @@ export default function VisualGallery({ theme, value, optionsFor, onChange }) {
               >
                 {style.label}
               </span>
-              {selected && (
-                <span
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    top: 5,
-                    right: 5,
-                    width: 18,
-                    height: 18,
-                    borderRadius: 999,
-                    background: colors.accent,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Check size={12} strokeWidth={3.2} color={theme === "day" ? "#FFFFFF" : "#0F1E26"} />
-                </span>
-              )}
             </button>
           );
         })}
