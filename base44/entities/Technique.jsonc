@@ -1,4 +1,5 @@
 {
+  "name": "Technique",
   "type": "object",
   "properties": {
     "name": {
@@ -17,6 +18,12 @@
       "type": "string"
     },
     "difficulty": {
+      "type": "string"
+    },
+    "sourceLabel": {
+      "type": "string"
+    },
+    "sourceUrl": {
       "type": "string"
     }
   },
@@ -42,6 +49,5 @@
         "role": "admin"
       }
     }
-  },
-  "name": "Technique"
+  }
 }
