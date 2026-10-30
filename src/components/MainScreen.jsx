@@ -216,20 +216,6 @@ export default function MainScreen({
         />
       )}
 
-      <p
-        style={{
-          margin: showShortcuts ? "10px 0 0" : 0,
-          textAlign: "center",
-          fontFamily: FONT,
-          fontSize: "13.5px",
-          fontWeight: 600,
-          color: colors.tertiary,
-          padding: "0 32px",
-        }}
-      >
-        One minute. Just for you.
-      </p>
-
       {/* Hidden shortcuts leave a discreet way back — the orb already takes the
           freed space, so nothing sits empty. */}
       {!showShortcuts && (
