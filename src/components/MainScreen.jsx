@@ -10,7 +10,7 @@ const ORB_MAX = 300;
 export default function MainScreen({
   onTap,
   theme = "day",
-  onToggleTheme,
+  onOpenAbout,
   selectedCategory = "All",
   onCategoryChange,
   isPro = false,
@@ -64,14 +64,14 @@ export default function MainScreen({
           style={{
             margin: 0,
             fontFamily: FONT,
-            fontSize: "22px",
+            fontSize: "21px",
             fontWeight: 800,
-            letterSpacing: "0.16em",
+            letterSpacing: "0.01em",
             color: colors.text,
             lineHeight: 1,
           }}
         >
-          PAUSE
+          always pause.
         </p>
 
         <button
@@ -100,20 +100,35 @@ export default function MainScreen({
         </button>
       </div>
 
-      {/* Selected category */}
-      <p
-        style={{
-          margin: "10px 0 0",
-          textAlign: "center",
-          fontFamily: FONT,
-          fontSize: "15px",
-          fontWeight: 700,
-          letterSpacing: "0.02em",
-          color: colors.secondary,
-        }}
-      >
-        {categoryLabel}
-      </p>
+      {/* Brand heading */}
+      <div style={{ margin: "14px 32px 0", textAlign: "center" }}>
+        <p
+          style={{
+            margin: 0,
+            fontFamily: FONT,
+            fontSize: "23px",
+            fontWeight: 800,
+            letterSpacing: "-0.01em",
+            color: colors.text,
+            lineHeight: 1.25,
+          }}
+        >
+          Take a moment.
+        </p>
+        <p
+          style={{
+            margin: "6px 0 0",
+            fontFamily: FONT,
+            fontSize: "15px",
+            fontWeight: 500,
+            letterSpacing: "0.005em",
+            color: colors.secondary,
+            lineHeight: 1.45,
+          }}
+        >
+          Whenever you need one.
+        </p>
+      </div>
 
       {/* Orb + invitation */}
       <div
@@ -160,7 +175,7 @@ export default function MainScreen({
             color: colors.text,
           }}
         >
-          tap to breathe
+          Tap to pause
         </button>
       </div>
 
@@ -169,13 +184,13 @@ export default function MainScreen({
           margin: 0,
           textAlign: "center",
           fontFamily: FONT,
-          fontSize: "14px",
-          fontWeight: 500,
+          fontSize: "13.5px",
+          fontWeight: 600,
           color: colors.tertiary,
           padding: "0 32px",
         }}
       >
-        four guided breaths, about a minute
+        {categoryLabel} · about a minute
       </p>
 
       <AnimatePresence>
@@ -187,9 +202,9 @@ export default function MainScreen({
             onCategoryChange={onCategoryChange}
             isPro={isPro}
             onLockedCategoryTap={onLockedCategoryTap}
-            onToggleTheme={onToggleTheme}
             onOpenPersonalize={onOpenPersonalize}
             onOpenPausePlus={onOpenPausePlus}
+            onOpenAbout={onOpenAbout}
             onClose={() => setMenuOpen(false)}
           />
         )}

@@ -23,14 +23,14 @@ export default function Privacy() {
           <section>
             <h2 className="text-lg font-bold mb-3">Overview</h2>
             <p>
-              Work OnDeck LLC ("we," "us," or "our") operates the Pause mobile application. This Privacy Policy explains how we handle information when you use our app.
+              Work OnDeck LLC ("we," "us," or "our") operates the Always Pause mobile application. This Privacy Policy explains how we handle information when you use our app.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold mb-3">Information We Collect</h2>
             <p>
-              Pause is designed to be a minimal, privacy-respecting app. We collect only the following:
+              Always Pause is designed to be a minimal, privacy-respecting app. We collect only the following:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
               <li><strong>Usage Analytics:</strong> We collect anonymous, aggregated data about how the app is used — such as which breathing techniques are selected and how often the app is opened. This data cannot be used to identify you personally.</li>
@@ -49,7 +49,7 @@ export default function Privacy() {
           <section>
             <h2 className="text-lg font-bold mb-3">How We Use Your Information</h2>
             <p>
-              Anonymous usage data is used solely to improve the app experience — understanding which features are used most helps us make Pause better.
+              Anonymous usage data is used solely to improve the app experience — understanding which features are used most helps us make Always Pause better.
             </p>
           </section>
 
@@ -63,14 +63,14 @@ export default function Privacy() {
           <section>
             <h2 className="text-lg font-bold mb-3">Third Party Services</h2>
             <p>
-              Pause may use Apple's built-in App Analytics which collects anonymous usage data subject to Apple's own privacy policy.
+              Always Pause may use Apple's built-in App Analytics which collects anonymous usage data subject to Apple's own privacy policy.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold mb-3">Children's Privacy</h2>
             <p>
-              Pause is not directed at children under 13. We do not knowingly collect data from children under 13.
+              Always Pause is not directed at children under 13. We do not knowingly collect data from children under 13.
             </p>
           </section>
 

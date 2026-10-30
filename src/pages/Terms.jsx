@@ -23,35 +23,35 @@ export default function Terms() {
           <section>
             <h2 className="text-lg font-bold mb-3">Acceptance of Terms</h2>
             <p>
-              By downloading or using Pause, you agree to be bound by these Terms. If you do not agree, do not use the app.
+              By downloading or using Always Pause, you agree to be bound by these Terms. If you do not agree, do not use the app.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold mb-3">Use of the App</h2>
             <p>
-              Pause is a wellness tool designed to guide breathing exercises for stress relief and relaxation. It is intended for general wellness purposes only.
+              Always Pause is a wellness tool designed to guide breathing exercises for stress relief and relaxation. It is intended for general wellness purposes only.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold mb-3">Medical Disclaimer</h2>
             <p>
-              Pause is <strong>NOT</strong> a medical device and is <strong>NOT</strong> intended to diagnose, treat, cure, or prevent any medical condition. The breathing techniques provided are for general wellness purposes only. If you have any medical conditions — particularly respiratory or cardiovascular conditions — consult a qualified healthcare provider before using this app. Do not use Pause as a substitute for professional medical advice, diagnosis, or treatment.
+              Always Pause is <strong>NOT</strong> a medical device and is <strong>NOT</strong> intended to diagnose, treat, cure, or prevent any medical condition. The breathing techniques provided are for general wellness purposes only. If you have any medical conditions — particularly respiratory or cardiovascular conditions — consult a qualified healthcare provider before using this app. Do not use Always Pause as a substitute for professional medical advice, diagnosis, or treatment.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold mb-3">Intellectual Property</h2>
             <p>
-              All content in Pause, including design, text, animations, and the Pause name and brand, are the property of Work OnDeck LLC and are protected by applicable intellectual property laws.
+              All content in Always Pause, including design, text, animations, and the Always Pause name and brand, are the property of Work OnDeck LLC and are protected by applicable intellectual property laws.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold mb-3">In-App Purchases</h2>
             <p>
-              Pause may offer optional in-app purchases. All purchases are final and subject to Apple's App Store terms. We do not offer refunds outside of Apple's standard refund policy.
+              Always Pause may offer optional in-app purchases. All purchases are final and subject to Apple's App Store terms. We do not offer refunds outside of Apple's standard refund policy.
             </p>
           </section>
 
@@ -65,7 +65,7 @@ export default function Terms() {
           <section>
             <h2 className="text-lg font-bold mb-3">Limitation of Liability</h2>
             <p>
-              Work OnDeck LLC shall not be liable for any indirect, incidental, or consequential damages arising from your use of Pause. The app is provided "as is" without warranties of any kind.
+              Work OnDeck LLC shall not be liable for any indirect, incidental, or consequential damages arising from your use of Always Pause. The app is provided "as is" without warranties of any kind.
             </p>
           </section>
 

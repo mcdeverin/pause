@@ -1,16 +1,14 @@
 import { motion } from "framer-motion";
 import {
   Crosshair,
-  FileText,
   Flame,
+  Info,
   Layers,
   Leaf,
   Lock,
   Moon,
-  ShieldCheck,
   SlidersHorizontal,
   Sparkles,
-  Sun,
   X,
   Zap,
 } from "lucide-react";
@@ -67,9 +65,9 @@ export default function NavigationSheet({
   onCategoryChange,
   isPro,
   onLockedCategoryTap,
-  onToggleTheme,
   onOpenPersonalize,
   onOpenPausePlus,
+  onOpenAbout,
   onClose,
 }) {
   const colors = getColors(theme);
@@ -135,13 +133,13 @@ export default function NavigationSheet({
         >
           <span
             style={{
-              fontSize: "20px",
+              fontSize: "18px",
               fontWeight: 800,
-              letterSpacing: "0.16em",
+              letterSpacing: "0.01em",
               color: colors.text,
             }}
           >
-            PAUSE
+            always pause.
           </span>
           <button
             type="button"
@@ -203,45 +201,26 @@ export default function NavigationSheet({
 
           <SheetRow
             theme={theme}
-            icon={theme === "day" ? Sun : Moon}
-            label={theme === "day" ? "Light appearance" : "Dark appearance"}
-            onClick={onToggleTheme}
-            trailing={
-              <span style={{ fontSize: "13px", fontWeight: 600, color: colors.tertiary }}>
-                {theme === "day" ? "tap for dark" : "tap for light"}
-              </span>
-            }
-          />
-
-          <SheetRow
-            theme={theme}
-            icon={ShieldCheck}
-            label="Privacy"
-            onClick={() => window.open("https://alwayspause.com/privacy", "_blank")}
-          />
-
-          <SheetRow
-            theme={theme}
-            icon={FileText}
-            label="Terms"
-            onClick={() =>
-              window.open(
-                "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
-                "_blank"
-              )
-            }
-          />
-
-          <div style={{ height: 1, margin: "12px 14px", background: colors.border }} />
-
-          <SheetRow
-            theme={theme}
             icon={Sparkles}
-            label={isPro ? "Pause+ · manage" : "Unlock Pause+"}
+            label={isPro ? "Always Pause+ · manage" : "Unlock Always Pause+"}
             accent={!isPro}
             onClick={() => {
               onClose();
               onOpenPausePlus();
+            }}
+          />
+        </div>
+
+        {/* Pinned footer */}
+        <div style={{ padding: "0 10px" }}>
+          <div style={{ height: 1, margin: "4px 14px 8px", background: colors.border }} />
+          <SheetRow
+            theme={theme}
+            icon={Info}
+            label="About & Legal"
+            onClick={() => {
+              onClose();
+              onOpenAbout();
             }}
           />
         </div>

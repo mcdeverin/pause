@@ -38,7 +38,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
 
   const ctaLabel = () => {
     if (loading) return '· processing ·';
-    if (selected === PRODUCT_IDS.lifetime) return 'get pause+ forever';
+    if (selected === PRODUCT_IDS.lifetime) return 'get always pause+ forever';
     return 'start 7-day free trial';
   };
 
@@ -298,7 +298,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             textAlign: "center",
             lineHeight: 1.25,
           }}>
-            unlock all of pause+
+            Make every pause your own.
           </p>
 
           {/* 20pt gap */}

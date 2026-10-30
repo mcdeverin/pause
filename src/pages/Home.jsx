@@ -5,6 +5,7 @@ import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
 import PaywallScreen from "../components/PaywallScreen";
 import PersonalizePanel from "../components/personalize/PersonalizePanel";
+import AboutLegalSheet from "../components/AboutLegalSheet";
 import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
 import { initRevenueCat, checkEntitlement } from "../lib/revenuecat";
 import { loadPreferences, savePreferences } from "../lib/preferences";
@@ -20,6 +21,7 @@ export default function Home() {
   const [showSupport, setShowSupport] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showPersonalize, setShowPersonalize] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [pendingTechnique, setPendingTechnique] = useState(null);
   const [isPro, setIsPro] = useState(false);
   const [theme, setTheme] = useState("day");
@@ -98,7 +100,7 @@ export default function Home() {
             onTap={() => startBreathing()}
             onSupportClick={() => setShowSupport(true)}
             theme={theme}
-            onToggleTheme={() => applyTheme(theme === "day" ? "night" : "day")}
+            onOpenAbout={() => setShowAbout(true)}
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
             onHapticsChange={() => setHapticsEnabled(!hapticsEnabled)}
@@ -156,6 +158,13 @@ export default function Home() {
               }
             }}
           />
+        )}
+      </AnimatePresence>
+
+      {/* About & Legal */}
+      <AnimatePresence>
+        {showAbout && (
+          <AboutLegalSheet key="about" theme={theme} onClose={() => setShowAbout(false)} />
         )}
       </AnimatePresence>
 
