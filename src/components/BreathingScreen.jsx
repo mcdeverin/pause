@@ -54,6 +54,14 @@ export default function BreathingScreen({
 
   const colors = getColors(theme);
 
+  // Only a real stored http(s) link is shown — never a placeholder.
+  const sourceUrl = useMemo(() => {
+    const raw = activeTechnique.sourceUrl;
+    if (typeof raw !== "string") return null;
+    const trimmed = raw.trim();
+    return /^https?:\/\//i.test(trimmed) ? trimmed : null;
+  }, [activeTechnique.sourceUrl]);
+
   const [showInfo, setShowInfo] = useState(false);
   const [infoMaxHeight, setInfoMaxHeight] = useState(null);
 
@@ -241,6 +249,35 @@ export default function BreathingScreen({
           >
             {activeTechnique.science}
           </p>
+
+          {sourceUrl && (
+            <button
+              type="button"
+              onClick={(event) => {
+                // Tapping the source must not count as tapping the card closed.
+                event.stopPropagation();
+                window.open(sourceUrl, "_blank");
+              }}
+              style={{
+                display: "block",
+                margin: "6px auto 0",
+                minHeight: 32,
+                padding: "8px 8px 0",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: FONT,
+                fontSize: "12.5px",
+                fontWeight: 600,
+                letterSpacing: "0.01em",
+                color: colors.tertiary,
+                textDecoration: "underline",
+                textUnderlineOffset: "3px",
+              }}
+            >
+              View source ↗
+            </button>
+          )}
         </div>
       )}
 
