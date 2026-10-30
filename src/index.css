@@ -90,21 +90,15 @@
 }
 
 @layer base {
-  @keyframes liquidMorph {
+  @keyframes liquidDrift {
     0% {
-      border-radius: 60% 40% 70% 30% / 50% 60% 40% 70%;
-    }
-    25% {
-      border-radius: 50% 50% 60% 40% / 40% 70% 50% 60%;
+      transform: rotate(0deg) scale(1);
     }
     50% {
-      border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%;
-    }
-    75% {
-      border-radius: 70% 30% 50% 50% / 30% 70% 60% 40%;
+      transform: rotate(180deg) scale(1.04);
     }
     100% {
-      border-radius: 60% 40% 70% 30% / 50% 60% 40% 70%;
+      transform: rotate(360deg) scale(1);
     }
   }
 
@@ -120,6 +114,11 @@
     overflow: hidden;
     overscroll-behavior: none;
   }
+}
+
+.liquid-blob-shape {
+  animation: liquidDrift 38s ease-in-out infinite;
+  transform-origin: 50% 50%;
 }
 
 /* Custom selection color */

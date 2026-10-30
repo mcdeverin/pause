@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Info } from "lucide-react";
 import { motion } from "framer-motion";
+import BlobShape from "./BlobShape";
 
 const TOTAL_CYCLES = 4;
 
@@ -230,15 +231,12 @@ function BreathingScreenContent({ technique, phases, labels, onDone, theme, hapt
               position: "absolute",
               width: "100%",
               height: "100%",
-              background: theme === "day"
-                ? "radial-gradient(circle at 35% 35%, #4A7FA6 0%, #6BA888 100%)"
-                : "radial-gradient(circle at 35% 35%, rgba(74, 91, 140, 0.9) 0%, rgba(155, 142, 196, 0.7) 60%, rgba(155, 142, 196, 0.5) 100%)",
-              borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
               transform: `scale(${orbScale})`,
               transition: "transform 0.95s ease-in-out",
-              animation: "liquidMorph 8s ease-in-out infinite",
             }}
-          />
+          >
+            <BlobShape theme={theme} />
+          </div>
         </div>
       </div>
 
