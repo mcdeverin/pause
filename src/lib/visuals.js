@@ -65,15 +65,6 @@ export const PALETTES = {
       { id: "sage", label: "Sage", tint: "#DFEDE2", rim: "#F3FBF5", edge: "#9DB4A4" },
     ],
   },
-  glass: {
-    options: [
-      { id: "clear", label: "Clear", tint: "#E2EEF4", rim: "#FFFFFF", edge: "#96AFC0" },
-      { id: "cool", label: "Cool", tint: "#CEE4F7", rim: "#F4FAFF", edge: "#82A6C6" },
-      { id: "smoke", label: "Smoke", tint: "#D6DAE0", rim: "#F8F9FB", edge: "#8C96A4" },
-      { id: "rose", label: "Rose", tint: "#F6DEE8", rim: "#FFF4F8", edge: "#C6A2AE" },
-      { id: "sage", label: "Sage", tint: "#DCEEE2", rim: "#F6FDF8", edge: "#9DB4A4" },
-    ],
-  },
   aurora: {
     options: [
       { id: "aurora", label: "Aurora", colours: ["#5FD3C4", "#6FA8F0", "#B79CF0", "#8FE3D0"], haze: "#0E2230" },
@@ -158,18 +149,6 @@ export const VISUAL_STYLES = [
       SLIDER("outline", "Outline intensity", 60, "How luminous the rim reads."),
       PALETTE("tint", "Glass tint", "crystal", "clear"),
       SLIDER("glow", "Soft glow", 30, "A soft light around the sphere."),
-    ],
-  },
-  {
-    id: "glass",
-    label: "Glass",
-    collection: "classics",
-    description: "Liquid glass that bends the light.",
-    controls: [
-      SLIDER("transparency", "Transparency", 55, "Higher keeps what's behind it visible."),
-      SLIDER("rim", "Rim intensity", 65, "How bright the wet edge reads."),
-      SLIDER("glow", "Soft glow", 30, "A gentle light spilling past the glass."),
-      PALETTE("tint", "Glass tint", "glass", "clear"),
     ],
   },
   {
