@@ -10,6 +10,8 @@ import VisualGallery from "./VisualGallery";
 import FineTuneSection from "./FineTuneSection";
 import BackgroundSection from "./BackgroundSection";
 import AdjustmentSlider from "./AdjustmentSlider";
+import RestoreDefaultsButton from "./RestoreDefaultsButton";
+import { restoreVisualDefaults, visualSettingsAtDefaults } from "../../lib/personalizeDefaults";
 
 function SectionLabel({ children, theme, isFirst }) {
   const colors = getColors(theme);
@@ -169,6 +171,11 @@ export default function PersonalizePanel({
     setPreviewOpen(true);
   };
 
+  const restoreDefaults = () => {
+    setDraft((current) => restoreVisualDefaults(current));
+    setJustSaved(false);
+  };
+
   const handleSave = () => {
     onSave(draft);
     setJustSaved(true);
@@ -304,6 +311,12 @@ export default function PersonalizePanel({
               Show preview
             </button>
           )}
+
+          <RestoreDefaultsButton
+            theme={draftTheme}
+            disabled={visualSettingsAtDefaults(draft)}
+            onClick={restoreDefaults}
+          />
 
           {/* Breathing visuals */}
           <SectionLabel theme={draftTheme}>Breathing visuals</SectionLabel>
