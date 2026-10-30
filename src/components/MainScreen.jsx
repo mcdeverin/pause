@@ -51,7 +51,6 @@ export default function MainScreen({
   }, [measureOrb]);
 
   const colors = getColors(theme);
-  const categoryLabel = selectedCategory === "All" ? "all breaths" : selectedCategory.toLowerCase();
 
   return (
     <div
@@ -228,7 +227,7 @@ export default function MainScreen({
           padding: "0 32px",
         }}
       >
-        {categoryLabel} · about a minute
+        One minute. Just for you.
       </p>
 
       {/* Hidden shortcuts leave a discreet way back — the orb already takes the
