@@ -1,10 +1,13 @@
-import { getColors } from "../../lib/design";
+import { DEFAULT_VISUAL_COLORS, isHexColor } from "../../lib/visualColors";
 
-// The original Always Pause orb, unchanged: same teal-to-sage gradient, same
-// organic morph, same breathing travel (resting scale 1 → 1.35 at full lungs).
-export default function OriginalOrb({ breath = 0, theme = "day", reducedMotion = false, animate = true }) {
-  const colors = getColors(theme);
+// The original Always Pause orb, unchanged: same organic morph, same breathing
+// travel (resting scale 1 → 1.35 at full lungs). Only its two gradient colours
+// are customizable, and they belong to the visual alone — the background and the
+// Light / Dark appearance never tint it.
+export default function OriginalOrb({ breath = 0, options = {}, reducedMotion = false, animate = true }) {
   const scale = 1 + 0.35 * breath;
+  const from = isHexColor(options.colorFrom) ? options.colorFrom : DEFAULT_VISUAL_COLORS.orb.colorFrom;
+  const to = isHexColor(options.colorTo) ? options.colorTo : DEFAULT_VISUAL_COLORS.orb.colorTo;
 
   return (
     <div
@@ -21,7 +24,7 @@ export default function OriginalOrb({ breath = 0, theme = "day", reducedMotion =
         style={{
           width: "100%",
           height: "100%",
-          background: colors.orbGradient,
+          background: `radial-gradient(circle at 35% 35%, ${from} 0%, ${to} 100%)`,
           borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
           transform: `scale(${scale})`,
           transition: reducedMotion ? "none" : "transform 0.12s linear",

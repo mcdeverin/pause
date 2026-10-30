@@ -3,6 +3,7 @@ import { ChevronDown } from "lucide-react";
 import { FONT, getColors } from "../../lib/design";
 import { PALETTES, getStyle } from "../../lib/visuals";
 import AdjustmentSlider from "./AdjustmentSlider";
+import SpectrumColorSlider from "./SpectrumColorSlider";
 
 function swatchBackground(option) {
   if (!option) return "transparent";
@@ -77,6 +78,13 @@ export default function FineTuneSection({ theme, styleId, options, onChange }) {
 
   if (style.controls.length === 0) return null;
 
+  // Reset only ever restores this visual's own original colours.
+  const colourControls = style.controls.filter((control) => control.type === "color");
+  const customised = colourControls.some((control) => options[control.key] !== control.default);
+  const resetColours = () => {
+    colourControls.forEach((control) => onChange(control.key, control.default));
+  };
+
   return (
     <div
       style={{
@@ -129,7 +137,15 @@ export default function FineTuneSection({ theme, styleId, options, onChange }) {
       {open && (
         <div style={{ padding: "0 14px 14px" }}>
           {style.controls.map((control) =>
-            control.type === "palette" ? (
+            control.type === "color" ? (
+              <SpectrumColorSlider
+                key={control.key}
+                label={control.label}
+                value={options[control.key]}
+                theme={theme}
+                onChange={(next) => onChange(control.key, next)}
+              />
+            ) : control.type === "palette" ? (
               <PaletteControl
                 key={control.key}
                 control={control}
@@ -149,6 +165,33 @@ export default function FineTuneSection({ theme, styleId, options, onChange }) {
                 onChange={(next) => onChange(control.key, next)}
               />
             )
+          )}
+
+          {customised && (
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}>
+              <button
+                type="button"
+                onClick={resetColours}
+                style={{
+                  minHeight: 44,
+                  padding: "8px 2px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: FONT,
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  letterSpacing: "0.01em",
+                  color: colors.tertiary,
+                  textDecoration: "underline",
+                  textDecorationThickness: "1px",
+                  textUnderlineOffset: 3,
+                  opacity: 0.85,
+                }}
+              >
+                Reset
+              </button>
+            </div>
           )}
         </div>
       )}

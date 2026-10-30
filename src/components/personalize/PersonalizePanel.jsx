@@ -314,6 +314,7 @@ export default function PersonalizePanel({
             onChange={(id) => update("visual", id)}
           />
           <FineTuneSection
+            key={draft.visual}
             theme={draftTheme}
             styleId={draft.visual}
             options={resolveOptions(draft.visual, draft.visualOptions?.[draft.visual])}

@@ -1,4 +1,5 @@
 import { getColors } from "../lib/design";
+import { DEFAULT_VISUAL_COLORS, isHexColor } from "../lib/visualColors";
 
 // Breathing Ring — an alternative visualisation driven by the same breath state
 // as the organic orb (fill 0 = empty lungs, 1 = full).
@@ -8,10 +9,15 @@ const STROKE = 12;
 const RADIUS = CENTER - STROKE - 10;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-export default function BreathingRing({ theme, fill = 0, label, showLabel = false, reducedMotion = false }) {
+export default function BreathingRing({ theme, options = {}, fill = 0, label, showLabel = false, reducedMotion = false }) {
   const colors = getColors(theme);
   const clamped = Math.min(Math.max(fill, 0), 1);
   const offset = CIRCUMFERENCE * (1 - clamped);
+
+  // The outline's two colours are the ring's own — never the background's or the
+  // appearance's. The empty track stays a neutral that reads on any canvas.
+  const ringFrom = isHexColor(options.colorFrom) ? options.colorFrom : DEFAULT_VISUAL_COLORS.ring.colorFrom;
+  const ringTo = isHexColor(options.colorTo) ? options.colorTo : DEFAULT_VISUAL_COLORS.ring.colorTo;
 
   return (
     <div

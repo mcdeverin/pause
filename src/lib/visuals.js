@@ -2,6 +2,8 @@
 // material and its own fine-tuning controls. Everything here is data only — the
 // shared breathing clock stays the single source of breathing progress.
 
+import { DEFAULT_VISUAL_COLORS, isHexColor } from "./visualColors";
+
 export const COLLECTIONS = [
   { id: "classics", label: "Classics" },
   { id: "nature", label: "Nature" },
@@ -110,6 +112,14 @@ const PALETTE = (key, label, palette, def) => ({
   default: def,
 });
 
+// One of the two gradient colours, chosen on a spectrum slider.
+const COLOR = (key, label, def) => ({
+  key,
+  type: "color",
+  label,
+  default: def,
+});
+
 // Only styles listed here are selectable — nothing unfinished is offered.
 export const VISUAL_STYLES = [
   {
@@ -117,39 +127,34 @@ export const VISUAL_STYLES = [
     label: "Original",
     collection: "classics",
     description: "The original shifting orb.",
-    controls: [],
+    controls: [
+      COLOR("colorFrom", "First color", DEFAULT_VISUAL_COLORS.orb.colorFrom),
+      COLOR("colorTo", "Second color", DEFAULT_VISUAL_COLORS.orb.colorTo),
+    ],
   },
   {
     id: "ring",
     label: "Ring",
     collection: "classics",
     description: "A ring that fills with your breath.",
-    controls: [],
+    controls: [
+      COLOR("colorFrom", "First color", DEFAULT_VISUAL_COLORS.ring.colorFrom),
+      COLOR("colorTo", "Second color", DEFAULT_VISUAL_COLORS.ring.colorTo),
+    ],
   },
   {
     id: "bubble",
     label: "Bubble",
     collection: "classics",
     description: "Iridescent soap bubble.",
-    controls: [
-      SLIDER("transparency", "Transparency", 60, "Higher keeps the centre clearer."),
-      SLIDER("rim", "Rim intensity", 55, "How defined the bubble's edge is."),
-      SLIDER("iridescence", "Iridescence", 70, "Strength of the shifting pastel rim."),
-      SLIDER("glow", "Soft glow", 35, "A gentle halo around the bubble."),
-      PALETTE("palette", "Color palette", "bubble", "default"),
-    ],
+    controls: [],
   },
   {
     id: "crystal",
     label: "Crystal",
     collection: "classics",
     description: "Faceted glass sphere.",
-    controls: [
-      SLIDER("transparency", "Transparency", 55, "Higher keeps the background visible."),
-      SLIDER("outline", "Outline intensity", 60, "How luminous the rim reads."),
-      PALETTE("tint", "Glass tint", "crystal", "clear"),
-      SLIDER("glow", "Soft glow", 30, "A soft light around the sphere."),
-    ],
+    controls: [],
   },
   {
     id: "leaves",
@@ -262,6 +267,10 @@ export function resolveOptions(styleId, raw) {
     if (control.type === "palette") {
       resolved[control.key] = paletteOption(control.palette, source[control.key])
         ? (paletteOption(control.palette, source[control.key]).id)
+        : control.default;
+    } else if (control.type === "color") {
+      resolved[control.key] = isHexColor(source[control.key])
+        ? source[control.key].trim()
         : control.default;
     } else {
       resolved[control.key] = Math.round(
