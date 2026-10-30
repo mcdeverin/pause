@@ -62,18 +62,18 @@ export default function Home() {
       .catch(() => {});
   }, []);
 
-  const updatePreference = useCallback((key, value) => {
-    setPreferences((previous) => {
-      const next = { ...previous, [key]: value };
-      savePreferences(next);
-      return next;
-    });
-  }, []);
-
   const applyTheme = useCallback((nextTheme) => {
     setTheme(nextTheme);
     localStorage.setItem("pauseTheme", nextTheme);
   }, []);
+
+  // Personalization is drafted inside the panel and only committed here on save,
+  // so closing without saving leaves the stored preferences untouched.
+  const commitPreferences = useCallback((nextPreferences, nextTheme) => {
+    setPreferences(nextPreferences);
+    savePreferences(nextPreferences);
+    applyTheme(nextTheme);
+  }, [applyTheme]);
 
   const beginSession = useCallback((chosenTechnique, moment) => {
     sessionMomentRef.current = moment || null;
@@ -208,8 +208,7 @@ export default function Home() {
             key="personalize"
             theme={theme}
             prefs={preferences}
-            onChange={updatePreference}
-            onThemeChange={applyTheme}
+            onSave={commitPreferences}
             onClose={() => setShowPersonalize(false)}
           />
         )}
