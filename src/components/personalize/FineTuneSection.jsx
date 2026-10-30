@@ -81,7 +81,7 @@ export default function FineTuneSection({ theme, styleId, options, onChange }) {
   // Reset only ever restores this visual's own original colours.
   const colourControls = style.controls.filter((control) => control.type === "color");
   const customised = colourControls.some((control) => options[control.key] !== control.default);
-  const resetColours = () => {
+  const revertColours = () => {
     colourControls.forEach((control) => onChange(control.key, control.default));
   };
 
@@ -95,39 +95,91 @@ export default function FineTuneSection({ theme, styleId, options, onChange }) {
         overflow: "hidden",
       }}
     >
-      <button
-        type="button"
-        onClick={() => setOpen((current) => !current)}
-        aria-expanded={open}
+      <div
         style={{
-          width: "100%",
-          minHeight: 50,
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
-          gap: 10,
-          padding: "12px 14px",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          fontFamily: FONT,
-          textAlign: "left",
+          gap: 4,
+          minHeight: 50,
+          padding: "0 10px 0 14px",
         }}
       >
-        <span style={{ fontSize: "14.5px", fontWeight: 700, color: colors.text }}>
-          Customize colors
-        </span>
-        <ChevronDown
-          size={18}
-          strokeWidth={2.2}
-          color={colors.secondary}
+        <button
+          type="button"
+          onClick={() => setOpen((current) => !current)}
+          aria-expanded={open}
           style={{
-            flexShrink: 0,
-            transform: open ? "rotate(180deg)" : "none",
-            transition: "transform 0.2s ease",
+            flex: 1,
+            minHeight: 44,
+            display: "flex",
+            alignItems: "center",
+            padding: "12px 0",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontFamily: FONT,
+            textAlign: "left",
+            fontSize: "14.5px",
+            fontWeight: 700,
+            color: colors.text,
           }}
-        />
-      </button>
+        >
+          Colors
+        </button>
+
+        {open && customised && (
+          <button
+            type="button"
+            onClick={revertColours}
+            style={{
+              minHeight: 44,
+              padding: "0 4px",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontFamily: FONT,
+              fontSize: "12.5px",
+              fontWeight: 600,
+              letterSpacing: "0.01em",
+              color: colors.tertiary,
+              textDecoration: "underline",
+              textDecorationThickness: "1px",
+              textUnderlineOffset: 3,
+            }}
+          >
+            Revert
+          </button>
+        )}
+
+        <button
+          type="button"
+          onClick={() => setOpen((current) => !current)}
+          aria-expanded={open}
+          aria-label={open ? "Collapse colors" : "Expand colors"}
+          style={{
+            width: 44,
+            height: 44,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+          }}
+        >
+          <ChevronDown
+            size={18}
+            strokeWidth={2.2}
+            color={colors.secondary}
+            style={{
+              flexShrink: 0,
+              transform: open ? "rotate(180deg)" : "none",
+              transition: "transform 0.2s ease",
+            }}
+          />
+        </button>
+      </div>
 
       {open && (
         <div style={{ padding: "0 14px 14px" }}>
@@ -160,33 +212,6 @@ export default function FineTuneSection({ theme, styleId, options, onChange }) {
                 onChange={(next) => onChange(control.key, next)}
               />
             )
-          )}
-
-          {customised && (
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}>
-              <button
-                type="button"
-                onClick={resetColours}
-                style={{
-                  minHeight: 44,
-                  padding: "8px 2px",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: FONT,
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  letterSpacing: "0.01em",
-                  color: colors.tertiary,
-                  textDecoration: "underline",
-                  textDecorationThickness: "1px",
-                  textUnderlineOffset: 3,
-                  opacity: 0.85,
-                }}
-              >
-                Reset
-              </button>
-            </div>
           )}
         </div>
       )}
