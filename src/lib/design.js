@@ -60,6 +60,9 @@ const DAY = {
   glassBorder: "rgba(34, 34, 34, 0.07)",
   scrim: "rgba(24, 24, 24, 0.26)",
   sheet: "#FFFFFF",
+  pill: "rgba(255, 255, 255, 0.50)",
+  pillBorder: "rgba(0, 0, 0, 0.12)",
+  pillText: "#9A9A9A",
   ringFrom: "#5B9E9A",
   ringTo: "#8FBFA8",
   orbGradient:
@@ -79,6 +82,9 @@ const NIGHT = {
   glassBorder: "rgba(245, 245, 242, 0.12)",
   scrim: "rgba(6, 10, 16, 0.52)",
   sheet: "#131A23",
+  pill: "rgba(255, 255, 255, 0.08)",
+  pillBorder: "rgba(255, 255, 255, 0.18)",
+  pillText: "#B4B4AF",
   ringFrom: "#7FB6C4",
   ringTo: "#9CC7B4",
   orbGradient:
