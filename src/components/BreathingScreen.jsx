@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { ArrowUpRight, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import SessionTimerPill from "./SessionTimerPill";
+import TechniqueInfoCard from "./TechniqueInfoCard";
 import { FONT, getColors } from "../lib/design";
 import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
@@ -217,109 +218,17 @@ export default function BreathingScreen({
         {activeTechnique.name}
       </p>
 
-      {/* Science fact */}
+      {/* Science fact + source */}
       {showInfo && (
-        <div
-          ref={infoCardRef}
-          onClick={() => setShowInfo(false)}
-          style={{
-            position: "absolute",
-            top: "calc(env(safe-area-inset-top, 44px) + 104px)",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 30,
-            width: "calc(100vw - 48px)",
-            maxWidth: 300,
-            padding: "16px 20px",
-            borderRadius: 18,
-            background: colors.glass,
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: `1px solid ${colors.glassBorder}`,
-            cursor: "pointer",
-            display: "flex",
-            flexDirection: "column",
-            maxHeight: infoMaxHeight ? `${infoMaxHeight}px` : undefined,
-            overflow: "hidden",
-          }}
-        >
-          {/* Only the blurb scrolls when space runs short, so the source line
-              below is never clipped out of view. */}
-          <div
-            style={{
-              flex: 1,
-              minHeight: 0,
-              overflowY: "auto",
-              overscrollBehavior: "contain",
-              WebkitOverflowScrolling: "touch",
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                fontFamily: FONT,
-                fontSize: "14px",
-                fontWeight: 500,
-                lineHeight: 1.65,
-                color: colors.text,
-                textAlign: "center",
-              }}
-            >
-              {activeTechnique.science}
-            </p>
-          </div>
-
-          {sourceUrl ? (
-            <button
-              type="button"
-              onClick={(event) => {
-                // Tapping the source must not count as tapping the card closed.
-                event.stopPropagation();
-                window.open(sourceUrl, "_blank");
-              }}
-              style={{
-                flexShrink: 0,
-                display: "flex",
-                alignItems: "center",
-                gap: 4,
-                width: "fit-content",
-                margin: "8px auto 0",
-                padding: "6px 0",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: FONT,
-                fontSize: "12.5px",
-                fontWeight: 600,
-                letterSpacing: "0.01em",
-                color: colors.text,
-              }}
-            >
-              <span style={{ borderBottom: `1px dotted ${colors.tertiary}`, paddingBottom: 2 }}>
-                View source
-              </span>
-              <ArrowUpRight size={12} strokeWidth={2.4} />
-            </button>
-          ) : (
-            sourceTitle && (
-              <p
-                style={{
-                  flexShrink: 0,
-                  margin: "8px 0 0",
-                  fontFamily: FONT,
-                  fontSize: "12.5px",
-                  fontWeight: 500,
-                  letterSpacing: "0.005em",
-                  lineHeight: 1.5,
-                  color: colors.tertiary,
-                  textAlign: "center",
-                }}
-              >
-                Source: {sourceTitle}
-              </p>
-            )
-          )}
-        </div>
+        <TechniqueInfoCard
+          cardRef={infoCardRef}
+          science={activeTechnique.science}
+          sourceUrl={sourceUrl}
+          sourceLabel={sourceTitle}
+          theme={theme}
+          maxHeight={infoMaxHeight}
+          onClose={() => setShowInfo(false)}
+        />
       )}
 
       {/* Visualisation */}
