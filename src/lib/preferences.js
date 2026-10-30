@@ -3,7 +3,7 @@
 
 import { clampBlur, clampDim, clampPhotoOffset, clampPhotoZoom } from "./background";
 import { DEFAULT_CUSTOM_COLOR } from "./design";
-import { normalizeVisualOptions } from "./visuals";
+import { isStyleSelectable, normalizeVisualOptions } from "./visuals";
 
 const STORAGE_KEY = "pausePreferences";
 
@@ -45,6 +45,8 @@ export function loadPreferences() {
           : DEFAULT_CUSTOM_COLOR,
       // Selections saved before the collection existed simply have no options.
       visualOptions: normalizeVisualOptions(merged.visualOptions),
+      // A style whose collection isn't offered right now falls back to Original.
+      visual: isStyleSelectable(merged.visual) ? merged.visual : DEFAULT_PREFERENCES.visual,
     };
   } catch {
     return { ...DEFAULT_PREFERENCES };

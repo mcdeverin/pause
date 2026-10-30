@@ -1,19 +1,32 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { FONT, getColors } from "../../lib/design";
-import { COLLECTIONS, collectionForStyle, getStyle, stylesInCollection } from "../../lib/visuals";
+import {
+  availableCollections,
+  collectionForStyle,
+  getStyle,
+  isCollectionVisible,
+  stylesInCollection,
+} from "../../lib/visuals";
 import VisualThumb from "../visuals/VisualThumb";
 
 // The breathing visual gallery: collection filters and small thumbnails. Only
 // styles that exist here are listed, so nothing unfinished can be picked.
 export default function VisualGallery({ theme, value, optionsFor, onChange }) {
   const colors = getColors(theme);
-  const [collection, setCollection] = useState(() => collectionForStyle(value));
+  const collections = availableCollections();
+  const [collection, setCollection] = useState(() => {
+    const saved = collectionForStyle(value);
+    // A saved style from a collection that isn't offered now falls back to the
+    // first collection that is, so the grid is never empty.
+    return isCollectionVisible(saved) ? saved : collections[0].id;
+  });
   const styles = stylesInCollection(collection);
   const active = getStyle(value);
 
   return (
     <div>
+      {collections.length > 1 && (
       <div
         style={{
           display: "flex",
@@ -24,7 +37,7 @@ export default function VisualGallery({ theme, value, optionsFor, onChange }) {
           margin: "0 -2px",
         }}
       >
-        {COLLECTIONS.map((entry) => {
+        {collections.map((entry) => {
           const selected = entry.id === collection;
           return (
             <button
@@ -53,8 +66,16 @@ export default function VisualGallery({ theme, value, optionsFor, onChange }) {
           );
         })}
       </div>
+      )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginTop: 12 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 8,
+          marginTop: collections.length > 1 ? 12 : 0,
+        }}
+      >
         {styles.map((style) => {
           const selected = style.id === value;
           return (

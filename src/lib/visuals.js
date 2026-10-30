@@ -10,6 +10,11 @@ export const COLLECTIONS = [
   { id: "sports", label: "Sports & Focus" },
 ];
 
+// Collections the gallery offers right now. The remaining styles stay in the
+// registry above, so nothing saved breaks — they just aren't selectable until
+// their collection is added back here.
+const VISIBLE_COLLECTIONS = ["classics"];
+
 export const PALETTES = {
   bubble: {
     options: [
@@ -218,6 +223,20 @@ export function stylesInCollection(collectionId) {
 
 export function collectionForStyle(id) {
   return getStyle(id).collection;
+}
+
+export function isCollectionVisible(collectionId) {
+  return VISIBLE_COLLECTIONS.includes(collectionId);
+}
+
+export function availableCollections() {
+  return COLLECTIONS.filter((entry) => isCollectionVisible(entry.id));
+}
+
+// A style is only offered while its collection is visible.
+export function isStyleSelectable(id) {
+  const style = VISUAL_STYLES.find((entry) => entry.id === id);
+  return Boolean(style && isCollectionVisible(style.collection));
 }
 
 export function paletteOption(paletteId, optionId) {
