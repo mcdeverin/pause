@@ -110,7 +110,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                       fontFamily: "'Poppins', sans-serif",
                       fontSize: "13px",
                       letterSpacing: "0.005em",
-                      fontWeight: isSelected ? 600 : 400,
+                      fontWeight: isSelected ? 700 : 500,
                       color: isLocked ? lockedColor : baseColor,
                     }}
                   >
@@ -230,7 +230,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                     fontFamily: "'Poppins', sans-serif",
                     fontSize: "12px",
                     letterSpacing: "0.005em",
-                    fontWeight: 400,
+                    fontWeight: 500,
                     color: isDayTheme ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.55)",
                   }}
                 >
@@ -257,7 +257,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
                   fontFamily: "'Poppins', sans-serif",
                   fontSize: "11px",
                   letterSpacing: "0.1em",
-                  fontWeight: isPro ? 300 : 400,
+                  fontWeight: isPro ? 500 : 700,
                   color: isPro
                     ? (isDayTheme ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.35)")
                     : (isDayTheme ? "#4A7FA6" : "#6BA888"),
@@ -286,7 +286,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
           style={{
             fontSize: "12px",
             letterSpacing: "0.22em",
-            fontWeight: 600,
+            fontWeight: 700,
             color: textColor,
             fontFamily: "'Poppins', sans-serif",
             margin: 0,
@@ -336,7 +336,7 @@ export default function MainScreen({ onTap, onSupportClick, theme = "day", onTog
             letterSpacing: "0.015em",
             color: isDayTheme ? "#333333" : "#F0EDE8",
             fontFamily: "'Poppins', sans-serif",
-            fontWeight: 500,
+            fontWeight: 600,
             background: "none",
             border: "none",
             cursor: "pointer",

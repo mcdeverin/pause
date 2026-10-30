@@ -128,9 +128,9 @@ export default function LiquidOrb({ theme, isBreathing, technique, size = 260 })
               position: "absolute",
               zIndex: 10,
               fontSize: "32px",
-              fontWeight: 200,
+              fontWeight: 500,
               color: "rgba(255, 255, 255, 0.95)",
-              fontFamily: "'Nunito', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               textShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
             }}
           >

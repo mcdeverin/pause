@@ -13,7 +13,7 @@ export default function Privacy() {
       </button>
 
       <div className="max-w-2xl">
-        <h1 className="text-3xl font-semibold mb-8 font-sans">Privacy Policy</h1>
+        <h1 className="text-3xl font-bold mb-8 font-sans">Privacy Policy</h1>
 
         <div className="space-y-6 text-sm text-foreground/85 leading-relaxed font-sans">
           <p className="text-xs text-foreground/60 mb-6">
@@ -21,14 +21,14 @@ export default function Privacy() {
           </p>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">Overview</h2>
+            <h2 className="text-lg font-bold mb-3">Overview</h2>
             <p>
               Work OnDeck LLC ("we," "us," or "our") operates the Pause mobile application. This Privacy Policy explains how we handle information when you use our app.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">Information We Collect</h2>
+            <h2 className="text-lg font-bold mb-3">Information We Collect</h2>
             <p>
               Pause is designed to be a minimal, privacy-respecting app. We collect only the following:
             </p>
@@ -47,42 +47,42 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">How We Use Your Information</h2>
+            <h2 className="text-lg font-bold mb-3">How We Use Your Information</h2>
             <p>
               Anonymous usage data is used solely to improve the app experience — understanding which features are used most helps us make Pause better.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">Health &amp; Fitness Data</h2>
+            <h2 className="text-lg font-bold mb-3">Health &amp; Fitness Data</h2>
             <p>
               Always Pause uses Apple HealthKit to log your breathing sessions as Mindful Minutes and to read your heart rate during sessions. This data is stored exclusively in your personal Apple Health app on your device. We never collect, transmit, or share your health data with any third party. You can revoke access at any time in iPhone Settings → Privacy &amp; Security → Health → Always Pause.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">Third Party Services</h2>
+            <h2 className="text-lg font-bold mb-3">Third Party Services</h2>
             <p>
               Pause may use Apple's built-in App Analytics which collects anonymous usage data subject to Apple's own privacy policy.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">Children's Privacy</h2>
+            <h2 className="text-lg font-bold mb-3">Children's Privacy</h2>
             <p>
               Pause is not directed at children under 13. We do not knowingly collect data from children under 13.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">Changes to This Policy</h2>
+            <h2 className="text-lg font-bold mb-3">Changes to This Policy</h2>
             <p>
               We may update this Privacy Policy from time to time. We will notify users of significant changes by updating the date at the top of this page.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3">Contact Us</h2>
+            <h2 className="text-lg font-bold mb-3">Contact Us</h2>
             <p>
               Questions? Email us at: <a href="mailto:hello@alwayspause.com" className="underline hover:opacity-70">hello@alwayspause.com</a>
             </p>

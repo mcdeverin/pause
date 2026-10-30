@@ -132,7 +132,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             <span style={{
               fontFamily: FONT,
               fontSize: "14px",
-              fontWeight: 500,
+              fontWeight: 600,
               letterSpacing: "0.01em",
               color: textColor,
               lineHeight: 1.3,
@@ -143,7 +143,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               <span style={{
                 fontFamily: FONT,
                 fontSize: "9px",
-                fontWeight: 600,
+                fontWeight: 700,
                 letterSpacing: "0.03em",
                 color: primaryColor,
                 border: `1px solid ${primaryColor}`,
@@ -161,7 +161,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             <span style={{
               fontFamily: FONT,
               fontSize: "11px",
-              fontWeight: 400,
+              fontWeight: 500,
               letterSpacing: "0.005em",
               color: textColor,
               opacity: 0.62,
@@ -183,7 +183,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <span style={{
             fontFamily: FONT,
             fontSize: "18px",
-            fontWeight: 600,
+            fontWeight: 700,
             letterSpacing: "-0.01em",
             color: textColor,
             whiteSpace: "nowrap",
@@ -191,7 +191,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           }}>
             {amount}
             {unit && (
-              <span style={{ fontSize: "11px", fontWeight: 500, opacity: 0.6, letterSpacing: "0" }}>
+              <span style={{ fontSize: "11px", fontWeight: 600, opacity: 0.6, letterSpacing: "0" }}>
                 {unit}
               </span>
             )}
@@ -199,7 +199,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <span style={{
             fontFamily: FONT,
             fontSize: "10px",
-            fontWeight: 400,
+            fontWeight: 500,
             letterSpacing: "0.005em",
             color: textColor,
             opacity: 0.62,
@@ -259,7 +259,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             fontFamily: FONT,
             fontSize: "11px",
             letterSpacing: "0.06em",
-            fontWeight: 500,
+            fontWeight: 600,
             color: textColor,
             transition: "opacity 0.2s",
           }}
@@ -292,7 +292,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <p style={{
             fontFamily: FONT,
             fontSize: "24px",
-            fontWeight: 600,
+            fontWeight: 700,
             letterSpacing: "-0.015em",
             color: textColor,
             margin: 0,
@@ -309,7 +309,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <p style={{
             fontFamily: FONT,
             fontSize: "13px",
-            fontWeight: 400,
+            fontWeight: 500,
             letterSpacing: "0.005em",
             color: textColor,
             opacity: 0.62,
@@ -385,7 +385,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               cursor: "pointer",
               fontFamily: FONT,
               fontSize: "14px",
-              fontWeight: 500,
+              fontWeight: 600,
               letterSpacing: "0.01em",
               color: isDayTheme ? "#FAFAF8" : "#F0EDE8",
               textAlign: "center",
@@ -405,7 +405,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <p style={{
             fontFamily: FONT,
             fontSize: "11px",
-            fontWeight: 400,
+            fontWeight: 500,
             letterSpacing: "0.005em",
             color: textColor,
             opacity: 0.55,
@@ -443,7 +443,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
                     fontFamily: FONT,
                     fontSize: "11px",
                     letterSpacing: "0.01em",
-                    fontWeight: 500,
+                    fontWeight: 600,
                     color: textColor,
                     opacity: 0.55,
                     padding: 0,
@@ -464,7 +464,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               color: '#ff6b6b',
               opacity: 0.9,
               fontFamily: FONT,
-              fontWeight: 400,
+              fontWeight: 500,
               letterSpacing: '0.005em',
               marginTop: '4px',
               textAlign: 'center',

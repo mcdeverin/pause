@@ -54,7 +54,7 @@ export default function SupportScreen({ onClose, theme }) {
         <div className="text-center space-y-8">
           {/* App name */}
           <h1
-            className="font-sans text-3xl font-semibold tracking-[0.01em]"
+            className="font-sans text-3xl font-bold tracking-[0.01em]"
             style={{ color: colors.text }}
           >
             Always Pause
@@ -71,7 +71,7 @@ export default function SupportScreen({ onClose, theme }) {
           {/* Tip buttons */}
           <div className="flex flex-col gap-3 pt-4">
             <button
-              className="px-8 py-3 rounded-sm transition-all duration-500 font-sans text-sm font-medium tracking-[0.01em] hover:opacity-80"
+              className="px-8 py-3 rounded-sm transition-all duration-500 font-sans text-sm font-semibold tracking-[0.01em] hover:opacity-80"
               style={{
                 background: colors.buttonBg,
                 color: colors.buttonText,
@@ -81,7 +81,7 @@ export default function SupportScreen({ onClose, theme }) {
               ♡ Leave a tip — $1.99
             </button>
             <button
-              className="px-8 py-3 rounded-sm transition-all duration-500 font-sans text-sm font-medium tracking-[0.01em] hover:opacity-80"
+              className="px-8 py-3 rounded-sm transition-all duration-500 font-sans text-sm font-semibold tracking-[0.01em] hover:opacity-80"
               style={{
                 background: colors.buttonBg,
                 color: colors.buttonText,
