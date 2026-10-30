@@ -122,22 +122,6 @@ export default function Home() {
     beginSession(t, null);
   }, [techniques, selectedCategory, isPro, beginSession]);
 
-  // Preview deep link: ?technique=bhramari (a name or an id) opens that one
-  // exercise straight on the breathing screen, once per load.
-  const deepLinkDoneRef = useRef(false);
-  useEffect(() => {
-    if (deepLinkDoneRef.current || techniques.length === 0) return;
-    const requested = new URLSearchParams(window.location.search).get("technique");
-    if (!requested) return;
-    const raw = requested.trim();
-    const match = techniques.find(
-      (t) => String(t.id) === raw || t.name.toLowerCase() === raw.toLowerCase()
-    );
-    if (!match) return;
-    deepLinkDoneRef.current = true;
-    startBreathing(match);
-  }, [techniques, startBreathing]);
-
   // Moment shortcuts only use their mapped category — never a fallback
   // technique, and never a premium category that isn't unlocked.
   const startMoment = useCallback((momentId) => {
