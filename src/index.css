@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -50,7 +50,7 @@
     --sidebar-border: 37 13% 90%;
     --sidebar-ring: 217 44% 36%;
 
-    --font-nunito: 'Poppins', sans-serif;
+    --font-nunito: 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
   }
 
   .dark {
@@ -114,11 +114,32 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
     font-weight: 500;
-    letter-spacing: -0.005em;
+    letter-spacing: 0;
     overflow: hidden;
     overscroll-behavior: none;
+  }
+}
+
+@layer utilities {
+  /* Countdowns keep a fixed width so digits don't shift while breathing */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* Screen-reader only: keeps phase cues available when labels are hidden */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 }
 

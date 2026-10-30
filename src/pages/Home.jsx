@@ -1,12 +1,16 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import SoftBlob from "../components/SoftBlob";
 import MainScreen from "../components/MainScreen";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
 import PaywallScreen from "../components/PaywallScreen";
+import PersonalizePanel from "../components/personalize/PersonalizePanel";
 import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
 import { initRevenueCat, checkEntitlement } from "../lib/revenuecat";
+import { loadPreferences, savePreferences } from "../lib/preferences";
+import { getBackgroundStyle } from "../lib/design";
+
+const LOCKED_CATEGORIES = ["Focus", "Energy", "Advanced"];
 
 export default function Home() {
   const [mode, setMode] = useState("idle");
@@ -15,13 +19,13 @@ export default function Home() {
 
   const [showSupport, setShowSupport] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showPersonalize, setShowPersonalize] = useState(false);
   const [pendingTechnique, setPendingTechnique] = useState(null);
   const [isPro, setIsPro] = useState(false);
   const [theme, setTheme] = useState("day");
   const [techniques, setTechniques] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [preferences, setPreferences] = useState(loadPreferences);
 
   useEffect(() => {
     const saved = localStorage.getItem("pauseTheme") || "day";
@@ -31,24 +35,28 @@ export default function Home() {
   useEffect(() => {
     initRevenueCat()
       .then(() => checkEntitlement())
-      .then(pro => setIsPro(pro))
+      .then((pro) => setIsPro(pro))
       .catch(() => {});
   }, []);
 
   useEffect(() => {
     loadTechniques()
-      .then((loaded) => {
-        setTechniques(loaded);
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
+      .then((loaded) => setTechniques(loaded))
+      .catch(() => {});
   }, []);
 
+  const updatePreference = useCallback((key, value) => {
+    setPreferences((previous) => {
+      const next = { ...previous, [key]: value };
+      savePreferences(next);
+      return next;
+    });
+  }, []);
 
-
-  const LOCKED_CATEGORIES = ["Focus", "Energy", "Advanced"];
+  const applyTheme = useCallback((nextTheme) => {
+    setTheme(nextTheme);
+    localStorage.setItem("pauseTheme", nextTheme);
+  }, []);
 
   const startBreathing = useCallback((forcedTechnique = null) => {
     if (techniques.length === 0) return;
@@ -73,35 +81,32 @@ export default function Home() {
     setTechnique(null);
   }, []);
 
-
-
-  const bgColor = theme === "day" ? "#F7F5F2" : "#0D1B2A";
+  const openPaywall = useCallback(() => {
+    setPendingTechnique(null);
+    setShowPaywall(true);
+  }, []);
 
   return (
     <div
       className="w-full min-h-screen flex flex-col"
-      style={{ background: bgColor }}
+      style={{ ...getBackgroundStyle(preferences.background, theme), transition: "background 0.4s ease" }}
     >
-
-      {/* Main content */}
       <AnimatePresence mode="wait">
         {mode === "idle" && (
           <MainScreen
             key="main"
-            onTap={startBreathing}
+            onTap={() => startBreathing()}
             onSupportClick={() => setShowSupport(true)}
             theme={theme}
-            onToggleTheme={() => {
-              const newTheme = theme === "day" ? "night" : "day";
-              setTheme(newTheme);
-              localStorage.setItem("pauseTheme", newTheme);
-            }}
+            onToggleTheme={() => applyTheme(theme === "day" ? "night" : "day")}
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
             onHapticsChange={() => setHapticsEnabled(!hapticsEnabled)}
             isPro={isPro}
-            onTechniqueSelect={(t) => startBreathing(t)}
-            onLockedCategoryTap={() => { setPendingTechnique(null); setShowPaywall(true); }}
+            background={preferences.background}
+            onOpenPersonalize={() => setShowPersonalize(true)}
+            onOpenPausePlus={openPaywall}
+            onLockedCategoryTap={openPaywall}
           />
         )}
         {mode === "breathing" && technique && (
@@ -111,6 +116,24 @@ export default function Home() {
             onDone={stopBreathing}
             theme={theme}
             hapticsEnabled={hapticsEnabled}
+            visual={preferences.visual}
+            background={preferences.background}
+            showTimer={preferences.showTimer}
+            showInstructions={preferences.showInstructions}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Personalization */}
+      <AnimatePresence>
+        {showPersonalize && (
+          <PersonalizePanel
+            key="personalize"
+            theme={theme}
+            prefs={preferences}
+            onChange={updatePreference}
+            onThemeChange={applyTheme}
+            onClose={() => setShowPersonalize(false)}
           />
         )}
       </AnimatePresence>

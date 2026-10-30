@@ -4,7 +4,7 @@ import LiquidOrb from "./LiquidOrb";
 import { getOfferings, purchasePackage, restorePurchases, checkEntitlement } from '../lib/revenuecat';
 import { PRODUCT_IDS, getLocalizedPrice, formatDailyPrice } from '../lib/pricing';
 
-const FONT = "'Poppins', sans-serif";
+const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
 export default function PaywallScreen({ theme = "day", onClose, onPurchase, triggerCategory }) {
   const [selected, setSelected] = useState(PRODUCT_IDS.annual);
@@ -20,7 +20,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   }, []);
 
   const isDayTheme = theme === "day";
-  const textColor = isDayTheme ? "#111111" : "#F0EDE8";
+  const textColor = isDayTheme ? "#222222" : "#F5F5F2";
+  const secondaryTextColor = isDayTheme ? "#444444" : "#C9C9C4";
   const bg = isDayTheme ? "#FAFAF8" : "#0D1117";
   const glassBackground = isDayTheme ? "rgba(255,255,255,0.55)" : "rgba(20,30,50,0.7)";
   const glassBorder = isDayTheme ? "rgba(0,0,0,0.10)" : "rgba(255,255,255,0.13)";
@@ -114,7 +115,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           WebkitBackdropFilter: "blur(20px)",
           border: `1px solid ${border}`,
           borderRadius: "18px",
-          padding: "15px 18px",
+          padding: "17px 18px",
           cursor: "pointer",
           display: "flex",
           flexDirection: "row",
@@ -131,9 +132,9 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           <div style={{ display: "flex", alignItems: "center", gap: "7px", flexWrap: "wrap" }}>
             <span style={{
               fontFamily: FONT,
-              fontSize: "14px",
-              fontWeight: 600,
-              letterSpacing: "0.01em",
+              fontSize: "16px",
+              fontWeight: 700,
+              letterSpacing: "0.005em",
               color: textColor,
               lineHeight: 1.3,
             }}>
@@ -160,11 +161,10 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           {caption && (
             <span style={{
               fontFamily: FONT,
-              fontSize: "11px",
-              fontWeight: 500,
+              fontSize: "13px",
+              fontWeight: 600,
               letterSpacing: "0.005em",
-              color: textColor,
-              opacity: 0.62,
+              color: secondaryTextColor,
               lineHeight: 1.45,
             }}>
               {caption}
@@ -182,8 +182,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         }}>
           <span style={{
             fontFamily: FONT,
-            fontSize: "18px",
-            fontWeight: 700,
+            fontSize: "22px",
+            fontWeight: 800,
             letterSpacing: "-0.01em",
             color: textColor,
             whiteSpace: "nowrap",
@@ -191,20 +191,19 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           }}>
             {amount}
             {unit && (
-              <span style={{ fontSize: "11px", fontWeight: 600, opacity: 0.6, letterSpacing: "0" }}>
+              <span style={{ fontSize: "13px", fontWeight: 600, color: secondaryTextColor, letterSpacing: "0" }}>
                 {unit}
               </span>
             )}
           </span>
           <span style={{
             fontFamily: FONT,
-            fontSize: "10px",
-            fontWeight: 500,
+            fontSize: "12.5px",
+            fontWeight: 600,
             letterSpacing: "0.005em",
-            color: textColor,
-            opacity: 0.62,
+            color: secondaryTextColor,
             whiteSpace: "nowrap",
-            lineHeight: 1.3,
+            lineHeight: 1.35,
           }}>
             {secondary}
           </span>
@@ -254,17 +253,17 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             background: "none",
             border: "none",
             cursor: "pointer",
-            opacity: 0.4,
+            opacity: 0.65,
             padding: "4px",
             fontFamily: FONT,
-            fontSize: "11px",
-            letterSpacing: "0.06em",
+            fontSize: "13px",
+            letterSpacing: "0.04em",
             fontWeight: 600,
             color: textColor,
             transition: "opacity 0.2s",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.4")}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.65")}
         >
           close
         </button>
@@ -291,9 +290,9 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           {/* 2. Headline */}
           <p style={{
             fontFamily: FONT,
-            fontSize: "24px",
-            fontWeight: 700,
-            letterSpacing: "-0.015em",
+            fontSize: "27px",
+            fontWeight: 800,
+            letterSpacing: "-0.01em",
             color: textColor,
             margin: 0,
             textAlign: "center",
@@ -308,14 +307,13 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           {/* 3. Subhead */}
           <p style={{
             fontFamily: FONT,
-            fontSize: "13px",
+            fontSize: "15px",
             fontWeight: 500,
             letterSpacing: "0.005em",
-            color: textColor,
-            opacity: 0.62,
+            color: secondaryTextColor,
             margin: 0,
             textAlign: "center",
-            lineHeight: 1.6,
+            lineHeight: 1.55,
           }}>
             box, 4-7-8, coherence, physiological sigh, and more.{" "}
             for focus, energy, and the hardest moments.
@@ -384,9 +382,9 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               padding: "16px 24px 15px 24px",
               cursor: "pointer",
               fontFamily: FONT,
-              fontSize: "14px",
-              fontWeight: 600,
-              letterSpacing: "0.01em",
+              fontSize: "16px",
+              fontWeight: 700,
+              letterSpacing: "0.005em",
               color: isDayTheme ? "#FAFAF8" : "#F0EDE8",
               textAlign: "center",
               boxSizing: "border-box",
@@ -404,11 +402,11 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           {/* 8. Disclosure */}
           <p style={{
             fontFamily: FONT,
-            fontSize: "11px",
+            fontSize: "12.5px",
             fontWeight: 500,
             letterSpacing: "0.005em",
-            color: textColor,
-            opacity: 0.55,
+            color: secondaryTextColor,
+            lineHeight: 1.55,
             margin: 0,
             textAlign: "center",
             lineHeight: 1.6,
@@ -441,18 +439,17 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
                     border: "none",
                     cursor: "pointer",
                     fontFamily: FONT,
-                    fontSize: "11px",
+                    fontSize: "13.5px",
                     letterSpacing: "0.01em",
                     fontWeight: 600,
-                    color: textColor,
-                    opacity: 0.55,
+                    color: secondaryTextColor,
                     padding: 0,
                   }}
                 >
                   {label}
                 </button>
                 {i < arr.length - 1 && (
-                  <span style={{ color: textColor, opacity: 0.3, fontSize: "11px" }}>·</span>
+                  <span style={{ color: secondaryTextColor, fontSize: "13.5px" }}>·</span>
                 )}
               </span>
             ))}
@@ -460,8 +457,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
 
           {error && (
             <p style={{
-              fontSize: '12px',
-              color: '#ff6b6b',
+              fontSize: '13.5px',
+              color: '#C0392B',
               opacity: 0.9,
               fontFamily: FONT,
               fontWeight: 500,
