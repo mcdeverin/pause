@@ -43,7 +43,6 @@ export default function PersonalizePanel({
   // Everything below edits a draft. The stored preferences only change through
   // Save My Pause, so closing this panel simply discards the draft.
   const [draft, setDraft] = useState(prefs);
-  const [draftTheme, setDraftTheme] = useState(theme);
   const [justSaved, setJustSaved] = useState(false);
   // The preview folds away once the sheet is scrolled, handing the screen to the
   // controls, and returns as soon as the sheet is back at the top.
@@ -51,9 +50,13 @@ export default function PersonalizePanel({
   const savedTimerRef = useRef(0);
   const manualPreviewRef = useRef(false);
 
+  // Appearance lives in the draft too: the panel restyles itself right away, but
+  // nothing is stored until Save My Pause. It never touches the background.
+  const appearance = draft.appearance || (theme === "night" ? "dark" : "light");
+  const draftTheme = appearance === "dark" ? "night" : "day";
   const colors = getColors(draftTheme);
-  const isDay = draftTheme === "day";
-  const solidBackground = isSolidBackground(draft.background, draftTheme);
+  const isDay = appearance === "light";
+  const solidBackground = isSolidBackground(draft.background);
 
   const activePhotoId = draft.photoId || (photos[0] ? photos[0].id : null);
   const activePhoto = photos.find((entry) => entry.id === activePhotoId) || null;
@@ -68,11 +71,6 @@ export default function PersonalizePanel({
 
   const updateGradient = (patch) => {
     setDraft((current) => ({ ...current, ...patch }));
-    setJustSaved(false);
-  };
-
-  const updateTheme = (nextTheme) => {
-    setDraftTheme(nextTheme);
     setJustSaved(false);
   };
 
@@ -96,7 +94,7 @@ export default function PersonalizePanel({
     setDraft((current) => {
       const next = { ...current, background: id };
       // Blur means nothing on a flat colour, so it isn't carried into one.
-      if (isSolidBackground(id, draftTheme)) next.backgroundBlur = 0;
+      if (isSolidBackground(id)) next.backgroundBlur = 0;
       return next;
     });
     setJustSaved(false);
@@ -172,7 +170,7 @@ export default function PersonalizePanel({
   };
 
   const handleSave = () => {
-    onSave(draft, draftTheme);
+    onSave(draft);
     setJustSaved(true);
     clearTimeout(savedTimerRef.current);
     savedTimerRef.current = setTimeout(() => setJustSaved(false), 2600);
@@ -373,15 +371,15 @@ export default function PersonalizePanel({
             }}
           >
             {[
-              { id: "day", label: "Light" },
-              { id: "night", label: "Dark" },
+              { id: "light", label: "Light" },
+              { id: "dark", label: "Dark" },
             ].map((option) => {
-              const active = isDay === (option.id === "day");
+              const active = appearance === option.id;
               return (
                 <button
                   key={option.id}
                   type="button"
-                  onClick={() => updateTheme(option.id)}
+                  onClick={() => update("appearance", option.id)}
                   aria-pressed={active}
                   style={{
                     minHeight: 44,

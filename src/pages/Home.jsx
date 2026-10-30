@@ -30,11 +30,13 @@ export default function Home() {
   const [pendingMoment, setPendingMoment] = useState(null);
   const [shortcutNotice, setShortcutNotice] = useState("");
   const [isPro, setIsPro] = useState(false);
-  const [theme, setTheme] = useState("day");
   const [techniques, setTechniques] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [preferences, setPreferences] = useState(loadPreferences);
   const [photos, setPhotos] = useState(getStoredPhotos);
+
+  // Light / Dark restyles the interface only — the background keeps its own canvas.
+  const theme = preferences.appearance === "dark" ? "night" : "day";
 
   // The photo in use is whichever one the saved preferences point at, falling
   // back to the most recently added.
@@ -53,11 +55,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const saved = localStorage.getItem("pauseTheme") || "day";
-    setTheme(saved);
-  }, []);
-
-  useEffect(() => {
     initRevenueCat()
       .then(() => checkEntitlement())
       .then((pro) => setIsPro(pro))
@@ -70,18 +67,12 @@ export default function Home() {
       .catch(() => {});
   }, []);
 
-  const applyTheme = useCallback((nextTheme) => {
-    setTheme(nextTheme);
-    localStorage.setItem("pauseTheme", nextTheme);
-  }, []);
-
-  // Personalization is drafted inside the panel and only committed here on save,
-  // so closing without saving leaves the stored preferences untouched.
-  const commitPreferences = useCallback((nextPreferences, nextTheme) => {
+  // Personalization — appearance included — is drafted inside the panel and only
+  // committed here on save, so closing without saving changes nothing.
+  const commitPreferences = useCallback((nextPreferences) => {
     setPreferences(nextPreferences);
     savePreferences(nextPreferences);
-    applyTheme(nextTheme);
-  }, [applyTheme]);
+  }, []);
 
   // Hiding the moment shortcuts happens straight from the home screen, outside
   // the personalization draft, so it saves immediately.

@@ -4,8 +4,10 @@ import { MOMENTS } from "../lib/moments";
 
 const ICONS = { calm: Leaf, focus: Crosshair, wind_down: Moon, reset: Sun };
 
-export default function MomentShortcuts({ theme, onSelect, notice, onHide }) {
-  const colors = getColors(theme);
+export default function MomentShortcuts({ theme, ink, onSelect, notice, onHide }) {
+  // These sit on the chosen background rather than on an interface surface, so
+  // they follow the canvas ink that MainScreen worked out.
+  const colors = ink || getColors(theme);
 
   return (
     <div style={{ padding: "0 20px" }}>

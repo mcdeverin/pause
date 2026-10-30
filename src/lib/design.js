@@ -5,62 +5,56 @@ import { getStyleLabel } from "./visuals";
 
 export const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
+// Each preset owns exactly one canvas tone. Light / Dark restyles the interface
+// only, so a preset never repaints when the appearance changes.
 export const BACKGROUNDS = [
   {
     id: "classic",
     label: "Classic",
     description: "Clean and distraction free.",
-    day: "#FAFAF8",
-    night: "#0D1117",
+    tone: "#FAFAF8",
   },
   {
     id: "sage",
     label: "Sage Mist",
     description: "Soft, grounded and calm.",
-    day: "linear-gradient(180deg, #F9FBF7 0%, #EDF3EC 55%, #E3EDE6 100%)",
-    night: "linear-gradient(180deg, #0E1512 0%, #142019 60%, #17261E 100%)",
+    tone: "linear-gradient(180deg, #F9FBF7 0%, #EDF3EC 55%, #E3EDE6 100%)",
   },
   {
     id: "blue",
     label: "Blue Hour",
     description: "Cool, airy and quiet.",
-    day: "linear-gradient(180deg, #F7FAFC 0%, #E9F0F6 55%, #DDE7F1 100%)",
-    night: "linear-gradient(180deg, #0B1220 0%, #101D2E 60%, #14273E 100%)",
+    tone: "linear-gradient(180deg, #F7FAFC 0%, #E9F0F6 55%, #DDE7F1 100%)",
   },
   {
     id: "lavender",
     label: "Lavender Dusk",
     description: "Gentle and restorative.",
-    day: "linear-gradient(180deg, #FBF9FC 0%, #F0ECF6 55%, #E6E0F0 100%)",
-    night: "linear-gradient(180deg, #100E18 0%, #181427 60%, #1F1933 100%)",
+    tone: "linear-gradient(180deg, #FBF9FC 0%, #F0ECF6 55%, #E6E0F0 100%)",
   },
   {
     id: "first-light",
     label: "First Light",
     description: "Warm and unhurried.",
-    day: "linear-gradient(180deg, #FDF7EF 0%, #F8E9DC 50%, #F2DFD4 100%)",
-    night: "linear-gradient(180deg, #18120E 0%, #231A15 55%, #2B201A 100%)",
+    tone: "linear-gradient(180deg, #FDF7EF 0%, #F8E9DC 50%, #F2DFD4 100%)",
   },
   {
     id: "slow-sunday",
     label: "Slow Sunday",
     description: "Cream, sage and nothing urgent.",
-    day: "linear-gradient(180deg, #FBF8F1 0%, #F3EFE2 50%, #E8EFE7 100%)",
-    night: "linear-gradient(180deg, #13120F 0%, #1B1D17 55%, #1F241C 100%)",
+    tone: "linear-gradient(180deg, #FBF8F1 0%, #F3EFE2 50%, #E8EFE7 100%)",
   },
   {
     id: "stillwater",
     label: "Stillwater",
     description: "One steady, even tone.",
-    day: "#DFE8E6",
-    night: "#101A1C",
+    tone: "#DFE8E6",
   },
   {
     id: "nightfall",
     label: "Nightfall",
     description: "Deep and enclosing.",
-    day: "linear-gradient(180deg, #F0F2F8 0%, #E4E8F1 55%, #D8DEEB 100%)",
-    night: "linear-gradient(180deg, #090D17 0%, #111A2B 55%, #17243A 100%)",
+    tone: "linear-gradient(180deg, #F0F2F8 0%, #E4E8F1 55%, #D8DEEB 100%)",
   },
 ];
 
@@ -153,7 +147,7 @@ export const DEFAULT_CUSTOM_COLOR = "#E7EDEA";
 export const DEFAULT_GRADIENT_FROM = "#E9F2EC";
 export const DEFAULT_GRADIENT_TO = "#DCE7F1";
 
-const BASE_TONE = { day: "#FAFAF8", night: "#0D1117" };
+const BASE_TONE = "#FAFAF8";
 
 export function getBackgroundOption(id) {
   return BACKGROUNDS.find((option) => option.id === id) || null;
@@ -164,31 +158,32 @@ export function isPhotoBackground(id) {
 }
 
 // A flat colour has nothing to soften, so blur is switched off for it.
-export function isSolidBackground(id, theme) {
+export function isSolidBackground(id) {
   if (id === MY_PHOTO_ID) return false;
   if (id === CUSTOM_GRADIENT_ID) return false;
   if (id === CUSTOM_COLOR_ID) return true;
   const preset = getBackgroundOption(id) || BACKGROUNDS[0];
-  const value = theme === "day" ? preset.day : preset.night;
-  return !String(value).includes("gradient");
+  return !String(preset.tone).includes("gradient");
 }
 
 // `palette` carries the user's own colour choices: { customColor, gradientFrom,
 // gradientTo }. Anything missing falls back to the curated default.
-export function getBackgroundTone(id, theme, palette = {}) {
+// Appearance is deliberately not a parameter: the canvas a background paints is
+// identical in Light and Dark, so switching appearance never repaints it.
+export function getBackgroundTone(id, palette = {}) {
   if (id === CUSTOM_GRADIENT_ID) {
     const from = palette.gradientFrom || DEFAULT_GRADIENT_FROM;
     const to = palette.gradientTo || DEFAULT_GRADIENT_TO;
     return `linear-gradient(180deg, ${from} 0%, ${to} 100%)`;
   }
   if (id === CUSTOM_COLOR_ID) return palette.customColor || DEFAULT_CUSTOM_COLOR;
-  if (id === MY_PHOTO_ID) return theme === "day" ? BASE_TONE.day : BASE_TONE.night;
+  if (id === MY_PHOTO_ID) return BASE_TONE;
   const preset = getBackgroundOption(id) || BACKGROUNDS[0];
-  return theme === "day" ? preset.day : preset.night;
+  return preset.tone;
 }
 
-export function getBackgroundStyle(id, theme, customColor) {
-  return { background: getBackgroundTone(id, theme, customColor) };
+export function getBackgroundStyle(id, customColor) {
+  return { background: getBackgroundTone(id, customColor) };
 }
 
 export function getBackgroundLabel(id, customColor) {

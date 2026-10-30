@@ -5,6 +5,7 @@ import BreathingVisual from "../visuals/BreathingVisual";
 import SessionTimerPill from "../SessionTimerPill";
 import { clampPhotoOffset } from "../../lib/background";
 import { FONT, getColors, isPhotoBackground } from "../../lib/design";
+import { getCanvasInk } from "../../lib/canvasInk";
 import { getStyleLabel } from "../../lib/visuals";
 import useBreathingClock from "../../hooks/useBreathingClock";
 
@@ -21,6 +22,11 @@ const PREVIEW_CYCLES = 4;
 // Your Moments.
 export default function LivePreview({ theme, settings = {}, photo = null, onPhotoPan }) {
   const colors = getColors(theme);
+  // The annotations inside the preview sit on the canvas itself, so they use the
+  // same adaptive ink as a real session.
+  const ink = getCanvasInk(theme, settings, {
+    hasPhoto: isPhotoBackground(settings.background) && Boolean(photo),
+  });
   const [loop, setLoop] = useState(0);
   const panRef = useRef(null);
 
@@ -113,9 +119,9 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
             fontWeight: 700,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
-            color: colors.tertiary,
-            background: colors.pill,
-            border: `1px solid ${colors.pillBorder}`,
+            color: ink.tertiary,
+            background: ink.pill,
+            border: `1px solid ${ink.pillBorder}`,
             borderRadius: 999,
             padding: "5px 9px",
             lineHeight: 1,
@@ -158,7 +164,8 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
           fontWeight: 700,
           letterSpacing: "0.01em",
           textTransform: "lowercase",
-          color: colors.text,
+          color: ink.text,
+          textShadow: ink.shadow,
           lineHeight: 1.3,
           visibility: settings.showInstructions ? "visible" : "hidden",
         }}

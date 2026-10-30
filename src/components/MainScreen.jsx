@@ -4,7 +4,8 @@ import { AnimatePresence } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import NavigationSheet from "./NavigationSheet";
 import MomentShortcuts from "./MomentShortcuts";
-import { FONT, getColors } from "../lib/design";
+import { FONT, isPhotoBackground } from "../lib/design";
+import { getCanvasInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 
 const ORB_MAX = 300;
@@ -50,7 +51,11 @@ export default function MainScreen({
     return () => window.removeEventListener("resize", handleResize);
   }, [measureOrb]);
 
-  const colors = getColors(theme);
+  // Text and icons sit straight on the chosen background, so the ink adapts to
+  // it. The background itself is never touched.
+  const ink = getCanvasInk(theme, backgroundSettings, {
+    hasPhoto: isPhotoBackground(backgroundSettings.background) && Boolean(photo),
+  });
 
   return (
     <div
@@ -87,7 +92,8 @@ export default function MainScreen({
             fontSize: "21px",
             fontWeight: 800,
             letterSpacing: "0.01em",
-            color: colors.text,
+            color: ink.text,
+            textShadow: ink.shadow,
             lineHeight: 1,
           }}
         >
@@ -112,8 +118,8 @@ export default function MainScreen({
             border: "none",
             cursor: "pointer",
             padding: 0,
-            color: colors.text,
-            opacity: 0.75,
+            color: ink.text,
+            opacity: 0.85,
           }}
         >
           <Menu size={23} strokeWidth={2.2} />
@@ -129,7 +135,8 @@ export default function MainScreen({
             fontSize: "23px",
             fontWeight: 800,
             letterSpacing: "-0.01em",
-            color: colors.text,
+            color: ink.text,
+            textShadow: ink.shadow,
             lineHeight: 1.25,
           }}
         >
@@ -142,7 +149,8 @@ export default function MainScreen({
             fontSize: "15px",
             fontWeight: 500,
             letterSpacing: "0.005em",
-            color: colors.secondary,
+            color: ink.secondary,
+            textShadow: ink.shadow,
             lineHeight: 1.45,
           }}
         >
@@ -200,7 +208,8 @@ export default function MainScreen({
             fontSize: "17px",
             fontWeight: 700,
             letterSpacing: "0.01em",
-            color: colors.text,
+            color: ink.text,
+            textShadow: ink.shadow,
           }}
         >
           Tap to pause
@@ -210,6 +219,7 @@ export default function MainScreen({
       {showShortcuts && (
         <MomentShortcuts
           theme={theme}
+          ink={ink}
           onSelect={onSelectMoment}
           notice={shortcutNotice}
           onHide={onHideShortcuts}
@@ -235,8 +245,8 @@ export default function MainScreen({
               border: "none",
               padding: 0,
               cursor: "pointer",
-              color: colors.tertiary,
-              opacity: 0.55,
+              color: ink.tertiary,
+              opacity: 0.7,
               transition: "opacity 0.2s ease",
             }}
             onMouseEnter={(event) => (event.currentTarget.style.opacity = "0.9")}

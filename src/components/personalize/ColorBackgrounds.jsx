@@ -50,7 +50,7 @@ export default function ColorBackgrounds({
             label={option.label}
             selected={draft.background === option.id}
             onSelect={() => onSelectBackground(option.id)}
-            previewBackground={theme === "day" ? option.day : option.night}
+            previewBackground={option.tone}
             preview={null}
           />
         ))}

@@ -4,7 +4,9 @@ import { getBackgroundTone, isPhotoBackground, isSolidBackground } from "../lib/
 // Paints the chosen background only. Dimming and blur stop at this layer, so the
 // orb, the ring, text and controls are never touched.
 // The host element needs position:relative and isolation:isolate.
-export default function BackgroundLayer({ settings = {}, theme = "day", photo = null, fixed = false }) {
+// The canvas is appearance-independent — Light / Dark never repaints it — so the
+// `theme` prop callers still pass is deliberately unused here.
+export default function BackgroundLayer({ settings = {}, photo = null, fixed = false }) {
   const {
     background = "classic",
     backgroundDim = 0,
@@ -18,9 +20,9 @@ export default function BackgroundLayer({ settings = {}, theme = "day", photo = 
   } = settings;
 
   const hasPhoto = isPhotoBackground(background) && Boolean(photo);
-  const blur = isSolidBackground(background, theme) ? 0 : blurPixels(clampBlur(backgroundBlur));
+  const blur = isSolidBackground(background) ? 0 : blurPixels(clampBlur(backgroundBlur));
   const dim = clampDim(backgroundDim);
-  const tone = getBackgroundTone(background, theme, { customColor, gradientFrom, gradientTo });
+  const tone = getBackgroundTone(background, { customColor, gradientFrom, gradientTo });
   const zoom = clampPhotoZoom(photoZoom);
 
   return (
@@ -33,7 +35,7 @@ export default function BackgroundLayer({ settings = {}, theme = "day", photo = 
         zIndex: -1,
         overflow: "hidden",
         pointerEvents: "none",
-        background: theme === "day" ? "#FAFAF8" : "#0D1117",
+        background: "#FAFAF8",
         transition: "background 0.35s ease",
       }}
     >

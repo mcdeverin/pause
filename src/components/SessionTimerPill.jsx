@@ -4,6 +4,8 @@ import { FONT, formatClock, getColors } from "../lib/design";
 // Compact frosted countdown pill shown in the top-left of a session.
 // It only displays the session's existing remaining time — it never runs
 // its own timer, so it always matches the breathing engine.
+// The pill is its own surface, so it uses the appearance's glass and reads
+// clearly over a light or dark background without dimming either.
 export default function SessionTimerPill({ seconds, theme }) {
   const colors = getColors(theme);
   const remaining = Math.max(0, Math.round(seconds || 0));
@@ -17,16 +19,16 @@ export default function SessionTimerPill({ seconds, theme }) {
         gap: 7,
         padding: "6px 13px 6px 11px",
         borderRadius: "999px",
-        background: colors.pill,
-        border: `1px solid ${colors.pillBorder}`,
+        background: colors.glass,
+        border: `1px solid ${colors.glassBorder}`,
         backdropFilter: "blur(18px)",
         WebkitBackdropFilter: "blur(18px)",
-        color: colors.pillText,
+        color: colors.secondary,
         fontFamily: FONT,
         lineHeight: 1,
       }}
     >
-      <Circle size={11} strokeWidth={2.6} color={colors.pillText} aria-hidden="true" />
+      <Circle size={11} strokeWidth={2.6} color={colors.secondary} aria-hidden="true" />
       <span className="tnum" style={{ fontSize: "14px", fontWeight: 600, letterSpacing: "0.02em" }}>
         {formatClock(remaining)}
       </span>

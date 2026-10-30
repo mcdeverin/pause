@@ -4,7 +4,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import SessionTimerPill from "./SessionTimerPill";
 import TechniqueInfoCard from "./TechniqueInfoCard";
-import { FONT, getColors } from "../lib/design";
+import { FONT, getColors, isPhotoBackground } from "../lib/design";
+import { getCanvasInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
 
@@ -54,6 +55,11 @@ export default function BreathingScreen({
   }, [phasesValid, labels, activePhases]);
 
   const colors = getColors(theme);
+  // Cues and controls are drawn straight on the background, so their ink adapts
+  // to that canvas. The background and the user's dimming stay untouched.
+  const ink = getCanvasInk(theme, backgroundSettings, {
+    hasPhoto: isPhotoBackground(backgroundSettings.background) && Boolean(photo),
+  });
 
   // Only a real stored http(s) link is shown — never a placeholder.
   const sourceUrl = useMemo(() => {
@@ -194,7 +200,7 @@ export default function BreathingScreen({
             background: "none",
             border: "none",
             cursor: "pointer",
-            color: colors.tertiary,
+            color: ink.tertiary,
           }}
         >
           <Info size={17} strokeWidth={2.2} />
@@ -211,7 +217,8 @@ export default function BreathingScreen({
           fontWeight: 700,
           letterSpacing: "0.01em",
           textTransform: "lowercase",
-          color: colors.text,
+          color: ink.text,
+          textShadow: ink.shadow,
           lineHeight: 1.35,
         }}
       >
@@ -278,7 +285,8 @@ export default function BreathingScreen({
               fontWeight: 700,
               letterSpacing: "0.01em",
               textTransform: "lowercase",
-              color: colors.text,
+              color: ink.text,
+              textShadow: ink.shadow,
               lineHeight: 1.3,
             }}
           >
@@ -295,7 +303,7 @@ export default function BreathingScreen({
             width: "min(180px, 60vw)",
             height: 4,
             borderRadius: 999,
-            background: colors.track,
+            background: ink.track,
             position: "relative",
             overflow: "hidden",
           }}
@@ -327,7 +335,8 @@ export default function BreathingScreen({
             fontSize: "16px",
             fontWeight: 600,
             letterSpacing: "0.02em",
-            color: colors.secondary,
+            color: ink.secondary,
+            textShadow: ink.shadow,
           }}
         >
           done
