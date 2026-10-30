@@ -3,6 +3,7 @@ import OriginalOrb from "./OriginalOrb";
 import RingVisual from "./RingVisual";
 import BubbleVisual from "./BubbleVisual";
 import CrystalVisual from "./CrystalVisual";
+import GlassVisual from "./GlassVisual";
 import AuroraVisual from "./AuroraVisual";
 import LeavesVisual from "./LeavesVisual";
 import BranchesVisual from "./BranchesVisual";
@@ -17,6 +18,7 @@ const REGISTRY = {
   ring: RingVisual,
   bubble: BubbleVisual,
   crystal: CrystalVisual,
+  glass: GlassVisual,
   aurora: AuroraVisual,
   leaves: LeavesVisual,
   branches: BranchesVisual,
