@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Info } from "lucide-react";
+import { ArrowUpRight, Info } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import SessionTimerPill from "./SessionTimerPill";
@@ -61,6 +61,11 @@ export default function BreathingScreen({
     const trimmed = raw.trim();
     return /^https?:\/\//i.test(trimmed) ? trimmed : null;
   }, [activeTechnique.sourceUrl]);
+
+  const sourceTitle =
+    typeof activeTechnique.sourceLabel === "string" && activeTechnique.sourceLabel.trim()
+      ? activeTechnique.sourceLabel.trim()
+      : null;
 
   const [showInfo, setShowInfo] = useState(false);
   const [infoMaxHeight, setInfoMaxHeight] = useState(null);
@@ -250,7 +255,7 @@ export default function BreathingScreen({
             {activeTechnique.science}
           </p>
 
-          {sourceUrl && (
+          {sourceUrl ? (
             <button
               type="button"
               onClick={(event) => {
@@ -259,10 +264,12 @@ export default function BreathingScreen({
                 window.open(sourceUrl, "_blank");
               }}
               style={{
-                display: "block",
-                margin: "6px auto 0",
-                minHeight: 32,
-                padding: "8px 8px 0",
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
+                width: "fit-content",
+                margin: "8px auto 0",
+                padding: "6px 0",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -270,13 +277,31 @@ export default function BreathingScreen({
                 fontSize: "12.5px",
                 fontWeight: 600,
                 letterSpacing: "0.01em",
-                color: colors.tertiary,
-                textDecoration: "underline",
-                textUnderlineOffset: "3px",
+                color: colors.text,
               }}
             >
-              View source ↗
+              <span style={{ borderBottom: `1px dotted ${colors.tertiary}`, paddingBottom: 2 }}>
+                View source
+              </span>
+              <ArrowUpRight size={12} strokeWidth={2.4} />
             </button>
+          ) : (
+            sourceTitle && (
+              <p
+                style={{
+                  margin: "8px 0 0",
+                  fontFamily: FONT,
+                  fontSize: "12.5px",
+                  fontWeight: 500,
+                  letterSpacing: "0.005em",
+                  lineHeight: 1.5,
+                  color: colors.tertiary,
+                  textAlign: "center",
+                }}
+              >
+                Source: {sourceTitle}
+              </p>
+            )
           )}
         </div>
       )}
