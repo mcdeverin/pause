@@ -12,6 +12,8 @@ export async function loadTechniques() {
     id: record.id,
     name: record.name,
     scienceBlurb: record.scienceBlurb,
+    scienceBlurbSource: record.scienceBlurbSource,
+    scienceBlurbSourceUrl: record.scienceBlurbSourceUrl,
     category: record.category,
     difficulty: record.difficulty,
     phases: record.phases,
