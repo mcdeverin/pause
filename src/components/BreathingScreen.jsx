@@ -4,9 +4,13 @@ import { motion, useReducedMotion } from "framer-motion";
 import BreathingRing from "./BreathingRing";
 import SessionTimerPill from "./SessionTimerPill";
 import { FONT, getBackgroundStyle, getColors } from "../lib/design";
-import { fillForPhase } from "../lib/breathing";
+import useBreathingClock from "../hooks/useBreathingClock";
 
 const TOTAL_CYCLES = 4;
+
+// Orb geometry: resting scale with empty lungs, plus this much at full lungs.
+const ORB_MIN_SCALE = 1.0;
+const ORB_RANGE = 0.35;
 
 const DEFAULT_TECHNIQUE = {
   name: "Box Breathing",
@@ -51,116 +55,65 @@ export default function BreathingScreen({
 
   const colors = getColors(theme);
 
-  const [phaseIndex, setPhaseIndex] = useState(0);
-  const [secondsLeft, setSecondsLeft] = useState(activePhases[0]);
-  const [orbScale, setOrbScale] = useState(1.0);
-  const [breathFill, setBreathFill] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState(
-    () => activePhases.reduce((a, b) => a + b, 0) * TOTAL_CYCLES
-  );
   const [showInfo, setShowInfo] = useState(false);
 
-  const timerRef = useRef(null);
   const finishedRef = useRef(false);
   const sessionIdRef = useRef(
     typeof crypto !== "undefined" && crypto.randomUUID
       ? crypto.randomUUID()
       : `${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
-  const phaseIndexRef = useRef(0);
-  const secondsLeftRef = useRef(activePhases[0]);
-  const cycleCountRef = useRef(0);
-  const totalSecondsRef = useRef(activePhases.reduce((a, b) => a + b, 0) * TOTAL_CYCLES);
-  const elapsedSecondsRef = useRef(0);
+  const hapticPhaseRef = useRef(-1);
+
+  // Ends the session exactly once and reports the real elapsed breathing time,
+  // so a repeated callback can never record the same pause twice.
+  const finish = (payload) => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
+    onDone({
+      sessionId: sessionIdRef.current,
+      completed: Boolean(payload?.completed),
+      elapsedSeconds: payload?.elapsedSeconds || 0,
+    });
+  };
 
   // ── Haptic feedback ──────────────────────────────────────────────
   const triggerHaptic = (label) => {
     if (!hapticsEnabled || !navigator.vibrate) return;
-    const l = label.toLowerCase();
-    if (l.includes("inhale")) {
+    const l = String(label || "").toLowerCase();
+    if (/(inhale|sniff|belly|chest|collar)/.test(l)) {
       navigator.vibrate([80, 40, 80]); // soft double pulse — breathe in
-    } else if (l.includes("exhale")) {
+    } else if (/(exhale|hum)/.test(l)) {
       navigator.vibrate([40, 30, 40, 30, 40]); // gentle triple fade — breathe out
-    } else if (l.includes("hold")) {
+    } else if (/hold/.test(l)) {
       navigator.vibrate(150); // single sustained — stay still
     }
   };
   // ────────────────────────────────────────────────────────────────
 
-  // Ends the session exactly once and reports the real elapsed breathing time,
-  // so a repeated callback can never record the same pause twice.
-  const finish = (completed) => {
-    if (finishedRef.current) return;
-    finishedRef.current = true;
-    onDone({
-      sessionId: sessionIdRef.current,
-      completed,
-      elapsedSeconds: elapsedSecondsRef.current,
-    });
-  };
+  // One session clock drives the countdown, the cues, the progress bar and both
+  // visualisations — there is no separate timing engine for orb and ring.
+  const clock = useBreathingClock({
+    phases: activePhases,
+    labels: activeLabels,
+    cycles: TOTAL_CYCLES,
+    onComplete: finish,
+  });
 
+  const { label: currentLabel, breath, progress, timeRemaining } = clock;
+  const orbScale = ORB_MIN_SCALE + ORB_RANGE * breath;
+
+  // Haptics fire on phase changes, from the same clock as the visuals.
   useEffect(() => {
-    triggerHaptic(activeLabels[0]);
+    if (clock.phaseIndex === hapticPhaseRef.current) return;
+    hapticPhaseRef.current = clock.phaseIndex;
+    triggerHaptic(currentLabel);
+  }, [clock.phaseIndex, currentLabel]);
 
-    timerRef.current = setInterval(() => {
-      secondsLeftRef.current -= 1;
-
-      const currentPhaseIdx = phaseIndexRef.current;
-      const currentLabel = activeLabels[currentPhaseIdx];
-      const previousLabel = currentPhaseIdx > 0 ? activeLabels[currentPhaseIdx - 1] : "";
-      const currentDuration = activePhases[currentPhaseIdx];
-      const secondsElapsed = currentDuration - secondsLeftRef.current;
-      const phaseProgress = secondsElapsed / currentDuration;
-
-      // Orb scale
-      let newScale = 1.0;
-      const lowered = currentLabel.toLowerCase();
-      if (lowered.includes("inhale")) {
-        newScale = 1.0 + 0.35 * phaseProgress;
-      } else if (lowered.includes("exhale")) {
-        newScale = 1.35 - 0.35 * phaseProgress;
-      } else if (lowered.includes("hold")) {
-        newScale = previousLabel.toLowerCase().includes("inhale") ? 1.35 : 1.0;
-      }
-
-      setOrbScale(newScale);
-      setBreathFill(fillForPhase(currentLabel, phaseProgress, previousLabel));
-      setSecondsLeft(secondsLeftRef.current);
-
-      // Overall progress + remaining time (same tick, same source of truth)
-      elapsedSecondsRef.current += 1;
-      setProgress(Math.min(elapsedSecondsRef.current / totalSecondsRef.current, 1));
-      setTimeRemaining(Math.max(totalSecondsRef.current - elapsedSecondsRef.current, 0));
-
-      // Advance phase when countdown hits 0
-      if (secondsLeftRef.current <= 0) {
-        const nextPhaseIdx = (currentPhaseIdx + 1) % activePhases.length;
-
-        if (nextPhaseIdx === 0) {
-          cycleCountRef.current += 1;
-          if (cycleCountRef.current >= TOTAL_CYCLES) {
-            clearInterval(timerRef.current);
-            setProgress(1);
-            setTimeout(() => finish(true), 500);
-            return;
-          }
-        }
-
-        phaseIndexRef.current = nextPhaseIdx;
-        secondsLeftRef.current = activePhases[nextPhaseIdx];
-        setPhaseIndex(nextPhaseIdx);
-
-        triggerHaptic(activeLabels[nextPhaseIdx]);
-      }
-    }, 1000);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [activePhases, activeLabels, onDone, hapticsEnabled]);
-
-  const currentLabel = activeLabels[phaseIndex] || "";
+  const handleDone = () => {
+    const elapsed = clock.cancel();
+    finish({ completed: false, elapsedSeconds: Math.round(elapsed) });
+  };
   const showRingLabel = showInstructions && visual === "ring";
   const showBottomLabel = showInstructions && visual !== "ring";
 
@@ -282,7 +235,7 @@ export default function BreathingScreen({
           <div style={{ width: "min(300px, 74vw)", aspectRatio: "1 / 1" }}>
             <BreathingRing
               theme={theme}
-              fill={breathFill}
+              fill={breath}
               label={currentLabel}
               showLabel={showRingLabel}
               reducedMotion={reducedMotion}
@@ -307,7 +260,9 @@ export default function BreathingScreen({
                 background: colors.orbGradient,
                 borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
                 transform: `scale(${orbScale})`,
-                transition: reducedMotion ? "transform 0.3s linear" : "transform 0.95s ease-in-out",
+                // The scale already tracks the clock continuously; this only
+                // smooths the last few frames.
+                transition: reducedMotion ? "none" : "transform 0.12s linear",
                 animation: reducedMotion ? "none" : "liquidMorph 8s ease-in-out infinite",
               }}
             />
@@ -370,13 +325,13 @@ export default function BreathingScreen({
               background: `linear-gradient(90deg, ${colors.ringFrom} 0%, ${colors.ringTo} 100%)`,
             }}
             animate={{ width: `${progress * 100}%` }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: reducedMotion ? 0.2 : 0.15, ease: "linear" }}
           />
         </div>
 
         <button
           type="button"
-          onClick={() => finish(false)}
+          onClick={handleDone}
           style={{
             minHeight: 44,
             padding: "10px 28px",

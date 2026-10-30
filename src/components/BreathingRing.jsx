@@ -69,9 +69,9 @@ export default function BreathingRing({ theme, fill = 0, label, showLabel = fals
           strokeDasharray={CIRCUMFERENCE}
           strokeDashoffset={offset}
           style={{
-            transition: reducedMotion
-              ? "stroke-dashoffset 0.2s linear"
-              : "stroke-dashoffset 0.95s linear",
+            // The fill already updates continuously from the session clock;
+            // this only smooths the last few frames.
+            transition: reducedMotion ? "none" : "stroke-dashoffset 0.12s linear",
           }}
         />
       </svg>
