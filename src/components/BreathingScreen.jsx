@@ -13,7 +13,7 @@ const DEFAULT_TECHNIQUE = {
   name: "Box Breathing",
   phases: "4,4,4,4",
   phaseLabels: "inhale,hold,exhale,hold",
-  science: "Used by Navy SEALs to control stress under pressure.",
+  science: "When your mind is busy, four predictable phases give you something steady to follow.",
 };
 
 const FALLBACK_PHASES = DEFAULT_TECHNIQUE.phases.split(",").map(Number);
@@ -55,6 +55,7 @@ export default function BreathingScreen({
   const colors = getColors(theme);
 
   const [showInfo, setShowInfo] = useState(false);
+  const [infoMaxHeight, setInfoMaxHeight] = useState(null);
 
   const finishedRef = useRef(false);
   const sessionIdRef = useRef(
@@ -63,6 +64,8 @@ export default function BreathingScreen({
       : `${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
   const hapticPhaseRef = useRef(-1);
+  const infoCardRef = useRef(null);
+  const visualRef = useRef(null);
 
   // Ends the session exactly once and reports the real elapsed breathing time,
   // so a repeated callback can never record the same pause twice.
@@ -107,6 +110,23 @@ export default function BreathingScreen({
     hapticPhaseRef.current = clock.phaseIndex;
     triggerHaptic(currentLabel);
   }, [clock.phaseIndex, currentLabel]);
+
+  // The information card is height-capped to the space above the breathing
+  // visual, so its text can never reach or cover the animation. On a very short
+  // screen the card scrolls instead of growing downwards.
+  useEffect(() => {
+    if (!showInfo) return undefined;
+    const measure = () => {
+      const card = infoCardRef.current;
+      const visualBox = visualRef.current;
+      if (!card || !visualBox) return;
+      const available = visualBox.getBoundingClientRect().top - card.getBoundingClientRect().top - 14;
+      setInfoMaxHeight(Math.max(80, Math.round(available)));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [showInfo]);
 
   const handleDone = () => {
     const elapsed = clock.cancel();
@@ -185,6 +205,7 @@ export default function BreathingScreen({
       {/* Science fact */}
       {showInfo && (
         <div
+          ref={infoCardRef}
           onClick={() => setShowInfo(false)}
           style={{
             position: "absolute",
@@ -201,6 +222,10 @@ export default function BreathingScreen({
             WebkitBackdropFilter: "blur(20px)",
             border: `1px solid ${colors.glassBorder}`,
             cursor: "pointer",
+            maxHeight: infoMaxHeight ? `${infoMaxHeight}px` : undefined,
+            overflowY: "auto",
+            overscrollBehavior: "contain",
+            WebkitOverflowScrolling: "touch",
           }}
         >
           <p
@@ -230,7 +255,7 @@ export default function BreathingScreen({
           padding: "8px 24px",
         }}
       >
-        <div style={{ width: "min(290px, 74vw)", aspectRatio: "1 / 1" }}>
+        <div ref={visualRef} style={{ width: "min(290px, 74vw)", aspectRatio: "1 / 1" }}>
           <BreathingVisual
             id={visual}
             breath={breath}
