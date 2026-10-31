@@ -6,8 +6,7 @@ import SessionTimerPill from "../SessionTimerPill";
 import { clampPhotoOffset } from "../../lib/background";
 import { FONT, getColors, isPhotoBackground } from "../../lib/design";
 import { getCanvasInk } from "../../lib/canvasInk";
-import { getStyleLabel, resolveOptions } from "../../lib/visuals";
-import { getVisualPair } from "../../lib/phaseColors";
+import { getStyleLabel } from "../../lib/visuals";
 import useBreathingClock from "../../hooks/useBreathingClock";
 
 // Equal Breathing (Sama Vritti) already exists in the technique library. Its 5s
@@ -45,20 +44,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
 
   const reducedMotion = useReducedMotion();
   const breath = Math.min(Math.max(clock.breath || 0, 0), 1);
-  const visualId = settings.visual || "orb";
-  const visualLabel = getStyleLabel(visualId);
-  // The cue is written in the visual's own two colours, so what the user picks
-  // for the ring or the orb is echoed by the step they're reading.
-  const pair = getVisualPair(visualId, resolveOptions(visualId, settings.visualOptions?.[visualId]));
-  const cueInk = pair
-    ? {
-        backgroundImage: `linear-gradient(135deg, ${pair.from} 0%, ${pair.to} 100%)`,
-        WebkitBackgroundClip: "text",
-        backgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        color: "transparent",
-      }
-    : { color: ink.text };
+  const visualLabel = getStyleLabel(settings.visual || "orb");
   const canPan = isPhotoBackground(settings.background) && Boolean(photo) && Boolean(onPhotoPan);
 
   const handlePanStart = (event) => {
@@ -178,7 +164,9 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
           fontWeight: 700,
           letterSpacing: "0.01em",
           textTransform: "lowercase",
-          ...cueInk,
+          // One neutral, background-adaptive colour for every visual — the cue
+          // never takes on the visual's own gradient.
+          color: ink.text,
           textShadow: ink.shadow,
           lineHeight: 1.3,
           visibility: settings.showInstructions ? "visible" : "hidden",

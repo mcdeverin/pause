@@ -154,8 +154,9 @@ export default function BreathingScreen({
     const elapsed = clock.cancel();
     finish({ completed: false, elapsedSeconds: Math.round(elapsed) });
   };
-  const showRingLabel = showInstructions && visual === "ring";
-  const showBottomLabel = showInstructions && visual !== "ring";
+  // Every visual writes the phase in the same place, at the same size, so the cue
+  // never moves or restyles itself when a different visual is chosen.
+  const showBottomLabel = showInstructions;
 
   return (
     <motion.div
@@ -257,7 +258,7 @@ export default function BreathingScreen({
             options={visualOptions?.[visual]}
             reducedMotion={reducedMotion}
             label={currentLabel}
-            showLabel={showRingLabel}
+            showLabel={false}
           />
         </div>
       </div>
