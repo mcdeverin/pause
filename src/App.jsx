@@ -11,7 +11,8 @@ import Terms from './pages/Terms.jsx';
 import CrystalComparison from './pages/CrystalComparison.jsx';
 import GhostStudio from './pages/GhostStudio.jsx';
 import LiquidOrbStudio from './pages/LiquidOrbStudio.jsx';
-import ShapesStudio from './pages/ShapesStudio.jsx';
+import { lazy, Suspense } from "react";
+const ShapesStudio = lazy(() => import("./pages/ShapesStudio.jsx"));
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -46,7 +47,7 @@ const AuthenticatedApp = () => {
       <Route path="/crystal-comparison" element={<CrystalComparison />} />
       <Route path="/ghost-studio" element={<GhostStudio />} />
       <Route path="/liquid-orb-studio" element={<LiquidOrbStudio />} />
-      <Route path="/shapes-studio" element={<ShapesStudio />} />
+      <Route path="/shapes-studio" element={<Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
