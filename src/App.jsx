@@ -12,6 +12,7 @@ import Terms from './pages/Terms.jsx';
 import CrystalComparison from './pages/CrystalComparison.jsx';
 import GhostStudio from './pages/GhostStudio.jsx';
 
+const SensoryStudio = lazy(() => import('./pages/SensoryStudio.jsx'));
 const ShapesStudio = lazy(() => import('./pages/ShapesStudio.jsx'));
 const LiquidOrbStudio = lazy(() => import('./pages/LiquidOrbStudio.jsx'));
 
@@ -48,6 +49,7 @@ const AuthenticatedApp = () => {
       <Route path="/terms" element={<Terms />} />
       <Route path="/crystal-comparison" element={<CrystalComparison />} />
       <Route path="/ghost-studio" element={<GhostStudio />} />
+      <Route path="/sensory-studio" element={<Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense>} />
       <Route path="/shapes-studio" element={<Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense>} />
       <Route path="/liquid-orb-studio" element={<Suspense fallback={<div className="p-8">Loading Liquid Orb Studio…</div>}><LiquidOrbStudio /></Suspense>} />
       <Route path="*" element={<PageNotFound />} />
