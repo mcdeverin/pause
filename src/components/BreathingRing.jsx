@@ -39,7 +39,7 @@ export default function BreathingRing({ theme, options = {}, fill = 0, label, sh
         width="100%"
         height="100%"
         aria-hidden="true"
-        style={{ transform: "rotate(-90deg)", overflow: "visible" }}
+        style={{ overflow: "visible" }}
       >
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -48,32 +48,34 @@ export default function BreathingRing({ theme, options = {}, fill = 0, label, sh
           </linearGradient>
         </defs>
 
-        <circle
-          cx={CENTER}
-          cy={CENTER}
-          r={RADIUS}
-          fill="none"
-          stroke={colors.track}
-          strokeWidth={STROKE}
-        />
+        {/* The quarter turn lives on this group rather than on the <svg>. A CSS
+            transform on the root put the whole ring on its own compositing layer,
+            and on iOS the arc then stopped repainting until a touch forced it. */}
+        <g transform={`rotate(-90 ${CENTER} ${CENTER})`}>
+          <circle
+            cx={CENTER}
+            cy={CENTER}
+            r={RADIUS}
+            fill="none"
+            stroke={colors.track}
+            strokeWidth={STROKE}
+          />
 
-        <circle
-          key={gradientId}
-          cx={CENTER}
-          cy={CENTER}
-          r={RADIUS}
-          fill="none"
-          stroke={`url(#${gradientId})`}
-          strokeWidth={STROKE}
-          strokeLinecap="round"
-          strokeDasharray={CIRCUMFERENCE}
-          strokeDashoffset={offset}
-          style={{
-            // The fill already updates continuously from the session clock;
-            // this only smooths the last few frames.
-            transition: reducedMotion ? "none" : "stroke-dashoffset 0.12s linear",
-          }}
-        />
+          {/* The offset is written as a style, not an attribute, and carries no
+              transition: a CSS transition restarted ~30 times a second holds the
+              old value on iOS, which froze the arc between taps. */}
+          <circle
+            cx={CENTER}
+            cy={CENTER}
+            r={RADIUS}
+            fill="none"
+            stroke={`url(#${gradientId})`}
+            strokeWidth={STROKE}
+            strokeLinecap="round"
+            strokeDasharray={CIRCUMFERENCE}
+            style={{ strokeDashoffset: offset }}
+          />
+        </g>
       </svg>
 
       {showLabel && label && (
