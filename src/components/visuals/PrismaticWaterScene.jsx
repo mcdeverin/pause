@@ -35,7 +35,7 @@ export default function PrismaticWaterScene({strength=.7,softness=.65,motion=.5,
   return interaction+flow+wake;
  }
  vec3 spectrum(float x){
-  vec3 a=vec3(.51,.62,.74),b=vec3(.46,.37,.32),c=vec3(1.,1.,1.),d=vec3(.02,.21,.43);
+  vec3 a=vec3(.55,.61,.67),b=vec3(.45,.43,.39),c=vec3(1.,1.,1.),d=vec3(.02,.21,.43);
   return clamp(a+b*cos(6.28318*(c*x+d)),0.,1.);
  }
  void main(){
@@ -59,12 +59,12 @@ export default function PrismaticWaterScene({strength=.7,softness=.65,motion=.5,
   float colorPhase=env.x*.49+env.y*.58+normal.x*.22+normal.y*.19;
   vec3 iridescent=spectrum(colorPhase);
   vec3 warm=mix(uColors[0],uColors[1],clamp(.5+.5*sin(colorPhase*8.),0.,1.));
-  iridescent=mix(iridescent,mix(warm,uColors[2],.4),.17);
+  iridescent=mix(iridescent,mix(warm,uColors[2],.4),.10);
   float touchDist=length(p-vec2(uPointer.x*aspect,uPointer.y));
   float touchGlow=exp(-touchDist*touchDist/(.28*.28))*uStrength;
-  float colorAmount=clamp(.12+.26*uMotion+.46*touchGlow+.28*length(slope),0.,.85);
+  float colorAmount=clamp(.42+.27*uMotion+.38*touchGlow+.32*length(slope),0.,.96);
   vec3 col=mix(chrome,iridescent,colorAmount);
-  col+=vec3(1.,.91,.76)*glint*.24;
+  col+=vec3(1.,.91,.76)*glint*.22;
   col+=vec3(.88,.96,1.)*pow(max(dot(normal,normalize(vec3(-.4,.6,1.))),0.),38.)*.38;
   col+=fresnel*vec3(.24,.31,.4);
   col=clamp(col,0.,1.);
