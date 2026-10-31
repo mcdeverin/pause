@@ -65,7 +65,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       }
       particleGeometry = new THREE.BufferGeometry();
       particleGeometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(particleBase), 3));
-      particleMaterial = new THREE.PointsMaterial({ color: "#cbbbed", size: .026, sizeAttenuation: true, transparent: true, opacity: .9, depthWrite: false });
+      particleMaterial = new THREE.PointsMaterial({ color: "#d7dce1", size: .026, sizeAttenuation: true, transparent: true, opacity: .9, depthWrite: false });
       particles = new THREE.Points(particleGeometry, particleMaterial);
       group.add(particles);
     } else {
@@ -90,7 +90,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
         if (background === "dark") {
           gradient.addColorStop(0, "#414956"); gradient.addColorStop(1, "#11151c");
         } else {
-          gradient.addColorStop(0, "#fdfcfa"); gradient.addColorStop(1, "#e3ddef");
+          gradient.addColorStop(0, "#ffffff"); gradient.addColorStop(1, "#e8ebed");
         }
         ctx.fillStyle = gradient; ctx.fillRect(0, 0, 1024, 1024);
         backdropTexture = new THREE.CanvasTexture(canvas);
