@@ -93,10 +93,11 @@ export default function PrismaticGlass({
   playing = true,
   quality = "high",
   reducedMotion = false,
+  transparentCanvas = false,
 }) {
   const hostRef = useRef(null);
-  const live = useRef({ settings, breathRef, mode, photo, playing, quality, reducedMotion });
-  live.current = { settings, breathRef, mode, photo, playing, quality, reducedMotion };
+  const live = useRef({ settings, breathRef, mode, photo, playing, quality, reducedMotion, transparentCanvas });
+  live.current = { settings, breathRef, mode, photo, playing, quality, reducedMotion, transparentCanvas };
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -147,6 +148,7 @@ export default function PrismaticGlass({
     const backdrop = new THREE.Mesh(backdropGeometry, backdropMaterial);
     backdrop.position.z = -8;
     scene.add(backdrop);
+    backdrop.visible = !live.current.transparentCanvas;
     let backdropTexture = null;
 
     // Rebuilt only when the mode or the photograph changes. A photograph decodes
@@ -266,7 +268,8 @@ export default function PrismaticGlass({
         resize();
       }
 
-      applyBackdrop(nextMode, nextPhoto);
+      backdrop.visible = !live.current.transparentCanvas;
+      if (!live.current.transparentCanvas) applyBackdrop(nextMode, nextPhoto);
       if (isPlaying && !reduce) elapsed += dt;
 
       setDetail(s.facets ?? PRISMATIC_DEFAULTS.facets);
