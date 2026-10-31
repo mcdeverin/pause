@@ -2,8 +2,7 @@
 // Copyright ElevenLabs contributors; see ELEVENLABS-UI-LICENSE.md
 
 import { useEffect, useMemo, useRef } from "react"
-import { useTexture } from "@react-three/drei"
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber"
 import * as THREE from "three"
 
 
@@ -70,7 +69,7 @@ function Scene({
   const targetColor1Ref = useRef(new THREE.Color(colors[0]))
   const targetColor2Ref = useRef(new THREE.Color(colors[1]))
   const animSpeedRef = useRef(0.1)
-  const perlinNoiseTexture = useTexture(
+  const perlinNoiseTexture = useLoader(THREE.TextureLoader,
     "https://storage.googleapis.com/eleven-public-cdn/images/perlin-noise.png"
   )
 
