@@ -11,6 +11,9 @@ import BranchesVisual from "./BranchesVisual";
 import BloomVisual from "./BloomVisual";
 import RippleVisual from "./RippleVisual";
 import BasketballVisual from "./BasketballVisual";
+import StudioBreathingShape from "./StudioBreathingShape";
+const ParticlesVisual = (props) => <StudioBreathingShape {...props} kind="particles" />;
+const RainDropletVisual = (props) => <StudioBreathingShape {...props} kind="dropletsSingle" />;
 
 // Every visual takes the same breath value from the shared session clock — none
 // of them keeps its own timing.
@@ -28,6 +31,8 @@ const REGISTRY = {
   bloom: BloomVisual,
   ripple: RippleVisual,
   basketball: BasketballVisual,
+  particles: ParticlesVisual,
+  rainDroplet: RainDropletVisual,
 };
 
 export default function BreathingVisual({
