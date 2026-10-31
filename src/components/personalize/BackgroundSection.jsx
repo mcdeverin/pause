@@ -4,7 +4,6 @@ import {
   EMPTY_CATEGORY_COPY,
   NATURE_IMAGES,
   PLACES_IMAGES,
-  SEASONS,
   SEASON_IMAGES,
   getGalleryCategory,
 } from "../../lib/backgroundGallery";
@@ -37,7 +36,6 @@ export default function BackgroundSection({
   onPhotoZoom,
 }) {
   const [category, setCategory] = useState(() => categoryFor(draft.background));
-  const [season, setSeason] = useState(SEASONS[0].id);
 
   return (
     <>
@@ -92,11 +90,10 @@ export default function BackgroundSection({
         {category === "seasons" && (
           <PhotoGallery
             theme={theme}
-            images={SEASON_IMAGES[season] || []}
+            images={SEASON_IMAGES}
             value={draft.background}
             onSelect={onSelectBackground}
             emptyCopy={EMPTY_CATEGORY_COPY.seasons}
-            seasonTabs={{ seasons: SEASONS, value: season, onChange: setSeason }}
           />
         )}
       </div>

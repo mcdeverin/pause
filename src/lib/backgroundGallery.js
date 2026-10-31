@@ -16,13 +16,6 @@ export const BACKGROUND_CATEGORIES = [
   { id: "photos", label: "Your Photos" },
 ];
 
-export const SEASONS = [
-  { id: "spring", label: "Spring" },
-  { id: "summer", label: "Summer" },
-  { id: "autumn", label: "Autumn" },
-  { id: "winter", label: "Winter" },
-];
-
 const ASSET_ROOT = "https://media.base44.com/images/public/69ca3c28f8f30cee64e1f21c";
 
 export const NATURE_IMAGES = [
@@ -91,19 +84,45 @@ export const PLACES_IMAGES = [
   },
 ];
 
-export const SEASON_IMAGES = {
-  spring: [],
-  summer: [],
-  autumn: [],
-  winter: [],
-};
+export const SEASON_IMAGES = [
+  {
+    id: "seasons-spring-blossom",
+    label: "Spring Blossom",
+    url: `${ASSET_ROOT}/3a4937d9a_agnese-rudzite-nim3L3siR7o-unsplash.jpg`,
+    tone: "#D5DBE1",
+  },
+  {
+    id: "seasons-summer-daisies",
+    label: "Summer Daisies",
+    url: `${ASSET_ROOT}/3760fa21d_aysegul-aytoren-5YL2eo4fNnM-unsplash.jpg`,
+    tone: "#87B0E4",
+  },
+  {
+    id: "seasons-misty-ridge",
+    label: "Misty Ridge",
+    url: `${ASSET_ROOT}/0e0e78104_laura-adai-IafQGHZfcBI-unsplash.jpg`,
+    tone: "#C9C9C9",
+  },
+  {
+    id: "seasons-glacier",
+    label: "Glacier",
+    url: `${ASSET_ROOT}/e05d553a5_mariano-baraldi-o7ZfuOskfO0-unsplash.jpg`,
+    tone: "#B4C1CB",
+  },
+  {
+    id: "seasons-frosted-bird",
+    label: "Frosted Bird",
+    url: `${ASSET_ROOT}/fd80ec123_wolfgang-hasselmann-ZqRY74ZiUKc-unsplash.jpg`,
+    tone: "#E4E4E4",
+  },
+];
 
 // One flat lookup, so a saved background id can always be resolved back to the
 // photograph it points at without a database read.
 export const GALLERY_IMAGES = [
   ...NATURE_IMAGES,
   ...PLACES_IMAGES,
-  ...SEASONS.map((season) => SEASON_IMAGES[season.id] || []).flat(),
+  ...SEASON_IMAGES,
 ];
 
 export function getGalleryImage(id) {
@@ -120,9 +139,7 @@ export function isGalleryPhotoId(id) {
 export function getGalleryCategory(id) {
   if (NATURE_IMAGES.some((image) => image.id === id)) return "nature";
   if (PLACES_IMAGES.some((image) => image.id === id)) return "places";
-  if (SEASONS.some((season) => (SEASON_IMAGES[season.id] || []).some((image) => image.id === id))) {
-    return "seasons";
-  }
+  if (SEASON_IMAGES.some((image) => image.id === id)) return "seasons";
   return null;
 }
 

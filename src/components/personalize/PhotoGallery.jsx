@@ -9,48 +9,11 @@ const GRID = {
 
 // The photographic collections. Real curated images only — an unpopulated
 // collection shows a clean empty state rather than stand-in photography.
-export default function PhotoGallery({ theme, value, onSelect, images, emptyCopy, seasonTabs = null }) {
+export default function PhotoGallery({ theme, value, onSelect, images, emptyCopy }) {
   const colors = getColors(theme);
 
   return (
     <>
-      {seasonTabs && (
-        <div
-          role="tablist"
-          aria-label="Seasons"
-          style={{ display: "flex", gap: 6, overflowX: "auto", margin: "0 0 10px", paddingBottom: 2 }}
-        >
-          {seasonTabs.seasons.map((season) => {
-            const selected = season.id === seasonTabs.value;
-            return (
-              <button
-                key={season.id}
-                type="button"
-                role="tab"
-                aria-selected={selected}
-                onClick={() => seasonTabs.onChange(season.id)}
-                style={{
-                  flexShrink: 0,
-                  minHeight: 34,
-                  padding: "7px 12px",
-                  borderRadius: 999,
-                  border: `1px solid ${selected ? colors.accent : colors.pillBorder}`,
-                  background: selected ? colors.accentSoft : "transparent",
-                  color: selected ? colors.text : colors.secondary,
-                  fontFamily: FONT,
-                  fontSize: "12.5px",
-                  fontWeight: 700,
-                  whiteSpace: "nowrap",
-                  cursor: "pointer",
-                }}
-              >
-                {season.label}
-              </button>
-            );
-          })}
-        </div>
-      )}
-
       {images.length === 0 ? (
         <div
           style={{
