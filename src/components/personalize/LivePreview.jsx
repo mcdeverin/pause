@@ -153,6 +153,8 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
             breath={breath}
             theme={theme}
             options={settings.visualOptions?.[settings.visual]}
+            photo={photo}
+            backgroundSettings={settings}
             reducedMotion={reducedMotion}
             showLabel={false}
           />
