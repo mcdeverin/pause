@@ -19,32 +19,58 @@ export default function PrismaticWaterScene({strength=.7,softness=.65,motion=.5,
  uniform float uTime,uStrength,uSoftness,uMotion;
  uniform vec2 uResolution,uPointer,uVelocity;
  uniform vec3 uColors[3];
- float wave(vec2 p,vec2 center,float freq,float speed){
- float d=length(p-center);return sin(d*freq-uTime*speed)*exp(-d*3.3);
+ float ring(vec2 p,vec2 origin,float frequency,float phase){
+  float d=length(p-origin);
+  return sin(d*frequency-phase)*exp(-d*2.8);
+ }
+ float heightField(vec2 p){
+  float t=uTime;
+  float a=uResolution.x/max(uResolution.y,1.);
+  vec2 touch=vec2(uPointer.x*a,uPointer.y);
+  float dist=length(p-touch);
+  float nearTouch=exp(-dist*(3.5+uSoftness*3.));
+  float interaction=nearTouch*uStrength*(sin(dist*88.-t*11.)*.026+sin(dist*143.-t*15.)*.009);
+  float flow=uMotion*(sin(p.x*9.+p.y*4.+t*.38)*.005+cos(p.y*13.-p.x*3.-t*.31)*.004);
+  float wake=ring(p,vec2(.49*a,.49),32.,t*.55)*.009*uMotion;
+  return interaction+flow+wake;
+ }
+ vec3 spectrum(float x){
+  vec3 a=vec3(.51,.62,.74),b=vec3(.46,.37,.32),c=vec3(1.,1.,1.),d=vec3(.02,.21,.43);
+  return clamp(a+b*cos(6.28318*(c*x+d)),0.,1.);
  }
  void main(){
- vec2 uv=vUv;float aspect=uResolution.x/max(uResolution.y,1.);
- vec2 p=vec2(uv.x*aspect,uv.y),cursor=vec2(uPointer.x*aspect,uPointer.y);
- float d=length(p-cursor);
- float influence=exp(-d*d/(.035+.18*uSoftness));
- float ripples=sin(d*54.-uTime*8.)*exp(-d*(7.+4.*uSoftness));
- vec2 dir=(p-cursor)/(d+.002);
- vec2 displacement=dir*ripples*influence*uStrength*.024+uVelocity*influence*uStrength*.055;
- float ambient=wave(p,vec2(.18*aspect,.72),19.,.48)+wave(p,vec2(.85*aspect,.3),23.,.37)+wave(p,vec2(.53*aspect,.53),28.,.31);
- displacement+=vec2(sin(ambient*2.+uTime*.17),cos(ambient*2.-uTime*.13))*.008*uMotion;
- vec2 q=uv-displacement;
- float blend=clamp(.5+.38*sin(q.x*4.+q.y*3.+ambient*.55),0.,1.);
- vec3 col=mix(uColors[0],uColors[1],blend);
- col=mix(col,uColors[2],clamp(.35+.4*cos(q.y*5.-q.x*2.+ambient),0.,1.));
- float ridges=sin((q.y+ambient*.026)*120.+q.x*15.);
- float shimmer=pow(max(0.,ridges),18.)*(.08+.16*uMotion);
- float crest=max(0.,ripples)*influence*uStrength*.22;
- col+=vec3(1.,.93,.94)*(shimmer+crest);
- col-=vec3(.18,.13,.22)*max(0.,-ripples)*influence*uStrength*.08;
- col=mix(col,vec3(1.),.07);
- gl_FragColor=vec4(col,1.);
- #include <tonemapping_fragment>
- #include <colorspace_fragment>
+  float aspect=uResolution.x/max(uResolution.y,1.);
+  vec2 p=vec2(vUv.x*aspect,vUv.y);
+  float eps=.0025;
+  float h=heightField(p);
+  vec2 slope=vec2(heightField(p+vec2(eps,0.))-heightField(p-vec2(eps,0.)),heightField(p+vec2(0.,eps))-heightField(p-vec2(0.,eps)))/(2.*eps);
+  vec3 normal=normalize(vec3(-slope.x*2.4,-slope.y*2.4,1.));
+  vec3 view=vec3(0.,0.,1.);
+  vec3 reflection=reflect(-view,normal);
+  float fresnel=pow(1.-max(dot(normal,view),0.),3.);
+  float t=uTime;
+  vec2 env=reflection.xy*.48+p*.23;
+  float longBands=sin(env.y*18.+env.x*8.+sin(env.x*6.)*2.);
+  float thinBands=sin(env.y*75.+env.x*22.+sin(env.y*14.)*3.);
+  float glint=pow(max(0.,sin(env.y*44.+env.x*16.)),18.);
+  float sky=clamp(.5+.5*sin(env.y*4.+env.x*2.),0.,1.);
+  vec3 chrome=mix(vec3(.20,.27,.38),vec3(.91,.95,1.),clamp(.55+longBands*.29+thinBands*.11,0.,1.));
+  chrome=mix(chrome,vec3(.99,.99,1.),sky*.18);
+  float colorPhase=env.x*.49+env.y*.58+normal.x*.22+normal.y*.19;
+  vec3 iridescent=spectrum(colorPhase);
+  vec3 warm=mix(uColors[0],uColors[1],clamp(.5+.5*sin(colorPhase*8.),0.,1.));
+  iridescent=mix(iridescent,mix(warm,uColors[2],.4),.17);
+  float touchDist=length(p-vec2(uPointer.x*aspect,uPointer.y));
+  float touchGlow=exp(-touchDist*2.2)*uStrength;
+  float colorAmount=clamp(.12+.26*uMotion+.46*touchGlow+.28*length(slope),0.,.85);
+  vec3 col=mix(chrome,iridescent,colorAmount);
+  col+=vec3(1.,.91,.76)*glint*.24;
+  col+=vec3(.88,.96,1.)*pow(max(dot(normal,normalize(vec3(-.4,.6,1.))),0.),38.)*.38;
+  col+=fresnel*vec3(.24,.31,.4);
+  col=clamp(col,0.,1.);
+  gl_FragColor=vec4(col,1.);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
  }`});
  const scene=new THREE.Scene();scene.add(new THREE.Mesh(geometry,material));
  const pointer=new THREE.Vector2(-10,-10),target=new THREE.Vector2(-10,-10),last=new THREE.Vector2(-10,-10);
