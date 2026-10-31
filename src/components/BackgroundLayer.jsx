@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { blurPixels, clampBlur, clampDim, clampPhotoOffset, clampPhotoZoom } from "../lib/background";
 import { getBackgroundTone, isPhotoBackground, isSolidBackground } from "../lib/design";
 
@@ -6,7 +7,7 @@ import { getBackgroundTone, isPhotoBackground, isSolidBackground } from "../lib/
 // The host element needs position:relative and isolation:isolate.
 // The canvas is appearance-independent — Light / Dark never repaints it — so the
 // `theme` prop callers still pass is deliberately unused here.
-export default function BackgroundLayer({ settings = {}, photo = null, fixed = false }) {
+function BackgroundLayer({ settings = {}, photo = null, fixed = false }) {
   const {
     background = "classic",
     backgroundDim = 0,
@@ -86,3 +87,8 @@ export default function BackgroundLayer({ settings = {}, photo = null, fixed = f
     </div>
   );
 }
+
+// A session republishes its breathing visual ~30 times a second. Its inputs never
+// change while it breathes, so without this the photograph, its blur and the
+// dimming were rebuilt on every one of those frames.
+export default memo(BackgroundLayer);
