@@ -9,6 +9,7 @@ import Home from './pages/Home.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
 import CrystalComparison from './pages/CrystalComparison.jsx';
+import GhostStudio from './pages/GhostStudio.jsx';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -41,6 +42,7 @@ const AuthenticatedApp = () => {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/crystal-comparison" element={<CrystalComparison />} />
+      <Route path="/ghost-studio" element={<GhostStudio />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
