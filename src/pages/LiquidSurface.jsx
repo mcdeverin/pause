@@ -15,7 +15,7 @@ export default function LiquidSurface(){
  {!expanded&&<><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}><Link to="/" style={{color:"#645e66",textDecoration:"none",fontSize:14}}>← Back to Always Pause</Link><span style={{fontSize:11,letterSpacing:".16em",fontWeight:700,color:"#8d8187"}}>SENSORY</span></div><h1 style={{fontSize:"clamp(30px,5vw,46px)",margin:"0 0 6px"}}>Liquid Surface</h1><p style={{fontSize:14,color:"#80777d",margin:"0 0 22px"}}>Move your finger or cursor through the water.</p></>}
  <div style={{position:"relative",height:expanded?"100dvh":"min(68dvh,690px)",minHeight:expanded?0:340,borderRadius:expanded?0:22,overflow:"hidden"}}>
  <LiquidSurfaceScene photoUrl={background==="photo"?image?.url:null} strength={strength} viscosity={viscosity} paused={false}/>
- <button type="button" onClick={()=>setExpanded(v=>!v)} style={{position:"absolute",right:16,top:16,padding:"10px 15px",border:0,borderRadius:24,background:"#ffffffdf",cursor:"pointer"}}>{expanded?"Exit full screen":"Expand ↗"}</button>
+ <button type="button" onClick={()=>setExpanded(v=>!v)} aria-label={expanded?"Exit full screen":"Expand Liquid Surface to full screen"} title={expanded?"Exit full screen":"Full screen"} style={{position:"absolute",top:16,right:16,zIndex:5,width:42,height:42,display:"grid",placeItems:"center",border:0,borderRadius:14,background:"#ffffffd9",color:"#353036",fontSize:23,cursor:"pointer",boxShadow:"0 2px 12px #00000012"}}>{expanded?"↙↗":"↗↙"}</button>
  </div>
  {!expanded&&<div style={{display:"flex",flexWrap:"wrap",gap:22,alignItems:"center",justifyContent:"space-between",marginTop:22}}>
  </div>}
