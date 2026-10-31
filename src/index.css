@@ -6,7 +6,8 @@
 
 @layer base {
   html {
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   * {
@@ -162,8 +163,9 @@
     font-family: 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
     font-weight: 500;
     letter-spacing: 0;
-    overflow: hidden;
-    overscroll-behavior: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-x: none;
   }
 }
 
