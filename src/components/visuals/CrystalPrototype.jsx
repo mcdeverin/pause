@@ -29,24 +29,27 @@ export default function CrystalPrototype({
   reducedMotion = false,
   breath,
   dark = false,
+  testPattern = false,
 }) {
   const hostRef = useRef(null);
   const settingsRef = useRef(settings);
   const activeRef = useRef(animate && !reducedMotion);
   const breathRef = useRef(breath);
   const darkRef = useRef(dark);
+  const patternRef = useRef(testPattern);
   const [failed, setFailed] = useState(false);
   settingsRef.current = settings;
   activeRef.current = animate && !reducedMotion;
   breathRef.current = breath;
   darkRef.current = dark;
+  patternRef.current = testPattern;
 
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return undefined;
     let renderer, observer, frame = 0, disposed = false;
     let pmrem, room, environment;
-    let geometry, edgesGeometry;
+    let geometry, edgesGeometry, backdropGeometry, backdropMaterial, backdropTexture;
     const materials = [];
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
@@ -63,7 +66,36 @@ export default function CrystalPrototype({
       renderer.toneMappingExposure = 1.4;
       // A matching scene backdrop gives the transmission pass something to refract.
       // The final app integration will need its actual background rendered here.
-      scene.background = new THREE.Color(dark ? "#252c39" : "#f0eef3");
+      scene.background = null;
+      // Put the test artwork inside WebGL, behind the glass, so the
+      // transmission pass can actually refract its pixels.
+      const patternCanvas = document.createElement("canvas");
+      patternCanvas.width = 1024;
+      patternCanvas.height = 1024;
+      const ctx = patternCanvas.getContext("2d");
+      if (ctx) {
+        ctx.fillStyle = "#f3f0f6";
+        ctx.fillRect(0, 0, 1024, 1024);
+        ctx.strokeStyle = "#a9a1bd";
+        ctx.lineWidth = 5;
+        for (let x = -1024; x < 2048; x += 90) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 460, 1024); ctx.stroke();
+        }
+        ctx.fillStyle = "#6b607e";
+        ctx.font = "600 66px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("ALWAYS PAUSE", 512, 410);
+        ctx.font = "38px sans-serif";
+        ctx.fillText("GLASS REFRACTION TEST", 512, 625);
+      }
+      backdropTexture = new THREE.CanvasTexture(patternCanvas);
+      backdropTexture.colorSpace = THREE.SRGBColorSpace;
+      backdropGeometry = new THREE.PlaneGeometry(28, 28);
+      backdropMaterial = new THREE.MeshBasicMaterial({ map: backdropTexture, toneMapped: false });
+      const backdrop = new THREE.Mesh(backdropGeometry, backdropMaterial);
+      backdrop.position.z = -5;
+      backdrop.visible = testPattern;
+      scene.add(backdrop);
       pmrem = new THREE.PMREMGenerator(renderer);
       room = new RoomEnvironment();
       environment = pmrem.fromScene(room);
@@ -106,7 +138,10 @@ export default function CrystalPrototype({
         const level = THREE.MathUtils.clamp(Math.round(next), 0, 2);
         if (detail === level) return;
         detail = level;
-        geometry?.dispose();
+        backdropGeometry?.dispose();
+      backdropMaterial?.dispose();
+      backdropTexture?.dispose();
+      geometry?.dispose();
         edgesGeometry?.dispose();
         geometry = new THREE.IcosahedronGeometry(3.05, level);
         // Split faces for hard normals, giving each cut a separate reflection.
