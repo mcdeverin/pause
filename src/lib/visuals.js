@@ -190,9 +190,9 @@ export const VISUAL_STYLES = [
   },
   {
     id: "rainDroplet",
-    label: "Rain Droplet",
+    label: "Rain Droplets",
     collection: "classics",
-    description: "One glass droplet that breathes over your background.",
+    description: "A cluster of refractive water droplets that breathes over your selected background.",
     controls: [],
   },
   {
