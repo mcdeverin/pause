@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FONT, getColors } from "../../lib/design";
 
-const CELL = 26;
 const GAP = 6;
 
 export default function ActivityGrid({ theme, weeks, caption }) {
@@ -25,11 +24,11 @@ export default function ActivityGrid({ theme, weeks, caption }) {
         {caption}
       </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(7, ${CELL}px)`, gap: GAP }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: GAP, width: "100%", maxWidth: 440, margin: "0 auto" }}>
         {weeks.map((week, weekIndex) =>
           week.map((day, dayIndex) => {
             if (!day) {
-              return <span key={`empty-${weekIndex}-${dayIndex}`} style={{ width: CELL, height: CELL }} />;
+              return <span key={`empty-${weekIndex}-${dayIndex}`} style={{ width: "100%", aspectRatio: "1 / 1" }} />;
             }
             const isActive = day.key === activeKey;
             return (
@@ -43,8 +42,8 @@ export default function ActivityGrid({ theme, weeks, caption }) {
                   day: "numeric",
                 })}: ${day.count} ${day.count === 1 ? "pause" : "pauses"}`}
                 style={{
-                  width: CELL,
-                  height: CELL,
+                  width: "100%",
+                  aspectRatio: "1 / 1",
                   padding: 0,
                   borderRadius: 7,
                   cursor: "pointer",
