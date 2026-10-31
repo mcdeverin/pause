@@ -161,6 +161,13 @@ export const VISUAL_STYLES = [
     controls: [],
   },
   {
+    id: "living",
+    label: "Living",
+    collection: "classics",
+    description: "A softly shifting, iridescent living orb.",
+    controls: [],
+  },
+  {
     id: "glass",
     label: "Iridescent",
     collection: "classics",
