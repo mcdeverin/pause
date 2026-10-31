@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import NavigationSheet from "./NavigationSheet";
 import MomentShortcuts from "./MomentShortcuts";
-import { FONT, isPhotoBackground } from "../lib/design";
+import { FONT, FROST_GLASS, FROST_INK, isPhotoBackground } from "../lib/design";
 import { getCanvasInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import { usePhotoLightness } from "../hooks/usePhotoLightness";
@@ -258,14 +258,13 @@ export default function MainScreen({
               gap: 6,
               padding: "0 11px",
               borderRadius: 999,
-              background: ink.glass,
-              border: `1px solid ${ink.glassBorder}`,
+              ...FROST_GLASS,
               cursor: "pointer",
               fontFamily: FONT,
               fontSize: "11.5px",
               fontWeight: 500,
               letterSpacing: "0.01em",
-              color: ink.secondary,
+              color: FROST_INK,
             }}
           >
             <Eye size={13} strokeWidth={2} />

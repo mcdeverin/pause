@@ -6,6 +6,18 @@ import { getGalleryImage } from "./backgroundGallery";
 
 export const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
+// The two small controls that float over the background share one frosted
+// warm-ivory treatment, so they stay readable on both dark and light canvases.
+export const FROST_GLASS = {
+  background: "rgba(250, 248, 244, 0.82)",
+  backdropFilter: "blur(8px)",
+  WebkitBackdropFilter: "blur(8px)",
+  border: "1px solid rgba(69, 76, 73, 0.12)",
+  boxShadow: "0 1px 6px rgba(69, 76, 73, 0.10)",
+};
+
+export const FROST_INK = "#454C49";
+
 // Each preset owns exactly one canvas tone. Light / Dark restyles the interface
 // only, so a preset never repaints when the appearance changes.
 export const BACKGROUNDS = [

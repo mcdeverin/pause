@@ -1,5 +1,5 @@
 import { Crosshair, EyeOff, Leaf, Moon, Sun } from "lucide-react";
-import { FONT, getColors } from "../lib/design";
+import { FONT, FROST_GLASS, FROST_INK, getColors } from "../lib/design";
 import { MOMENTS } from "../lib/moments";
 
 const ICONS = { calm: Leaf, focus: Crosshair, wind_down: Moon, reset: Sun };
@@ -28,10 +28,9 @@ export default function MomentShortcuts({ theme, ink, onSelect, notice, onHide }
             minHeight: 36,
             padding: "0 12px 0 15px",
             borderRadius: 999,
-            background: colors.glass,
-            border: `1px solid ${colors.glassBorder}`,
+            ...FROST_GLASS,
             cursor: "pointer",
-            color: colors.text,
+            color: FROST_INK,
             fontFamily: FONT,
             fontSize: "14px",
             fontWeight: 700,
