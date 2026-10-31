@@ -216,9 +216,9 @@ export default function PersonalizePanel({
     }
 
     onSave(draft);
-    setJustSaved(true);
-    clearTimeout(savedTimerRef.current);
-    savedTimerRef.current = setTimeout(() => setJustSaved(false), 2600);
+    // Saving commits the draft and returns directly to the updated Pause screen.
+    // Upgrade prompts above still keep the sheet open until resolved.
+    onClose();
   };
 
   return (
