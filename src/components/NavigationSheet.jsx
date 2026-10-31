@@ -80,7 +80,7 @@ export default function NavigationSheet({
 }) {
   const colors = getColors(theme);
   const navigate = useNavigate();
-  const [breathingExpanded,setBreathingExpanded]=useState(true);
+  const [breathingExpanded,setBreathingExpanded]=useState(false);
   const [sensoryExpanded,setSensoryExpanded]=useState(false);
 
   const handleCategory = (id) => {
