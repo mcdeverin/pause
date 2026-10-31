@@ -11,59 +11,40 @@ export default function MomentShortcuts({ theme, ink, onSelect, notice, onHide }
 
   return (
     <div style={{ padding: "0 20px" }}>
-      {/* The prompt and its hide control sit on their own opaque capsule, so they
-          stay readable whatever photograph or colour is behind them. */}
+      {/* The prompt and its hide control are one glass capsule: the whole pill
+          hides the shortcuts, and the translucent surface keeps it readable over
+          any photograph or colour. */}
       <div style={{ display: "flex", justifyContent: "center", margin: "0 0 10px" }}>
-        <div
+        <button
+          type="button"
+          onClick={onHide}
+          aria-label="Hide moment shortcuts"
+          title="Hide moment shortcuts"
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: 2,
+            gap: 8,
             maxWidth: "100%",
-            padding: "3px 4px 3px 15px",
+            minHeight: 36,
+            padding: "0 12px 0 15px",
             borderRadius: 999,
-            background: colors.sheet,
-            border: `1px solid ${colors.border}`,
+            background: colors.glass,
+            border: `1px solid ${colors.glassBorder}`,
+            cursor: "pointer",
+            color: colors.text,
+            fontFamily: FONT,
+            fontSize: "14px",
+            fontWeight: 700,
+            letterSpacing: "0.005em",
+            lineHeight: 1.35,
+            transition: "opacity 0.2s ease",
           }}
+          onMouseEnter={(event) => (event.currentTarget.style.opacity = "0.86")}
+          onMouseLeave={(event) => (event.currentTarget.style.opacity = "1")}
         >
-          <p
-            style={{
-              margin: 0,
-              fontFamily: FONT,
-              fontSize: "14.5px",
-              fontWeight: 700,
-              letterSpacing: "0.005em",
-              color: colors.text,
-              lineHeight: 1.35,
-            }}
-          >
-            What do you need right now?
-          </p>
-          <button
-            type="button"
-            onClick={onHide}
-            aria-label="Hide moment shortcuts"
-            title="Hide moment shortcuts"
-            style={{
-              width: 30,
-              height: 30,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "none",
-              border: "none",
-              padding: 0,
-              cursor: "pointer",
-              color: colors.text,
-              opacity: 0.7,
-              transition: "opacity 0.2s ease",
-            }}
-            onMouseEnter={(event) => (event.currentTarget.style.opacity = "1")}
-            onMouseLeave={(event) => (event.currentTarget.style.opacity = "0.7")}
-          >
-            <EyeOff size={16} strokeWidth={2.2} />
-          </button>
-        </div>
+          <span>What do you need right now?</span>
+          <EyeOff size={16} strokeWidth={2.2} style={{ opacity: 0.7, flexShrink: 0 }} />
+        </button>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
