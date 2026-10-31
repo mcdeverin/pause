@@ -49,6 +49,10 @@ export default function VisualLab() {
           <div style={{ letterSpacing: "0.22em", fontSize: 11, color: "#b6bac6", textTransform: "uppercase" }}>Always Pause · Design Studio</div>
           <h1 style={{ fontSize: "clamp(28px, 5vw, 44px)", fontWeight: 500, margin: "8px 0" }}>Living Opal Lab</h1>
           <p style={{ color: "#b6bac6", margin: 0 }}>Explore color, tone, shape, light, movement and breath. Nothing here changes your saved app settings.</p>
+          <nav style={{ display: "flex", gap: 14, marginTop: 12, fontSize: 13 }}>
+            <span style={{ color: "#a9adba" }}>Living Lab</span>
+            <a href="/crystal-lab" style={{ color: "#cdb9fa" }}>Crystal Lab</a>
+          </nav>
         </header>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))", gap: 22 }}>
           <section style={{ borderRadius: 24, background: dark ? "radial-gradient(circle at 50% 42%, #303344, #141720 76%)" : "radial-gradient(circle at 50% 42%, #ffffff, #e6e5e9 76%)", minHeight: 440, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "hidden", position: "relative" }}>
