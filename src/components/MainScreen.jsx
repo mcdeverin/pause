@@ -132,14 +132,13 @@ export default function MainScreen({
         </button>
       </div>
 
-      {/* Brand heading — eased down from the wordmark so the space above it and
-          the space around the breathing circle read as evenly spread. It is moved
-          with a transform, so the circle and "Tap to pause" keep their places. */}
+      {/* Keep the heading in normal layout flow so it never overlaps the orb
+          on mobile web browsers with shorter usable viewports. */}
       <div
         style={{
-          margin: "clamp(24px, 8.5vh, 92px) 32px 0",
+          margin: "clamp(18px, 4vh, 44px) 32px 0",
           textAlign: "center",
-          transform: "translateY(clamp(26px, 7vh, 72px))",
+          flexShrink: 0,
         }}
       >
         <p
