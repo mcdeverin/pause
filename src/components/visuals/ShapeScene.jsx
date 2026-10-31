@@ -51,7 +51,6 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
     } else if (kind === "particles") {
       const count = 1700;
       particleBase = new Float32Array(count * 3);
-      if (droplets) { camera.fov = 60; camera.position.z = 3; camera.updateProjectionMatrix(); }
       for (let i = 0; i < count; i++) {
         const phi = i * 2.3999632, y = 1 - 2 * (i + .5) / count, radius = Math.sqrt(1 - y * y);
         particleBase[i * 3] = Math.cos(phi) * radius;
@@ -66,6 +65,7 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
     } else {
       const droplets = kind === "droplets" || kind === "dropletsSingle" || kind === "dropletsHalo";
       const count = droplets ? 140 : 46;
+      if (droplets) { camera.fov = 60; camera.position.z = 3; camera.updateProjectionMatrix(); }
       const material = droplets
         ? new THREE.MeshBasicMaterial({ color: "#ffffff", refractionRatio: .95 })
         : null;
