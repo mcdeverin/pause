@@ -6,6 +6,7 @@ import {
   PLACES_IMAGES,
   SEASONS,
   SEASON_IMAGES,
+  getGalleryCategory,
 } from "../../lib/backgroundGallery";
 import CategoryTabs from "./CategoryTabs";
 import ColorBackgrounds from "./ColorBackgrounds";
@@ -15,6 +16,8 @@ import PhotoLibrary from "./PhotoLibrary";
 // Which category a saved background belongs to, so reopening the panel lands on
 // the collection the user last chose from.
 function categoryFor(background) {
+  const collection = getGalleryCategory(background);
+  if (collection) return collection;
   if (background === MY_PHOTO_ID) return "photos";
   if (background === CUSTOM_COLOR_ID || background === CUSTOM_GRADIENT_ID) return "color";
   if (BACKGROUNDS.some((option) => option.id === background)) return "color";

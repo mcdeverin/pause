@@ -2,6 +2,7 @@
 // Every screen reads from here so the app stays visually consistent.
 
 import { getStyleLabel } from "./visuals";
+import { getGalleryImage } from "./backgroundGallery";
 
 export const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
@@ -153,13 +154,15 @@ export function getBackgroundOption(id) {
   return BACKGROUNDS.find((option) => option.id === id) || null;
 }
 
+// A photograph background is either the user's own photo or one of the curated
+// collection images — both fill the screen the same way.
 export function isPhotoBackground(id) {
-  return id === MY_PHOTO_ID;
+  return id === MY_PHOTO_ID || Boolean(getGalleryImage(id));
 }
 
 // A flat colour has nothing to soften, so blur is switched off for it.
 export function isSolidBackground(id) {
-  if (id === MY_PHOTO_ID) return false;
+  if (isPhotoBackground(id)) return false;
   if (id === CUSTOM_GRADIENT_ID) return false;
   if (id === CUSTOM_COLOR_ID) return true;
   const preset = getBackgroundOption(id) || BACKGROUNDS[0];
@@ -177,7 +180,7 @@ export function getBackgroundTone(id, palette = {}) {
     return `linear-gradient(180deg, ${from} 0%, ${to} 100%)`;
   }
   if (id === CUSTOM_COLOR_ID) return palette.customColor || DEFAULT_CUSTOM_COLOR;
-  if (id === MY_PHOTO_ID) return BASE_TONE;
+  if (isPhotoBackground(id)) return BASE_TONE;
   const preset = getBackgroundOption(id) || BACKGROUNDS[0];
   return preset.tone;
 }
@@ -190,6 +193,8 @@ export function getBackgroundLabel(id, customColor) {
   if (id === CUSTOM_COLOR_ID) return customColor ? `Custom ${customColor}` : "Custom Color";
   if (id === CUSTOM_GRADIENT_ID) return "Custom Gradient";
   if (id === MY_PHOTO_ID) return "Your Photos";
+  const gallery = getGalleryImage(id);
+  if (gallery) return gallery.label;
   const found = getBackgroundOption(id) || BACKGROUNDS[0];
   return found.label;
 }

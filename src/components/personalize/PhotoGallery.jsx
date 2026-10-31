@@ -106,11 +106,21 @@ export default function PhotoGallery({ theme, value, onSelect, images, emptyCopy
                     background: image.tone || colors.track,
                   }}
                 >
+                  {/* Lazy, low-priority thumbnails: only the photographs actually on
+                      screen are requested, so opening the panel stays light. */}
                   <img
                     src={image.url}
                     alt=""
                     loading="lazy"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    decoding="async"
+                    fetchPriority="low"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      objectPosition: "center",
+                      display: "block",
+                    }}
                   />
                 </span>
                 <span

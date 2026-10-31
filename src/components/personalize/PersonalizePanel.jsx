@@ -12,6 +12,8 @@ import BackgroundSection from "./BackgroundSection";
 import AdjustmentSlider from "./AdjustmentSlider";
 import RestoreDefaultsButton from "./RestoreDefaultsButton";
 import { restoreVisualDefaults, visualSettingsAtDefaults } from "../../lib/personalizeDefaults";
+import { isGalleryPhotoId } from "../../lib/backgroundGallery";
+import { resolveBackgroundImage } from "../../lib/backgroundImage";
 
 function SectionLabel({ children, theme, isFirst }) {
   const colors = getColors(theme);
@@ -60,9 +62,8 @@ export default function PersonalizePanel({
   const isDay = appearance === "light";
   const solidBackground = isSolidBackground(draft.background);
 
-  const activePhotoId = draft.photoId || (photos[0] ? photos[0].id : null);
-  const activePhoto = photos.find((entry) => entry.id === activePhotoId) || null;
-  const previewPhoto = activePhoto ? activePhoto.dataUrl : null;
+  // The preview paints the same photograph the home screen would.
+  const previewPhoto = resolveBackgroundImage(draft, photos);
 
   useEffect(() => () => clearTimeout(savedTimerRef.current), []);
 
@@ -97,6 +98,12 @@ export default function PersonalizePanel({
       const next = { ...current, background: id };
       // Blur means nothing on a flat colour, so it isn't carried into one.
       if (isSolidBackground(id)) next.backgroundBlur = 0;
+      // A curated photograph always arrives centred and uncropped.
+      if (isGalleryPhotoId(id)) {
+        next.photoZoom = 1;
+        next.photoOffsetX = 0;
+        next.photoOffsetY = 0;
+      }
       return next;
     });
     setJustSaved(false);

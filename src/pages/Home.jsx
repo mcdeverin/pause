@@ -10,6 +10,7 @@ import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
 import { initRevenueCat, checkEntitlement } from "../lib/revenuecat";
 import { loadPreferences, savePreferences } from "../lib/preferences";
 import { addStoredPhoto, getStoredPhotos, removeStoredPhoto } from "../lib/backgroundPhoto";
+import { resolveBackgroundImage } from "../lib/backgroundImage";
 import BackgroundLayer from "../components/BackgroundLayer";
 import { MOMENTS, addMoment } from "../lib/moments";
 import MomentsScreen from "../components/moments/MomentsScreen";
@@ -38,11 +39,9 @@ export default function Home() {
   // Light / Dark restyles the interface only — the background keeps its own canvas.
   const theme = preferences.appearance === "dark" ? "night" : "day";
 
-  // The photo in use is whichever one the saved preferences point at, falling
-  // back to the most recently added.
-  const activePhotoEntry =
-    photos.find((entry) => entry.id === preferences.photoId) || photos[0] || null;
-  const photo = activePhotoEntry ? activePhotoEntry.dataUrl : null;
+  // The photograph in use is whatever the saved preferences point at — a curated
+  // collection image or one of this device's own photos.
+  const photo = resolveBackgroundImage(preferences, photos);
   const sessionMomentRef = useRef(null);
   const noticeTimerRef = useRef(null);
 
