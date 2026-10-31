@@ -37,7 +37,7 @@ export default function BreathingRing({ theme, options = {}, fill = 0, label, sh
           width: "72%",
           height: "72%",
           borderRadius: "50%",
-          background: `radial-gradient(circle at 40% 38%, ${colors.ringFrom}2E 0%, ${colors.ringTo}12 62%, transparent 78%)`,
+          background: `radial-gradient(circle at 40% 38%, ${ringFrom}2E 0%, ${ringTo}12 62%, transparent 78%)`,
         }}
       />
 
@@ -50,8 +50,8 @@ export default function BreathingRing({ theme, options = {}, fill = 0, label, sh
       >
         <defs>
           <linearGradient id="pauseBreathingRing" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={colors.ringFrom} />
-            <stop offset="100%" stopColor={colors.ringTo} />
+            <stop offset="0%" stopColor={ringFrom} />
+            <stop offset="100%" stopColor={ringTo} />
           </linearGradient>
         </defs>
 
