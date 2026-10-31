@@ -10,6 +10,7 @@ import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
 import CrystalComparison from './pages/CrystalComparison.jsx';
 import GhostStudio from './pages/GhostStudio.jsx';
+import LiquidOrbStudio from './pages/LiquidOrbStudio.jsx';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -43,6 +44,7 @@ const AuthenticatedApp = () => {
       <Route path="/terms" element={<Terms />} />
       <Route path="/crystal-comparison" element={<CrystalComparison />} />
       <Route path="/ghost-studio" element={<GhostStudio />} />
+      <Route path="/liquid-orb-studio" element={<LiquidOrbStudio />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
