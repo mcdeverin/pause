@@ -1,20 +1,27 @@
-import CrystalPrototype, { CRYSTAL_DEFAULTS } from "./CrystalPrototype";
+import { useRef } from "react";
+import PrismaticGlass from "../crystalStudio/PrismaticGlass";
+import { PRISMATIC_DEFAULTS } from "../../lib/crystalStudio";
 
-// The production Crystal style now uses the Prismatic Glass renderer.
-// Keep the breathing clock upstream and leave the photo/background layer intact.
+// The Crystal choice uses the exact Prismatic Glass renderer from Crystal Comparison.
+// The existing breathing clock remains the single source of breath timing.
 export default function CrystalVisual({
   breath = 0,
   theme = "day",
   reducedMotion = false,
   animate = true,
+  photo = null,
 }) {
+  const breathRef = useRef(breath);
+  breathRef.current = breath;
   return (
-    <CrystalPrototype
-      settings={CRYSTAL_DEFAULTS}
-      breath={breath}
-      dark={theme === "night"}
-      animate={animate}
+    <PrismaticGlass
+      settings={PRISMATIC_DEFAULTS}
+      breathRef={breathRef}
+      mode={photo ? "photo" : theme === "night" ? "dark" : "light"}
+      photo={photo}
+      playing={animate}
       reducedMotion={reducedMotion}
+      quality="balanced"
     />
   );
 }
