@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { breathScale } from "../../lib/breathExpansion";
 
 /*
  * Living Opal 2.0 for Always Pause.
@@ -465,7 +466,7 @@ export default function LivingOpalVisual({
           // The existing breathing clock controls expansion; visual motion
           // never decides when an inhale, hold, or exhale starts.
           const b = THREE.MathUtils.clamp(breathRef.current, 0, 1);
-          const scale = 1 + 0.35 * b;
+          const scale = breathScale(b);
           blob.scale.setScalar(scale);
           blob.rotation.y = movingRef.current ? elapsed * 0.09 : 0;
           blob.rotation.z = movingRef.current ? Math.sin(elapsed * 0.2) * 0.06 : 0;
