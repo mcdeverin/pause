@@ -464,8 +464,8 @@ export default function LivingOpalVisual({
 
           // The existing breathing clock controls expansion; visual motion
           // never decides when an inhale, hold, or exhale starts.
-          const b = THREE.MathUtils.clamp(s?.breath ?? breathRef.current, 0, 1);
-          const scale = (s?.size ?? 1) * (0.84 + (s?.breathStrength ?? 0.22) * b);
+          const b = THREE.MathUtils.clamp(breathRef.current, 0, 1);
+          const scale = 1 + 0.35 * b;
           blob.scale.setScalar(scale);
           blob.rotation.y = movingRef.current ? elapsed * 0.09 : 0;
           blob.rotation.z = movingRef.current ? Math.sin(elapsed * 0.2) * 0.06 : 0;
