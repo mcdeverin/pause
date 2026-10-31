@@ -16,6 +16,9 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
       renderer.setClearColor(0x000000, 0);
+      renderer.domElement.style.width = "100%";
+      renderer.domElement.style.height = "100%";
+      renderer.domElement.style.display = "block";
       element.appendChild(renderer.domElement);
     } catch (error) {
       console.error("Three.js renderer unavailable", error);
