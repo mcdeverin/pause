@@ -72,7 +72,13 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       const droplets = kind === "droplets" || kind === "dropletsSingle" || kind === "dropletsHalo";
       const count = kind === "dropletsSingle" ? 1 : 46;
       if (droplets) { camera.fov = 60; camera.position.z = 3; camera.updateProjectionMatrix(); }
-      const material = droplets
+      const material = droplets && background === "transparent"
+        ? new THREE.ShaderMaterial({
+            transparent: true, depthWrite: false,
+            vertexShader: `varying vec3 vNormal; varying vec3 vView; void main() { vec4 viewPos = modelViewMatrix * vec4(position, 1.0); vNormal = normalize(normalMatrix * normal); vView = normalize(-viewPos.xyz); gl_Position = projectionMatrix * viewPos; }`,
+            fragmentShader: `varying vec3 vNormal; varying vec3 vView; void main() { float ndv = abs(dot(normalize(vNormal), normalize(vView))); float rim = pow(1.0 - ndv, 3.0); vec3 n = normalize(vNormal); float glint = pow(max(dot(n, normalize(vec3(-0.38, 0.64, 0.67))), 0.0), 90.0); float glint2 = pow(max(dot(n, normalize(vec3(0.6, -0.48, 0.63))), 0.0), 150.0); float alpha = clamp(0.015 + rim * 0.52 + glint * 0.82 + glint2 * 0.44, 0.0, 0.94); vec3 tint = mix(vec3(0.86, 0.91, 0.94), vec3(1.0), glint); gl_FragColor = vec4(tint, alpha); }`
+          })
+        : droplets
         ? new THREE.MeshPhysicalMaterial({
             color: 0xffffff, metalness: 0, roughness: 0.015,
             transmission: 1, thickness: 1.2, ior: 1.33,
@@ -80,7 +86,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
             transparent: false, depthWrite: true
           })
         : null;
-      if (droplets) {
+      if (droplets && background !== "transparent") {
         // Three.js transmission samples the actual scene behind the glass.
         // Never use the Park3Med cubemap: it cannot match the selected photo.
         const canvas = document.createElement("canvas");
