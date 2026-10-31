@@ -182,6 +182,20 @@ export const VISUAL_STYLES = [
     controls: [],
   },
   {
+    id: "particles",
+    label: "Particles",
+    collection: "classics",
+    description: "A constellation of particles that expands with your breath.",
+    controls: [],
+  },
+  {
+    id: "rainDroplet",
+    label: "Rain Droplet",
+    collection: "classics",
+    description: "One glass droplet that breathes over your background.",
+    controls: [],
+  },
+  {
     id: "leaves",
     label: "Leaves",
     collection: "nature",
