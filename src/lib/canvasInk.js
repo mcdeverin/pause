@@ -60,14 +60,22 @@ function canvasLightness(settings) {
   return average * (1 - clampDim(settings.backgroundDim) / 100);
 }
 
-function resolveInk(theme, settings, { hasPhoto = false, photoDimThreshold }) {
-  const inkTheme = hasPhoto
-    ? clampDim(settings.backgroundDim) >= photoDimThreshold
-      ? "night"
-      : theme
-    : canvasLightness(settings) >= LIGHT_CANVAS
-      ? "day"
-      : "night";
+function resolveInk(theme, settings, { hasPhoto = false, photoLightness = null, photoDimThreshold }) {
+  let inkTheme;
+
+  if (hasPhoto) {
+    // A sampled photo brightness is exact, and the chosen dimming is applied on
+    // top of it so a darkened photo flips the ink correctly. While the sample is
+    // unavailable the dimming alone decides.
+    if (typeof photoLightness === "number") {
+      const dimmed = photoLightness * (1 - clampDim(settings.backgroundDim) / 100);
+      inkTheme = dimmed >= LIGHT_CANVAS ? "day" : "night";
+    } else {
+      inkTheme = clampDim(settings.backgroundDim) >= photoDimThreshold ? "night" : theme;
+    }
+  } else {
+    inkTheme = canvasLightness(settings) >= LIGHT_CANVAS ? "day" : "night";
+  }
 
   // A soft halo instead of a hard outline: it lifts the text off busy imagery
   // without reading as a shadow the user could notice.
@@ -79,9 +87,10 @@ function resolveInk(theme, settings, { hasPhoto = false, photoDimThreshold }) {
   return { inkTheme, shadow };
 }
 
-export function getCanvasInk(theme, settings = {}, { hasPhoto = false } = {}) {
+export function getCanvasInk(theme, settings = {}, { hasPhoto = false, photoLightness = null } = {}) {
   const { inkTheme, shadow } = resolveInk(theme, settings, {
     hasPhoto,
+    photoLightness,
     photoDimThreshold: PHOTO_DIM_THRESHOLD,
   });
   return { ...getColors(inkTheme), shadow };
@@ -89,9 +98,10 @@ export function getCanvasInk(theme, settings = {}, { hasPhoto = false } = {}) {
 
 // Used only by the breathing cue and its supporting text (sessions and the live
 // preview), so the rest of the interface keeps its own palette.
-export function getBreathingInk(theme, settings = {}, { hasPhoto = false } = {}) {
+export function getBreathingInk(theme, settings = {}, { hasPhoto = false, photoLightness = null } = {}) {
   const { inkTheme, shadow } = resolveInk(theme, settings, {
     hasPhoto,
+    photoLightness,
     photoDimThreshold: BREATHING_PHOTO_DIM_THRESHOLD,
   });
   return { ...getColors(inkTheme), ...BREATHING_INK[inkTheme], shadow };

@@ -8,6 +8,7 @@ import { FONT, getColors, isPhotoBackground } from "../lib/design";
 import { getBreathingInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
+import { usePhotoLightness } from "../hooks/usePhotoLightness";
 
 const TOTAL_CYCLES = 4;
 
@@ -57,8 +58,12 @@ export default function BreathingScreen({
   const colors = getColors(theme);
   // Cues and controls are drawn straight on the background, so their ink adapts
   // to that canvas. The background and the user's dimming stay untouched.
+  const photoBackground =
+    isPhotoBackground(backgroundSettings.background) && Boolean(photo);
+  const photoLightness = usePhotoLightness(photoBackground ? photo : null);
   const ink = getBreathingInk(theme, backgroundSettings, {
-    hasPhoto: isPhotoBackground(backgroundSettings.background) && Boolean(photo),
+    hasPhoto: photoBackground,
+    photoLightness,
   });
 
   // Only a real stored http(s) link is shown — never a placeholder.

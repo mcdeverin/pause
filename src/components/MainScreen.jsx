@@ -7,6 +7,7 @@ import MomentShortcuts from "./MomentShortcuts";
 import { FONT, isPhotoBackground } from "../lib/design";
 import { getCanvasInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
+import { usePhotoLightness } from "../hooks/usePhotoLightness";
 
 const ORB_MAX = 300;
 
@@ -53,8 +54,12 @@ export default function MainScreen({
 
   // Text and icons sit straight on the chosen background, so the ink adapts to
   // it. The background itself is never touched.
+  const photoBackground =
+    isPhotoBackground(backgroundSettings.background) && Boolean(photo);
+  const photoLightness = usePhotoLightness(photoBackground ? photo : null);
   const ink = getCanvasInk(theme, backgroundSettings, {
-    hasPhoto: isPhotoBackground(backgroundSettings.background) && Boolean(photo),
+    hasPhoto: photoBackground,
+    photoLightness,
   });
 
   return (

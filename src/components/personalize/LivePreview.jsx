@@ -8,6 +8,7 @@ import { FONT, getColors, isPhotoBackground } from "../../lib/design";
 import { getBreathingInk } from "../../lib/canvasInk";
 import { getStyleLabel } from "../../lib/visuals";
 import useBreathingClock from "../../hooks/useBreathingClock";
+import { usePhotoLightness } from "../../hooks/usePhotoLightness";
 
 // Equal Breathing (Sama Vritti) already exists in the technique library. Its 5s
 // inhale and 5s exhale are used exactly as stored — only the cycle count is short
@@ -24,8 +25,11 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
   const colors = getColors(theme);
   // The annotations inside the preview sit on the canvas itself, so they use the
   // same adaptive ink as a real session.
+  const photoBackground = isPhotoBackground(settings.background) && Boolean(photo);
+  const photoLightness = usePhotoLightness(photoBackground ? photo : null);
   const ink = getBreathingInk(theme, settings, {
-    hasPhoto: isPhotoBackground(settings.background) && Boolean(photo),
+    hasPhoto: photoBackground,
+    photoLightness,
   });
   const [loop, setLoop] = useState(0);
   const panRef = useRef(null);
@@ -45,7 +49,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
   const reducedMotion = useReducedMotion();
   const breath = Math.min(Math.max(clock.breath || 0, 0), 1);
   const visualLabel = getStyleLabel(settings.visual || "orb");
-  const canPan = isPhotoBackground(settings.background) && Boolean(photo) && Boolean(onPhotoPan);
+  const canPan = photoBackground && Boolean(onPhotoPan);
 
   const handlePanStart = (event) => {
     if (!canPan) return;
