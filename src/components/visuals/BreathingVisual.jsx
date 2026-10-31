@@ -13,7 +13,8 @@ import RippleVisual from "./RippleVisual";
 import BasketballVisual from "./BasketballVisual";
 import StudioBreathingShape from "./StudioBreathingShape";
 const ParticlesVisual = (props) => <StudioBreathingShape {...props} kind="particles" />;
-const RainDropletVisual = (props) => <StudioBreathingShape {...props} kind="droplets" />;
+const BubblesVisual = (props) => <StudioBreathingShape {...props} kind="droplets" />;
+const RainDropletVisual = (props) => <StudioBreathingShape {...props} kind="dropletsSingle" />;
 
 // Every visual takes the same breath value from the shared session clock — none
 // of them keeps its own timing.
@@ -32,7 +33,8 @@ const REGISTRY = {
   ripple: RippleVisual,
   basketball: BasketballVisual,
   particles: ParticlesVisual,
-  rainDroplet: RainDropletVisual,
+  rainDroplet: BubblesVisual,
+  singleRainDroplet: RainDropletVisual,
 };
 
 export default function BreathingVisual({
