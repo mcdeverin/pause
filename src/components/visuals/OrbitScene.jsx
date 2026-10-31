@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-export default function OrbitScene({ accent = "#ed4d9a", motion = 0.6, paused = false }) {
+export default function OrbitScene({ accent = "#d90a3d", motion = 0.6, paused = false }) {
  const host = useRef(null), settings = useRef({accent,motion,paused});
  settings.current = {accent,motion,paused};
  useEffect(() => {
@@ -9,18 +9,18 @@ export default function OrbitScene({ accent = "#ed4d9a", motion = 0.6, paused = 
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.6));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1.55;
+  renderer.toneMappingExposure=1.18;
   renderer.domElement.style.cssText="width:100%;height:100%;display:block;touch-action:none";
   el.appendChild(renderer.domElement);
-  const scene=new THREE.Scene();scene.background=new THREE.Color("#0b0b1c");
+  const scene=new THREE.Scene();scene.background=new THREE.Color("#dedede");
   const camera=new THREE.PerspectiveCamera(32,1,.1,100);camera.position.z=15;
-  scene.add(new THREE.HemisphereLight(0xc6d5ff,0x23132c,2.8));
-  const lights=[["#ffffff",75,-5,7,7],["#ff64c4",65,5,3,3],["#728bff",80,1,-5,5]];
+  scene.add(new THREE.HemisphereLight(0xffffff,0x6a2730,2.2));
+  const lights=[["#fff1e8",100,-5,7,7],["#ff3a25",130,4,2,4],["#ffffff",85,-3,-3,6]];
   lights.forEach(([color,power,x,y,z])=>{const l=new THREE.PointLight(color,power,30);l.position.set(x,y,z);scene.add(l);});
   const geometry=new THREE.SphereGeometry(1,48,32);
   const spheres=Array.from({length:18},(_,i)=>{
-   const color=i%6<2?"#e5e8ff":i%6<4?"#343959":settings.current.accent;
-   const material=new THREE.MeshPhysicalMaterial({color,metalness:.38,roughness:.13,clearcoat:1,clearcoatRoughness:.08});
+   const color=i%6<2?"#f4f0ef":i%6<4?"#340b13":settings.current.accent;
+   const material=new THREE.MeshPhysicalMaterial({color,metalness:.3,roughness:.075,clearcoat:1,clearcoatRoughness:.035});
    const mesh=new THREE.Mesh(geometry,material);
    const angle=i*2.39996,radius=1.05+Math.sqrt(i/18)*1.55;
    mesh.position.set(Math.cos(angle)*radius,Math.sin(angle)*radius,(i%5-2)*.76);
