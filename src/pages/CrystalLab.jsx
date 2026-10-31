@@ -14,7 +14,7 @@ const CONTROLS = [
   ["ior", "Refraction index", 1, 2.4, 0.01],
   ["thickness", "Glass thickness", 0.1, 6, 0.1],
   ["edges", "Facet outline strength", 0, 0.5, 0.01],
-  ["transmission", "Glass transmission", 0, 0.8, 0.01],
+  ["transmission", "Glass transmission", 0, 1, 0.01],
   ["roughness", "Surface roughness", 0, 1, 0.01],
   ["metalness", "Reflective metalness", 0, 1, 0.01],
   ["light", "Key light", 0, 5, 0.05],
@@ -29,6 +29,7 @@ export default function CrystalLab() {
   const [settings, setSettings] = useState({ ...CRYSTAL_DEFAULTS });
   const [dark, setDark] = useState(false);
   const [playing, setPlaying] = useState(true);
+  const [testPattern, setTestPattern] = useState(false);
   const [notice, setNotice] = useState("");
   const update = (key, value) => setSettings(s => ({ ...s, [key]: value }));
   const copy = async () => {
@@ -46,7 +47,7 @@ export default function CrystalLab() {
         <header style={{ marginBottom: 22 }}>
           <div style={{ letterSpacing: "0.22em", fontSize: 11, color: "#b6bac6", textTransform: "uppercase" }}>Always Pause · Design Studio</div>
           <h1 style={{ fontSize: "clamp(28px, 5vw, 44px)", fontWeight: 500, margin: "8px 0" }}>Crystal Lab</h1>
-          <p style={{ color: "#b6bac6", margin: 0 }}>Clear refractive glass with crisp facets and subtle rainbow dispersion. Rigid geometry, gentle breathing.</p>
+          <p style={{ color: "#b6bac6", margin: 0 }}>Clear refractive glass with crisp facets and subtle rainbow dispersion. Use the refraction test to inspect actual background distortion.</p>
           <nav style={{ display: "flex", gap: 14, marginTop: 12, fontSize: 13 }}>
             <a href="/visual-lab" style={{ color: "#cdb9fa" }}>Living Lab</a>
             <span style={{ color: "#a9adba" }}>Crystal Lab</span>
@@ -59,9 +60,10 @@ export default function CrystalLab() {
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           }}>
             <div style={{ width: "min(100%, 460px)", aspectRatio: "1", maxHeight: 450 }}>
-              <CrystalPrototype settings={settings} animate={playing} dark={dark} />
+              <CrystalPrototype settings={settings} animate={playing} dark={dark} testPattern={testPattern} />
             </div>
             <div style={{ position: "absolute", bottom: 20, display: "flex", gap: 8 }}>
+              <button style={buttonStyle} onClick={() => setTestPattern(v => !v)}>{testPattern ? "Hide refraction test" : "Show refraction test"}</button>
               <button style={buttonStyle} onClick={() => setPlaying(p => !p)}>{playing ? "Pause rotation" : "Play rotation"}</button>
               <button style={buttonStyle} onClick={() => setDark(d => !d)}>{dark ? "Light background" : "Dark background"}</button>
             </div>
