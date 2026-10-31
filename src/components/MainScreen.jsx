@@ -18,6 +18,7 @@ export default function MainScreen({
   selectedCategory = "All",
   onCategoryChange,
   isPro = false,
+  isOwner = false,
   lockedCategories = [],
   onLockedCategoryTap,
   onOpenPersonalize,
@@ -283,6 +284,7 @@ export default function MainScreen({
             selectedCategory={selectedCategory}
             onCategoryChange={onCategoryChange}
             isPro={isPro}
+            isOwner={isOwner}
             lockedCategories={lockedCategories}
             onLockedCategoryTap={onLockedCategoryTap}
             onOpenPersonalize={onOpenPersonalize}
