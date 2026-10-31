@@ -265,7 +265,11 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
           : droplets
           ? { x: Math.cos(angle) * radius, y, z: Math.sin(angle) * radius, size: .11 + (i % 5) * .018 }
           : { x: Math.cos(angle) * radius, y, z: Math.sin(angle) * radius, size: .11 + (i % 5) * .018 };
-        const mat = material || new THREE.MeshPhysicalMaterial({ color: colors[i % 4], metalness: .08, roughness: .12, clearcoat: 1, transparent: true, opacity: .94 });
+        const mat = (material && droplets && background === "transparent" && i > 0) ? material.clone() : material || new THREE.MeshPhysicalMaterial({ color: colors[i % 4], metalness: .08, roughness: .12, clearcoat: 1, transparent: true, opacity: .94 });
+        if (i > 0 && droplets && background === "transparent") {
+          mat.uniforms.uPhoto = material.uniforms.uPhoto;
+          mat.uniforms.uHasPhoto = material.uniforms.uHasPhoto;
+        }
         const mesh = new THREE.Mesh(geometry, mat);
         group.add(mesh);
         objects.push({ mesh, spec, index: i });
@@ -352,19 +356,22 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
         const rect = element.getBoundingClientRect();
         const uniforms = materialForScreenPhoto.uniforms;
         uniforms.uCanvasOrigin.value.set(photoSpace === "element" ? 0 : rect.left, photoSpace === "element" ? 0 : rect.top);
-        const single = kind === "dropletsSingle";
-        const mesh = objects[0]?.mesh;
-        if (mesh) {
+        for (const { mesh } of objects) {
+          if (!mesh.material?.uniforms?.uSphereCenter) continue;
           mesh.updateWorldMatrix(true, false);
           const world = mesh.getWorldPosition(new THREE.Vector3());
           const projected = world.clone().project(camera);
-          uniforms.uSphereCenter.value.set(
+          const u = mesh.material.uniforms;
+          u.uViewport.value.copy(uniforms.uViewport.value);
+          u.uCanvasOrigin.value.copy(uniforms.uCanvasOrigin.value);
+          u.uCanvasSize.value.copy(uniforms.uCanvasSize.value);
+          u.uPixelRatio.value = uniforms.uPixelRatio.value;
+          u.uSphereCenter.value.set(
             (photoSpace === "element" ? 0 : rect.left) + (projected.x * .5 + .5) * element.clientWidth,
             (photoSpace === "element" ? 0 : rect.top) + (-projected.y * .5 + .5) * element.clientHeight
           );
-          const radiusWorld = single ? .88 : mesh.scale.x * .16;
           const distance = Math.max(.1, camera.position.z - world.z);
-          uniforms.uSphereRadius.value = radiusWorld / (distance * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * element.clientHeight / 2;
+          u.uSphereRadius.value = mesh.scale.x / (distance * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * element.clientHeight / 2;
         }
       }
       renderer.render(scene, camera);
