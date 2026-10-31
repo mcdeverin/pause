@@ -1,5 +1,6 @@
 import { resolveOptions } from "../../lib/visuals";
 import OriginalOrb from "./OriginalOrb";
+import LiquidOriginalOrb from "./LiquidOriginalOrb";
 import RingVisual from "./RingVisual";
 import BubbleVisual from "./BubbleVisual";
 import CrystalVisual from "./CrystalVisual";
@@ -15,7 +16,8 @@ import BasketballVisual from "./BasketballVisual";
 // Every visual takes the same breath value from the shared session clock — none
 // of them keeps its own timing.
 const REGISTRY = {
-  orb: OriginalOrb,
+  orb: LiquidOriginalOrb,
+  classicOrb: OriginalOrb,
   ring: RingVisual,
   bubble: BubbleVisual,
   crystal: CrystalVisual,
@@ -41,7 +43,7 @@ export default function BreathingVisual({
   label,
   showLabel = false,
 }) {
-  const Visual = REGISTRY[id] || OriginalOrb;
+  const Visual = REGISTRY[id] || LiquidOriginalOrb;
   const resolved = resolveOptions(id, options);
 
   return (
