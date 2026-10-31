@@ -11,7 +11,7 @@ export default function StudioBreathingShape({ kind, breath = 0, photo = null, b
   const background = "transparent";
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
-      <ShapeScene kind={kind} breathRef={breathRef} motionRef={motionRef} background={background} />
+      <ShapeScene kind={kind} breathRef={breathRef} motionRef={motionRef} background={background} photoUrl={photoUrl} backgroundSettings={backgroundSettings} />
     </div>
   );
 }
