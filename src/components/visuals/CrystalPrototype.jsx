@@ -34,10 +34,12 @@ export default function CrystalPrototype({
   const settingsRef = useRef(settings);
   const activeRef = useRef(animate && !reducedMotion);
   const breathRef = useRef(breath);
+  const darkRef = useRef(dark);
   const [failed, setFailed] = useState(false);
   settingsRef.current = settings;
   activeRef.current = animate && !reducedMotion;
   breathRef.current = breath;
+  darkRef.current = dark;
 
   useEffect(() => {
     const host = hostRef.current;
