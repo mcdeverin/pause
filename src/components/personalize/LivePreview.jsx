@@ -141,7 +141,9 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
           justifyContent: "center",
         }}
       >
-        <div style={{ width: "min(112px, 22vh)", aspectRatio: "1 / 1" }}>
+        {/* Sized so the visual's full-breath scale (up to 1.35×) still fits
+            inside this row, keeping the cue below it uncovered. */}
+        <div style={{ height: "min(112px, 72%)", aspectRatio: "1 / 1" }}>
           <BreathingVisual
             id={settings.visual}
             breath={breath}
