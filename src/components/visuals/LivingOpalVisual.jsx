@@ -379,7 +379,9 @@ export default function LivingOpalVisual({
 
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
-      camera.position.z = 11.5;
+      // Leave room for the full 55% inhale expansion and shader deformation.
+      // Otherwise the WebGL viewport cuts the orb into a visible square.
+      camera.position.z = 16.5;
 
       // Significantly fewer vertices than the 300 x 300 desktop demo.
       // The shader still deforms the mesh on the GPU.
