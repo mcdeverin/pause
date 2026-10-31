@@ -257,7 +257,7 @@ export default function BreathingScreen({
       >
         <div
           ref={visualRef}
-          style={{ width: "min(290px, 74vw)", aspectRatio: "1 / 1", position: "relative" }}
+          style={{ width: "min(250px, 64vw, 31vh)", aspectRatio: "1 / 1", position: "relative", flexShrink: 0 }}
         >
           <BreathingVisual
             id={visual}
