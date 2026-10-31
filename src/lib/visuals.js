@@ -17,6 +17,10 @@ export const COLLECTIONS = [
 // their collection is added back here.
 const VISIBLE_COLLECTIONS = ["classics"];
 
+// Styles kept in the registry but no longer offered in the gallery. A pause
+// already saved with one still renders; it just can't be picked again.
+const HIDDEN_STYLE_IDS = ["glass"];
+
 export const PALETTES = {
   bubble: {
     options: [
@@ -230,7 +234,9 @@ export function getStyleLabel(id) {
 }
 
 export function stylesInCollection(collectionId) {
-  return VISUAL_STYLES.filter((style) => style.collection === collectionId);
+  return VISUAL_STYLES.filter(
+    (style) => style.collection === collectionId && !HIDDEN_STYLE_IDS.includes(style.id)
+  );
 }
 
 export function collectionForStyle(id) {
@@ -248,7 +254,9 @@ export function availableCollections() {
 // A style is only offered while its collection is visible.
 export function isStyleSelectable(id) {
   const style = VISUAL_STYLES.find((entry) => entry.id === id);
-  return Boolean(style && isCollectionVisible(style.collection));
+  return Boolean(
+    style && isCollectionVisible(style.collection) && !HIDDEN_STYLE_IDS.includes(style.id)
+  );
 }
 
 export function paletteOption(paletteId, optionId) {
