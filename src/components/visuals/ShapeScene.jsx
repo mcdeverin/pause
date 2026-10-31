@@ -282,17 +282,6 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
-      if (kind === "dropletsSingle" && background !== "transparent") {
-        // The photo plane must remain in the WebGL transmission pass, but its
-        // rectangular bounds must not show over the page-wide CSS photograph.
-        // Clip only the glass sphere footprint in the final transparent canvas.
-        const sphereRadius = .88 * 1.18;
-        const distance = camera.position.z;
-        const radiusPx = (sphereRadius / (distance * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)))) * height / 2;
-        const mask = `radial-gradient(circle ${Math.ceil(radiusPx + 3)}px at center, black 97%, transparent 100%)`;
-        renderer.domElement.style.maskImage = mask;
-        renderer.domElement.style.webkitMaskImage = mask;
-      }
       if (materialForScreenPhoto) {
         const rect = element.getBoundingClientRect();
         const uniforms = materialForScreenPhoto.uniforms;
@@ -372,6 +361,19 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
           );
           const distance = Math.max(.1, camera.position.z - world.z);
           u.uSphereRadius.value = mesh.scale.x / (distance * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * element.clientHeight / 2;
+        }
+      }
+      if (kind === "dropletsSingle" && background !== "transparent") {
+        // Mask the internal refraction backdrop to the actual animated glass
+        // silhouette. The background plane must never appear as a square.
+        const sphere = objects[0]?.mesh;
+        if (sphere) {
+          const distance = Math.max(.1, camera.position.z - sphere.position.z);
+          const radiusPx = sphere.scale.x / (distance * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * element.clientHeight / 2;
+          const radius = Math.max(0, radiusPx);
+          const mask = `radial-gradient(circle ${radius.toFixed(2)}px at 50% 50%, #000 calc(100% - 1px), transparent 100%)`;
+          renderer.domElement.style.maskImage = mask;
+          renderer.domElement.style.webkitMaskImage = mask;
         }
       }
       renderer.render(scene, camera);
