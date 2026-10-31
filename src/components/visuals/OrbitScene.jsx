@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 export default function OrbitScene({ accent = "#d90a3d", motion = 0.6, paused = false }) {
  const host = useRef(null), settings = useRef({accent,motion,paused});
  settings.current = {accent,motion,paused};
@@ -13,14 +14,20 @@ export default function OrbitScene({ accent = "#d90a3d", motion = 0.6, paused = 
   renderer.domElement.style.cssText="width:100%;height:100%;display:block;touch-action:none";
   el.appendChild(renderer.domElement);
   const scene=new THREE.Scene();scene.background=new THREE.Color("#dedede");
+  // Keep reflection environment fixed when the user changes sphere colors.
+  const pmrem=new THREE.PMREMGenerator(renderer);
+  const room=new RoomEnvironment();
+  const reflection=pmrem.fromScene(room,.025);
+  scene.environment=reflection.texture;
+  room.dispose();
   const camera=new THREE.PerspectiveCamera(32,1,.1,100);camera.position.z=15;
-  scene.add(new THREE.HemisphereLight(0xffffff,0x6a2730,2.2));
-  const lights=[["#fff1e8",100,-5,7,7],["#ff3a25",130,4,2,4],["#ffffff",85,-3,-3,6]];
+  scene.add(new THREE.HemisphereLight(0xffffff,0x775a5a,2.2));
+  const lights=[["#fff4df",125,-5,7,7],["#ff7354",105,4,2,4],["#ffffff",90,-3,-3,6]];
   lights.forEach(([color,power,x,y,z])=>{const l=new THREE.PointLight(color,power,30);l.position.set(x,y,z);scene.add(l);});
   const geometry=new THREE.SphereGeometry(1,48,32);
   const spheres=Array.from({length:18},(_,i)=>{
    const color=i%6<2?"#f4f0ef":i%6<4?"#340b13":settings.current.accent;
-   const material=new THREE.MeshPhysicalMaterial({color,metalness:.3,roughness:.075,clearcoat:1,clearcoatRoughness:.035});
+   const material=new THREE.MeshPhysicalMaterial({color,metalness:.42,roughness:.095,clearcoat:1,clearcoatRoughness:.025,envMapIntensity:1.75});
    const mesh=new THREE.Mesh(geometry,material);
    const angle=i*2.39996,radius=1.05+Math.sqrt(i/18)*1.55;
    mesh.position.set(Math.cos(angle)*radius,Math.sin(angle)*radius,(i%5-2)*.76);
@@ -82,7 +89,7 @@ export default function OrbitScene({ accent = "#d90a3d", motion = 0.6, paused = 
    renderer.render(scene,camera);frame=requestAnimationFrame(tick);
   };
   frame=requestAnimationFrame(tick);
-  return()=>{cancelAnimationFrame(frame);observer.disconnect();el.removeEventListener("pointermove",updatePointer);el.removeEventListener("pointerdown",press);el.removeEventListener("pointerup",release);el.removeEventListener("pointercancel",release);el.removeEventListener("pointerleave",leave);spheres.forEach(s=>s.mesh.material.dispose());geometry.dispose();renderer.dispose();renderer.domElement.remove();};
+  return()=>{cancelAnimationFrame(frame);observer.disconnect();el.removeEventListener("pointermove",updatePointer);el.removeEventListener("pointerdown",press);el.removeEventListener("pointerup",release);el.removeEventListener("pointercancel",release);el.removeEventListener("pointerleave",leave);spheres.forEach(s=>s.mesh.material.dispose());geometry.dispose();reflection.dispose();pmrem.dispose();renderer.dispose();renderer.domElement.remove();};
  },[]);
  return <div ref={host} style={{width:"100%",height:"100%"}}/>;
 }
