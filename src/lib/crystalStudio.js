@@ -1,10 +1,13 @@
 // Shared configuration and backdrop artwork for the Crystal Comparison Studio.
 // Development-only: nothing in here is imported by the breathing experience.
 
+import { NATURE_IMAGES } from "./backgroundGallery";
+
 export const BACKGROUND_MODES = [
   { id: "light", label: "Light" },
   { id: "dark", label: "Dark" },
   { id: "test", label: "Refraction" },
+  { id: "photo", label: "Nature photo" },
 ];
 
 // Matches the WebGL backdrop closely so no seam shows while a canvas resizes.
@@ -12,7 +15,31 @@ export const BACKGROUND_CSS = {
   light: "linear-gradient(180deg, #fdfcfa 0%, #f1eef6 55%, #e2dcec 100%)",
   dark: "radial-gradient(circle at 50% 42%, #3a414f 0%, #20242e 62%, #101216 100%)",
   test: "linear-gradient(180deg, #f3f0f6 0%, #ece7f2 100%)",
+  // Only the panel around the canvas: the photograph itself is painted inside
+  // the scene, so the glass can refract it.
+  photo: "linear-gradient(180deg, #fdfcfa 0%, #f1eef6 55%, #e2dcec 100%)",
 };
+
+// The app's own nature photographs, offered as a backdrop. The image is drawn
+// into the artwork plane inside the WebGL scene, never behind the canvas.
+export const BACKDROP_PHOTOS = NATURE_IMAGES;
+
+export const DEFAULT_BACKDROP_PHOTO = "nature-mountain-lake";
+
+// Photographs arrive asynchronously. The same element is reused per url, so
+// switching back to one already downloaded is instant.
+const photoCache = new Map();
+
+export function getBackdropPhoto(url) {
+  if (typeof url !== "string" || !url) return null;
+  const cached = photoCache.get(url);
+  if (cached) return cached;
+  const image = new Image();
+  image.crossOrigin = "anonymous";
+  image.src = url;
+  photoCache.set(url, image);
+  return image;
+}
 
 export const STUDIO_UI = {
   page: "#F7F5F1",
@@ -92,12 +119,22 @@ export const BASELINE_CONTROLS = [
 // The artwork is drawn into a canvas that becomes a plane inside the WebGL
 // scene, behind the crystal, so the transmission pass can genuinely refract it.
 // A CSS background behind the canvas would never be refracted.
-export function drawBackdrop(mode, size = 1024) {
+export function drawBackdrop(mode, size = 1024, image = null) {
   const canvas = document.createElement("canvas");
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext("2d");
   if (!ctx) return canvas;
+
+  // Centre-cropped to fill the square artwork plane, so the photograph is never
+  // squashed. Until it has decoded, the light gradient below stands in.
+  if (mode === "photo" && image && image.complete && image.naturalWidth > 0) {
+    const scale = Math.max(size / image.naturalWidth, size / image.naturalHeight);
+    const width = image.naturalWidth * scale;
+    const height = image.naturalHeight * scale;
+    ctx.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
+    return canvas;
+  }
 
   if (mode === "dark") {
     const grad = ctx.createRadialGradient(size * 0.5, size * 0.42, size * 0.05, size * 0.5, size * 0.5, size * 0.78);

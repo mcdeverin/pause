@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { drawBackdrop, PRISMATIC_DEFAULTS } from "@/lib/crystalStudio";
+import { drawBackdrop, getBackdropPhoto, PRISMATIC_DEFAULTS } from "@/lib/crystalStudio";
 
 const RADIUS = 3.05;
 
@@ -89,13 +89,14 @@ export default function PrismaticGlass({
   settings = PRISMATIC_DEFAULTS,
   breathRef,
   mode = "light",
+  photo = null,
   playing = true,
   quality = "high",
   reducedMotion = false,
 }) {
   const hostRef = useRef(null);
-  const live = useRef({ settings, breathRef, mode, playing, quality, reducedMotion });
-  live.current = { settings, breathRef, mode, playing, quality, reducedMotion };
+  const live = useRef({ settings, breathRef, mode, photo, playing, quality, reducedMotion });
+  live.current = { settings, breathRef, mode, photo, playing, quality, reducedMotion };
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -121,7 +122,7 @@ export default function PrismaticGlass({
     let frame = 0;
     let elapsed = 0;
     let last = performance.now();
-    let currentMode = null;
+    let currentBackdrop = null;
     let currentQuality = live.current.quality;
     let detail = -1;
 
@@ -148,11 +149,18 @@ export default function PrismaticGlass({
     scene.add(backdrop);
     let backdropTexture = null;
 
-    const applyBackdrop = (nextMode) => {
-      if (currentMode === nextMode) return;
-      currentMode = nextMode;
+    // Rebuilt only when the mode or the photograph changes. A photograph decodes
+    // asynchronously, so the neutral gradient is painted first and swapped for
+    // the photo on the frame it becomes available.
+    const applyBackdrop = (nextMode, nextPhoto) => {
+      const image = nextMode === "photo" ? getBackdropPhoto(nextPhoto) : null;
+      const ready = Boolean(image && image.complete && image.naturalWidth > 0);
+      const state =
+        nextMode === "photo" ? (ready ? `photo:${nextPhoto}` : "photo:pending") : nextMode;
+      if (currentBackdrop === state) return;
+      currentBackdrop = state;
       backdropTexture?.dispose();
-      backdropTexture = new THREE.CanvasTexture(drawBackdrop(nextMode));
+      backdropTexture = new THREE.CanvasTexture(drawBackdrop(nextMode, 1024, image));
       backdropTexture.colorSpace = THREE.SRGBColorSpace;
       backdropMaterial.map = backdropTexture;
       backdropMaterial.needsUpdate = true;
@@ -246,6 +254,7 @@ export default function PrismaticGlass({
         settings: s,
         breathRef: sharedBreath,
         mode: nextMode,
+        photo: nextPhoto,
         playing: isPlaying,
         quality: nextQuality,
         reducedMotion: reduce,
@@ -257,7 +266,7 @@ export default function PrismaticGlass({
         resize();
       }
 
-      applyBackdrop(nextMode);
+      applyBackdrop(nextMode, nextPhoto);
       if (isPlaying && !reduce) elapsed += dt;
 
       setDetail(s.facets ?? PRISMATIC_DEFAULTS.facets);

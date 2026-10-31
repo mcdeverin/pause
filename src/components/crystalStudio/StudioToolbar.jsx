@@ -55,6 +55,9 @@ export default function StudioToolbar({
   modes,
   mode,
   onModeChange,
+  photos = [],
+  photoId,
+  onPhotoChange,
   auto,
   onToggleAuto,
   sync,
@@ -87,6 +90,28 @@ export default function StudioToolbar({
           </Pill>
         ))}
       </Group>
+
+      {mode === "photo" && (
+        <Group label="Photo">
+          <select
+            value={photoId}
+            onChange={(event) => onPhotoChange(event.target.value)}
+            aria-label="Backdrop photograph"
+            style={{
+              ...pillBase,
+              minHeight: 34,
+              paddingRight: 10,
+              fontWeight: 600,
+            }}
+          >
+            {photos.map((entry) => (
+              <option key={entry.id} value={entry.id}>
+                {entry.label}
+              </option>
+            ))}
+          </select>
+        </Group>
+      )}
 
       <Group label="Breathing">
         <Pill active={auto} onClick={onToggleAuto}>

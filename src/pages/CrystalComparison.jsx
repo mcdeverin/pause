@@ -9,9 +9,11 @@ import StudioToolbar from "@/components/crystalStudio/StudioToolbar";
 import { CRYSTAL_DEFAULTS } from "@/components/crystalStudio/CrystalPrototypeBaseline";
 import useStudioBreath from "@/hooks/useStudioBreath";
 import {
+  BACKDROP_PHOTOS,
   BACKGROUND_CSS,
   BACKGROUND_MODES,
   BASELINE_CONTROLS,
+  DEFAULT_BACKDROP_PHOTO,
   PRISMATIC_CONTROLS,
   PRISMATIC_DEFAULTS,
   STUDIO_UI,
@@ -22,6 +24,7 @@ import {
 export default function CrystalComparison() {
   const [allowed, setAllowed] = useState(null);
   const [mode, setMode] = useState("light");
+  const [photoId, setPhotoId] = useState(DEFAULT_BACKDROP_PHOTO);
   const [quality, setQuality] = useState("high");
   const [auto, setAuto] = useState(true);
   const [sync, setSync] = useState(true);
@@ -63,6 +66,12 @@ export default function CrystalComparison() {
     setPlayingB(next);
   };
 
+  // The photograph is painted inside each WebGL scene; this is only the panel
+  // behind the canvas, so the edges match while a canvas resizes.
+  const photo =
+    BACKDROP_PHOTOS.find((entry) => entry.id === photoId) || BACKDROP_PHOTOS[0];
+  const photoBackground = `url("${photo.url}") center / cover no-repeat`;
+
   const matchSizes = () => {
     setPrismatic((current) => ({ ...current, size: 1, breathStrength: 0.19 }));
     setBaseline((current) => ({ ...current, size: 1, breathStrength: 0.19 }));
@@ -72,7 +81,7 @@ export default function CrystalComparison() {
     <StudioPanel
       label="Prismatic Glass"
       tag="Experimental"
-      background={BACKGROUND_CSS[mode]}
+      background={mode === "photo" ? photoBackground : BACKGROUND_CSS[mode]}
       playing={playingA}
       onTogglePlay={() => setPlayingA((value) => !value)}
       onExpand={() => setExpanded(expanded === "a" ? null : "a")}
@@ -90,6 +99,7 @@ export default function CrystalComparison() {
         settings={prismatic}
         breathRef={sync ? sharedBreath : { current: prismatic.breath }}
         mode={mode}
+        photo={photo.url}
         playing={playingA}
         quality={quality}
         reducedMotion={reduced}
@@ -101,7 +111,9 @@ export default function CrystalComparison() {
     <StudioPanel
       label="Crystal Lab"
       tag="Existing"
-      background={BACKGROUND_CSS[mode === "test" ? "test" : mode]}
+      background={
+        mode === "photo" ? photoBackground : BACKGROUND_CSS[mode === "test" ? "test" : mode]
+      }
       playing={playingB}
       onTogglePlay={() => setPlayingB((value) => !value)}
       onExpand={() => setExpanded(expanded === "b" ? null : "b")}
@@ -192,6 +204,9 @@ export default function CrystalComparison() {
           modes={BACKGROUND_MODES}
           mode={mode}
           onModeChange={setMode}
+          photos={BACKDROP_PHOTOS}
+          photoId={photoId}
+          onPhotoChange={setPhotoId}
           auto={auto}
           onToggleAuto={() => setAuto((value) => !value)}
           sync={sync}
