@@ -75,7 +75,6 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
           if (disposed) { texture.dispose(); return; }
           texture.mapping = THREE.CubeRefractionMapping;
           environment = texture;
-          scene.background = texture;
           material.envMap = texture;
           material.needsUpdate = true;
         }, undefined, error => console.warn("Droplet environment texture could not load", error));
