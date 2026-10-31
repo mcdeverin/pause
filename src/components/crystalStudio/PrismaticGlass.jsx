@@ -94,10 +94,11 @@ export default function PrismaticGlass({
   quality = "high",
   reducedMotion = false,
   transparentCanvas = false,
+  sessionBreathing = false,
 }) {
   const hostRef = useRef(null);
-  const live = useRef({ settings, breathRef, mode, photo, playing, quality, reducedMotion, transparentCanvas });
-  live.current = { settings, breathRef, mode, photo, playing, quality, reducedMotion, transparentCanvas };
+  const live = useRef({ settings, breathRef, mode, photo, playing, quality, reducedMotion, transparentCanvas, sessionBreathing });
+  live.current = { settings, breathRef, mode, photo, playing, quality, reducedMotion, transparentCanvas, sessionBreathing };
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -293,7 +294,9 @@ export default function PrismaticGlass({
       fill.position.set(-Math.cos(angle) * 8, -3.5, -Math.sin(angle) * 8);
 
       const breath = THREE.MathUtils.clamp(sharedBreath?.current ?? 0.3, 0, 1);
-      const gemScale = (s.size ?? 1) * (0.89 + (s.breathStrength ?? 0.19) * breath);
+      const gemScale = live.current.sessionBreathing
+        ? 1 + 0.35 * breath
+        : (s.size ?? 1) * (0.89 + (s.breathStrength ?? 0.19) * breath);
       gem.scale.setScalar(gemScale);
       if (live.current.transparentCanvas) {
         // The perspective-projected silhouette of the sphere; outside stays transparent.
