@@ -139,11 +139,14 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
 
                 if (uHasPhoto > 0.5) {
                   vec3 behind = texture2D(uPhoto, distortedUV).rgb;
-                  // Subtle thickness and dark Fresnel silhouette preserve
-                  // dense water glass instead of a soap bubble outline.
-                  vec3 glass = behind * (1.0 - 0.25 * fresnel);
-                  glass = mix(glass, vec3(0.95, 0.98, 1.0), glint * 0.82 + glint2 * 0.40);
-                  gl_FragColor = vec4(glass, 1.0);
+                  // The app already draws the photo behind this canvas.
+                  // Blend refracted pixels over that real image rather than
+                  // replacing the entire sphere with an opaque, dark copy.
+                  // A small white lift simulates scattered light in water.
+                  vec3 glass = mix(behind, vec3(0.94, 0.97, 1.0), 0.12 + 0.16 * fresnel);
+                  glass = mix(glass, vec3(1.0), clamp(glint * 0.9 + glint2 * 0.55, 0.0, 1.0));
+                  float alpha = clamp(0.57 + 0.25 * fresnel + 0.16 * glint + 0.12 * glint2, 0.0, 0.96);
+                  gl_FragColor = vec4(glass, alpha);
                 } else {
                   // Solid/gradient backgrounds: leave the app canvas visible
                   // instead of inventing an internal photograph.
