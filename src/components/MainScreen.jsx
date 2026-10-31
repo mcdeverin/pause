@@ -127,8 +127,15 @@ export default function MainScreen({
       </div>
 
       {/* Brand heading — eased down from the wordmark so the space above it and
-          the space around the breathing circle read as evenly spread. */}
-      <div style={{ margin: "clamp(24px, 8.5vh, 92px) 32px 0", textAlign: "center" }}>
+          the space around the breathing circle read as evenly spread. It is moved
+          with a transform, so the circle and "Tap to pause" keep their places. */}
+      <div
+        style={{
+          margin: "clamp(24px, 8.5vh, 92px) 32px 0",
+          textAlign: "center",
+          transform: "translateY(clamp(14px, 4vh, 40px))",
+        }}
+      >
         <p
           style={{
             margin: 0,
