@@ -342,13 +342,16 @@ export default function LivingOpalVisual({
   breath = 0,
   animate = true,
   reducedMotion = false,
+  labSettings,
 }) {
   const canvasHost = useRef(null);
   const breathRef = useRef(breath);
   const movingRef = useRef(animate && !reducedMotion);
+  const settingsRef = useRef(labSettings);
   const [webglFailed, setWebglFailed] = useState(false);
   breathRef.current = breath;
   movingRef.current = animate && !reducedMotion;
+  settingsRef.current = labSettings;
 
   useEffect(() => {
     const host = canvasHost.current;
@@ -443,15 +446,26 @@ export default function LivingOpalVisual({
         const delta = Math.min(0.05, Math.max(0, (now - lastFrame) / 1000));
         lastFrame = now;
         if (!document.hidden) {
-          if (movingRef.current) elapsed += delta;
+          const s = settingsRef.current;
+          if (movingRef.current) elapsed += delta * (s?.speed ?? 1);
+          material.uniforms._frequency.value = s?.frequency ?? 0.85;
+          material.uniforms._amplitude.value = s?.amplitude ?? 0.75;
+          material.uniforms._metallic.value = s?.metallic ?? 0.82;
+          material.uniforms._smoothness.value = s?.smoothness ?? 0.92;
+          material.uniforms._lightintensity.value = s?.light ?? 1.3;
+          material.uniforms._colorSinusoidal.value = s?.blend ?? 0.45;
+          if (s?.colors) s.colors.forEach((hex, i) => {
+            const u = material.uniforms[`_baseColor${i + 1}`];
+            if (u && /^#[0-9a-fA-F]{6}$/.test(hex)) u.value.set(hex);
+          });
           material.uniforms.u_time.value = elapsed;
           material.uniforms._colorsAngle.value.z =
             -28 + (movingRef.current ? Math.sin(elapsed * 0.28) * 10 : 0);
 
           // The existing breathing clock controls expansion; visual motion
           // never decides when an inhale, hold, or exhale starts.
-          const b = THREE.MathUtils.clamp(breathRef.current, 0, 1);
-          const scale = movingRef.current ? 0.84 + 0.22 * b : 0.95;
+          const b = THREE.MathUtils.clamp(s?.breath ?? breathRef.current, 0, 1);
+          const scale = (s?.size ?? 1) * (movingRef.current ? 0.84 + (s?.breathStrength ?? 0.22) * b : 0.95);
           blob.scale.setScalar(scale);
           blob.rotation.y = movingRef.current ? elapsed * 0.09 : 0;
           blob.rotation.z = movingRef.current ? Math.sin(elapsed * 0.2) * 0.06 : 0;
