@@ -16,7 +16,7 @@ export const CRYSTAL_DEFAULTS = {
   ior: 1.52,
   thickness: 2.5,
   edges: 0.06,
-  light: 2.4,
+  light: 1.25,
   rotation: 0.25,
   size: 1,
   breathStrength: 0.19,
@@ -63,7 +63,7 @@ export default function CrystalPrototype({
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.4;
+      renderer.toneMappingExposure = 0.8;
       // A matching scene backdrop gives the transmission pass something to refract.
       // The final app integration will need its actual background rendered here.
       scene.background = null;
@@ -148,12 +148,12 @@ export default function CrystalPrototype({
         lines.geometry = edgesGeometry;
       };
 
-      const ambient = new THREE.AmbientLight(0xffffff, 0.95);
-      const key = new THREE.DirectionalLight(0xffffff, 2.4);
+      const ambient = new THREE.AmbientLight(0xffffff, 0.38);
+      const key = new THREE.DirectionalLight(0xffffff, 1.25);
       key.position.set(-4, 6, 8);
-      const fill = new THREE.DirectionalLight(0x9ebce8, 1.3);
+      const fill = new THREE.DirectionalLight(0x9ebce8, 0.55);
       fill.position.set(5, -2, 3);
-      const blush = new THREE.DirectionalLight(0xf4d2e7, 0.75);
+      const blush = new THREE.DirectionalLight(0xf4d2e7, 0.3);
       blush.position.set(0, -5, -2);
       scene.add(ambient, key, fill, blush);
 
@@ -193,7 +193,7 @@ export default function CrystalPrototype({
           shellMaterial.roughness = s.roughness ?? 0.015;
           shellMaterial.metalness = s.metalness ?? 0;
           shellMaterial.transmission = s.transmission ?? 0.97;
-          key.intensity = s.light ?? 2.4;
+          key.intensity = s.light ?? 1.25;
           const b = THREE.MathUtils.clamp(breathRef.current ?? s.breath ?? 0.5, 0, 1);
           const scale = (s.size ?? 1) * (0.89 + (s.breathStrength ?? 0.19) * b);
           gem.scale.setScalar(scale);
