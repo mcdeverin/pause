@@ -31,6 +31,7 @@ export const DEFAULT_PREFERENCES = {
   photoOffsetY: 0,
   showTimer: true,
   showInstructions: true,
+  voiceGuide: false,
   showShortcuts: true,
   saveMoments: false,
   // Whether the one-time introductory Plus offer has been shown. Kept apart from
