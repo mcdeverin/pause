@@ -2,7 +2,6 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { FONT, getColors } from "../../lib/design";
 import { PALETTES, getStyle } from "../../lib/visuals";
-import { hueFromHex } from "../../lib/visualColors";
 import AdjustmentSlider from "./AdjustmentSlider";
 import SpectrumColorSlider from "./SpectrumColorSlider";
 
@@ -79,16 +78,6 @@ export default function FineTuneSection({ theme, styleId, options, onChange }) {
 
   if (style.controls.length === 0) return null;
 
-  // Colours are compared the same way the slider positions them — by hue — so a
-  // shade that sits anywhere off its original hue counts as changed.
-  const colourControls = style.controls.filter((control) => control.type === "color");
-  const customised = colourControls.some(
-    (control) => hueFromHex(options[control.key]) !== hueFromHex(control.default)
-  );
-  const revertColours = () => {
-    colourControls.forEach((control) => onChange(control.key, control.default));
-  };
-
   return (
     <div
       style={{
@@ -130,32 +119,6 @@ export default function FineTuneSection({ theme, styleId, options, onChange }) {
         >
           Colors
         </button>
-
-        {open && customised && (
-          <button
-            type="button"
-            onClick={revertColours}
-            style={{
-              minHeight: 44,
-              padding: "0 4px",
-              flexShrink: 0,
-              whiteSpace: "nowrap",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontFamily: FONT,
-              fontSize: "12.5px",
-              fontWeight: 600,
-              letterSpacing: "0.01em",
-              color: colors.tertiary,
-              textDecoration: "underline",
-              textDecorationThickness: "1px",
-              textUnderlineOffset: 3,
-            }}
-          >
-            Revert
-          </button>
-        )}
 
         <button
           type="button"
