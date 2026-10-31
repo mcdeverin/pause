@@ -22,6 +22,7 @@ export default function CrystalVisual({
       playing={animate}
       reducedMotion={reducedMotion}
       quality="balanced"
+      transparentCanvas
     />
   );
 }
