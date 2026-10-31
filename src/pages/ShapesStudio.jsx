@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import ShapeScene from "@/components/visuals/ShapeScene";
 import OrganicBlobScene from "@/components/visuals/OrganicBlobScene";
 import IridescentBlobScene from "@/components/visuals/IridescentBlobScene";
+import LiquidChromeScene from "@/components/visuals/LiquidChromeScene";
 import NatureOrbScene from "@/components/visuals/NatureOrbScene";
 import CrystalClusterScene from "@/components/visuals/CrystalClusterScene";
 import PrismaticGlass from "@/components/crystalStudio/PrismaticGlass";
@@ -16,6 +17,7 @@ export default function ShapesStudio(){
  const [blobColor,setBlobColor]=useState("#e8d7f6");
  const [iridescent,setIridescent]=useState({waves:3.4,depth:.36,twist:1.6});
  const [nature,setNature]=useState({palette:"forest",density:950});
+ const [chromeDepth,setChromeDepth]=useState(.2);
  const [prismatic,setPrismatic]=useState({...PRISMATIC_DEFAULTS});
  const breathRef=useRef(.4),motionRef=useRef(.6);motionRef.current=motion;
  useEffect(()=>{base44.auth.me().then(me=>setAllowed(me?.role==="admin")).catch(()=>setAllowed(false));},[]);
@@ -39,6 +41,13 @@ export default function ShapesStudio(){
  </div>}
  <h2 style={{fontSize:19,margin:"14px 6px 2px"}}>{name}</h2><p style={{fontSize:13,color:"#73777b",margin:"0 6px 12px"}}>{description}</p></article>)}
  </div>
+ <article style={{marginTop:20,padding:12,background:"white",borderRadius:20,boxShadow:"0 6px 22px #2222220a"}}>
+ <h2 style={{fontSize:20,margin:"12px 8px 4px"}}>Liquid Chrome · experimental</h2>
+ <p style={{fontSize:13,color:"#73777b",margin:"0 8px 14px"}}>Mirror-like silver with subtle emerald and violet reflections. No typography.</p>
+ <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,400px),1fr))",gap:20}}>
+ <div style={{height:"clamp(420px,48vw,600px)",background:bg,borderRadius:14,overflow:"hidden"}}><LiquidChromeScene breathRef={breathRef} motionRef={motionRef} depth={chromeDepth}/></div>
+ <div style={{padding:16}}><label style={{display:"grid",gap:8,fontSize:13}}>Sculpture depth · {chromeDepth.toFixed(2)}<input type="range" min="0" max=".35" step=".01" value={chromeDepth} onChange={e=>setChromeDepth(Number(e.target.value))}/></label></div>
+ </div></article>
  <article style={{marginTop:20,padding:12,background:"white",borderRadius:20,boxShadow:"0 6px 22px #2222220a"}}>
   <h2 style={{fontSize:20,margin:"12px 8px 4px"}}>Nature Orb · botanical study</h2>
   <p style={{fontSize:13,color:"#73777b",margin:"0 8px 14px"}}>A living sphere of layered leaves, soft sunlight, and gentle breathing motion.</p>
