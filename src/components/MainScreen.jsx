@@ -206,6 +206,8 @@ export default function MainScreen({
               breath={visual === "ring" ? 1 : 0}
               theme={theme}
               options={visualOptions?.[visual]}
+              photo={photo}
+              backgroundSettings={backgroundSettings}
             />
           </div>
         </button>
