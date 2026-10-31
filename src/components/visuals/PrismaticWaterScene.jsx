@@ -28,8 +28,8 @@ export default function PrismaticWaterScene({strength=.7,softness=.65,motion=.5,
   float a=uResolution.x/max(uResolution.y,1.);
   vec2 touch=vec2(uPointer.x*a,uPointer.y);
   float dist=length(p-touch);
-  float nearTouch=exp(-dist*(3.5+uSoftness*3.));
-  float interaction=nearTouch*uStrength*(sin(dist*88.-t*11.)*.026+sin(dist*143.-t*15.)*.009);
+  float nearTouch=exp(-dist*dist/(.28*.28))*exp(-dist*(3.5+uSoftness*3.));
+  float interaction=nearTouch*uStrength*(sin(dist*62.-t*5.)*.018+sin(dist*124.-t*10.)*.004);
   float flow=uMotion*(sin(p.x*9.+p.y*4.+t*.38)*.005+cos(p.y*13.-p.x*3.-t*.31)*.004);
   float wake=ring(p,vec2(.49*a,.49),32.,t*.55)*.009*uMotion;
   return interaction+flow+wake;
@@ -61,7 +61,7 @@ export default function PrismaticWaterScene({strength=.7,softness=.65,motion=.5,
   vec3 warm=mix(uColors[0],uColors[1],clamp(.5+.5*sin(colorPhase*8.),0.,1.));
   iridescent=mix(iridescent,mix(warm,uColors[2],.4),.17);
   float touchDist=length(p-vec2(uPointer.x*aspect,uPointer.y));
-  float touchGlow=exp(-touchDist*2.2)*uStrength;
+  float touchGlow=exp(-touchDist*touchDist/(.28*.28))*uStrength;
   float colorAmount=clamp(.12+.26*uMotion+.46*touchGlow+.28*length(slope),0.,.85);
   vec3 col=mix(chrome,iridescent,colorAmount);
   col+=vec3(1.,.91,.76)*glint*.24;
