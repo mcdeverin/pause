@@ -63,8 +63,8 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
       particles = new THREE.Points(particleGeometry, particleMaterial);
       group.add(particles);
     } else {
-      const droplets = kind === "droplets";
-      const count = droplets ? 36 : 46;
+      const droplets = kind === "droplets" || kind === "dropletsSingle" || kind === "dropletsHalo";
+      const count = kind === "dropletsSingle" ? 1 : droplets ? 12 : 46;
       const material = droplets
         ? new THREE.MeshBasicMaterial({ color: "#ffffff", refractionRatio: .95 })
         : null;
@@ -79,11 +79,11 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
         }, undefined, error => console.warn("Droplet environment texture could not load", error));
       }
       for (let i = 0; i < count; i++) {
-        const angle = i * 2.399963229728653;
+        const angle = droplets ? (i / count) * Math.PI * 2 : i * 2.399963229728653;
         const y = 1 - 2 * (i + .5) / count;
         const radius = Math.sqrt(1 - y * y);
         const spec = droplets
-          ? { x: Math.cos(angle) * (.38 + Math.sqrt((i + .5) / count) * 1.8), y: Math.sin(angle) * (.38 + Math.sqrt((i + .5) / count) * 1.8) * .84, z: Math.sin(i * 1.9) * .75, size: .09 + ((i * 7) % 13) / 13 * .26 }
+          ? kind === "dropletsSingle" ? { x: 0, y: 0, z: 0, size: .98 } : { x: Math.cos(angle) * .83, y: Math.sin(angle) * .83, z: Math.sin(i * 1.9) * .12, size: .19 + (i % 3) * .045 }
           : { x: Math.cos(angle) * radius, y, z: Math.sin(angle) * radius, size: .11 + (i % 5) * .018 };
         const mat = material || new THREE.MeshPhysicalMaterial({ color: colors[i % 4], metalness: .08, roughness: .12, clearcoat: 1, transparent: true, opacity: .94 });
         const mesh = new THREE.Mesh(geometry, mat);
@@ -101,6 +101,7 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
     const observer = new ResizeObserver(resize);
     observer.observe(element);
     resize();
+    const dropletsMode = kind === "droplets" || kind === "dropletsSingle" || kind === "dropletsHalo";
     const start = performance.now();
     let last = start;
     const animate = now => {
@@ -110,7 +111,7 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
       const t = (now - start) / 1000;
       const b = Math.max(0, Math.min(1, breathRef.current ?? .4));
       const motion = motionRef.current ?? .6;
-      group.rotation.y += dt * (kind === "ribbon" ? .18 : kind === "droplets" ? .055 : .085) * motion;
+      group.rotation.y += dt * (kind === "ribbon" ? .18 : dropletsMode ? .055 : .085) * motion;
       if (kind === "ribbon") {
         group.rotation.z = Math.sin(t * .22) * .16 * motion;
         group.scale.set(.82 + b * .45, .78 + b * .28, .82 + b * .45);
@@ -126,10 +127,10 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
         position.needsUpdate = true;
       } else {
         for (const { mesh, spec, index } of objects) {
-          if (kind === "droplets") {
-            const expand = .87 + b * .24;
-            mesh.position.set(spec.x * expand + Math.sin(t * .3 + index * .71) * .075 * motion, spec.y * expand + Math.cos(t * .38 + index * .71) * .09 * motion, spec.z + Math.sin(t * .2 + index * .71) * .07 * motion);
-            mesh.scale.setScalar(spec.size * (1 + b * .17));
+          if (dropletsMode) {
+            const expand = kind === "dropletsSingle" ? 1 : .68 + b * .48;
+            mesh.position.set(spec.x * expand + (kind === "dropletsSingle" ? 0 : Math.sin(t * .3 + index * .71) * .015 * motion), spec.y * expand + (kind === "dropletsSingle" ? 0 : Math.cos(t * .38 + index * .71) * .015 * motion), spec.z);
+            mesh.scale.setScalar(spec.size * (kind === "dropletsSingle" ? .77 + b * .32 : .92 + b * .14));
           } else {
             const swell = .82 + b * .34 + Math.sin(t * .7 + index * .7) * .035 * motion;
             mesh.position.set(spec.x * swell, spec.y * swell, spec.z * swell);
