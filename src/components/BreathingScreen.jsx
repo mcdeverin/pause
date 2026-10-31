@@ -264,6 +264,8 @@ export default function BreathingScreen({
             breath={breath}
             theme={theme}
             options={visualOptions?.[visual]}
+            photo={photo}
+            backgroundSettings={backgroundSettings}
             reducedMotion={reducedMotion}
             label={currentLabel}
             showLabel={false}
