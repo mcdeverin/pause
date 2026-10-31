@@ -9,7 +9,6 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
-import CrystalComparison from './pages/CrystalComparison.jsx';
 import GhostStudio from './pages/GhostStudio.jsx';
 
 const Popcorn = lazy(() => import('./pages/Popcorn.jsx'));
@@ -48,11 +47,10 @@ const AuthenticatedApp = () => {
       <Route path="/" element={<Home />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
-      <Route path="/crystal-comparison" element={<CrystalComparison />} />
-      <Route path="/ghost-studio" element={<GhostStudio />} />
+      <Route path="/theme-studio" element={<GhostStudio />} />
       <Route path="/sensory/popcorn" element={<Suspense fallback={<div className="p-8">Loading Popcorn…</div>}><Popcorn /></Suspense>} />
       <Route path="/sensory-studio" element={<Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense>} />
-      <Route path="/shapes-studio" element={<Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense>} />
+      <Route path="/orb-studio" element={<Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense>} />
       <Route path="/liquid-orb-studio" element={<Suspense fallback={<div className="p-8">Loading Liquid Orb Studio…</div>}><LiquidOrbStudio /></Suspense>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
