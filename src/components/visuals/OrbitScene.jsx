@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 export default function OrbitScene({ accent = "#ed4d9a", motion = 0.6, paused = false }) {
  const host = useRef(null), settings = useRef({accent,motion,paused});
@@ -22,15 +22,26 @@ export default function OrbitScene({ accent = "#ed4d9a", motion = 0.6, paused = 
    const color=i%6<2?"#e5e8ff":i%6<4?"#343959":settings.current.accent;
    const material=new THREE.MeshPhysicalMaterial({color,metalness:.38,roughness:.13,clearcoat:1,clearcoatRoughness:.08});
    const mesh=new THREE.Mesh(geometry,material);
-   const angle=i*2.39996,radius=1.3+Math.sqrt(i/18)*2.0;
-   mesh.position.set(Math.cos(angle)*radius,Math.sin(angle)*radius,(i%5-2)*.5);
+   const angle=i*2.39996,radius=1.05+Math.sqrt(i/18)*1.55;
+   mesh.position.set(Math.cos(angle)*radius,Math.sin(angle)*radius,(i%5-2)*.76);
    scene.add(mesh);
-   return {mesh,velocity:new THREE.Vector3(),target:new THREE.Vector3().copy(mesh.position),accent:i%6>=4};
+   return {mesh,velocity:new THREE.Vector3(),accent:i%6>=4};
   });
   const pointer=new THREE.Vector3(100,100,0);
-  const updatePointer=e=>{const r=el.getBoundingClientRect();pointer.set(((e.clientX-r.left)/r.width-.5)*9,((.5-(e.clientY-r.top)/r.height))*9,0);};
-  const leave=()=>pointer.set(100,100,0);
-  el.addEventListener("pointermove",updatePointer);el.addEventListener("pointerdown",updatePointer);el.addEventListener("pointerleave",leave);
+  let touching=false;
+  const updatePointer=e=>{
+   const rect=el.getBoundingClientRect(),nx=(e.clientX-rect.left)/rect.width*2-1,ny=1-(e.clientY-rect.top)/rect.height*2;
+   const distance=camera.position.z*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*2;
+   pointer.set(nx*distance*camera.aspect/2,ny*distance/2,0);
+  };
+  const press=e=>{touching=true;updatePointer(e);el.setPointerCapture?.(e.pointerId);};
+  const release=()=>{touching=false;};
+  const leave=()=>{if(!touching)pointer.set(100,100,0);};
+  el.addEventListener("pointermove",updatePointer);
+  el.addEventListener("pointerdown",press);
+  el.addEventListener("pointerup",release);
+  el.addEventListener("pointercancel",release);
+  el.addEventListener("pointerleave",leave);
   const resize=()=>{const w=el.clientWidth||1,h=el.clientHeight||1;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);};
   const observer=new ResizeObserver(resize);observer.observe(el);resize();
   let frame,previous=performance.now();
@@ -38,20 +49,40 @@ export default function OrbitScene({ accent = "#ed4d9a", motion = 0.6, paused = 
    const dt=Math.min((now-previous)/1000,.04);previous=now;
    const {accent,motion,paused}=settings.current;
    if(!paused){
+    const step=Math.min(dt,.025),energy=.7+motion*1.25;
     for(const item of spheres){
      const p=item.mesh.position;
-     const force=item.target.clone().sub(p).multiplyScalar(1.4);
-     const away=p.clone().sub(pointer);const distance=away.length();
-     if(distance<2.2&&Math.abs(p.z)<1.8)force.add(away.normalize().multiplyScalar((2.2-distance)*13));
-     for(const other of spheres){if(other===item)continue;const d=p.clone().sub(other.mesh.position);const len=d.length();if(len>0.001&&len<1.93)force.addScaledVector(d,(1.93-len)*5/len);}
-     item.velocity.addScaledVector(force,dt*motion);item.velocity.multiplyScalar(Math.exp(-3*dt));p.addScaledVector(item.velocity,dt*4);
+     const force=p.clone().multiplyScalar(-3.2);
+     force.z*=.8;
+     const away=p.clone().sub(pointer),dist=away.length();
+     if(dist<2.7)force.addScaledVector(away.normalize(),(2.7-dist)*(touching?55:30)*energy);
+     item.velocity.addScaledVector(force,step*energy);
+     item.velocity.multiplyScalar(Math.exp(-1.05*step));
+    }
+    spheres.forEach(item=>item.mesh.position.addScaledVector(item.velocity,step*energy));
+    for(let pass=0;pass<3;pass++){
+     for(let i=0;i<spheres.length;i++)for(let j=i+1;j<spheres.length;j++){
+      const A=spheres[i],B=spheres[j],difference=B.mesh.position.clone().sub(A.mesh.position);
+      let distance=difference.length();
+      if(distance<.0001){difference.set(.01,.01,.01);distance=difference.length();}
+      if(distance>=2.01)continue;
+      const normal=difference.multiplyScalar(1/distance),overlap=2.01-distance;
+      A.mesh.position.addScaledVector(normal,-overlap*.5);
+      B.mesh.position.addScaledVector(normal,overlap*.5);
+      const relative=B.velocity.clone().sub(A.velocity).dot(normal);
+      if(relative<0){
+       const impulse=-(1+.82)*relative*.5;
+       A.velocity.addScaledVector(normal,-impulse);
+       B.velocity.addScaledVector(normal,impulse);
+      }
+     }
     }
    }
    spheres.forEach(item=>{if(item.accent)item.mesh.material.color.lerp(new THREE.Color(accent),.08);});
    renderer.render(scene,camera);frame=requestAnimationFrame(tick);
   };
   frame=requestAnimationFrame(tick);
-  return()=>{cancelAnimationFrame(frame);observer.disconnect();el.removeEventListener("pointermove",updatePointer);el.removeEventListener("pointerdown",updatePointer);el.removeEventListener("pointerleave",leave);spheres.forEach(s=>s.mesh.material.dispose());geometry.dispose();renderer.dispose();renderer.domElement.remove();};
+  return()=>{cancelAnimationFrame(frame);observer.disconnect();el.removeEventListener("pointermove",updatePointer);el.removeEventListener("pointerdown",press);el.removeEventListener("pointerup",release);el.removeEventListener("pointercancel",release);el.removeEventListener("pointerleave",leave);spheres.forEach(s=>s.mesh.material.dispose());geometry.dispose();renderer.dispose();renderer.domElement.remove();};
  },[]);
  return <div ref={host} style={{width:"100%",height:"100%"}}/>;
 }
