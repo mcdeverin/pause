@@ -2,12 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import OrbitScene from "@/components/visuals/OrbitScene";
 
-const COLORS = [["Cherry","#d90a3d"],["Coral","#f2544d"],["Wine","#7e1530"],["Ruby","#b70029"]];
-
 export default function Popcorn() {
-  const [accent,setAccent]=useState(COLORS[0][1]);
-  const [motion,setMotion]=useState(1);
-  const [paused,setPaused]=useState(false);
+  const [hue,setHue] = useState(345);
+  const [expanded,setExpanded] = useState(false);
+  const accent = `hsl(${hue}, 90%, 48%)`;
   return (
     <main style={{minHeight:"100dvh",background:"#f7f6f4",color:"#27232a",padding:"clamp(16px,3vw,34px)",fontFamily:"inherit"}}>
       <div style={{maxWidth:1200,margin:"0 auto"}}>
@@ -17,16 +15,13 @@ export default function Popcorn() {
         </div>
         <h1 style={{fontSize:"clamp(30px,5vw,46px)",fontWeight:700,margin:"0 0 6px"}}>Popcorn</h1>
         <p style={{fontSize:14,color:"#80777d",margin:"0 0 22px"}}>Touch, scatter, and watch the spheres come together again.</p>
-        <div style={{position:"relative",height:"min(68dvh,690px)",minHeight:340,borderRadius:22,overflow:"hidden",background:"#dedede"}}>
-          <OrbitScene accent={accent} motion={motion} paused={paused}/>
-          <div style={{position:"absolute",left:18,bottom:18,pointerEvents:"none",fontSize:12,color:"#5d5158",background:"#ffffffb8",borderRadius:20,padding:"9px 13px"}}>Move your cursor or drag to bounce</div>
+        <div style={{position:expanded?"fixed":"relative",inset:expanded?0:undefined,zIndex:expanded?1000:undefined,height:expanded?"100dvh":"min(68dvh,690px)",minHeight:expanded?0:340,borderRadius:expanded?0:22,overflow:"hidden",background:"#dedede"}}>
+          <OrbitScene accent={accent} motion={1} paused={false}/>
+          <button type="button" aria-label={expanded?"Exit full screen":"Expand Popcorn to full screen"} title={expanded?"Exit full screen":"Full screen"} onClick={()=>setExpanded(v=>!v)} style={{position:"absolute",top:16,right:16,zIndex:5,width:42,height:42,display:"grid",placeItems:"center",border:0,borderRadius:14,background:"#ffffffd9",color:"#353036",fontSize:23,cursor:"pointer",boxShadow:"0 2px 12px #00000012"}}>{expanded?"↙↗":"↗↙"}</button>
         </div>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:22,marginTop:22}}>
-          <div><div style={{fontSize:13,fontWeight:600,marginBottom:10}}>Color</div><div style={{display:"flex",gap:12}}>
-            {COLORS.map(([name,hex])=><button key={hex} type="button" title={name} aria-label={name} aria-pressed={accent===hex} onClick={()=>setAccent(hex)} style={{width:36,height:36,borderRadius:"50%",background:hex,border:accent===hex?"3px solid #353036":"3px solid white",outline:"1px solid #d1c9ca",cursor:"pointer"}}/>)}
-          </div></div>
-          <label style={{fontSize:13}}>Bounce · {Math.round(motion*100)}%<input type="range" min="0" max="1" step=".05" value={motion} onChange={e=>setMotion(Number(e.target.value))} style={{display:"block",width:190,marginTop:12}}/></label>
-          <button type="button" onClick={()=>setPaused(v=>!v)} style={{border:"1px solid #ded8d9",background:"white",borderRadius:22,padding:"11px 22px",cursor:"pointer"}}>{paused?"Resume":"Pause"}</button>
+        <div style={{marginTop:22,maxWidth:360}}>
+          <label htmlFor="popcorn-hue" style={{display:"block",fontSize:13,fontWeight:600,marginBottom:10}}>Color</label>
+          <input id="popcorn-hue" type="range" min="0" max="360" step="1" value={hue} onChange={e=>setHue(Number(e.target.value))} aria-label="Popcorn color" style={{display:"block",width:"100%",height:20,appearance:"none",WebkitAppearance:"none",borderRadius:999,background:"linear-gradient(to right,#f33,#ff0,#0f6,#0df,#44f,#f0f,#f33)",cursor:"pointer",accentColor:accent}}/>
         </div>
       </div>
     </main>
