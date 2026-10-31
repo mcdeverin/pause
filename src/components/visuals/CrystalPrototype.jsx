@@ -138,10 +138,7 @@ export default function CrystalPrototype({
         const level = THREE.MathUtils.clamp(Math.round(next), 0, 2);
         if (detail === level) return;
         detail = level;
-        backdropGeometry?.dispose();
-      backdropMaterial?.dispose();
-      backdropTexture?.dispose();
-      geometry?.dispose();
+        geometry?.dispose();
         edgesGeometry?.dispose();
         geometry = new THREE.IcosahedronGeometry(3.05, level);
         // Split faces for hard normals, giving each cut a separate reflection.
@@ -181,6 +178,7 @@ export default function CrystalPrototype({
       const draw = (now) => {
         if (disposed) return;
         const s = settingsRef.current;
+        backdrop.visible = patternRef.current;
         if (!document.hidden) {
           const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
           if (activeRef.current) elapsed += dt;
@@ -219,6 +217,9 @@ export default function CrystalPrototype({
       if (!observer) window.removeEventListener("resize", resize);
       geometry?.dispose();
       edgesGeometry?.dispose();
+      backdropGeometry?.dispose();
+      backdropMaterial?.dispose();
+      backdropTexture?.dispose();
       materials.forEach((material) => material.dispose());
       environment?.dispose();
       room?.dispose();
