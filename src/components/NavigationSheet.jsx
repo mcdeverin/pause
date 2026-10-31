@@ -180,7 +180,7 @@ export default function NavigationSheet({
           <button type="button" onClick={() => setSensoryExpanded(v => !v)} aria-expanded={sensoryExpanded} aria-controls="sensory-menu" style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",margin:"0 0 4px",padding:"9px 14px",border:0,background:"transparent",color:colors.tertiary,fontFamily:FONT,fontSize:12.5,fontWeight:700,letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer"}}>
             <span>Sensory</span>{sensoryExpanded?<ChevronDown size={17}/>:<ChevronRight size={17}/>}
           </button>
-          {sensoryExpanded && <div id="sensory-menu">{isOwner ? <SheetRow theme={theme} icon={Orbit} label="Sensory Studio" onClick={() => {onClose();navigate("/sensory-studio");}}/> : <div style={{padding:"12px 14px 16px",fontFamily:FONT,fontSize:13,color:colors.secondary}}>Experiences coming soon.</div>}</div>}
+          {sensoryExpanded && <div id="sensory-menu"><SheetRow theme={theme} icon={Orbit} label="Popcorn" onClick={() => {onClose();navigate("/sensory/popcorn");}}/>{isOwner && <SheetRow theme={theme} icon={SlidersHorizontal} label="Sensory Studio · private" muted onClick={() => {onClose();navigate("/sensory-studio");}}/>}</div>}
           <div style={{ height: 1, margin: "12px 14px", background: colors.border }} />
 
           <SheetRow
