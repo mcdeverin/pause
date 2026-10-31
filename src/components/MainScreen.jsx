@@ -184,11 +184,12 @@ export default function MainScreen({
             justifyContent: "center",
           }}
         >
-          {/* The resting visual is whichever one they chose — at rest, not breathing. */}
+          {/* The resting visual is whichever one they chose — at rest, not breathing.
+              The ring rests as a complete circle instead of an empty track. */}
           <div style={{ width: orbSize, height: orbSize }}>
             <BreathingVisual
               id={visual}
-              breath={0}
+              breath={visual === "ring" ? 1 : 0}
               theme={theme}
               options={visualOptions?.[visual]}
             />
