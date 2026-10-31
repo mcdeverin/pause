@@ -165,7 +165,7 @@ export default function BreathingScreen({
 
   return (
     <motion.div
-      className="w-screen h-screen overflow-hidden flex flex-col"
+      className="screen-fit w-screen overflow-hidden flex flex-col"
       style={{
         position: "relative",
         boxSizing: "border-box",

@@ -64,10 +64,10 @@ export default function MainScreen({
 
   return (
     <div
+      className="screen-fit"
       style={{
         position: "relative",
         width: "100%",
-        height: "100vh",
         overflow: "hidden",
         boxSizing: "border-box",
         display: "flex",

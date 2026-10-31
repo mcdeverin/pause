@@ -168,6 +168,14 @@
 }
 
 @layer utilities {
+  /* The height the browser actually shows. On mobile Safari 100vh is taller than
+     the visible area, which pushed the moment shortcuts and the menu below the
+     browser's toolbars where they could neither be seen nor tapped. */
+  .screen-fit {
+    height: 100vh;
+    height: 100dvh;
+  }
+
   /* Countdowns keep a fixed width so digits don't shift while breathing */
   .tnum {
     font-variant-numeric: tabular-nums;

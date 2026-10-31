@@ -110,12 +110,29 @@ export default function Home() {
     });
   }, [preferences]);
 
-  const startBreathing = useCallback((forcedTechnique = null) => {
-    if (techniques.length === 0) return;
+  // If the exercise library has not arrived yet — a slow first load on a phone —
+  // fetch it again rather than swallowing the tap, which looked like a dead button.
+  const ensureTechniques = useCallback(async () => {
+    if (techniques.length > 0) return techniques;
+    try {
+      const loaded = await loadTechniques();
+      setTechniques(loaded);
+      return loaded;
+    } catch {
+      return [];
+    }
+  }, [techniques]);
+
+  const startBreathing = useCallback(async (forcedTechnique = null) => {
+    const available = await ensureTechniques();
+    if (available.length === 0) {
+      flashNotice("Your exercises could not load. Check your connection and tap again.");
+      return;
+    }
     const filtered = selectedCategory === "All"
-      ? (isPro ? techniques : techniques.filter(t => !LOCKED_CATEGORIES.includes(t.category)))
-      : techniques.filter(t => t.category === selectedCategory);
-    const pool = filtered.length > 0 ? filtered : techniques;
+      ? (isPro ? available : available.filter(t => !LOCKED_CATEGORIES.includes(t.category)))
+      : available.filter(t => t.category === selectedCategory);
+    const pool = filtered.length > 0 ? filtered : available;
     const t = forcedTechnique || getRandomTechnique(pool);
 
     if (!isPro && LOCKED_CATEGORIES.includes(t.category)) {
@@ -126,7 +143,7 @@ export default function Home() {
     }
 
     beginSession(t, null);
-  }, [techniques, selectedCategory, isPro, beginSession]);
+  }, [ensureTechniques, selectedCategory, isPro, beginSession, flashNotice]);
 
   // Moment shortcuts only use their mapped category — never a fallback
   // technique, and never a premium category that isn't unlocked.

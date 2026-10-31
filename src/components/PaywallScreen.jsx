@@ -87,9 +87,9 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
 
   const ctaLabel = () => {
     if (loading) return '· processing ·';
-    if (planKey === 'lifetime') return `buy forever — ${lifetimePrice}`;
-    if (hasTrial(planKey)) return `start ${trialDays[planKey]}-day free trial`;
-    return `subscribe — ${getPlanPriceLabel(offerings, planKey)}`;
+    if (planKey === 'lifetime') return `Unlock forever — ${lifetimePrice}`;
+    if (hasTrial(planKey)) return `Start ${trialDays[planKey]}-day free trial`;
+    return `Continue with ${planKey}`;
   };
 
   const disclosureText = () => {
@@ -336,7 +336,20 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           {/* 32pt gap */}
           <div style={{ height: "30px" }} />
 
-          {/* 2. Headline */}
+          {/* 2. Eyebrow + headline */}
+          <p style={{
+            fontFamily: FONT,
+            fontSize: "11.5px",
+            fontWeight: 700,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: secondaryTextColor,
+            margin: "0 0 10px",
+            textAlign: "center",
+            lineHeight: 1.4,
+          }}>
+            Always Pause+
+          </p>
           <p style={{
             fontFamily: FONT,
             fontSize: "27px",
@@ -347,7 +360,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             textAlign: "center",
             lineHeight: 1.25,
           }}>
-            Make every pause your own.
+            Make space for more.
           </p>
 
           {/* 20pt gap */}
@@ -364,9 +377,74 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             textAlign: "center",
             lineHeight: 1.55,
           }}>
-            box, 4-7-8, coherence, physiological sigh, and more.{" "}
-            for focus, energy, and the hardest moments.
+            Discover more ways to breathe, create a space that feels like yours, and
+            understand how you feel along the way.
           </p>
+
+          {/* Contextual note when a specific feature opened the paywall */}
+          {triggerCategory && (
+            <p style={{
+              fontFamily: FONT,
+              fontSize: "13.5px",
+              fontWeight: 600,
+              letterSpacing: "0.005em",
+              color: secondaryTextColor,
+              margin: "14px 0 0",
+              textAlign: "center",
+              lineHeight: 1.5,
+              opacity: 0.85,
+            }}>
+              Unlock every breathing technique with Always Pause+.
+            </p>
+          )}
+
+          {/* What Plus opens up — only what the app actually offers today */}
+          <ul
+            style={{
+              listStyle: "none",
+              margin: "20px 0 0",
+              padding: 0,
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              gap: "9px",
+            }}
+          >
+            {[
+              "every breathing technique",
+              "all four breathing visuals",
+              "beautiful background collections",
+              "more ways to personalize your pause",
+            ].map((benefit) => (
+              <li
+                key={benefit}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  fontFamily: FONT,
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  letterSpacing: "0.005em",
+                  color: secondaryTextColor,
+                  lineHeight: 1.5,
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  style={{
+                    width: "4px",
+                    height: "4px",
+                    borderRadius: "50%",
+                    background: primaryColor,
+                    opacity: 0.6,
+                    flexShrink: 0,
+                  }}
+                />
+                {benefit}
+              </li>
+            ))}
+          </ul>
 
           {/* 32pt gap */}
           <div style={{ height: "32px" }} />
