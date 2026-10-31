@@ -23,6 +23,9 @@ export default function CrystalClusterScene({breathRef, background="photo", phot
     const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});
     renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));
     renderer.setSize(Math.max(1,el.clientWidth),Math.max(1,el.clientHeight),false);
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
     el.appendChild(renderer.domElement);
     scene.add(new THREE.AmbientLight(0xffffff,2.1));
     const key=new THREE.DirectionalLight(0xffffff,3.2);key.position.set(2,4,5);scene.add(key);
