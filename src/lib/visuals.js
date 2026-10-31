@@ -190,9 +190,16 @@ export const VISUAL_STYLES = [
   },
   {
     id: "rainDroplet",
-    label: "Rain Droplets",
+    label: "Bubbles",
     collection: "classics",
-    description: "A cluster of refractive water droplets that breathes over your selected background.",
+    description: "A cluster of glossy bubbles that breathes with you.",
+    controls: [],
+  },
+  {
+    id: "singleRainDroplet",
+    label: "Rain Droplet",
+    collection: "classics",
+    description: "One water-like glass droplet using the Shapes Studio material.",
     controls: [],
   },
   {
