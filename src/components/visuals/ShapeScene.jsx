@@ -51,6 +51,7 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
     } else if (kind === "particles") {
       const count = 1700;
       particleBase = new Float32Array(count * 3);
+      if (droplets) { camera.fov = 60; camera.position.z = 3; camera.updateProjectionMatrix(); }
       for (let i = 0; i < count; i++) {
         const phi = i * 2.3999632, y = 1 - 2 * (i + .5) / count, radius = Math.sqrt(1 - y * y);
         particleBase[i * 3] = Math.cos(phi) * radius;
@@ -64,7 +65,7 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
       group.add(particles);
     } else {
       const droplets = kind === "droplets" || kind === "dropletsSingle" || kind === "dropletsHalo";
-      const count = droplets ? 36 : 46;
+      const count = droplets ? 140 : 46;
       const material = droplets
         ? new THREE.MeshBasicMaterial({ color: "#ffffff", refractionRatio: .95 })
         : null;
@@ -74,6 +75,7 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
           if (disposed) { texture.dispose(); return; }
           texture.mapping = THREE.CubeRefractionMapping;
           environment = texture;
+          scene.background = texture;
           material.envMap = texture;
           material.needsUpdate = true;
         }, undefined, error => console.warn("Droplet environment texture could not load", error));
@@ -83,7 +85,7 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
         const y = 1 - 2 * (i + .5) / count;
         const radius = Math.sqrt(1 - y * y);
         const spec = droplets
-          ? { x: Math.cos(angle) * (.38 + Math.sqrt((i + .5) / count) * 1.8), y: Math.sin(angle) * (.38 + Math.sqrt((i + .5) / count) * 1.8) * .84, z: Math.sin(i * 1.9) * .75, size: .09 + ((i * 7) % 13) / 13 * .26 }
+          ? { x: (Math.sin(i * 127.1) * 43758.5453 % 1) * 5, y: (Math.sin(i * 311.7) * 15731.743 % 1) * 5, z: -1.5 - (i % 11) * .34, size: .1 * (1 + (i % 7) / 3) }
           : { x: Math.cos(angle) * radius, y, z: Math.sin(angle) * radius, size: .11 + (i % 5) * .018 };
         const mat = material || new THREE.MeshPhysicalMaterial({ color: colors[i % 4], metalness: .08, roughness: .12, clearcoat: 1, transparent: true, opacity: .94 });
         const mesh = new THREE.Mesh(geometry, mat);
@@ -128,9 +130,9 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
       } else {
         for (const { mesh, spec, index } of objects) {
           if (dropletsMode) {
-            const expand = .82 + b * .3;
+            const expand = .92 + b * .12;
             mesh.position.set(spec.x * expand, spec.y * expand, spec.z * expand);
-            mesh.scale.setScalar(spec.size * (1 + b * .12));
+            mesh.scale.setScalar(spec.size * (1 + b * .18));
           } else {
             const swell = .82 + b * .34 + Math.sin(t * .7 + index * .7) * .035 * motion;
             mesh.position.set(spec.x * swell, spec.y * swell, spec.z * swell);
