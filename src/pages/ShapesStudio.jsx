@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ShapeScene from "@/components/visuals/ShapeScene";
 import { BACKDROP_PHOTOS, BACKGROUND_CSS } from "@/lib/crystalStudio";
-const kinds=[["pearls","Pearl Cluster","Iridescent spheres moving together"],["ribbon","Silk Ribbon","A sculptural spiral that opens"],["droplets","Droplet","Floating refractive glass spheres · Three.js Park3Med"],["particles","Particle Sphere","A constellation that breathes"]];
+const kinds=[["pearls","Pearl Cluster","Iridescent spheres moving together"],["dropletsSingle","Single Droplet","One clear refractive sphere that breathes"],["dropletsHalo","Droplet Halo","A circle of clear raindrops expanding and gathering"],["particles","Particle Sphere","A constellation that breathes"]];
 export default function ShapesStudio(){
  const [allowed,setAllowed]=useState(null),[background,setBackground]=useState("photo"),[photo,setPhoto]=useState(BACKDROP_PHOTOS[0]?.id),[playing,setPlaying]=useState(true),[manual,setManual]=useState(false),[breath,setBreath]=useState(.4),[motion,setMotion]=useState(.6);
  const breathRef=useRef(.4),motionRef=useRef(.6);motionRef.current=motion;
@@ -27,6 +27,6 @@ export default function ShapesStudio(){
  <section style={{background:"white",borderRadius:18,padding:22,maxWidth:600,marginTop:22}}>
  <label style={{display:"block",marginBottom:18}}>Ambient movement · {Math.round(motion*100)}%<input type="range" min="0" max="1" step=".01" value={motion} onChange={e=>setMotion(+e.target.value)} style={{display:"block",width:"100%"}}/></label>
  {manual&&<label style={{display:"block"}}>Manual inhale · {Math.round(breath*100)}%<input type="range" min="0" max="1" step=".01" value={breath} onChange={e=>{setBreath(+e.target.value);breathRef.current=+e.target.value;}} style={{display:"block",width:"100%"}}/></label>}
- <p style={{fontSize:12,color:"#777"}}>Auto timing: inhale 4 seconds · hold 2 seconds · exhale 6 seconds · hold 2 seconds. These are original prototype geometries inspired by the Three.js examples, not copied example scenes.</p>
+ <p style={{fontSize:12,color:"#777"}}>Auto timing: inhale 4 seconds · hold 2 seconds · exhale 6 seconds · hold 2 seconds. Droplet materials use the Three.js stereo example's white refractive environment mapping; layouts and breathing motion are custom.</p>
  </section></main>;
 }
