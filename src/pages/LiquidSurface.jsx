@@ -4,8 +4,8 @@ import LiquidSurfaceScene from "@/components/visuals/LiquidSurfaceScene";
 import { BACKDROP_PHOTOS } from "@/lib/crystalStudio";
 
 export default function LiquidSurface(){
- const [background,setBackground]=useState("gradient");
- const [photo,setPhoto]=useState(BACKDROP_PHOTOS[0]?.id);
+ const background="photo";
+ const photo=BACKDROP_PHOTOS[0]?.id;
  const strength=.83;
  const viscosity=.76;
  const [expanded,setExpanded]=useState(false);
@@ -18,8 +18,6 @@ export default function LiquidSurface(){
  <button type="button" onClick={()=>setExpanded(v=>!v)} style={{position:"absolute",right:16,top:16,padding:"10px 15px",border:0,borderRadius:24,background:"#ffffffdf",cursor:"pointer"}}>{expanded?"Exit full screen":"Expand ↗"}</button>
  </div>
  {!expanded&&<div style={{display:"flex",flexWrap:"wrap",gap:22,alignItems:"center",justifyContent:"space-between",marginTop:22}}>
- <label style={{fontSize:13}}>Backdrop <select value={background} onChange={e=>setBackground(e.target.value)}><option value="gradient">Pastel gradient</option><option value="photo">Nature photo</option></select></label>
- {background==="photo"&&<select aria-label="Nature photo" value={photo} onChange={e=>setPhoto(e.target.value)}>{BACKDROP_PHOTOS.map(p=><option key={p.id} value={p.id}>{p.label||p.id}</option>)}</select>}
  </div>}
  </div></main>;
 }
