@@ -9,13 +9,11 @@ import {
   clearMoments,
   getStats,
   getActivity,
-  getReflection,
   groupIntoWeeks,
   periodLabel,
 } from "../../lib/moments";
 import MomentsStats from "./MomentsStats";
 import MomentBars from "./MomentBars";
-import ReflectionCard from "./ReflectionCard";
 import ActivityGrid from "./ActivityGrid";
 
 export default function MomentsScreen({
@@ -32,7 +30,6 @@ export default function MomentsScreen({
 
   const stats = useMemo(() => getStats(moments, period), [moments, period]);
   const weeks = useMemo(() => groupIntoWeeks(getActivity(moments, period)), [moments, period]);
-  const reflection = getReflection(stats, period);
   const hasHistory = moments.some((record) => record.completed);
 
   const handleDelete = () => {
@@ -153,7 +150,6 @@ export default function MomentsScreen({
                 <div style={{ marginTop: 26 }}>
                   <MomentBars theme={theme} byMoment={stats.byMoment} quick={stats.quick} />
                 </div>
-                <ReflectionCard theme={theme} text={reflection} />
                 <div style={{ marginTop: 26 }}>
                   <ActivityGrid
                     theme={theme}
