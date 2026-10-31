@@ -1,36 +1,159 @@
-import { useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import RefractionDroplets from "./RefractionDroplets";
 
-const clamp = v => Math.max(0,Math.min(1,v));
-function Pearls({ breathRef, motionRef }) {
- const group=useRef();
- const pearls=useMemo(()=>Array.from({length:46},(_,i)=>{const a=i*2.39996323, y=1-2*(i+.5)/46, r=Math.sqrt(1-y*y);return [Math.cos(a)*r,y,Math.sin(a)*r,i]}),[]);
- useFrame(({clock},dt)=>{if(!group.current)return;const b=clamp(breathRef.current),t=clock.elapsedTime;group.current.rotation.y+=dt*.085*motionRef.current;group.current.children.forEach((m,i)=>{const [x,y,z]=pearls[i];const swell=.82+b*.34;const flutter=Math.sin(t*.7+i*.7)*.035*motionRef.current;m.position.set(x*(swell+flutter),y*(swell+flutter),z*(swell+flutter));m.scale.setScalar((.11+(i%5)*.018)*(1+b*.15));});});
- return <group ref={group}>{pearls.map((p,i)=><mesh key={i}><sphereGeometry args={[1,18,14]}/><meshPhysicalMaterial color={["#bdb1e9","#d7d7f5","#f6cbd9","#badfe5"][i%4]} metalness={.08} roughness={.12} clearcoat={1} clearcoatRoughness={.1} transparent opacity={.94}/></mesh>)}</group>;
-}
-function Ribbon({breathRef,motionRef}) {
- const mesh=useRef();const geometry=useMemo(()=>{const points=[];for(let i=0;i<=220;i++){const t=i/220*Math.PI*8;const r=.38+.085*Math.sin(t*2);points.push(new THREE.Vector3(Math.cos(t)*r, (i/220-.5)*2.25,Math.sin(t)*r));}return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),400,.075,9,false);},[]);
- useFrame(({clock},dt)=>{if(!mesh.current)return;mesh.current.rotation.y+=dt*.18*motionRef.current;mesh.current.rotation.z=Math.sin(clock.elapsedTime*.22)*.16*motionRef.current;const b=clamp(breathRef.current);mesh.current.scale.set(.82+b*.45,.78+b*.28,.82+b*.45);});
- return <mesh ref={mesh} geometry={geometry}><meshPhysicalMaterial color="#d8b9e8" metalness={.28} roughness={.2} clearcoat={1} side={THREE.DoubleSide}/></mesh>;
-}
-function Droplets({breathRef,motionRef}) {
- const group=useRef();const specs=useMemo(()=>Array.from({length:22},(_,i)=>{const a=i*2.4;return {x:Math.cos(a)*(.4+i%4*.15),y:Math.sin(a)*(.4+i%3*.2),z:Math.sin(i*1.8)*.4,size:.13+(i%4)*.055};}),[]);
- useFrame(({clock},dt)=>{if(!group.current)return;const b=clamp(breathRef.current);group.current.rotation.y+=dt*.12*motionRef.current;group.current.children.forEach((m,i)=>{const p=specs[i];const swell=.8+b*.42;m.position.set(p.x*swell,p.y*swell+Math.sin(clock.elapsedTime*.55+i)*.055*motionRef.current,p.z*swell);m.scale.set(p.size*.8,p.size*1.65,p.size*.8);});});
- return <group ref={group}>{specs.map((p,i)=><mesh key={i}><sphereGeometry args={[1,24,16]}/><meshPhysicalMaterial color={["#c6b7f0","#c7e8e8","#f5cbd4"][i%3]} metalness={.08} roughness={.12} clearcoat={1} transparent opacity={.9}/></mesh>)}</group>;
-}
-function Particles({breathRef,motionRef}) {
- const points=useRef();const base=useMemo(()=>{const count=1700,a=new Float32Array(count*3);for(let i=0;i<count;i++){const phi=i*2.3999632,y=1-2*(i+.5)/count,r=Math.sqrt(1-y*y);a[i*3]=Math.cos(phi)*r;a[i*3+1]=y;a[i*3+2]=Math.sin(phi)*r;}return a;},[]);
- const positions=useMemo(()=>new Float32Array(base),[base]);
- useFrame(({clock},dt)=>{if(!points.current)return;const b=clamp(breathRef.current),t=clock.elapsedTime;points.current.rotation.y+=dt*.09*motionRef.current;for(let i=0;i<base.length;i+=3){const idx=i/3,mod=1+.05*Math.sin(t*.55+idx*.1)*motionRef.current;const scale=(.76+b*.52)*mod;positions[i]=base[i]*scale;positions[i+1]=base[i+1]*scale;positions[i+2]=base[i+2]*scale;}points.current.geometry.attributes.position.needsUpdate=true;});
- return <points ref={points}><bufferGeometry><bufferAttribute attach="attributes-position" args={[positions,3]}/></bufferGeometry><pointsMaterial color="#cbbbed" size={.026} sizeAttenuation transparent opacity={.9} depthWrite={false}/></points>;
-}
-const shapes={pearls:Pearls,ribbon:Ribbon,droplets:RefractionDroplets,particles:Particles};
-export default function ShapeScene({kind,breathRef,motionRef}) {
- const Shape=shapes[kind]||Pearls;
- return <Canvas camera={{position:[0,0,4.5],fov:42}} dpr={[1,1.7]} gl={{alpha:true,antialias:true}} style={{width:"100%",height:"100%"}}>
- <ambientLight intensity={1.6}/><directionalLight position={[3,5,5]} intensity={2.4}/><pointLight position={[-3,-2,3]} color="#f3b7d4" intensity={3}/>
- <Shape breathRef={breathRef} motionRef={motionRef}/>
- </Canvas>;
+// Native Three.js scene: no React Three Fiber or Drei dependency.
+// Existing React Three Fiber prototypes remain in Git history.
+export default function ShapeScene({ kind, breathRef, motionRef }) {
+  const host = useRef(null);
+  useEffect(() => {
+    const element = host.current;
+    if (!element) return;
+    let renderer, frame = 0, disposed = false;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+    camera.position.z = 4.5;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+      renderer.setClearColor(0x000000, 0);
+      element.appendChild(renderer.domElement);
+    } catch (error) {
+      console.error("Three.js renderer unavailable", error);
+      return;
+    }
+    scene.add(new THREE.AmbientLight(0xffffff, 2));
+    const light = new THREE.DirectionalLight(0xffffff, 2.4);
+    light.position.set(3, 5, 5);
+    scene.add(light);
+    const pink = new THREE.PointLight(0xf3b7d4, 3);
+    pink.position.set(-3, -2, 3);
+    scene.add(pink);
+    const group = new THREE.Group();
+    scene.add(group);
+    const objects = [];
+    const geometry = new THREE.SphereGeometry(1, 32, 24);
+    const colors = ["#bdb1e9", "#d7d7f5", "#f6cbd9", "#badfe5"];
+    let environment = null;
+    let ribbonGeometry = null;
+    let particleGeometry = null;
+    let particleMaterial = null;
+    let particleBase = null;
+    let particles = null;
+    if (kind === "ribbon") {
+      const points = [];
+      for (let i = 0; i <= 220; i++) {
+        const t = i / 220 * Math.PI * 8;
+        const radius = .38 + .085 * Math.sin(t * 2);
+        points.push(new THREE.Vector3(Math.cos(t) * radius, (i / 220 - .5) * 2.25, Math.sin(t) * radius));
+      }
+      ribbonGeometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 400, .075, 9, false);
+      group.add(new THREE.Mesh(ribbonGeometry, new THREE.MeshPhysicalMaterial({ color: "#d8b9e8", metalness: .28, roughness: .2, clearcoat: 1, side: THREE.DoubleSide })));
+    } else if (kind === "particles") {
+      const count = 1700;
+      particleBase = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        const phi = i * 2.3999632, y = 1 - 2 * (i + .5) / count, radius = Math.sqrt(1 - y * y);
+        particleBase[i * 3] = Math.cos(phi) * radius;
+        particleBase[i * 3 + 1] = y;
+        particleBase[i * 3 + 2] = Math.sin(phi) * radius;
+      }
+      particleGeometry = new THREE.BufferGeometry();
+      particleGeometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(particleBase), 3));
+      particleMaterial = new THREE.PointsMaterial({ color: "#cbbbed", size: .026, sizeAttenuation: true, transparent: true, opacity: .9, depthWrite: false });
+      particles = new THREE.Points(particleGeometry, particleMaterial);
+      group.add(particles);
+    } else {
+      const droplets = kind === "droplets";
+      const count = droplets ? 36 : 46;
+      const material = droplets
+        ? new THREE.MeshBasicMaterial({ color: "#ffffff", refractionRatio: .95 })
+        : null;
+      if (droplets) {
+        const urls = ["px", "nx", "py", "ny", "pz", "nz"].map(side => `https://threejs.org/examples/textures/cube/Park3Med/${side}.jpg`);
+        new THREE.CubeTextureLoader().load(urls, texture => {
+          if (disposed) { texture.dispose(); return; }
+          texture.mapping = THREE.CubeRefractionMapping;
+          environment = texture;
+          material.envMap = texture;
+          material.needsUpdate = true;
+        }, undefined, error => console.warn("Droplet environment texture could not load", error));
+      }
+      for (let i = 0; i < count; i++) {
+        const angle = i * 2.399963229728653;
+        const y = 1 - 2 * (i + .5) / count;
+        const radius = Math.sqrt(1 - y * y);
+        const spec = droplets
+          ? { x: Math.cos(angle) * (.38 + Math.sqrt((i + .5) / count) * 1.8), y: Math.sin(angle) * (.38 + Math.sqrt((i + .5) / count) * 1.8) * .84, z: Math.sin(i * 1.9) * .75, size: .09 + ((i * 7) % 13) / 13 * .26 }
+          : { x: Math.cos(angle) * radius, y, z: Math.sin(angle) * radius, size: .11 + (i % 5) * .018 };
+        const mat = material || new THREE.MeshPhysicalMaterial({ color: colors[i % 4], metalness: .08, roughness: .12, clearcoat: 1, transparent: true, opacity: .94 });
+        const mesh = new THREE.Mesh(geometry, mat);
+        group.add(mesh);
+        objects.push({ mesh, spec, index: i });
+      }
+    }
+    const resize = () => {
+      if (!renderer || !element.isConnected) return;
+      const width = Math.max(1, element.clientWidth), height = Math.max(1, element.clientHeight);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(element);
+    resize();
+    const start = performance.now();
+    let last = start;
+    const animate = now => {
+      if (disposed) return;
+      const dt = Math.min((now - last) / 1000, .06);
+      last = now;
+      const t = (now - start) / 1000;
+      const b = Math.max(0, Math.min(1, breathRef.current ?? .4));
+      const motion = motionRef.current ?? .6;
+      group.rotation.y += dt * (kind === "ribbon" ? .18 : kind === "droplets" ? .055 : .085) * motion;
+      if (kind === "ribbon") {
+        group.rotation.z = Math.sin(t * .22) * .16 * motion;
+        group.scale.set(.82 + b * .45, .78 + b * .28, .82 + b * .45);
+      } else if (kind === "particles") {
+        const position = particleGeometry.attributes.position;
+        for (let i = 0; i < particleBase.length; i += 3) {
+          const mod = 1 + .05 * Math.sin(t * .55 + i / 3 * .1) * motion;
+          const scale = (.76 + b * .52) * mod;
+          position.array[i] = particleBase[i] * scale;
+          position.array[i + 1] = particleBase[i + 1] * scale;
+          position.array[i + 2] = particleBase[i + 2] * scale;
+        }
+        position.needsUpdate = true;
+      } else {
+        for (const { mesh, spec, index } of objects) {
+          if (kind === "droplets") {
+            const expand = .87 + b * .24;
+            mesh.position.set(spec.x * expand + Math.sin(t * .3 + index * .71) * .075 * motion, spec.y * expand + Math.cos(t * .38 + index * .71) * .09 * motion, spec.z + Math.sin(t * .2 + index * .71) * .07 * motion);
+            mesh.scale.setScalar(spec.size * (1 + b * .17));
+          } else {
+            const swell = .82 + b * .34 + Math.sin(t * .7 + index * .7) * .035 * motion;
+            mesh.position.set(spec.x * swell, spec.y * swell, spec.z * swell);
+            mesh.scale.setScalar(spec.size * (1 + b * .15));
+          }
+        }
+      }
+      renderer.render(scene, camera);
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      group.traverse(object => { if (object.material && object.material !== undefined) { const materials = Array.isArray(object.material) ? object.material : [object.material]; materials.forEach(mat => mat.dispose()); } });
+      geometry.dispose();
+      ribbonGeometry?.dispose();
+      particleGeometry?.dispose();
+      particleMaterial?.dispose();
+      environment?.dispose();
+      renderer.dispose();
+      renderer.domElement.remove();
+    };
+  }, [kind, breathRef, motionRef]);
+  return <div ref={host} style={{ width: "100%", height: "100%" }} />;
 }
