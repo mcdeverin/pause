@@ -117,19 +117,19 @@ const NIGHT = {
   sageBorder: "rgba(143, 191, 168, 0.30)",
   heat: ["rgba(143, 191, 168, 0.25)", "rgba(143, 191, 168, 0.50)", "rgba(143, 191, 168, 0.80)"],
   heatEmpty: "rgba(245, 245, 242, 0.08)",
-  // Fully opaque: the shortcuts sit on the user's background, so nothing of the
-  // photograph shows through the buttons themselves.
+  // Fully opaque, soft pastels — the shortcuts sit on the user's background, so
+  // they stay solid and never let the photograph show through.
   momentTints: {
-    calm: "#2A4A40",
-    focus: "#273E52",
-    wind_down: "#38304F",
-    reset: "#4A3A24",
+    calm: "#D8E9DF",
+    focus: "#D9E4F5",
+    wind_down: "#E6DEF5",
+    reset: "#FDECD4",
   },
   momentInk: {
-    calm: "#A9D3C0",
-    focus: "#A9C6E2",
-    wind_down: "#BDB0E4",
-    reset: "#E3BE86",
+    calm: "#2F6152",
+    focus: "#33587D",
+    wind_down: "#57497E",
+    reset: "#8A5B1F",
   },
   ringFrom: "#7FB6C4",
   ringTo: "#9CC7B4",
