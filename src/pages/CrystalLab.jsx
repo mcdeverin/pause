@@ -2,15 +2,18 @@ import { useState } from "react";
 import CrystalPrototype, { CRYSTAL_DEFAULTS } from "../components/visuals/CrystalPrototype";
 
 const PRESETS = {
-  "Clear Quartz": { tint: "#e4eff9", edge: "#a5bbd3", transmission: 0.35, metalness: 0.06, opacity: 0.94 },
-  "Moonstone": { tint: "#d7d9f4", edge: "#b0c4df", transmission: 0.22, metalness: 0.12, opacity: 0.94 },
-  "Rose Quartz": { tint: "#f3c7d8", edge: "#d9a1bd", transmission: 0.16, metalness: 0.08, opacity: 0.97 },
-  "Aquamarine": { tint: "#9edcdd", edge: "#6ba7b8", transmission: 0.28, metalness: 0.08, opacity: 0.95 },
-  "Amethyst": { tint: "#b7a2eb", edge: "#816bb2", transmission: 0.18, metalness: 0.18, opacity: 0.97 },
+  "Clear Quartz": { tint: "#f4f8ff", edge: "#c5d4e4", transmission: 0.97, metalness: 0, roughness: 0.015, dispersion: 0.16, edges: 0.06 },
+  "Moonstone": { tint: "#d7d9f4", edge: "#b0c4df", transmission: 0.82, metalness: 0, roughness: 0.08, dispersion: 0.12 },
+  "Rose Quartz": { tint: "#f3c7d8", edge: "#d9a1bd", transmission: 0.76, metalness: 0, roughness: 0.1, dispersion: 0.1 },
+  "Aquamarine": { tint: "#9edcdd", edge: "#6ba7b8", transmission: 0.9, metalness: 0, roughness: 0.03, dispersion: 0.14 },
+  "Amethyst": { tint: "#b7a2eb", edge: "#816bb2", transmission: 0.8, metalness: 0, roughness: 0.06, dispersion: 0.18 },
 };
 const CONTROLS = [
   ["facets", "Facet complexity", 0, 2, 1],
-  ["opacity", "Opacity", 0.2, 1, 0.01],
+  ["dispersion", "Rainbow dispersion", 0, 1, 0.01],
+  ["ior", "Refraction index", 1, 2.4, 0.01],
+  ["thickness", "Glass thickness", 0.1, 6, 0.1],
+  ["edges", "Facet outline strength", 0, 0.5, 0.01],
   ["transmission", "Glass transmission", 0, 0.8, 0.01],
   ["roughness", "Surface roughness", 0, 1, 0.01],
   ["metalness", "Reflective metalness", 0, 1, 0.01],
@@ -43,7 +46,7 @@ export default function CrystalLab() {
         <header style={{ marginBottom: 22 }}>
           <div style={{ letterSpacing: "0.22em", fontSize: 11, color: "#b6bac6", textTransform: "uppercase" }}>Always Pause · Design Studio</div>
           <h1 style={{ fontSize: "clamp(28px, 5vw, 44px)", fontWeight: 500, margin: "8px 0" }}>Crystal Lab</h1>
-          <p style={{ color: "#b6bac6", margin: 0 }}>A solid, faceted gemstone. It breathes and rotates, but never melts or morphs.</p>
+          <p style={{ color: "#b6bac6", margin: 0 }}>Clear refractive glass with crisp facets and subtle rainbow dispersion. Rigid geometry, gentle breathing.</p>
           <nav style={{ display: "flex", gap: 14, marginTop: 12, fontSize: 13 }}>
             <a href="/visual-lab" style={{ color: "#cdb9fa" }}>Living Lab</a>
             <span style={{ color: "#a9adba" }}>Crystal Lab</span>
@@ -56,7 +59,7 @@ export default function CrystalLab() {
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           }}>
             <div style={{ width: "min(100%, 460px)", aspectRatio: "1", maxHeight: 450 }}>
-              <CrystalPrototype settings={settings} animate={playing} />
+              <CrystalPrototype settings={settings} animate={playing} dark={dark} />
             </div>
             <div style={{ position: "absolute", bottom: 20, display: "flex", gap: 8 }}>
               <button style={buttonStyle} onClick={() => setPlaying(p => !p)}>{playing ? "Pause rotation" : "Play rotation"}</button>
