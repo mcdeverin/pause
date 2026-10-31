@@ -157,6 +157,13 @@ export const VISUAL_STYLES = [
     controls: [],
   },
   {
+    id: "glass",
+    label: "Iridescent",
+    collection: "classics",
+    description: "Liquid glass, lit from within.",
+    controls: [],
+  },
+  {
     id: "leaves",
     label: "Leaves",
     collection: "nature",
