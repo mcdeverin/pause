@@ -1,255 +1,127 @@
 // Adapted from ElevenLabs UI Orb (MIT License): https://github.com/elevenlabs/ui
 // Copyright ElevenLabs contributors; see ELEVENLABS-UI-LICENSE.md
-
-import { useEffect, useMemo, useRef } from "react"
-import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber"
-import * as THREE from "three"
-
+// Vanilla Three.js renderer: Base44 preview does not resolve React Three Fiber.
+import { useEffect, useRef } from "react";
+import * as THREE from "three";
 
 export function Orb({
   colors = ["#CADCFC", "#A0B9D1"],
   colorsRef,
-  resizeDebounce = 100,
-  seed,
+  seed = 420,
   agentState = null,
   volumeMode = "auto",
-  manualInput,
-  manualOutput,
+  manualInput = 0,
+  manualOutput = 0.3,
   inputVolumeRef,
   outputVolumeRef,
   getInputVolume,
   getOutputVolume,
   className,
 }) {
-  return (
-    <div className={className ?? "relative h-full w-full"}>
-      <Canvas
-        resize={{ debounce: resizeDebounce }}
-        gl={{
-          alpha: true,
-          antialias: true,
-          premultipliedAlpha: true,
-        }}
-      >
-        <Scene
-          colors={colors}
-          colorsRef={colorsRef}
-          seed={seed}
-          agentState={agentState}
-          volumeMode={volumeMode}
-          manualInput={manualInput}
-          manualOutput={manualOutput}
-          inputVolumeRef={inputVolumeRef}
-          outputVolumeRef={outputVolumeRef}
-          getInputVolume={getInputVolume}
-          getOutputVolume={getOutputVolume}
-        />
-      </Canvas>
-    </div>
-  )
+  const host = useRef(null);
+  const live = useRef({});
+  live.current = { colors, colorsRef, agentState, volumeMode, manualInput, manualOutput, inputVolumeRef, outputVolumeRef, getInputVolume, getOutputVolume };
+  useEffect(() => {
+    const element = host.current;
+    if (!element) return;
+    let renderer;
+    try { renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); }
+    catch (error) { console.warn("Orb WebGL unavailable", error); return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setClearColor(0, 0);
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
+    element.appendChild(renderer.domElement);
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-4, 4, 4, -4, .1, 20);
+    camera.position.z = 5;
+    const noiseData = new Uint8Array(256 * 256 * 4);
+    let randomSeed = (seed || 420) >>> 0;
+    const random = () => { randomSeed = (1664525 * randomSeed + 1013904223) >>> 0; return randomSeed / 4294967296; };
+    for (let i = 0; i < noiseData.length; i += 4) {
+      const value = Math.floor(random() * 256);
+      noiseData[i] = noiseData[i+1] = noiseData[i+2] = value;
+      noiseData[i+3] = 255;
+    }
+    const noise = new THREE.DataTexture(noiseData, 256, 256, THREE.RGBAFormat);
+    noise.wrapS = noise.wrapT = THREE.RepeatWrapping;
+    noise.needsUpdate = true;
+    const loader = new THREE.TextureLoader();
+    let loadedNoise = null;
+    loader.load("https://storage.googleapis.com/eleven-public-cdn/images/perlin-noise.png", texture => {
+      if (disposed) { texture.dispose(); return; }
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      loadedNoise = texture;
+      uniforms.uPerlinTexture.value = texture;
+    }, undefined, () => {});
+    const uniforms = {
+      uColor1: { value: new THREE.Color(colors[0]) },
+      uColor2: { value: new THREE.Color(colors[1]) },
+      uOffsets: { value: Array.from({length: 7}, () => random() * Math.PI * 2) },
+      uPerlinTexture: { value: noise },
+      uTime: { value: 0 },
+      uAnimation: { value: .1 },
+      uInverted: { value: 0 },
+      uInputVolume: { value: 0 },
+      uOutputVolume: { value: 0 },
+      uOpacity: { value: 0 },
+    };
+    const geometry = new THREE.CircleGeometry(3.5, 64);
+    const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: true, depthWrite: false });
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+    let disposed = false;
+    let frame = 0;
+    let previous = performance.now();
+    let input = 0, output = 0, speed = .1;
+    const resize = () => {
+      const width = element.clientWidth || 240, height = element.clientHeight || 240;
+      renderer.setSize(width, height, false);
+      const aspect = width / height;
+      camera.left = -4 * aspect; camera.right = 4 * aspect;
+      camera.top = 4; camera.bottom = -4;
+      camera.updateProjectionMatrix();
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(element);
+    resize();
+    const tick = now => {
+      if (disposed) return;
+      const dt = Math.min((now - previous) / 1000, .05);
+      previous = now;
+      const props = live.current;
+      const chosen = props.colorsRef?.current || props.colors;
+      uniforms.uColor1.value.lerp(new THREE.Color(chosen[0] || "#CADCFC"), .08);
+      uniforms.uColor2.value.lerp(new THREE.Color(chosen[1] || "#A0B9D1"), .08);
+      uniforms.uInverted.value = document.documentElement.classList.contains("dark") ? 1 : 0;
+      const manual = props.volumeMode === "manual";
+      const targetIn = manual ? (props.manualInput ?? props.inputVolumeRef?.current ?? props.getInputVolume?.() ?? 0) : .3;
+      const targetOut = manual ? (props.manualOutput ?? props.outputVolumeRef?.current ?? props.getOutputVolume?.() ?? .3) : .3;
+      input += (Math.max(0, Math.min(1, targetIn)) - input) * .2;
+      output += (Math.max(0, Math.min(1, targetOut)) - output) * .2;
+      speed += (.1 + (1 - (output - 1) ** 2) * .9 - speed) * .12;
+      uniforms.uTime.value += dt * .5;
+      uniforms.uAnimation.value += dt * speed;
+      uniforms.uInputVolume.value = input;
+      uniforms.uOutputVolume.value = output;
+      uniforms.uOpacity.value = Math.min(1, uniforms.uOpacity.value + dt * 2);
+      renderer.render(scene, camera);
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      geometry.dispose(); material.dispose(); noise.dispose(); loadedNoise?.dispose();
+      renderer.dispose();
+      if (renderer.domElement.parentNode === element) element.removeChild(renderer.domElement);
+    };
+  }, [seed]);
+  return <div ref={host} className={className} style={{ width: "100%", height: "100%", position: "relative" }} />;
 }
 
-function Scene({
-  colors,
-  colorsRef,
-  seed,
-  agentState,
-  volumeMode,
-  manualInput,
-  manualOutput,
-  inputVolumeRef,
-  outputVolumeRef,
-  getInputVolume,
-  getOutputVolume,
-}) {
-  const { gl } = useThree()
-  const circleRef =
-    useRef(null)
-  const initialColorsRef = useRef(colors)
-  const targetColor1Ref = useRef(new THREE.Color(colors[0]))
-  const targetColor2Ref = useRef(new THREE.Color(colors[1]))
-  const animSpeedRef = useRef(0.1)
-  const perlinNoiseTexture = useLoader(THREE.TextureLoader,
-    "https://storage.googleapis.com/eleven-public-cdn/images/perlin-noise.png"
-  )
-
-  const agentRef = useRef(agentState)
-  const modeRef = useRef(volumeMode)
-  const manualInRef = useRef(manualInput ?? 0)
-  const manualOutRef = useRef(manualOutput ?? 0)
-  const curInRef = useRef(0)
-  const curOutRef = useRef(0)
-
-  useEffect(() => {
-    agentRef.current = agentState
-  }, [agentState])
-
-  useEffect(() => {
-    modeRef.current = volumeMode
-  }, [volumeMode])
-
-  useEffect(() => {
-    manualInRef.current = clamp01(
-      manualInput ?? inputVolumeRef?.current ?? getInputVolume?.() ?? 0
-    )
-  }, [manualInput, inputVolumeRef, getInputVolume])
-
-  useEffect(() => {
-    manualOutRef.current = clamp01(
-      manualOutput ?? outputVolumeRef?.current ?? getOutputVolume?.() ?? 0
-    )
-  }, [manualOutput, outputVolumeRef, getOutputVolume])
-
-  const random = useMemo(
-    () => splitmix32(seed ?? Math.floor(Math.random() * 2 ** 32)),
-    [seed]
-  )
-  const offsets = useMemo(
-    () =>
-      new Float32Array(Array.from({ length: 7 }, () => random() * Math.PI * 2)),
-    [random]
-  )
-
-  useEffect(() => {
-    targetColor1Ref.current = new THREE.Color(colors[0])
-    targetColor2Ref.current = new THREE.Color(colors[1])
-  }, [colors])
-
-  useEffect(() => {
-    const apply = () => {
-      if (!circleRef.current) return
-      const isDark = document.documentElement.classList.contains("dark")
-      circleRef.current.material.uniforms.uInverted.value = isDark ? 1 : 0
-    }
-
-    apply()
-
-    const observer = new MutationObserver(apply)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    })
-    return () => observer.disconnect()
-  }, [])
-
-  useFrame((_, delta) => {
-    const mat = circleRef.current?.material
-    if (!mat) return
-    const live = colorsRef?.current
-    if (live) {
-      if (live[0]) targetColor1Ref.current.set(live[0])
-      if (live[1]) targetColor2Ref.current.set(live[1])
-    }
-    const u = mat.uniforms
-    u.uTime.value += delta * 0.5
-
-    if (u.uOpacity.value < 1) {
-      u.uOpacity.value = Math.min(1, u.uOpacity.value + delta * 2)
-    }
-
-    let targetIn = 0
-    let targetOut = 0.3
-    if (modeRef.current === "manual") {
-      targetIn = clamp01(
-        manualInput ?? inputVolumeRef?.current ?? getInputVolume?.() ?? 0
-      )
-      targetOut = clamp01(
-        manualOutput ?? outputVolumeRef?.current ?? getOutputVolume?.() ?? 0
-      )
-    } else {
-      const t = u.uTime.value * 2
-      if (agentRef.current === null) {
-        targetIn = 0
-        targetOut = 0.3
-      } else if (agentRef.current === "listening") {
-        targetIn = clamp01(0.55 + Math.sin(t * 3.2) * 0.35)
-        targetOut = 0.45
-      } else if (agentRef.current === "talking") {
-        targetIn = clamp01(0.65 + Math.sin(t * 4.8) * 0.22)
-        targetOut = clamp01(0.75 + Math.sin(t * 3.6) * 0.22)
-      } else {
-        const base = 0.38 + 0.07 * Math.sin(t * 0.7)
-        const wander = 0.05 * Math.sin(t * 2.1) * Math.sin(t * 0.37 + 1.2)
-        targetIn = clamp01(base + wander)
-        targetOut = clamp01(0.48 + 0.12 * Math.sin(t * 1.05 + 0.6))
-      }
-    }
-
-    curInRef.current += (targetIn - curInRef.current) * 0.2
-    curOutRef.current += (targetOut - curOutRef.current) * 0.2
-
-    const targetSpeed = 0.1 + (1 - Math.pow(curOutRef.current - 1, 2)) * 0.9
-    animSpeedRef.current += (targetSpeed - animSpeedRef.current) * 0.12
-
-    u.uAnimation.value += delta * animSpeedRef.current
-    u.uInputVolume.value = curInRef.current
-    u.uOutputVolume.value = curOutRef.current
-    u.uColor1.value.lerp(targetColor1Ref.current, 0.08)
-    u.uColor2.value.lerp(targetColor2Ref.current, 0.08)
-  })
-
-  useEffect(() => {
-    const canvas = gl.domElement
-    const onContextLost = (event) => {
-      event.preventDefault()
-      setTimeout(() => {
-        gl.forceContextRestore()
-      }, 1)
-    }
-    canvas.addEventListener("webglcontextlost", onContextLost, false)
-    return () =>
-      canvas.removeEventListener("webglcontextlost", onContextLost, false)
-  }, [gl])
-
-  const uniforms = useMemo(() => {
-    perlinNoiseTexture.wrapS = THREE.RepeatWrapping
-    perlinNoiseTexture.wrapT = THREE.RepeatWrapping
-    const isDark =
-      typeof document !== "undefined" &&
-      document.documentElement.classList.contains("dark")
-    return {
-      uColor1: new THREE.Uniform(new THREE.Color(initialColorsRef.current[0])),
-      uColor2: new THREE.Uniform(new THREE.Color(initialColorsRef.current[1])),
-      uOffsets: { value: offsets },
-      uPerlinTexture: new THREE.Uniform(perlinNoiseTexture),
-      uTime: new THREE.Uniform(0),
-      uAnimation: new THREE.Uniform(0.1),
-      uInverted: new THREE.Uniform(isDark ? 1 : 0),
-      uInputVolume: new THREE.Uniform(0),
-      uOutputVolume: new THREE.Uniform(0),
-      uOpacity: new THREE.Uniform(0),
-    }
-  }, [perlinNoiseTexture, offsets])
-
-  return (
-    <mesh ref={circleRef}>
-      <circleGeometry args={[3.5, 64]} />
-      <shaderMaterial
-        uniforms={uniforms}
-        fragmentShader={fragmentShader}
-        vertexShader={vertexShader}
-        transparent={true}
-      />
-    </mesh>
-  )
-}
-
-function splitmix32(a) {
-  return function () {
-    a |= 0
-    a = (a + 0x9e3779b9) | 0
-    let t = a ^ (a >>> 16)
-    t = Math.imul(t, 0x21f0aaad)
-    t = t ^ (t >>> 15)
-    t = Math.imul(t, 0x735a2d97)
-    return ((t = t ^ (t >>> 15)) >>> 0) / 4294967296
-  }
-}
-
-function clamp01(n) {
-  if (!Number.isFinite(n)) return 0
-  return Math.min(1, Math.max(0, n))
-}
 const vertexShader = /* glsl */ `
 uniform float uTime;
 uniform sampler2D uPerlinTexture;
