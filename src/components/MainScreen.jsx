@@ -242,6 +242,8 @@ export default function MainScreen({
 
       {/* Hidden shortcuts leave a discreet way back — the orb already takes the
           freed space, so nothing sits empty. */}
+      {/* Hidden shortcuts leave a way back. The control sits on the same opaque
+          capsule as the hide control, so it stays visible on any background. */}
       {!showShortcuts && (
         <div style={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
           <button
@@ -250,23 +252,24 @@ export default function MainScreen({
             aria-label="Show moment shortcuts"
             title="Show moment shortcuts"
             style={{
-              width: 44,
-              height: 44,
-              display: "flex",
+              minHeight: 40,
+              display: "inline-flex",
               alignItems: "center",
-              justifyContent: "center",
-              background: "none",
-              border: "none",
-              padding: 0,
+              gap: 8,
+              padding: "0 16px",
+              borderRadius: 999,
+              background: ink.sheet,
+              border: `1px solid ${ink.border}`,
               cursor: "pointer",
-              color: ink.tertiary,
-              opacity: 0.7,
-              transition: "opacity 0.2s ease",
+              fontFamily: FONT,
+              fontSize: "13.5px",
+              fontWeight: 700,
+              letterSpacing: "0.005em",
+              color: ink.text,
             }}
-            onMouseEnter={(event) => (event.currentTarget.style.opacity = "0.9")}
-            onMouseLeave={(event) => (event.currentTarget.style.opacity = "0.55")}
           >
-            <Eye size={18} strokeWidth={2.2} />
+            <Eye size={16} strokeWidth={2.2} />
+            Show moments
           </button>
         </div>
       )}
