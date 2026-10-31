@@ -299,29 +299,33 @@ export default function BreathingScreen({
           </span>
         )}
 
-        <div
-          style={{
-            width: "min(180px, 60vw)",
-            height: 4,
-            borderRadius: 999,
-            background: ink.track,
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <motion.div
+        {/* The ring's own arc already fills with the breath, so it needs no
+            second progress bar underneath. */}
+        {visual !== "ring" && (
+          <div
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              height: "100%",
+              width: "min(180px, 60vw)",
+              height: 4,
               borderRadius: 999,
-              background: `linear-gradient(90deg, ${colors.ringFrom} 0%, ${colors.ringTo} 100%)`,
+              background: ink.track,
+              position: "relative",
+              overflow: "hidden",
             }}
-            animate={{ width: `${phaseProgress * 100}%` }}
-            transition={{ duration: reducedMotion ? 0.2 : 0.15, ease: "linear" }}
-          />
-        </div>
+          >
+            <motion.div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                height: "100%",
+                borderRadius: 999,
+                background: `linear-gradient(90deg, ${colors.ringFrom} 0%, ${colors.ringTo} 100%)`,
+              }}
+              animate={{ width: `${phaseProgress * 100}%` }}
+              transition={{ duration: reducedMotion ? 0.2 : 0.15, ease: "linear" }}
+            />
+          </div>
+        )}
 
         <button
           type="button"
