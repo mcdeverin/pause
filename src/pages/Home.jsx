@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
+import { base44 } from "@/api/base44Client";
 import MainScreen from "../components/MainScreen";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
@@ -33,6 +34,7 @@ export default function Home() {
   const [pendingDraft, setPendingDraft] = useState(null);
   const [shortcutNotice, setShortcutNotice] = useState("");
   const [isPro, setIsPro] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const [techniques, setTechniques] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [preferences, setPreferences] = useState(loadPreferences);
@@ -61,6 +63,17 @@ export default function Home() {
       .then((pro) => setIsPro(pro))
       .catch(() => {});
   }, []);
+
+  // The app's own admin account sees every exercise, visual and background. This
+  // is a role check, never a change to the subscription itself.
+  useEffect(() => {
+    base44.auth
+      .me()
+      .then((me) => setIsOwner(me?.role === "admin"))
+      .catch(() => {});
+  }, []);
+
+  const hasFullAccess = isPro || isOwner;
 
   useEffect(() => {
     loadTechniques()
@@ -149,16 +162,20 @@ export default function Home() {
         ? available
         : available.filter((t) => t.category === selectedCategory);
     // Free breathing is unlimited, but only for the starter exercises.
-    const playable = isPro ? inCategory : inCategory.filter(isFreeTechnique);
+    const playable = hasFullAccess ? inCategory : inCategory.filter(isFreeTechnique);
     const pool =
-      playable.length > 0 ? playable : isPro ? available : available.filter(isFreeTechnique);
+      playable.length > 0
+        ? playable
+        : hasFullAccess
+          ? available
+          : available.filter(isFreeTechnique);
     if (pool.length === 0) {
       flashNotice("No breathing exercise fits that one yet.");
       return;
     }
 
     beginSession(forcedTechnique || getRandomTechnique(pool), null);
-  }, [ensureTechniques, selectedCategory, isPro, beginSession, flashNotice]);
+  }, [ensureTechniques, selectedCategory, hasFullAccess, beginSession, flashNotice]);
 
   // Choosing how you feel is always free: a shortcut uses the free exercises in
   // its own category where it can, and otherwise a starter exercise — it never
@@ -176,7 +193,7 @@ export default function Home() {
     const inMoment = available.filter(
       (t) => moment.categories.includes(t.category) && hasUsablePhases(t)
     );
-    const playable = isPro ? inMoment : inMoment.filter(isFreeTechnique);
+    const playable = hasFullAccess ? inMoment : inMoment.filter(isFreeTechnique);
     const pool =
       playable.length > 0
         ? playable
@@ -187,7 +204,7 @@ export default function Home() {
     }
 
     beginSession(getRandomTechnique(pool), moment.id);
-  }, [ensureTechniques, isPro, beginSession, flashNotice]);
+  }, [ensureTechniques, hasFullAccess, beginSession, flashNotice]);
 
   const openPaywall = useCallback((context = {}) => {
     // Interest in a specific premium feature, recorded once per attempt.
@@ -262,13 +279,13 @@ export default function Home() {
 
     // The one-time introduction: only after a session they actually finished, and
     // only ever once. Kept apart from the subscription, which RevenueCat owns.
-    if (result?.completed && !isPro && !preferences.introOfferSeen) {
+    if (result?.completed && !hasFullAccess && !preferences.introOfferSeen) {
       const next = { ...preferences, introOfferSeen: true };
       setPreferences(next);
       savePreferences(next);
       openPaywall({ source: "intro", introductory: true });
     }
-  }, [technique, preferences, isPro, openPaywall]);
+  }, [technique, preferences, hasFullAccess, openPaywall]);
 
   return (
     <div
@@ -288,7 +305,7 @@ export default function Home() {
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
             onHapticsChange={() => setHapticsEnabled(!hapticsEnabled)}
-            isPro={isPro}
+            isPro={hasFullAccess}
             backgroundSettings={preferences}
             photo={photo}
             visual={preferences.visual}
@@ -340,7 +357,7 @@ export default function Home() {
             onAddPhoto={handlePhotoAdded}
             onRemovePhoto={handlePhotoRemoved}
             onClose={() => setShowPersonalize(false)}
-            isPro={isPro}
+            isPro={hasFullAccess}
             onRequestUpgrade={requestUpgrade}
           />
         )}
