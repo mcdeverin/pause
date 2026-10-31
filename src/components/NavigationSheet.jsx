@@ -24,8 +24,6 @@ const CATEGORIES = [
   { id: "Advanced", label: "Advanced", icon: Flame },
 ];
 
-const LOCKED_CATEGORIES = ["Focus", "Energy", "Advanced"];
-
 function SheetRow({ icon: Icon, label, onClick, active, locked, muted, accent, theme, trailing }) {
   const colors = getColors(theme);
 
@@ -65,6 +63,7 @@ export default function NavigationSheet({
   selectedCategory,
   onCategoryChange,
   isPro,
+  lockedCategories = [],
   onLockedCategoryTap,
   onOpenPersonalize,
   onOpenMoments,
@@ -75,7 +74,7 @@ export default function NavigationSheet({
   const colors = getColors(theme);
 
   const handleCategory = (id) => {
-    const locked = !isPro && LOCKED_CATEGORIES.includes(id);
+    const locked = !isPro && lockedCategories.includes(id);
     onClose();
     if (locked) {
       if (onLockedCategoryTap) onLockedCategoryTap(id);
@@ -184,7 +183,7 @@ export default function NavigationSheet({
               icon={category.icon}
               label={category.label}
               active={selectedCategory === category.id}
-              locked={!isPro && LOCKED_CATEGORIES.includes(category.id)}
+              locked={!isPro && lockedCategories.includes(category.id)}
               onClick={() => handleCategory(category.id)}
             />
           ))}

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
-import { FONT, getColors, isSolidBackground, MY_PHOTO_ID } from "../../lib/design";
+import { CUSTOM_GRADIENT_ID, FONT, getColors, isSolidBackground, MY_PHOTO_ID } from "../../lib/design";
+import { FREE_PHOTO_SLOTS, isPremiumBackground, isPremiumVisual } from "../../lib/access";
 import { resolveOptions } from "../../lib/visuals";
 import { BLUR_MAX, DIM_MAX, clampBlur, clampDim, clampPhotoOffset, clampPhotoZoom } from "../../lib/background";
 import PreferenceToggle from "./PreferenceToggle";
@@ -44,6 +45,8 @@ export default function PersonalizePanel({
   onAddPhoto,
   onRemovePhoto,
   onClose,
+  isPro = false,
+  onRequestUpgrade,
 }) {
   // Everything below edits a draft. The stored preferences only change through
   // Save My Pause, so closing this panel simply discards the draft.
@@ -185,7 +188,33 @@ export default function PersonalizePanel({
     setJustSaved(false);
   };
 
+  // Previewing a Plus option is free for everyone; the offer only arrives when
+  // that option is applied. The draft is handed up so a purchase can keep it.
   const handleSave = () => {
+    if (!isPro) {
+      // Only a change they are making now is gated. A choice they already had
+      // saved stays theirs, so an unrelated edit never hits the offer.
+      if (isPremiumVisual(draft.visual) && draft.visual !== prefs.visual) {
+        if (onRequestUpgrade) {
+          onRequestUpgrade({ featureId: draft.visual, featureCategory: "visual" }, draft);
+          return;
+        }
+      }
+      if (isPremiumBackground(draft.background) && draft.background !== prefs.background) {
+        const gradient = draft.background === CUSTOM_GRADIENT_ID;
+        if (onRequestUpgrade) {
+          onRequestUpgrade(
+            {
+              featureId: draft.background,
+              featureCategory: gradient ? "gradient" : "background",
+            },
+            draft
+          );
+          return;
+        }
+      }
+    }
+
     onSave(draft);
     setJustSaved(true);
     clearTimeout(savedTimerRef.current);
@@ -334,6 +363,7 @@ export default function PersonalizePanel({
             value={draft.visual}
             optionsFor={(id) => resolveOptions(id, draft.visualOptions?.[id])}
             onChange={(id) => update("visual", id)}
+            isPro={isPro}
           />
           <FineTuneSection
             key={draft.visual}
@@ -356,6 +386,12 @@ export default function PersonalizePanel({
             onAddPhoto={handlePhotoAdded}
             onRemovePhoto={handlePhotoRemoved}
             onPhotoZoom={(zoom) => update("photoZoom", clampPhotoZoom(zoom))}
+            isPro={isPro}
+            addBlocked={!isPro && photos.length >= FREE_PHOTO_SLOTS}
+            onAddBlocked={() =>
+              onRequestUpgrade &&
+              onRequestUpgrade({ featureId: "extra_photo", featureCategory: "photo" }, draft)
+            }
           />
 
           {/* Background adjustments */}

@@ -7,10 +7,13 @@ import {
   stylesInCollection,
 } from "../../lib/visuals";
 import VisualThumb from "../visuals/VisualThumb";
+import PlusTag from "./PlusTag";
+import { isPremiumVisual } from "../../lib/access";
 
 // The breathing visual gallery: collection filters and small thumbnails. Only
 // styles that exist here are listed, so nothing unfinished can be picked.
-export default function VisualGallery({ theme, value, optionsFor, onChange }) {
+// Previews stay open to everyone — the offer only arrives when one is applied.
+export default function VisualGallery({ theme, value, optionsFor, onChange, isPro = false }) {
   const colors = getColors(theme);
   const collections = availableCollections();
   const [collection, setCollection] = useState(() => {
@@ -97,6 +100,7 @@ export default function VisualGallery({ theme, value, optionsFor, onChange }) {
                 transition: "border-color 0.2s ease, background 0.2s ease",
               }}
             >
+              {!isPro && isPremiumVisual(style.id) && <PlusTag theme={theme} />}
               <VisualThumb id={style.id} theme={theme} options={optionsFor(style.id)} size={50} />
               <span
                 style={{

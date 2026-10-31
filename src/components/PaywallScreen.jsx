@@ -17,10 +17,40 @@ import {
   getIntroTrialDays,
   formatDailyPrice,
 } from '../lib/pricing';
+import { track } from '../lib/analytics';
 
 const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
-export default function PaywallScreen({ theme = "day", onClose, onPurchase, triggerCategory }) {
+// One short line, only when a specific feature opened the offer.
+const CONTEXT_LINES = {
+  technique: "Unlock every breathing technique with Always Pause+.",
+  technique_category: "Unlock every breathing technique with Always Pause+.",
+  visual: "Unlock every breathing visual with Always Pause+.",
+  background: "Unlock the full background collection with Always Pause+.",
+  gradient: "Unlock custom gradients with Always Pause+.",
+  photo: "Keep a whole library of photos with Always Pause+.",
+};
+
+export default function PaywallScreen({
+  theme = "day",
+  onClose,
+  onPurchase,
+  source = "menu",
+  introductory = false,
+}) {
+  const contextLine = introductory ? null : CONTEXT_LINES[source] || null;
+
+  useEffect(() => {
+    track("paywall_viewed", {
+      source,
+      introductory_or_contextual: introductory ? "introductory" : "contextual",
+    });
+  }, [source, introductory]);
+
+  const handleClose = () => {
+    track("paywall_dismissed", { source });
+    onClose();
+  };
   const [selected, setSelected] = useState(PRODUCT_IDS.annual);
   const [offerings, setOfferings] = useState(null);
   const [eligibility, setEligibility] = useState({});
@@ -113,17 +143,28 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
         return;
       }
 
+      const productId = pkg.product.identifier;
+      track("purchase_flow_started", { product_id: productId });
+
       // Apple applies the introductory offer itself when this customer is eligible.
       await purchasePackage(pkg);
 
       // All three plans grant the same entitlement, so one check covers them all.
       const isPro = await checkEntitlement();
-      if (isPro) onPurchase(pkg.product.identifier);
-      else setError('purchase completed but premium is not active yet. try restore purchases.');
+      if (isPro) {
+        track("purchase_flow_result", { product_id: productId, outcome: "success" });
+        onPurchase(productId);
+      } else {
+        track("purchase_flow_result", { product_id: productId, outcome: "failed" });
+        setError('purchase completed but premium is not active yet. try restore purchases.');
+      }
     } catch (e) {
       // Backing out of the App Store sheet is not a failure worth a message.
       const cancelled = e?.userCancelled ?? e?.userInfo?.userCancelled;
-      if (!cancelled) {
+      if (cancelled) {
+        track("purchase_flow_result", { product_id: planKey, outcome: "cancelled" });
+      } else {
+        track("purchase_flow_result", { product_id: planKey, outcome: "failed" });
         setError('purchase could not be completed. please try again.');
       }
     } finally {
@@ -278,7 +319,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "flex-start",
-          zIndex: 50,
+          zIndex: 70,
           paddingTop: "env(safe-area-inset-top, 44px)",
           paddingBottom: "env(safe-area-inset-bottom, 34px)",
           overflowY: "auto",
@@ -294,7 +335,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
       >
         {/* Close button */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           style={{
             position: "absolute",
             top: "calc(env(safe-area-inset-top, 44px) + 16px)",
@@ -381,8 +422,8 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             understand how you feel along the way.
           </p>
 
-          {/* Contextual note when a specific feature opened the paywall */}
-          {triggerCategory && (
+          {/* Contextual note when a specific feature opened the offer */}
+          {contextLine && (
             <p style={{
               fontFamily: FONT,
               fontSize: "13.5px",
@@ -394,7 +435,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
               lineHeight: 1.5,
               opacity: 0.85,
             }}>
-              Unlock every breathing technique with Always Pause+.
+              {contextLine}
             </p>
           )}
 
@@ -525,6 +566,28 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
 
           {/* 16pt gap */}
           <div style={{ height: "16px" }} />
+
+          {/* Closing the one-time offer without buying is a first-class choice */}
+          {introductory && (
+            <button
+              onClick={handleClose}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "6px 10px",
+                fontFamily: FONT,
+                fontSize: "14.5px",
+                fontWeight: 700,
+                letterSpacing: "0.005em",
+                color: textColor,
+                opacity: 0.7,
+                marginBottom: "14px",
+              }}
+            >
+              Continue with the essentials
+            </button>
+          )}
 
           {/* 8. Disclosure */}
           <p style={{

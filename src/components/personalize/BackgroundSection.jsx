@@ -34,6 +34,9 @@ export default function BackgroundSection({
   onAddPhoto,
   onRemovePhoto,
   onPhotoZoom,
+  isPro = false,
+  addBlocked = false,
+  onAddBlocked,
 }) {
   const [category, setCategory] = useState(() => categoryFor(draft.background));
 
@@ -49,6 +52,7 @@ export default function BackgroundSection({
             onSelectBackground={onSelectBackground}
             onCustomColor={onCustomColor}
             onGradientColors={onGradientColors}
+            isPro={isPro}
           />
         )}
 
@@ -64,6 +68,8 @@ export default function BackgroundSection({
             onRemove={onRemovePhoto}
             zoom={draft.photoZoom}
             onZoomChange={onPhotoZoom}
+            addBlocked={addBlocked}
+            onAddBlocked={onAddBlocked}
           />
         )}
 
@@ -74,6 +80,7 @@ export default function BackgroundSection({
             value={draft.background}
             onSelect={onSelectBackground}
             emptyCopy={EMPTY_CATEGORY_COPY.nature}
+            isPro={isPro}
           />
         )}
 
@@ -84,6 +91,7 @@ export default function BackgroundSection({
             value={draft.background}
             onSelect={onSelectBackground}
             emptyCopy={EMPTY_CATEGORY_COPY.places}
+            isPro={isPro}
           />
         )}
 
@@ -94,6 +102,7 @@ export default function BackgroundSection({
             value={draft.background}
             onSelect={onSelectBackground}
             emptyCopy={EMPTY_CATEGORY_COPY.seasons}
+            isPro={isPro}
           />
         )}
       </div>

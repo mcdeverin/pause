@@ -1,5 +1,7 @@
 import { ImageIcon } from "lucide-react";
 import { FONT, getColors } from "../../lib/design";
+import PlusTag from "./PlusTag";
+import { isPremiumBackground } from "../../lib/access";
 
 const GRID = {
   display: "grid",
@@ -9,7 +11,7 @@ const GRID = {
 
 // The photographic collections. Real curated images only — an unpopulated
 // collection shows a clean empty state rather than stand-in photography.
-export default function PhotoGallery({ theme, value, onSelect, images, emptyCopy }) {
+export default function PhotoGallery({ theme, value, onSelect, images, emptyCopy, isPro = false }) {
   const colors = getColors(theme);
 
   return (
@@ -49,6 +51,7 @@ export default function PhotoGallery({ theme, value, onSelect, images, emptyCopy
                 onClick={() => onSelect(image.id)}
                 aria-pressed={selected}
                 style={{
+                  position: "relative",
                   display: "flex",
                   flexDirection: "column",
                   gap: 6,
@@ -60,6 +63,7 @@ export default function PhotoGallery({ theme, value, onSelect, images, emptyCopy
                   fontFamily: FONT,
                 }}
               >
+                {!isPro && isPremiumBackground(image.id) && <PlusTag theme={theme} />}
                 <span
                   style={{
                     display: "block",

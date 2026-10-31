@@ -33,6 +33,9 @@ export const DEFAULT_PREFERENCES = {
   showInstructions: true,
   showShortcuts: true,
   saveMoments: false,
+  // Whether the one-time introductory Plus offer has been shown. Kept apart from
+  // the subscription itself, which only RevenueCat can report.
+  introOfferSeen: false,
 };
 
 function deviceAppearance() {

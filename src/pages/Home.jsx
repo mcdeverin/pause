@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import MainScreen from "../components/MainScreen";
 import BreathingScreen from "../components/BreathingScreen";
@@ -16,8 +16,7 @@ import { MOMENTS, addMoment } from "../lib/moments";
 import MomentsScreen from "../components/moments/MomentsScreen";
 import { track } from "../lib/analytics";
 import { describeSavedBackground, describeVisual } from "../lib/analyticsProps";
-
-const LOCKED_CATEGORIES = ["Focus", "Energy", "Advanced"];
+import { isFreeTechnique } from "../lib/access";
 
 export default function Home() {
   const [mode, setMode] = useState("idle");
@@ -25,12 +24,13 @@ export default function Home() {
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
 
   const [showSupport, setShowSupport] = useState(false);
-  const [showPaywall, setShowPaywall] = useState(false);
+  // { source, featureId, featureCategory, introductory } — null when closed.
+  const [paywall, setPaywall] = useState(null);
   const [showPersonalize, setShowPersonalize] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
   const [showMoments, setShowMoments] = useState(false);
-  const [pendingTechnique, setPendingTechnique] = useState(null);
-  const [pendingMoment, setPendingMoment] = useState(null);
+  // A personalization draft waiting on a purchase, so it can be applied after.
+  const [pendingDraft, setPendingDraft] = useState(null);
   const [shortcutNotice, setShortcutNotice] = useState("");
   const [isPro, setIsPro] = useState(false);
   const [techniques, setTechniques] = useState([]);
@@ -123,60 +123,115 @@ export default function Home() {
     }
   }, [techniques]);
 
+  const hasUsablePhases = (technique) => {
+    const parsed = String(technique.phases || "").split(",").map(Number);
+    return parsed.length > 0 && !parsed.some(isNaN);
+  };
+
+  // A category is locked only when nothing free lives in it, so the menu never
+  // marks an exercise's home as premium by accident.
+  const lockedCategories = useMemo(() => {
+    const categories = [...new Set(techniques.map((technique) => technique.category).filter(Boolean))];
+    return categories.filter(
+      (category) => !techniques.some((t) => t.category === category && isFreeTechnique(t))
+    );
+  }, [techniques]);
+
   const startBreathing = useCallback(async (forcedTechnique = null) => {
     const available = await ensureTechniques();
     if (available.length === 0) {
       flashNotice("Your exercises could not load. Check your connection and tap again.");
       return;
     }
-    const filtered = selectedCategory === "All"
-      ? (isPro ? available : available.filter(t => !LOCKED_CATEGORIES.includes(t.category)))
-      : available.filter(t => t.category === selectedCategory);
-    const pool = filtered.length > 0 ? filtered : available;
-    const t = forcedTechnique || getRandomTechnique(pool);
 
-    if (!isPro && LOCKED_CATEGORIES.includes(t.category)) {
-      setPendingMoment(null);
-      setPendingTechnique(t);
-      setShowPaywall(true);
-      return;
-    }
-
-    beginSession(t, null);
-  }, [ensureTechniques, selectedCategory, isPro, beginSession, flashNotice]);
-
-  // Moment shortcuts only use their mapped category — never a fallback
-  // technique, and never a premium category that isn't unlocked.
-  const startMoment = useCallback((momentId) => {
-    const moment = MOMENTS.find((entry) => entry.id === momentId);
-    if (!moment) return;
-    if (techniques.length === 0) {
-      flashNotice("Your techniques are still loading. Try again in a moment.");
-      return;
-    }
-
-    // Only techniques with usable phase data — a shortcut never falls back to
-    // a stand-in technique behind the user's back.
-    const pool = techniques.filter((t) => {
-      if (!moment.categories.includes(t.category)) return false;
-      const parsed = String(t.phases || "").split(",").map(Number);
-      return parsed.length > 0 && !parsed.some(isNaN);
-    });
+    const inCategory =
+      selectedCategory === "All"
+        ? available
+        : available.filter((t) => t.category === selectedCategory);
+    // Free breathing is unlimited, but only for the starter exercises.
+    const playable = isPro ? inCategory : inCategory.filter(isFreeTechnique);
+    const pool =
+      playable.length > 0 ? playable : isPro ? available : available.filter(isFreeTechnique);
     if (pool.length === 0) {
       flashNotice("No breathing exercise fits that one yet.");
       return;
     }
 
-    const t = getRandomTechnique(pool);
-    if (!isPro && LOCKED_CATEGORIES.includes(t.category)) {
-      setPendingMoment(moment.id);
-      setPendingTechnique(t);
-      setShowPaywall(true);
+    beginSession(forcedTechnique || getRandomTechnique(pool), null);
+  }, [ensureTechniques, selectedCategory, isPro, beginSession, flashNotice]);
+
+  // Choosing how you feel is always free: a shortcut uses the free exercises in
+  // its own category where it can, and otherwise a starter exercise — it never
+  // opens the offer.
+  const startMoment = useCallback(async (momentId) => {
+    const moment = MOMENTS.find((entry) => entry.id === momentId);
+    if (!moment) return;
+
+    const available = await ensureTechniques();
+    if (available.length === 0) {
+      flashNotice("Your techniques are still loading. Try again in a moment.");
       return;
     }
 
-    beginSession(t, moment.id);
-  }, [techniques, isPro, beginSession, flashNotice]);
+    const inMoment = available.filter(
+      (t) => moment.categories.includes(t.category) && hasUsablePhases(t)
+    );
+    const playable = isPro ? inMoment : inMoment.filter(isFreeTechnique);
+    const pool =
+      playable.length > 0
+        ? playable
+        : available.filter((t) => isFreeTechnique(t) && hasUsablePhases(t));
+    if (pool.length === 0) {
+      flashNotice("No breathing exercise fits that one yet.");
+      return;
+    }
+
+    beginSession(getRandomTechnique(pool), moment.id);
+  }, [ensureTechniques, isPro, beginSession, flashNotice]);
+
+  const openPaywall = useCallback((context = {}) => {
+    // Interest in a specific premium feature, recorded once per attempt.
+    if (context.featureId) {
+      track("premium_feature_selected", {
+        feature_id: context.featureId,
+        feature_category: context.featureCategory || "unknown",
+      });
+    }
+    setPaywall({
+      source: context.source || "menu",
+      featureId: context.featureId || null,
+      featureCategory: context.featureCategory || null,
+      introductory: Boolean(context.introductory),
+    });
+  }, []);
+
+  // A premium option was chosen in the panel: the draft is kept so a purchase can
+  // apply exactly what they were looking at.
+  const requestUpgrade = useCallback((feature, draft) => {
+    setPendingDraft(draft || null);
+    openPaywall({ ...feature, source: feature.featureCategory });
+  }, [openPaywall]);
+
+  const closePaywall = useCallback(() => {
+    setPaywall(null);
+    setPendingDraft(null);
+  }, []);
+
+  const handlePaywallPurchase = useCallback(() => {
+    const context = paywall;
+    setIsPro(true);
+    setPaywall(null);
+
+    // Apply what they were doing before the offer appeared.
+    if (pendingDraft) {
+      commitPreferences(pendingDraft);
+      setPendingDraft(null);
+      setShowPersonalize(false);
+    }
+    if (context?.featureCategory === "technique" && context.featureId) {
+      setSelectedCategory(context.featureId);
+    }
+  }, [paywall, pendingDraft, commitPreferences]);
 
   const finishSession = useCallback((result) => {
     const endedTechnique = technique;
@@ -204,13 +259,16 @@ export default function Home() {
     sessionMomentRef.current = null;
     setMode("idle");
     setTechnique(null);
-  }, [technique, preferences]);
 
-  const openPaywall = useCallback(() => {
-    setPendingTechnique(null);
-    setPendingMoment(null);
-    setShowPaywall(true);
-  }, []);
+    // The one-time introduction: only after a session they actually finished, and
+    // only ever once. Kept apart from the subscription, which RevenueCat owns.
+    if (result?.completed && !isPro && !preferences.introOfferSeen) {
+      const next = { ...preferences, introOfferSeen: true };
+      setPreferences(next);
+      savePreferences(next);
+      openPaywall({ source: "intro", introductory: true });
+    }
+  }, [technique, preferences, isPro, openPaywall]);
 
   return (
     <div
@@ -239,8 +297,15 @@ export default function Home() {
             onShowShortcuts={() => updatePreference("showShortcuts", true)}
             onOpenPersonalize={() => setShowPersonalize(true)}
             onOpenMoments={() => setShowMoments(true)}
-            onOpenPausePlus={openPaywall}
-            onLockedCategoryTap={openPaywall}
+            onOpenPausePlus={() => openPaywall({ source: "menu" })}
+            lockedCategories={lockedCategories}
+            onLockedCategoryTap={(category) =>
+              openPaywall({
+                source: "technique_category",
+                featureId: category,
+                featureCategory: "technique",
+              })
+            }
             showShortcuts={preferences.showShortcuts}
             onSelectMoment={startMoment}
             shortcutNotice={shortcutNotice}
@@ -275,27 +340,22 @@ export default function Home() {
             onAddPhoto={handlePhotoAdded}
             onRemovePhoto={handlePhotoRemoved}
             onClose={() => setShowPersonalize(false)}
+            isPro={isPro}
+            onRequestUpgrade={requestUpgrade}
           />
         )}
       </AnimatePresence>
 
       {/* Paywall overlay */}
       <AnimatePresence>
-        {showPaywall && (
+        {paywall && (
           <PaywallScreen
             key="paywall"
             theme={theme}
-            triggerCategory={pendingTechnique?.category}
-            onClose={() => { setShowPaywall(false); setPendingTechnique(null); setPendingMoment(null); }}
-            onPurchase={() => {
-              setIsPro(true);
-              setShowPaywall(false);
-              if (pendingTechnique) {
-                beginSession(pendingTechnique, pendingMoment);
-                setPendingTechnique(null);
-                setPendingMoment(null);
-              }
-            }}
+            source={paywall.source}
+            introductory={paywall.introductory}
+            onClose={closePaywall}
+            onPurchase={handlePaywallPurchase}
           />
         )}
       </AnimatePresence>

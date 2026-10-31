@@ -21,6 +21,8 @@ export default function PhotoLibrary({
   onRemove,
   zoom = 1,
   onZoomChange,
+  addBlocked = false,
+  onAddBlocked,
 }) {
   const colors = getColors(theme);
   const fileRef = useRef(null);
@@ -113,7 +115,15 @@ export default function PhotoLibrary({
         {!full && (
           <button
             type="button"
-            onClick={() => fileRef.current && fileRef.current.click()}
+            onClick={() => {
+              // One photo is included; a second is where Plus comes in. Tapping
+              // Add is the intention, so that is where the offer belongs.
+              if (addBlocked) {
+                if (onAddBlocked) onAddBlocked();
+                return;
+              }
+              if (fileRef.current) fileRef.current.click();
+            }}
             disabled={busy}
             style={{
               minHeight: 108,
@@ -133,7 +143,7 @@ export default function PhotoLibrary({
           >
             <Plus size={18} strokeWidth={2.2} color={colors.tertiary} aria-hidden="true" />
             <span style={{ fontSize: "12px", fontWeight: 700, color: colors.secondary, letterSpacing: "0.01em" }}>
-              {busy ? "preparing…" : "Add"}
+              {busy ? "preparing…" : addBlocked ? "Add · Plus" : "Add"}
             </span>
           </button>
         )}

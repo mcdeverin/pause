@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BACKGROUNDS, CUSTOM_COLOR_ID, CUSTOM_GRADIENT_ID, FONT, getColors } from "../../lib/design";
 import { sanitizeHex } from "../../lib/background";
 import PreviewCard from "./PreviewCard";
+import PlusTag from "./PlusTag";
 
 const TILE_GRID = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 };
 
@@ -26,6 +27,7 @@ export default function ColorBackgrounds({
   onSelectBackground,
   onCustomColor,
   onGradientColors,
+  isPro = false,
 }) {
   const colors = getColors(theme);
   const [hexText, setHexText] = useState(draft.customColor || "");
@@ -65,15 +67,18 @@ export default function ColorBackgrounds({
           preview={null}
         />
 
-        <PreviewCard
-          theme={theme}
-          compact
-          label="Custom Gradient"
-          selected={draft.background === CUSTOM_GRADIENT_ID}
-          onSelect={() => onSelectBackground(CUSTOM_GRADIENT_ID)}
-          previewBackground={gradientCss(gradientText("from"), gradientText("to"))}
-          preview={null}
-        />
+        <div style={{ position: "relative" }}>
+          {!isPro && <PlusTag theme={theme} />}
+          <PreviewCard
+            theme={theme}
+            compact
+            label="Custom Gradient"
+            selected={draft.background === CUSTOM_GRADIENT_ID}
+            onSelect={() => onSelectBackground(CUSTOM_GRADIENT_ID)}
+            previewBackground={gradientCss(gradientText("from"), gradientText("to"))}
+            preview={null}
+          />
+        </div>
       </div>
 
       {draft.background === CUSTOM_COLOR_ID && (
