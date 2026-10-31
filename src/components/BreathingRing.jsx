@@ -18,6 +18,10 @@ export default function BreathingRing({ theme, options = {}, fill = 0, label, sh
   // appearance's. The empty track stays a neutral that reads on any canvas.
   const ringFrom = isHexColor(options.colorFrom) ? options.colorFrom : DEFAULT_VISUAL_COLORS.ring.colorFrom;
   const ringTo = isHexColor(options.colorTo) ? options.colorTo : DEFAULT_VISUAL_COLORS.ring.colorTo;
+  // A gradient referenced by url() is not always repainted when only its stops
+  // change, which left the arc showing old colours. A fresh id per colour pair
+  // makes the browser paint the arc again.
+  const gradientId = `pauseBreathingRing-${ringFrom.slice(1)}-${ringTo.slice(1)}`;
 
   return (
     <div
@@ -49,7 +53,7 @@ export default function BreathingRing({ theme, options = {}, fill = 0, label, sh
         style={{ transform: "rotate(-90deg)", overflow: "visible" }}
       >
         <defs>
-          <linearGradient id="pauseBreathingRing" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor={ringFrom} />
             <stop offset="100%" stopColor={ringTo} />
           </linearGradient>
@@ -65,11 +69,12 @@ export default function BreathingRing({ theme, options = {}, fill = 0, label, sh
         />
 
         <circle
+          key={gradientId}
           cx={CENTER}
           cy={CENTER}
           r={RADIUS}
           fill="none"
-          stroke="url(#pauseBreathingRing)"
+          stroke={`url(#${gradientId})`}
           strokeWidth={STROKE}
           strokeLinecap="round"
           strokeDasharray={CIRCUMFERENCE}
