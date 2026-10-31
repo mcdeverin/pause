@@ -1,6 +1,7 @@
 import { useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import RefractionDroplets from "./RefractionDroplets";
 
 const clamp = v => Math.max(0,Math.min(1,v));
 function Pearls({ breathRef, motionRef }) {
@@ -25,7 +26,7 @@ function Particles({breathRef,motionRef}) {
  useFrame(({clock},dt)=>{if(!points.current)return;const b=clamp(breathRef.current),t=clock.elapsedTime;points.current.rotation.y+=dt*.09*motionRef.current;for(let i=0;i<base.length;i+=3){const idx=i/3,mod=1+.05*Math.sin(t*.55+idx*.1)*motionRef.current;const scale=(.76+b*.52)*mod;positions[i]=base[i]*scale;positions[i+1]=base[i+1]*scale;positions[i+2]=base[i+2]*scale;}points.current.geometry.attributes.position.needsUpdate=true;});
  return <points ref={points}><bufferGeometry><bufferAttribute attach="attributes-position" args={[positions,3]}/></bufferGeometry><pointsMaterial color="#cbbbed" size={.026} sizeAttenuation transparent opacity={.9} depthWrite={false}/></points>;
 }
-const shapes={pearls:Pearls,ribbon:Ribbon,droplets:Droplets,particles:Particles};
+const shapes={pearls:Pearls,ribbon:Ribbon,droplets:RefractionDroplets,particles:Particles};
 export default function ShapeScene({kind,breathRef,motionRef}) {
  const Shape=shapes[kind]||Pearls;
  return <Canvas camera={{position:[0,0,4.5],fov:42}} dpr={[1,1.7]} gl={{alpha:true,antialias:true}} style={{width:"100%",height:"100%"}}>
