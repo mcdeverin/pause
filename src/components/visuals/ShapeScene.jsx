@@ -161,11 +161,8 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       if (droplets && background === "transparent" && photoUrl) {
         screenPhotoCanvas = document.createElement("canvas");
         const context = screenPhotoCanvas.getContext("2d");
-        screenPhotoTexture = new THREE.CanvasTexture(screenPhotoCanvas);
-        screenPhotoTexture.colorSpace = THREE.SRGBColorSpace;
-        screenPhotoTexture.wrapS = THREE.ClampToEdgeWrapping;
-        screenPhotoTexture.wrapT = THREE.ClampToEdgeWrapping;
-        material.uniforms.uPhoto.value = screenPhotoTexture;
+        // Do not upload an empty 0x0 canvas as a WebGL texture.
+        // Create the texture only after the selected image has been drawn.
         redrawPhoto = () => {
           if (!context || !photoImage || !photoImage.naturalWidth || disposed) return;
           const vw = Math.max(1, window.innerWidth), vh = Math.max(1, window.innerHeight);
@@ -195,6 +192,13 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
           if (dim > 0) {
             context.fillStyle = `rgba(0,0,0,${dim})`;
             context.fillRect(0, 0, vw, vh);
+          }
+          if (!screenPhotoTexture) {
+            screenPhotoTexture = new THREE.CanvasTexture(screenPhotoCanvas);
+            screenPhotoTexture.colorSpace = THREE.SRGBColorSpace;
+            screenPhotoTexture.wrapS = THREE.ClampToEdgeWrapping;
+            screenPhotoTexture.wrapT = THREE.ClampToEdgeWrapping;
+            material.uniforms.uPhoto.value = screenPhotoTexture;
           }
           screenPhotoTexture.needsUpdate = true;
           material.uniforms.uHasPhoto.value = 1;
