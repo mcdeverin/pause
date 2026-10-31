@@ -80,13 +80,29 @@ export default function IridescentBlobScene({ breathRef, motionRef, waves = 3.4,
     const swirl=lat*twist*2.1+t*.12*motion;
     const primary=THREE.MathUtils.lerp(Math.sin(low*a+swirl),Math.sin(high*a+swirl),blend);
     const secondary=Math.sin(2*a-lat*3.1+t*.09*motion);
-    const folds=.72*primary+.22*secondary;
-    const bulge=.055*Math.sin(4*lat+3*a+t*.17*motion);
-    const safeDepth=Math.min(depth,.48);
+    // Longitude is undefined at the poles. Fade all angular waves to zero there,
+    // otherwise the top/bottom vertices pull apart into visible triangular slits.
+    const poleFade=Math.pow(Math.max(0,1-y*y),1.15);
+    const folds=(.72*primary+.22*secondary)*poleFade;
+    const bulge=.055*Math.sin(4*lat+3*a+t*.17*motion)*poleFade;
+    const safeDepth=Math.min(depth,.42);
     const radius=(1+safeDepth*folds+bulge)*(.89+.2*breath);
     pos.array[k]=x*radius;pos.array[k+1]=y*radius;pos.array[k+2]=z*radius;
    }
    pos.needsUpdate=true;geo.computeVertexNormals();
+   // SphereGeometry duplicates vertices along its UV seam. Average their normals
+   // so a continuous surface does not display a sharp lighting crease.
+   const normals=geo.attributes.normal,columns=129,rows=97;
+   for(let row=1;row<rows-1;row++){
+    const a=row*columns,b=a+columns-1;
+    const nx=(normals.getX(a)+normals.getX(b))*.5;
+    const ny=(normals.getY(a)+normals.getY(b))*.5;
+    const nz=(normals.getZ(a)+normals.getZ(b))*.5;
+    const length=Math.hypot(nx,ny,nz)||1;
+    normals.setXYZ(a,nx/length,ny/length,nz/length);
+    normals.setXYZ(b,nx/length,ny/length,nz/length);
+   }
+   normals.needsUpdate=true;
    mesh.rotation.y=t*.085*motion;mesh.rotation.z=Math.sin(t*.15)*.14;
    renderer.render(scene,camera);
    frame=requestAnimationFrame(animate);
