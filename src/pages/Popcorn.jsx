@@ -6,7 +6,7 @@ const COLORS = [["Cherry","#d90a3d"],["Coral","#f2544d"],["Wine","#7e1530"],["Ru
 
 export default function Popcorn() {
   const [accent,setAccent]=useState(COLORS[0][1]);
-  const [motion,setMotion]=useState(.85);
+  const [motion,setMotion]=useState(1);
   const [paused,setPaused]=useState(false);
   return (
     <main style={{minHeight:"100dvh",background:"#f7f6f4",color:"#27232a",padding:"clamp(16px,3vw,34px)",fontFamily:"inherit"}}>
