@@ -162,7 +162,7 @@ export const VISUAL_STYLES = [
   },
   {
     id: "living_opal",
-    label: "Living Opal (Preview)",
+    label: "Living",
     collection: "classics",
     description: "A flowing, organically morphing pearlescent orb.",
     controls: [],
