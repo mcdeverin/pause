@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ShapeScene from "@/components/visuals/ShapeScene";
 import { BACKDROP_PHOTOS, BACKGROUND_CSS } from "@/lib/crystalStudio";
-const kinds=[["pearls","Pearl Cluster","Iridescent spheres moving together"],["ribbon","Silk Ribbon","A sculptural spiral that opens"],["droplets","Floating Droplets","Liquid forms drifting in space"],["particles","Particle Sphere","A constellation that breathes"]];
+const kinds=[["pearls","Pearl Cluster","Iridescent spheres moving together"],["ribbon","Silk Ribbon","A sculptural spiral that opens"],["droplets","Droplet","Floating refractive glass spheres · Three.js Park3Med"],["particles","Particle Sphere","A constellation that breathes"]];
 export default function ShapesStudio(){
  const [allowed,setAllowed]=useState(null),[background,setBackground]=useState("photo"),[photo,setPhoto]=useState(BACKDROP_PHOTOS[0]?.id),[playing,setPlaying]=useState(true),[manual,setManual]=useState(false),[breath,setBreath]=useState(.4),[motion,setMotion]=useState(.6);
  const breathRef=useRef(.4),motionRef=useRef(.6);motionRef.current=motion;
