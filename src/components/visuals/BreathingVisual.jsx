@@ -13,7 +13,7 @@ import RippleVisual from "./RippleVisual";
 import BasketballVisual from "./BasketballVisual";
 import StudioBreathingShape from "./StudioBreathingShape";
 const ParticlesVisual = (props) => <StudioBreathingShape {...props} kind="particles" />;
-const RainDropletVisual = (props) => <StudioBreathingShape {...props} kind="dropletsSingle" />;
+const RainDropletVisual = (props) => <StudioBreathingShape {...props} kind="droplets" />;
 
 // Every visual takes the same breath value from the shared session clock — none
 // of them keeps its own timing.
