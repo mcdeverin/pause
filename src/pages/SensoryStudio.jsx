@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import OrbitScene from "@/components/visuals/OrbitScene";
 import DiscoBallScene from "@/components/visuals/DiscoBallScene";
 import SomaScene from "@/components/visuals/SomaScene";
-const palettes=[["Rose","#ed4d9a"],["Cobalt","#4169ff"],["Mint","#39dfb4"],["Amber","#ffc451"]];
+const palettes=[["Cherry","#d90a3d"],["Coral","#f2544d"],["Wine","#7e1530"],["Ruby","#b70029"]];
 export default function SensoryStudio(){
  const [softness,setSoftness]=useState(.7),[depth,setDepth]=useState(.55),[scene,setScene]=useState("soma"),[discoHue,setDiscoHue]=useState("pink"),[allowed,setAllowed]=useState(null),[accent,setAccent]=useState(palettes[0][1]),[motion,setMotion]=useState(.6),[paused,setPaused]=useState(false),[expanded,setExpanded]=useState(false);
  useEffect(()=>{base44.auth.me().then(me=>setAllowed(me?.role==="admin")).catch(()=>setAllowed(false));},[]);
@@ -12,7 +12,7 @@ export default function SensoryStudio(){
  if(!allowed)return <main style={{padding:32}}>Private design studio. <Link to="/">Return to Pause</Link></main>;
  return <main style={{minHeight:"100vh",background:"#f6f5f4",color:"#24252a",padding:expanded?0:"24px max(18px, calc((100vw - 1380px)/2)) 80px"}}>
  {!expanded&&<><Link to="/" style={{color:"#77718c"}}>← Back to Pause</Link><p style={{fontSize:11,letterSpacing:".18em",color:"#8275a0",fontWeight:700,marginTop:26}}>ALWAYS PAUSE · PRIVATE EXPERIMENTS</p><h1 style={{fontSize:"clamp(32px,5vw,52px)",margin:"8px 0"}}>Sensory Studio</h1><p style={{color:"#73737c",marginBottom:24}}>Freeform interactive experiences. No breathing timer, no instructions to follow.</p></>}
- <div style={{display:expanded?"none":"flex",gap:10,marginBottom:16}}>{[["soma","Soma"],["disco","Disco Ball"],["orbit","Orbit"]].map(([id,label])=><button key={id} onClick={()=>{setScene(id);setPaused(false)}} style={{padding:"11px 20px",borderRadius:22,border:scene===id?"1px solid #9d81b2":"1px solid #ddd",background:scene===id?"#eee4f7":"white",cursor:"pointer"}}>{label}</button>)}</div>
+ <div style={{display:expanded?"none":"flex",gap:10,marginBottom:16}}>{[["soma","Soma"],["disco","Disco Ball"],["orbit","Orbit"]].map(([id,label])=><button key={id} onClick={()=>{setScene(id);setPaused(false)}} style={{padding:"11px 20px",borderRadius:22,border:scene===id?"1px solid #9d81b2":"1px solid #ddd",background:scene===id?"#f9e6e9":"white",cursor:"pointer"}}>{label}</button>)}</div>
  <section style={{background:"#fff",borderRadius:expanded?0:22,padding:expanded?0:12,overflow:"hidden"}}>
  <div style={{position:"relative",height:expanded?"100dvh":"min(67vw,670px)",minHeight:expanded?0:380,borderRadius:expanded?0:15,overflow:"hidden"}}>
  {scene==="soma"?<SomaScene softness={softness} depth={depth} motion={motion} paused={paused}/>:scene==="disco"?<div style={{width:"100%",height:"100%",background:"radial-gradient(ellipse at 65% 15%, #ff8cda 0%, #dba0ed 35%, #a7a1e9 67%, #f5c4e8 100%)"}}><DiscoBallScene speed={motion} paused={paused} hue={discoHue}/></div>:<OrbitScene accent={accent} motion={motion} paused={paused}/>}
