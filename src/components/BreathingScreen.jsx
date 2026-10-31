@@ -124,7 +124,7 @@ export default function BreathingScreen({
 
   // The bar fills across the phase being spoken above it (inhale, hold, exhale),
   // so the two always agree instead of the bar showing whole-session progress.
-  const { label: currentLabel, breath, phaseProgress, timeRemaining } = clock;
+  const { label: currentLabel, breath, phaseProgress, phaseRemaining, timeRemaining } = clock;
 
   // Haptics fire on phase changes, from the same clock as the visuals.
   useEffect(() => {
@@ -250,7 +250,10 @@ export default function BreathingScreen({
           padding: "8px 24px",
         }}
       >
-        <div ref={visualRef} style={{ width: "min(290px, 74vw)", aspectRatio: "1 / 1" }}>
+        <div
+          ref={visualRef}
+          style={{ width: "min(290px, 74vw)", aspectRatio: "1 / 1", position: "relative" }}
+        >
           <BreathingVisual
             id={visual}
             breath={breath}
@@ -260,6 +263,29 @@ export default function BreathingScreen({
             label={currentLabel}
             showLabel={false}
           />
+          {/* The ring has no bar under it, so the seconds left in the current
+              phase are counted inside the circle itself. */}
+          {visual === "ring" && showInstructions && (
+            <span
+              aria-hidden="true"
+              className="tnum"
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: FONT,
+                fontSize: "38px",
+                fontWeight: 700,
+                lineHeight: 1,
+                color: ink.text,
+                textShadow: ink.shadow,
+              }}
+            >
+              {Math.ceil(phaseRemaining - 1e-6)}
+            </span>
+          )}
         </div>
       </div>
 
