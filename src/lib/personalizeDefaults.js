@@ -17,20 +17,22 @@ const VISUAL_KEYS = [
   "photoOffsetY",
 ];
 
-// Returns a draft with every visual setting back at its default. It only ever
+// Returns a draft with every visual setting back at its default, for every
+// style — dropping all fine-tuning hands each one its own colours again. The
+// style the user is looking at stays selected, so restoring is something they
+// can watch happen on the Ring as easily as on the Original. It only ever
 // touches the unsaved draft, so nothing is stored until Save My Pause.
 export function restoreVisualDefaults(draft) {
-  const restored = { ...draft, visual: DEFAULT_PREFERENCES.visual, visualOptions: {} };
+  const restored = { ...draft, visualOptions: {} };
   VISUAL_KEYS.forEach((key) => {
     restored[key] = DEFAULT_PREFERENCES[key];
   });
   return restored;
 }
 
-// True when the chosen visual, its fine-tuning, the background and its
-// adjustments all already match their defaults.
+// True when every style's fine-tuning, the background and its adjustments all
+// already match their defaults.
 export function visualSettingsAtDefaults(draft) {
-  if (draft.visual !== DEFAULT_PREFERENCES.visual) return false;
   if (VISUAL_KEYS.some((key) => draft[key] !== DEFAULT_PREFERENCES[key])) return false;
 
   return VISUAL_STYLES.every((style) => {
