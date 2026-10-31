@@ -33,6 +33,8 @@ export default function BreathingVisual({
   theme = "day",
   options = {},
   reducedMotion = false,
+  photo = null,
+  backgroundSettings = {},
   animate = true,
   label,
   showLabel = false,
@@ -46,6 +48,8 @@ export default function BreathingVisual({
       theme={theme}
       options={resolved}
       reducedMotion={reducedMotion}
+      photo={photo}
+      backgroundSettings={backgroundSettings}
       animate={animate}
       label={label}
       showLabel={showLabel}
