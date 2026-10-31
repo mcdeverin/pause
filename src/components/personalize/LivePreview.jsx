@@ -5,7 +5,7 @@ import BreathingVisual from "../visuals/BreathingVisual";
 import SessionTimerPill from "../SessionTimerPill";
 import { clampPhotoOffset } from "../../lib/background";
 import { FONT, getColors, isPhotoBackground } from "../../lib/design";
-import { getCanvasInk } from "../../lib/canvasInk";
+import { getBreathingInk } from "../../lib/canvasInk";
 import { getStyleLabel } from "../../lib/visuals";
 import useBreathingClock from "../../hooks/useBreathingClock";
 
@@ -24,7 +24,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
   const colors = getColors(theme);
   // The annotations inside the preview sit on the canvas itself, so they use the
   // same adaptive ink as a real session.
-  const ink = getCanvasInk(theme, settings, {
+  const ink = getBreathingInk(theme, settings, {
     hasPhoto: isPhotoBackground(settings.background) && Boolean(photo),
   });
   const [loop, setLoop] = useState(0);
@@ -119,7 +119,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
             fontWeight: 700,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
-            color: ink.tertiary,
+            color: ink.secondary,
             background: ink.pill,
             border: `1px solid ${ink.pillBorder}`,
             borderRadius: 999,

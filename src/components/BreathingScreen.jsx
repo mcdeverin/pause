@@ -5,7 +5,7 @@ import BreathingVisual from "./visuals/BreathingVisual";
 import SessionTimerPill from "./SessionTimerPill";
 import TechniqueInfoCard from "./TechniqueInfoCard";
 import { FONT, getColors, isPhotoBackground } from "../lib/design";
-import { getCanvasInk } from "../lib/canvasInk";
+import { getBreathingInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
 
@@ -57,7 +57,7 @@ export default function BreathingScreen({
   const colors = getColors(theme);
   // Cues and controls are drawn straight on the background, so their ink adapts
   // to that canvas. The background and the user's dimming stay untouched.
-  const ink = getCanvasInk(theme, backgroundSettings, {
+  const ink = getBreathingInk(theme, backgroundSettings, {
     hasPhoto: isPhotoBackground(backgroundSettings.background) && Boolean(photo),
   });
 

@@ -9,6 +9,27 @@ import { getBackgroundTone, getColors } from "./design";
 const HEX_PATTERN = /#([0-9a-f]{3}|[0-9a-f]{6})\b/gi;
 const LIGHT_CANVAS = 0.45;
 
+// Breathing cues and their supporting text use a softer editorial palette than
+// the rest of the interface: no near-black, no pure white.
+const BREATHING_INK = {
+  day: {
+    text: "#454C49",
+    secondary: "#666F6B",
+    tertiary: "#7C837E",
+  },
+  night: {
+    text: "#F5F3EF",
+    secondary: "#DAD7CF",
+    tertiary: "#B7B3AA",
+  },
+};
+
+// A photo's ink is decided from the dimming the user chose, because its own
+// brightness can't be read. A lightly dimmed photo still reads as a light
+// canvas, so the cues keep enough contrast on bright imagery too.
+const PHOTO_DIM_THRESHOLD = 55;
+const BREATHING_PHOTO_DIM_THRESHOLD = 45;
+
 function channelToLinear(value) {
   const channel = value / 255;
   return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
@@ -23,9 +44,8 @@ function hexLuminance(hex) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-// How light the canvas actually reads, 0 (black) to 1 (white). A photo's own
-// brightness is unknown, so photos keep the appearance's ink and rely on the
-// soft shadow below instead.
+// How light the canvas actually reads, 0 (black) to 1 (white). Dimming is part
+// of the calculation, so darkening a background correctly flips the ink.
 function canvasLightness(settings) {
   const tone = getBackgroundTone(settings.background, {
     customColor: settings.customColor,
@@ -40,25 +60,39 @@ function canvasLightness(settings) {
   return average * (1 - clampDim(settings.backgroundDim) / 100);
 }
 
-export function getCanvasInk(theme, settings = {}, { hasPhoto = false } = {}) {
-  if (hasPhoto) {
-    // A photo's own brightness can't be read, so the dimming the user chose is
-    // the signal: a heavily dimmed photo reads as a dark canvas.
-    const inkTheme = clampDim(settings.backgroundDim) >= 55 ? "night" : theme;
-    return {
-      ...getColors(inkTheme),
-      shadow:
-        inkTheme === "day"
-          ? "0 1px 12px rgba(255, 255, 255, 0.70)"
-          : "0 1px 14px rgba(0, 0, 0, 0.60)",
-    };
-  }
+function resolveInk(theme, settings, { hasPhoto = false, photoDimThreshold }) {
+  const inkTheme = hasPhoto
+    ? clampDim(settings.backgroundDim) >= photoDimThreshold
+      ? "night"
+      : theme
+    : canvasLightness(settings) >= LIGHT_CANVAS
+      ? "day"
+      : "night";
 
-  const lightCanvas = canvasLightness(settings) >= LIGHT_CANVAS;
-  return {
-    ...getColors(lightCanvas ? "day" : "night"),
-    shadow: lightCanvas
-      ? "0 1px 12px rgba(255, 255, 255, 0.60)"
-      : "0 1px 14px rgba(0, 0, 0, 0.50)",
-  };
+  // A soft halo instead of a hard outline: it lifts the text off busy imagery
+  // without reading as a shadow the user could notice.
+  const shadow =
+    inkTheme === "day"
+      ? `0 1px 12px rgba(255, 255, 255, ${hasPhoto ? 0.70 : 0.60})`
+      : `0 1px 14px rgba(0, 0, 0, ${hasPhoto ? 0.60 : 0.50})`;
+
+  return { inkTheme, shadow };
+}
+
+export function getCanvasInk(theme, settings = {}, { hasPhoto = false } = {}) {
+  const { inkTheme, shadow } = resolveInk(theme, settings, {
+    hasPhoto,
+    photoDimThreshold: PHOTO_DIM_THRESHOLD,
+  });
+  return { ...getColors(inkTheme), shadow };
+}
+
+// Used only by the breathing cue and its supporting text (sessions and the live
+// preview), so the rest of the interface keeps its own palette.
+export function getBreathingInk(theme, settings = {}, { hasPhoto = false } = {}) {
+  const { inkTheme, shadow } = resolveInk(theme, settings, {
+    hasPhoto,
+    photoDimThreshold: BREATHING_PHOTO_DIM_THRESHOLD,
+  });
+  return { ...getColors(inkTheme), ...BREATHING_INK[inkTheme], shadow };
 }
