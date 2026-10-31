@@ -306,6 +306,7 @@ export default function Home() {
             onCategoryChange={setSelectedCategory}
             onHapticsChange={() => setHapticsEnabled(!hapticsEnabled)}
             isPro={hasFullAccess}
+            isOwner={isOwner}
             backgroundSettings={preferences}
             photo={photo}
             visual={preferences.visual}
