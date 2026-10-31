@@ -252,23 +252,23 @@ export default function MainScreen({
             aria-label="Show moment shortcuts"
             title="Show moment shortcuts"
             style={{
-              minHeight: 40,
+              minHeight: 30,
               display: "inline-flex",
               alignItems: "center",
-              gap: 8,
-              padding: "0 16px",
+              gap: 6,
+              padding: "0 11px",
               borderRadius: 999,
-              background: ink.sheet,
-              border: `1px solid ${ink.border}`,
+              background: ink.glass,
+              border: `1px solid ${ink.glassBorder}`,
               cursor: "pointer",
               fontFamily: FONT,
-              fontSize: "13.5px",
-              fontWeight: 700,
-              letterSpacing: "0.005em",
-              color: ink.text,
+              fontSize: "11.5px",
+              fontWeight: 500,
+              letterSpacing: "0.01em",
+              color: ink.secondary,
             }}
           >
-            <Eye size={16} strokeWidth={2.2} />
+            <Eye size={13} strokeWidth={2} />
             Show moments
           </button>
         </div>
