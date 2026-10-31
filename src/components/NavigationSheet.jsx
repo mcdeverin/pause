@@ -1,8 +1,13 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   BarChart3,
   Crosshair,
   Flame,
+  ChevronDown,
+  ChevronRight,
+  Orbit,
   Info,
   Layers,
   Leaf,
@@ -69,9 +74,13 @@ export default function NavigationSheet({
   onOpenMoments,
   onOpenPausePlus,
   onOpenAbout,
+  isOwner = false,
   onClose,
 }) {
   const colors = getColors(theme);
+  const navigate = useNavigate();
+  const [breathingExpanded,setBreathingExpanded]=useState(true);
+  const [sensoryExpanded,setSensoryExpanded]=useState(false);
 
   const handleCategory = (id) => {
     const locked = !isPro && lockedCategories.includes(id);
@@ -163,31 +172,15 @@ export default function NavigationSheet({
         </div>
 
         <div style={{ flex: 1, overflowY: "auto", padding: "0 10px" }}>
-          <p
-            style={{
-              margin: "10px 14px 6px",
-              fontSize: "12.5px",
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: colors.tertiary,
-            }}
-          >
-            Breathing
-          </p>
-
-          {CATEGORIES.map((category) => (
-            <SheetRow
-              key={category.id}
-              theme={theme}
-              icon={category.icon}
-              label={category.label}
-              active={selectedCategory === category.id}
-              locked={!isPro && lockedCategories.includes(category.id)}
-              onClick={() => handleCategory(category.id)}
-            />
-          ))}
-
+          <button type="button" onClick={() => setBreathingExpanded(v => !v)} aria-expanded={breathingExpanded} aria-controls="breathing-menu" style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",margin:"10px 0 4px",padding:"9px 14px",border:0,background:"transparent",color:colors.tertiary,fontFamily:FONT,fontSize:12.5,fontWeight:700,letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer"}}>
+            <span>Breathing</span>{breathingExpanded?<ChevronDown size={17}/>:<ChevronRight size={17}/>}
+          </button>
+          {breathingExpanded && <div id="breathing-menu">{CATEGORIES.map(category => <SheetRow key={category.id} theme={theme} icon={category.icon} label={category.label} active={selectedCategory===category.id} locked={!isPro&&lockedCategories.includes(category.id)} onClick={() => handleCategory(category.id)}/>)}</div>}
+          <div style={{height:1,margin:"12px 14px",background:colors.border}}/>
+          <button type="button" onClick={() => setSensoryExpanded(v => !v)} aria-expanded={sensoryExpanded} aria-controls="sensory-menu" style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",margin:"0 0 4px",padding:"9px 14px",border:0,background:"transparent",color:colors.tertiary,fontFamily:FONT,fontSize:12.5,fontWeight:700,letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer"}}>
+            <span>Sensory</span>{sensoryExpanded?<ChevronDown size={17}/>:<ChevronRight size={17}/>}
+          </button>
+          {sensoryExpanded && <div id="sensory-menu">{isOwner ? <SheetRow theme={theme} icon={Orbit} label="Sensory Studio" onClick={() => {onClose();navigate("/sensory-studio");}}/> : <div style={{padding:"12px 14px 16px",fontFamily:FONT,fontSize:13,color:colors.secondary}}>Experiences coming soon.</div>}</div>}
           <div style={{ height: 1, margin: "12px 14px", background: colors.border }} />
 
           <SheetRow
