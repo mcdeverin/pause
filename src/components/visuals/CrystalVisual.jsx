@@ -10,6 +10,7 @@ export default function CrystalVisual({
   reducedMotion = false,
   animate = true,
   photo = null,
+  backgroundSettings = {},
 }) {
   const breathRef = useRef(breath);
   breathRef.current = breath;
