@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 // Native Three.js scene: no React Three Fiber or Drei dependency.
 // Existing React Three Fiber prototypes remain in Git history.
-export default function ShapeScene({ kind, breathRef, motionRef, background = "photo", photoUrl, backgroundSettings = {} }) {
+export default function ShapeScene({ kind, breathRef, motionRef, background = "photo", photoUrl, backgroundSettings = {}, photoSpace = "viewport" }) {
   const host = useRef(null);
   useEffect(() => {
     const element = host.current;
@@ -165,7 +165,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
         // Create the texture only after the selected image has been drawn.
         redrawPhoto = () => {
           if (!context || !photoImage || !photoImage.naturalWidth || disposed) return;
-          const vw = Math.max(1, window.innerWidth), vh = Math.max(1, window.innerHeight);
+          const vw = Math.max(1, photoSpace === "element" ? element.clientWidth : window.innerWidth), vh = Math.max(1, photoSpace === "element" ? element.clientHeight : window.innerHeight);
           const resolution = Math.min(1, 2048 / Math.max(vw, vh));
           screenPhotoCanvas.width = Math.max(1, Math.round(vw * resolution));
           screenPhotoCanvas.height = Math.max(1, Math.round(vh * resolution));
@@ -281,8 +281,8 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       if (materialForScreenPhoto) {
         const rect = element.getBoundingClientRect();
         const uniforms = materialForScreenPhoto.uniforms;
-        uniforms.uViewport.value.set(window.innerWidth, window.innerHeight);
-        uniforms.uCanvasOrigin.value.set(rect.left, rect.top);
+        uniforms.uViewport.value.set(photoSpace === "element" ? width : window.innerWidth, photoSpace === "element" ? height : window.innerHeight);
+        uniforms.uCanvasOrigin.value.set(photoSpace === "element" ? 0 : rect.left, photoSpace === "element" ? 0 : rect.top);
         uniforms.uCanvasSize.value.set(width, height);
         redrawPhoto();
       }
@@ -339,7 +339,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       if (materialForScreenPhoto) {
         const rect = element.getBoundingClientRect();
         const uniforms = materialForScreenPhoto.uniforms;
-        uniforms.uCanvasOrigin.value.set(rect.left, rect.top);
+        uniforms.uCanvasOrigin.value.set(photoSpace === "element" ? 0 : rect.left, photoSpace === "element" ? 0 : rect.top);
         uniforms.uSphereRadius.value = (kind === "dropletsSingle" ? .88 : .16) * (.92 + b * .12) * (1 + b * .18) / (camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * element.clientHeight / 2;
       }
       renderer.render(scene, camera);
@@ -362,6 +362,6 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [kind, breathRef, motionRef, background, photoUrl, backgroundSettings]);
+  }, [kind, breathRef, motionRef, background, photoUrl, backgroundSettings, photoSpace]);
   return <div ref={host} style={{ width: "100%", height: "100%" }} />;
 }
