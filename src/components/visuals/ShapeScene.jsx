@@ -70,7 +70,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       group.add(particles);
     } else {
       const droplets = kind === "droplets" || kind === "dropletsSingle" || kind === "dropletsHalo";
-      const count = kind === "dropletsSingle" ? 1 : droplets ? 140 : 46;
+      const count = kind === "dropletsSingle" ? 1 : 46;
       if (droplets) { camera.fov = 60; camera.position.z = 3; camera.updateProjectionMatrix(); }
       const material = droplets
         ? new THREE.MeshPhysicalMaterial({
@@ -123,7 +123,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
         const spec = kind === "dropletsSingle"
           ? { x: 0, y: 0, z: 0, size: .88 }
           : droplets
-          ? { x: Math.cos(angle) * Math.sqrt((i + .5) / count) * 1.55, y: Math.sin(angle) * Math.sqrt((i + .5) / count) * 1.35, z: -.35 - (i % 7) * .13, size: .09 + (i % 6) * .027 }
+          ? { x: Math.cos(angle) * radius, y, z: Math.sin(angle) * radius, size: .11 + (i % 5) * .018 }
           : { x: Math.cos(angle) * radius, y, z: Math.sin(angle) * radius, size: .11 + (i % 5) * .018 };
         const mat = material || new THREE.MeshPhysicalMaterial({ color: colors[i % 4], metalness: .08, roughness: .12, clearcoat: 1, transparent: true, opacity: .94 });
         const mesh = new THREE.Mesh(geometry, mat);
