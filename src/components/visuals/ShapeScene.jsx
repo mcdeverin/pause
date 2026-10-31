@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 // Native Three.js scene: no React Three Fiber or Drei dependency.
 // Existing React Three Fiber prototypes remain in Git history.
-export default function ShapeScene({ kind, breathRef, motionRef, background = "photo", photoUrl }) {
+export default function ShapeScene({ kind, breathRef, motionRef, background = "photo", photoUrl, backgroundSettings = {} }) {
   const host = useRef(null);
   useEffect(() => {
     const element = host.current;
@@ -40,6 +40,11 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
     let backdropTexture = null;
     let backdropAspect = 1;
     let environment = null;
+    let screenPhotoTexture = null;
+    let screenPhotoCanvas = null;
+    let photoImage = null;
+    let photoNeedsRedraw = false;
+    let redrawPhoto = () => {};
     let ribbonGeometry = null;
     let particleGeometry = null;
     let particleMaterial = null;
@@ -72,11 +77,78 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       const droplets = kind === "droplets" || kind === "dropletsSingle" || kind === "dropletsHalo";
       const count = kind === "dropletsSingle" ? 1 : 46;
       if (droplets) { camera.fov = 60; camera.position.z = 3; camera.updateProjectionMatrix(); }
+      // Use the original Three.js example's refract(view, normal, ratio)
+      // calculation, but sample the ACTUAL selected app photo at the sphere's
+      // screen position, not a fixed Park3Med cube environment.
+      // This canvas is only a texture input; it is NEVER drawn as a rectangle.
       const material = droplets && background === "transparent"
         ? new THREE.ShaderMaterial({
-            transparent: true, depthWrite: false,
-            vertexShader: `varying vec3 vNormal; varying vec3 vView; void main() { vec4 viewPos = modelViewMatrix * vec4(position, 1.0); vNormal = normalize(normalMatrix * normal); vView = normalize(-viewPos.xyz); gl_Position = projectionMatrix * viewPos; }`,
-            fragmentShader: `varying vec3 vNormal; varying vec3 vView; void main() { float ndv = abs(dot(normalize(vNormal), normalize(vView))); float rim = pow(1.0 - ndv, 3.0); vec3 n = normalize(vNormal); float glint = pow(max(dot(n, normalize(vec3(-0.38, 0.64, 0.67))), 0.0), 90.0); float glint2 = pow(max(dot(n, normalize(vec3(0.6, -0.48, 0.63))), 0.0), 150.0); float alpha = clamp(0.015 + rim * 0.52 + glint * 0.82 + glint2 * 0.44, 0.0, 0.94); vec3 tint = mix(vec3(0.86, 0.91, 0.94), vec3(1.0), glint); gl_FragColor = vec4(tint, alpha); }`
+            transparent: true,
+            depthWrite: false,
+            uniforms: {
+              uPhoto: { value: null },
+              uHasPhoto: { value: 0 },
+              uViewport: { value: new THREE.Vector2(1, 1) },
+              uCanvasOrigin: { value: new THREE.Vector2(0, 0) },
+              uCanvasSize: { value: new THREE.Vector2(1, 1) },
+              uSphereRadius: { value: 50 },
+            },
+            vertexShader: `
+              varying vec3 vNormal;
+              varying vec3 vView;
+              void main() {
+                vec4 viewPos = modelViewMatrix * vec4(position, 1.0);
+                vNormal = normalize(normalMatrix * normal);
+                vView = normalize(-viewPos.xyz);
+                gl_Position = projectionMatrix * viewPos;
+              }
+            `,
+            fragmentShader: `
+              uniform sampler2D uPhoto;
+              uniform float uHasPhoto;
+              uniform vec2 uViewport;
+              uniform vec2 uCanvasOrigin;
+              uniform vec2 uCanvasSize;
+              uniform float uSphereRadius;
+              varying vec3 vNormal;
+              varying vec3 vView;
+              void main() {
+                vec3 n = normalize(vNormal);
+                vec3 eye = normalize(vView);
+                // Same optical principle as webgl_effects_stereo.html:
+                // refract() redirects our sample using the sphere's normals.
+                vec3 direction = refract(-eye, n, 0.95);
+                float facing = clamp(dot(eye, n), 0.0, 1.0);
+                float fresnel = pow(1.0 - facing, 3.3);
+                float glint = pow(max(dot(n, normalize(vec3(-0.4, 0.68, 0.61))), 0.0), 95.0);
+                float glint2 = pow(max(dot(n, normalize(vec3(0.68, -0.43, 0.59))), 0.0), 125.0);
+
+                // gl_FragCoord is local to the WebGL canvas. Convert to
+                // viewport coordinates to align with BackgroundLayer's image.
+                vec2 localTopLeft = vec2(gl_FragCoord.x, uCanvasSize.y - gl_FragCoord.y);
+                vec2 globalTopLeft = uCanvasOrigin + localTopLeft;
+                vec2 photoUV = vec2(globalTopLeft.x / uViewport.x, 1.0 - globalTopLeft.y / uViewport.y);
+
+                // The interior bends what is ACTUALLY behind it. No skybox,
+                // fixed reflection photo, background plane or CSS square.
+                vec2 displacement = direction.xy * (uSphereRadius / uViewport) * 0.72;
+                vec2 distortedUV = clamp(photoUV + vec2(displacement.x, -displacement.y), vec2(0.001), vec2(0.999));
+
+                if (uHasPhoto > 0.5) {
+                  vec3 behind = texture2D(uPhoto, distortedUV).rgb;
+                  // Subtle thickness and dark Fresnel silhouette preserve
+                  // dense water glass instead of a soap bubble outline.
+                  vec3 glass = behind * (1.0 - 0.25 * fresnel);
+                  glass = mix(glass, vec3(0.95, 0.98, 1.0), glint * 0.82 + glint2 * 0.40);
+                  gl_FragColor = vec4(glass, 1.0);
+                } else {
+                  // Solid/gradient backgrounds: leave the app canvas visible
+                  // instead of inventing an internal photograph.
+                  float alpha = clamp(0.045 + fresnel * 0.60 + glint * 0.82 + glint2 * 0.48, 0.0, 0.96);
+                  gl_FragColor = vec4(vec3(0.92, 0.96, 0.98), alpha);
+                }
+              }
+            `,
           })
         : droplets
         ? new THREE.MeshPhysicalMaterial({
@@ -86,6 +158,53 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
             transparent: false, depthWrite: true
           })
         : null;
+      if (droplets && background === "transparent" && photoUrl) {
+        screenPhotoCanvas = document.createElement("canvas");
+        const context = screenPhotoCanvas.getContext("2d");
+        screenPhotoTexture = new THREE.CanvasTexture(screenPhotoCanvas);
+        screenPhotoTexture.colorSpace = THREE.SRGBColorSpace;
+        screenPhotoTexture.wrapS = THREE.ClampToEdgeWrapping;
+        screenPhotoTexture.wrapT = THREE.ClampToEdgeWrapping;
+        material.uniforms.uPhoto.value = screenPhotoTexture;
+        redrawPhoto = () => {
+          if (!context || !photoImage || !photoImage.naturalWidth || disposed) return;
+          const vw = Math.max(1, window.innerWidth), vh = Math.max(1, window.innerHeight);
+          const resolution = Math.min(1, 2048 / Math.max(vw, vh));
+          screenPhotoCanvas.width = Math.max(1, Math.round(vw * resolution));
+          screenPhotoCanvas.height = Math.max(1, Math.round(vh * resolution));
+          context.setTransform(resolution, 0, 0, resolution, 0, 0);
+          context.clearRect(0, 0, vw, vh);
+          const fitScale = Math.max(vw / photoImage.naturalWidth, vh / photoImage.naturalHeight);
+          const fitW = photoImage.naturalWidth * fitScale;
+          const fitH = photoImage.naturalHeight * fitScale;
+          const offsetX = Math.max(-100, Math.min(100, Number(backgroundSettings.photoOffsetX) || 0));
+          const offsetY = Math.max(-100, Math.min(100, Number(backgroundSettings.photoOffsetY) || 0));
+          // CSS object-position uses a fraction of the excess cover area.
+          const x = (vw - fitW) * (0.5 + offsetX / 100);
+          const y = (vh - fitH) * (0.5 + offsetY / 100);
+          const zoom = Math.max(1, Number(backgroundSettings.photoZoom) || 1);
+          context.save();
+          context.translate(vw / 2, vh / 2);
+          context.scale(zoom, zoom);
+          context.translate(-vw / 2, -vh / 2);
+          const blur = Number(backgroundSettings.backgroundBlur) || 0;
+          context.filter = blur > 0 ? `blur(${Math.min(30, blur)}px)` : "none";
+          context.drawImage(photoImage, x, y, fitW, fitH);
+          context.restore();
+          const dim = Math.min(100, Math.max(0, Number(backgroundSettings.backgroundDim) || 0)) / 100;
+          if (dim > 0) {
+            context.fillStyle = `rgba(0,0,0,${dim})`;
+            context.fillRect(0, 0, vw, vh);
+          }
+          screenPhotoTexture.needsUpdate = true;
+          material.uniforms.uHasPhoto.value = 1;
+        };
+        photoImage = new Image();
+        photoImage.crossOrigin = "anonymous";
+        photoImage.onload = redrawPhoto;
+        photoImage.onerror = () => console.warn("Rain Droplet cannot load the selected background for refraction", photoUrl);
+        photoImage.src = photoUrl;
+      }
       if (droplets && background !== "transparent") {
         // Three.js transmission samples the actual scene behind the glass.
         // Never use the Park3Med cubemap: it cannot match the selected photo.
@@ -137,13 +256,14 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
         objects.push({ mesh, spec, index: i });
       }
     }
+    const materialForScreenPhoto = (kind === "droplets" || kind === "dropletsSingle" || kind === "dropletsHalo") && background === "transparent" ? objects[0]?.mesh.material : null;
     const resize = () => {
       if (!renderer || !element.isConnected) return;
       const width = Math.max(1, element.clientWidth), height = Math.max(1, element.clientHeight);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
-      if (kind === "dropletsSingle") {
+      if (kind === "dropletsSingle" && background !== "transparent") {
         // The photo plane must remain in the WebGL transmission pass, but its
         // rectangular bounds must not show over the page-wide CSS photograph.
         // Clip only the glass sphere footprint in the final transparent canvas.
@@ -153,6 +273,14 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
         const mask = `radial-gradient(circle ${Math.ceil(radiusPx + 3)}px at center, black 97%, transparent 100%)`;
         renderer.domElement.style.maskImage = mask;
         renderer.domElement.style.webkitMaskImage = mask;
+      }
+      if (materialForScreenPhoto) {
+        const rect = element.getBoundingClientRect();
+        const uniforms = materialForScreenPhoto.uniforms;
+        uniforms.uViewport.value.set(window.innerWidth, window.innerHeight);
+        uniforms.uCanvasOrigin.value.set(rect.left, rect.top);
+        uniforms.uCanvasSize.value.set(width, height);
+        redrawPhoto();
       }
       if (backdropMesh) {
         const distance = camera.position.z - backdropMesh.position.z;
@@ -204,6 +332,12 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
           }
         }
       }
+      if (materialForScreenPhoto) {
+        const rect = element.getBoundingClientRect();
+        const uniforms = materialForScreenPhoto.uniforms;
+        uniforms.uCanvasOrigin.value.set(rect.left, rect.top);
+        uniforms.uSphereRadius.value = (kind === "dropletsSingle" ? .88 : .16) * (.92 + b * .12) * (1 + b * .18) / (camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * element.clientHeight / 2;
+      }
       renderer.render(scene, camera);
       frame = requestAnimationFrame(animate);
     };
@@ -220,9 +354,10 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       environment?.dispose();
       if (backdropMesh) { backdropMesh.geometry.dispose(); backdropMesh.material.dispose(); }
       backdropTexture?.dispose();
+      screenPhotoTexture?.dispose();
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [kind, breathRef, motionRef, background, photoUrl]);
+  }, [kind, breathRef, motionRef, background, photoUrl, backgroundSettings]);
   return <div ref={host} style={{ width: "100%", height: "100%" }} />;
 }
