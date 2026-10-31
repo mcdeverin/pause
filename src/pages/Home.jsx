@@ -14,6 +14,8 @@ import { resolveBackgroundImage } from "../lib/backgroundImage";
 import BackgroundLayer from "../components/BackgroundLayer";
 import { MOMENTS, addMoment } from "../lib/moments";
 import MomentsScreen from "../components/moments/MomentsScreen";
+import { track } from "../lib/analytics";
+import { describeSavedBackground, describeVisual } from "../lib/analyticsProps";
 
 const LOCKED_CATEGORIES = ["Focus", "Energy", "Advanced"];
 
@@ -71,6 +73,9 @@ export default function Home() {
   const commitPreferences = useCallback((nextPreferences) => {
     setPreferences(nextPreferences);
     savePreferences(nextPreferences);
+    // Reported on save only — never while a draft is being previewed.
+    track("breathing_visual_saved", { visual_id: describeVisual(nextPreferences) });
+    track("background_saved", describeSavedBackground(nextPreferences));
   }, []);
 
   // Hiding the moment shortcuts happens straight from the home screen, outside
@@ -99,7 +104,11 @@ export default function Home() {
     sessionMomentRef.current = moment || null;
     setTechnique(chosenTechnique);
     setMode("breathing");
-  }, []);
+    track("breathing_session_started", {
+      technique_id: chosenTechnique?.id || null,
+      visual_id: describeVisual(preferences),
+    });
+  }, [preferences]);
 
   const startBreathing = useCallback((forcedTechnique = null) => {
     if (techniques.length === 0) return;
@@ -168,10 +177,17 @@ export default function Home() {
       });
     }
 
+    track("breathing_session_ended", {
+      technique_id: endedTechnique?.id || null,
+      completed: Boolean(result?.completed),
+      duration_seconds: Math.round(elapsed),
+      visual_id: describeVisual(preferences),
+    });
+
     sessionMomentRef.current = null;
     setMode("idle");
     setTechnique(null);
-  }, [technique, preferences.saveMoments]);
+  }, [technique, preferences]);
 
   const openPaywall = useCallback(() => {
     setPendingTechnique(null);

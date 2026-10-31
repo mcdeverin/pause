@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, FileText, Mail, ShieldCheck, X } from "lucide-react";
 import { FONT, getColors } from "../lib/design";
+import PreferenceToggle from "./personalize/PreferenceToggle";
+import { isAnalyticsEnabled, setAnalyticsEnabled } from "../lib/analytics";
 
 const PRIVACY_URL = "https://alwayspause.com/privacy";
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
@@ -60,6 +63,10 @@ function SectionLabel({ children, theme }) {
 
 export default function AboutLegalSheet({ theme, onClose }) {
   const colors = getColors(theme);
+  // Off unless the person has turned it on before. The choice is stored on the
+  // device and applied immediately — switching it off clears the analytics
+  // client and any identifiers it created.
+  const [shareUsage, setShareUsage] = useState(isAnalyticsEnabled);
 
   return (
     <motion.div
@@ -146,6 +153,18 @@ export default function AboutLegalSheet({ theme, onClose }) {
           Always Pause is a simple breathing companion for real life. Whether you're feeling overwhelmed,
           finding your focus, or taking a break, a moment to breathe is always within reach.
         </p>
+
+        <SectionLabel theme={theme}>Privacy</SectionLabel>
+        <PreferenceToggle
+          theme={theme}
+          label="Share anonymous usage"
+          description="Sends anonymous counts of the visuals, backgrounds and techniques you use. Never your photos, exact colours, or identity. Off by default."
+          checked={shareUsage}
+          onChange={(value) => {
+            setShareUsage(value);
+            setAnalyticsEnabled(value);
+          }}
+        />
 
         <SectionLabel theme={theme}>Legal</SectionLabel>
         <InfoRow

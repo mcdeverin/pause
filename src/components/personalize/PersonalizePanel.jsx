@@ -14,6 +14,7 @@ import RestoreDefaultsButton from "./RestoreDefaultsButton";
 import { restoreVisualDefaults, visualSettingsAtDefaults } from "../../lib/personalizeDefaults";
 import { isGalleryPhotoId } from "../../lib/backgroundGallery";
 import { resolveBackgroundImage } from "../../lib/backgroundImage";
+import { track } from "../../lib/analytics";
 
 function SectionLabel({ children, theme, isFirst }) {
   const colors = getColors(theme);
@@ -179,6 +180,7 @@ export default function PersonalizePanel({
   };
 
   const restoreDefaults = () => {
+    track("restore_defaults_used", { visual_id: draft.visual });
     setDraft((current) => restoreVisualDefaults(current));
     setJustSaved(false);
   };

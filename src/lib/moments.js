@@ -1,7 +1,8 @@
 // "Your Moments" — local-only session history.
 // Everything here stays on the device (localStorage, which the Capacitor iOS
-// app persists across launches). Nothing is sent to Base44, ad services or
-// third-party analytics.
+// app persists across launches). This history is never sent to Base44, ad
+// services or third-party analytics — if someone opts in to anonymous usage
+// counts, only a completed flag and a rounded duration leave the device.
 
 const STORAGE_KEY = "pauseMoments";
 const MAX_RECORDS = 1000;
