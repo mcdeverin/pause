@@ -89,8 +89,8 @@ export default function GhostStudio() {
     <main style={{ minHeight: "100dvh", overflowY: "auto", background: STUDIO_UI.page, color: STUDIO_UI.text, padding: "24px max(18px, calc((100vw - 1180px)/2)) 60px", boxSizing: "border-box" }}>
       <Link to="/" style={{ color: STUDIO_UI.accent, fontSize: 13 }}>← Back to Pause</Link>
       <p style={{ color: STUDIO_UI.accent, letterSpacing: ".2em", fontSize: 11, fontWeight: 800, marginTop: 24 }}>ALWAYS PAUSE · DESIGN STUDIO</p>
-      <h1 style={{ fontSize: "clamp(28px,4vw,40px)", margin: "4px 0" }}>Ghost Studio</h1>
-      <p style={{ color: STUDIO_UI.muted, marginTop: 4 }}>Explore two smoke silhouettes before adding Ghost to the app.</p>
+      <h1 style={{ fontSize: "clamp(28px,4vw,40px)", margin: "4px 0" }}>Theme Studio</h1>
+      <p style={{ color: STUDIO_UI.muted, marginTop: 4 }}>Explore experimental themes and smoke silhouettes before approving them for the app.</p>
       <section style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", margin: "22px 0", fontSize: 13 }}>
         <label>Background <select value={mode} onChange={e => setMode(e.target.value)}><option value="dark">Dark</option><option value="light">Light</option><option value="photo">Nature photo</option></select></label>
         {mode === "photo" && <select value={photoId} onChange={e => setPhotoId(e.target.value)}>{BACKDROP_PHOTOS.map(p => <option key={p.id} value={p.id}>{p.label || p.id}</option>)}</select>}
