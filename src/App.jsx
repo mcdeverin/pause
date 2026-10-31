@@ -12,6 +12,7 @@ import Terms from './pages/Terms.jsx';
 import GhostStudio from './pages/GhostStudio.jsx';
 
 const Popcorn = lazy(() => import('./pages/Popcorn.jsx'));
+const LiquidSurface = lazy(() => import('./pages/LiquidSurface.jsx'));
 const SensoryStudio = lazy(() => import('./pages/SensoryStudio.jsx'));
 const ShapesStudio = lazy(() => import('./pages/ShapesStudio.jsx'));
 const LiquidOrbStudio = lazy(() => import('./pages/LiquidOrbStudio.jsx'));
@@ -48,6 +49,7 @@ const AuthenticatedApp = () => {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/theme-studio" element={<GhostStudio />} />
+      <Route path="/sensory/liquid-surface" element={<Suspense fallback={<div className="p-8">Loading Liquid Surface…</div>}><LiquidSurface /></Suspense>} />
       <Route path="/sensory/popcorn" element={<Suspense fallback={<div className="p-8">Loading Popcorn…</div>}><Popcorn /></Suspense>} />
       <Route path="/sensory-studio" element={<Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense>} />
       <Route path="/orb-studio" element={<Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense>} />
