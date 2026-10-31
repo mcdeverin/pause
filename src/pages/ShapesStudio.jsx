@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import ShapeScene from "@/components/visuals/ShapeScene";
 import CrystalClusterScene from "@/components/visuals/CrystalClusterScene";
 import { BACKDROP_PHOTOS, BACKGROUND_CSS } from "@/lib/crystalStudio";
-const kinds=[["pearls","Pearl Cluster","Iridescent spheres moving together"],["droplets","Rain Droplets","Clear glass refracting the selected backdrop, with breathing-only motion"],["crystalCluster","Crystal Cluster","Connected faceted glass crystals built with BufferGeometry"],["particles","Particle Sphere","A constellation that breathes"]];
+const kinds=[["pearls","Pearl Cluster","Iridescent spheres moving together"],["droplets","Rain Droplets","Clear glass refracting the selected backdrop, with breathing-only motion"],["dropletsSingle","Single Glass Droplet","One centered water-like sphere refracting the selected photograph"],["crystalCluster","Crystal Cluster","Connected faceted glass crystals built with BufferGeometry"],["particles","Particle Sphere","A constellation that breathes"]];
 export default function ShapesStudio(){
  const [allowed,setAllowed]=useState(null),[background,setBackground]=useState("photo"),[photo,setPhoto]=useState(BACKDROP_PHOTOS[0]?.id),[playing,setPlaying]=useState(true),[manual,setManual]=useState(false),[breath,setBreath]=useState(.4),[motion,setMotion]=useState(.6);
  const breathRef=useRef(.4),motionRef=useRef(.6);motionRef.current=motion;
@@ -15,7 +15,7 @@ export default function ShapesStudio(){
  const image=BACKDROP_PHOTOS.find(x=>x.id===photo)||BACKDROP_PHOTOS[0];
  const bg=background==="photo"&&image?`url("${image.url}") center / cover`:BACKGROUND_CSS[background];
  return <main style={{minHeight:"100vh",background:"#f7f5f1",color:"#2c302e",padding:"24px max(18px, calc((100vw - 1150px)/2)) 70px"}}>
- <Link to="/" style={{color:"#8b7cc0"}}>← Back to Pause</Link><p style={{fontSize:11,letterSpacing:".19em",fontWeight:700,color:"#8b7cc0",marginTop:25}}>ALWAYS PAUSE · PRIVATE EXPERIMENTS</p><h1 style={{fontSize:"clamp(30px,5vw,46px)",margin:"8px 0"}}>Shapes Studio</h1><p style={{color:"#747575"}}>Four breathing-synchronized Three.js studies. Nothing here changes your production gallery.</p>
+ <Link to="/" style={{color:"#8b7cc0"}}>← Back to Pause</Link><p style={{fontSize:11,letterSpacing:".19em",fontWeight:700,color:"#8b7cc0",marginTop:25}}>ALWAYS PAUSE · PRIVATE EXPERIMENTS</p><h1 style={{fontSize:"clamp(30px,5vw,46px)",margin:"8px 0"}}>Shapes Studio</h1><p style={{color:"#747575"}}>Five breathing-synchronized Three.js studies. Nothing here changes your production gallery.</p>
  <div style={{display:"flex",flexWrap:"wrap",gap:12,alignItems:"center",margin:"24px 0"}}>
  <label>Backdrop <select value={background} onChange={e=>setBackground(e.target.value)}><option value="photo">Nature photo</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
  {background==="photo"&&<select aria-label="Nature photo" value={photo} onChange={e=>setPhoto(e.target.value)}>{BACKDROP_PHOTOS.map(x=><option key={x.id} value={x.id}>{x.label||x.id}</option>)}</select>}
@@ -23,11 +23,11 @@ export default function ShapesStudio(){
  <button onClick={()=>{setManual(v=>!v);setPlaying(false)}}>{manual?"Automatic":"Manual"}</button>
  </div>
  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,360px),1fr))",gap:18}}>
- {kinds.map(([id,name,description])=><article key={id} style={{padding:12,background:"white",borderRadius:20,boxShadow:"0 6px 22px #2222220a"}}><div style={{height:340,background:id==="droplets"?"#e9edf0":bg,borderRadius:14,overflow:"hidden"}}>{id==="crystalCluster"?<CrystalClusterScene breathRef={breathRef} background={background} photoUrl={background==="photo"?image?.url:null}/>:<ShapeScene kind={id} breathRef={breathRef} motionRef={motionRef} background={background} photoUrl={background==="photo"?image?.url:null}/>}</div><h2 style={{fontSize:19,margin:"14px 6px 2px"}}>{name}</h2><p style={{fontSize:13,color:"#73777b",margin:"0 6px 12px"}}>{description}</p></article>)}
+ {kinds.map(([id,name,description])=><article key={id} style={{padding:12,background:"white",borderRadius:20,boxShadow:"0 6px 22px #2222220a"}}><div style={{height:340,background:id==="droplets"||id==="dropletsSingle"?"#e9edf0":bg,borderRadius:14,overflow:"hidden"}}>{id==="crystalCluster"?<CrystalClusterScene breathRef={breathRef} background={background} photoUrl={background==="photo"?image?.url:null}/>:<ShapeScene kind={id} breathRef={breathRef} motionRef={motionRef} background={background} photoUrl={background==="photo"?image?.url:null}/>}</div><h2 style={{fontSize:19,margin:"14px 6px 2px"}}>{name}</h2><p style={{fontSize:13,color:"#73777b",margin:"0 6px 12px"}}>{description}</p></article>)}
  </div>
  <section style={{background:"white",borderRadius:18,padding:22,maxWidth:600,marginTop:22}}>
  <label style={{display:"block",marginBottom:18}}>Ambient movement · {Math.round(motion*100)}%<input type="range" min="0" max="1" step=".01" value={motion} onChange={e=>setMotion(+e.target.value)} style={{display:"block",width:"100%"}}/></label>
  {manual&&<label style={{display:"block"}}>Manual inhale · {Math.round(breath*100)}%<input type="range" min="0" max="1" step=".01" value={breath} onChange={e=>{setBreath(+e.target.value);breathRef.current=+e.target.value;}} style={{display:"block",width:"100%"}}/></label>}
- <p style={{fontSize:12,color:"#777"}}>Auto timing: inhale 4 seconds · hold 2 seconds · exhale 6 seconds · hold 2 seconds. Droplet materials use the Three.js stereo example's white refractive environment mapping; layouts and breathing motion are custom.</p>
+ <p style={{fontSize:12,color:"#777"}}>Auto timing: inhale 4 seconds · hold 2 seconds · exhale 6 seconds · hold 2 seconds. Glass droplets use physical transmission over the selected backdrop rendered inside WebGL; the original fixed Park3Med environment is not used.</p>
  </section></main>;
 }
