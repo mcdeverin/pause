@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ShapeScene from "@/components/visuals/ShapeScene";
 import OrganicBlobScene from "@/components/visuals/OrganicBlobScene";
+import IridescentBlobScene from "@/components/visuals/IridescentBlobScene";
 import CrystalClusterScene from "@/components/visuals/CrystalClusterScene";
 import PrismaticGlass from "@/components/crystalStudio/PrismaticGlass";
 import StudioControls from "@/components/crystalStudio/StudioControls";
@@ -12,6 +13,7 @@ const kinds=[["organicBlob","Organic Blob","A softly undulating pearlescent form
 export default function ShapesStudio(){
  const [allowed,setAllowed]=useState(null),[background,setBackground]=useState("photo"),[photo,setPhoto]=useState(BACKDROP_PHOTOS[0]?.id),[playing,setPlaying]=useState(true),[manual,setManual]=useState(false),[breath,setBreath]=useState(.4),[motion,setMotion]=useState(.6);
  const [blobColor,setBlobColor]=useState("#e8d7f6");
+ const [iridescent,setIridescent]=useState({waves:3.4,depth:.36,twist:1.6});
  const [prismatic,setPrismatic]=useState({...PRISMATIC_DEFAULTS});
  const breathRef=useRef(.4),motionRef=useRef(.6);motionRef.current=motion;
  useEffect(()=>{base44.auth.me().then(me=>setAllowed(me?.role==="admin")).catch(()=>setAllowed(false));},[]);
@@ -35,6 +37,19 @@ export default function ShapesStudio(){
  </div>}
  <h2 style={{fontSize:19,margin:"14px 6px 2px"}}>{name}</h2><p style={{fontSize:13,color:"#73777b",margin:"0 6px 12px"}}>{description}</p></article>)}
  </div>
+ <article style={{marginTop:20,padding:12,background:"white",borderRadius:20,boxShadow:"0 6px 22px #2222220a"}}>
+  <h2 style={{fontSize:20,margin:"12px 8px 4px"}}>Iridescent Blob · experimental</h2>
+  <p style={{fontSize:13,color:"#73777b",margin:"0 8px 14px"}}>An original study of folded, glossy, cyan–violet–pink geometry inspired by the Blobmixer reference.</p>
+  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,400px),1fr))",gap:20}}>
+   <div style={{height:"clamp(420px,48vw,600px)",background:bg,borderRadius:14,overflow:"hidden"}}>
+    <IridescentBlobScene breathRef={breathRef} motionRef={motionRef} {...iridescent}/>
+   </div>
+   <div style={{padding:16,display:"grid",gap:20,alignContent:"start"}}>
+    {([["Fold count","waves",1,8,.1],["Fold depth","depth",0,.65,.01],["Twist","twist",0,4,.1]]).map(([label,key,min,max,step])=><label key={key} style={{display:"grid",gap:8,fontSize:13}}>{label} · {iridescent[key].toFixed(2)}<input type="range" min={min} max={max} step={step} value={iridescent[key]} onChange={e=>setIridescent(v=>({...v,[key]:Number(e.target.value)}))}/></label>)}
+    <button type="button" onClick={()=>setIridescent({waves:3.4,depth:.36,twist:1.6})}>Reset sculpture</button>
+   </div>
+  </div>
+ </article>
  <article style={{marginTop:20,padding:12,background:"white",borderRadius:20,boxShadow:"0 6px 22px #2222220a"}}>
   <h2 style={{fontSize:20,margin:"12px 8px 4px"}}>Prismatic Glass</h2>
   <p style={{fontSize:13,color:"#73777b",margin:"0 8px 14px"}}>Moved from Crystal Comparison. Adjustable refraction, lighting, and glass settings.</p>
