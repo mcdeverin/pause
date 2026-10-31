@@ -26,6 +26,7 @@ export default function CrystalVisual({
       reducedMotion={reducedMotion}
       quality="balanced"
       transparentCanvas
+      sessionBreathing
     />
   );
 }
