@@ -73,10 +73,17 @@ export default function IridescentBlobScene({ breathRef, motionRef, waves = 3.4,
    for(let i=0;i<pos.count;i++){
     const k=i*3,x=original[k],y=original[k+1],z=original[k+2];
     const a=Math.atan2(z,x),lat=Math.asin(Math.max(-1,Math.min(1,y)));
-    const phase=a*waves+lat*twist*3.2+t*.12*motion;
-    const folds=Math.sin(phase)*.65+Math.sin(phase*1.75+lat*2.1)*.25;
-    const bulge=Math.sin(lat*4.2-a*1.7+t*.17*motion)*.08;
-    const radius=(1+depth*folds+bulge)*(.89+.2*breath);
+    // Longitude must be periodic: fractional angular frequencies split the sphere at its UV seam.
+    // Blend adjacent whole-number harmonics instead of multiplying longitude by a fractional count.
+    const n=Math.max(1,Math.min(8,waves));
+    const low=Math.floor(n),high=Math.min(8,low+1),blend=n-low;
+    const swirl=lat*twist*2.1+t*.12*motion;
+    const primary=THREE.MathUtils.lerp(Math.sin(low*a+swirl),Math.sin(high*a+swirl),blend);
+    const secondary=Math.sin(2*a-lat*3.1+t*.09*motion);
+    const folds=.72*primary+.22*secondary;
+    const bulge=.055*Math.sin(4*lat+3*a+t*.17*motion);
+    const safeDepth=Math.min(depth,.48);
+    const radius=(1+safeDepth*folds+bulge)*(.89+.2*breath);
     pos.array[k]=x*radius;pos.array[k+1]=y*radius;pos.array[k+2]=z*radius;
    }
    pos.needsUpdate=true;geo.computeVertexNormals();
