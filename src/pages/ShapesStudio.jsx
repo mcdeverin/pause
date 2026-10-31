@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import ShapeScene from "@/components/visuals/ShapeScene";
 import CrystalClusterScene from "@/components/visuals/CrystalClusterScene";
 import { BACKDROP_PHOTOS, BACKGROUND_CSS } from "@/lib/crystalStudio";
-const kinds=[["pearls","Pearl Cluster","Iridescent spheres moving together"],["droplets","Rain Droplets","Matching Park3Med skybox and refraction, with breathing-only motion"],["crystalCluster","Crystal Cluster","Connected faceted glass crystals built with BufferGeometry"],["particles","Particle Sphere","A constellation that breathes"]];
+const kinds=[["pearls","Pearl Cluster","Iridescent spheres moving together"],["droplets","Rain Droplets","Clear glass refracting the selected backdrop, with breathing-only motion"],["crystalCluster","Crystal Cluster","Connected faceted glass crystals built with BufferGeometry"],["particles","Particle Sphere","A constellation that breathes"]];
 export default function ShapesStudio(){
  const [allowed,setAllowed]=useState(null),[background,setBackground]=useState("photo"),[photo,setPhoto]=useState(BACKDROP_PHOTOS[0]?.id),[playing,setPlaying]=useState(true),[manual,setManual]=useState(false),[breath,setBreath]=useState(.4),[motion,setMotion]=useState(.6);
  const breathRef=useRef(.4),motionRef=useRef(.6);motionRef.current=motion;
@@ -23,7 +23,7 @@ export default function ShapesStudio(){
  <button onClick={()=>{setManual(v=>!v);setPlaying(false)}}>{manual?"Automatic":"Manual"}</button>
  </div>
  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,360px),1fr))",gap:18}}>
- {kinds.map(([id,name,description])=><article key={id} style={{padding:12,background:"white",borderRadius:20,boxShadow:"0 6px 22px #2222220a"}}><div style={{height:340,background:id==="droplets"?"#e9edf0":bg,borderRadius:14,overflow:"hidden"}}>{id==="crystalCluster"?<CrystalClusterScene breathRef={breathRef} background={background} photoUrl={background==="photo"?image?.url:null}/>:<ShapeScene kind={id} breathRef={breathRef} motionRef={motionRef}/>}</div><h2 style={{fontSize:19,margin:"14px 6px 2px"}}>{name}</h2><p style={{fontSize:13,color:"#73777b",margin:"0 6px 12px"}}>{description}</p></article>)}
+ {kinds.map(([id,name,description])=><article key={id} style={{padding:12,background:"white",borderRadius:20,boxShadow:"0 6px 22px #2222220a"}}><div style={{height:340,background:id==="droplets"?"#e9edf0":bg,borderRadius:14,overflow:"hidden"}}>{id==="crystalCluster"?<CrystalClusterScene breathRef={breathRef} background={background} photoUrl={background==="photo"?image?.url:null}/>:<ShapeScene kind={id} breathRef={breathRef} motionRef={motionRef} background={background} photoUrl={background==="photo"?image?.url:null}/>}</div><h2 style={{fontSize:19,margin:"14px 6px 2px"}}>{name}</h2><p style={{fontSize:13,color:"#73777b",margin:"0 6px 12px"}}>{description}</p></article>)}
  </div>
  <section style={{background:"white",borderRadius:18,padding:22,maxWidth:600,marginTop:22}}>
  <label style={{display:"block",marginBottom:18}}>Ambient movement · {Math.round(motion*100)}%<input type="range" min="0" max="1" step=".01" value={motion} onChange={e=>setMotion(+e.target.value)} style={{display:"block",width:"100%"}}/></label>
