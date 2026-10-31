@@ -133,7 +133,7 @@ export default function MainScreen({
         style={{
           margin: "clamp(24px, 8.5vh, 92px) 32px 0",
           textAlign: "center",
-          transform: "translateY(clamp(14px, 4vh, 40px))",
+          transform: "translateY(clamp(20px, 5.5vh, 56px))",
         }}
       >
         <p
