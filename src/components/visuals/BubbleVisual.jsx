@@ -18,7 +18,8 @@ export default function BubbleVisual({ breath = 0, theme = "day", options = {}, 
   const iridescence = options.iridescence ?? 70;
   const glow = options.glow ?? 35;
 
-  const scale = 1 + 0.26 * breath;
+  // A wider swing between empty and full lungs reads more like a real breath.
+  const scale = 1.05 + 0.34 * breath;
   const bodyAlpha = 0.02 + (1 - transparency / 100) * 0.1;
   const rimAlpha = 0.22 + (rim / 100) * 0.62;
   const rimWidth = 2.4 + (rim / 100) * 2.4;

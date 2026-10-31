@@ -52,7 +52,8 @@ export default function CrystalVisual({ breath = 0, theme = "day", options = {},
   const outline = options.outline ?? 60;
   const glow = options.glow ?? 30;
 
-  const scale = 1 + 0.24 * breath;
+  // A wider swing between empty and full lungs reads more like a real breath.
+  const scale = 1.05 + 0.34 * breath;
   const density = 1 - (transparency / 100) * 0.6;
   const rimWidth = 1.4 + (outline / 100) * 2.4;
 
