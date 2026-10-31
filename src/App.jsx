@@ -6,6 +6,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home.jsx';
+import VisualLab from './pages/VisualLab.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
 // Add page imports here
@@ -46,6 +47,10 @@ const AuthenticatedApp = () => {
 
 
 function App() {
+  // Local-only design playground. Never included in the production route tree.
+  if (import.meta.env.DEV && window.location.pathname === '/visual-lab') {
+    return <VisualLab />;
+  }
 
   return (
     <AuthProvider>
