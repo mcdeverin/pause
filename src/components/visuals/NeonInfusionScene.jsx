@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BACKDROP_PHOTOS } from "@/lib/crystalStudio";
 
-// Studio prototype: pixel-aware propagation, not semantic tree segmentation.
+// Studio prototype: edge-guided vegetation propagation. True per-tree masks require segmentation assets.
 const COLORS=["#ff3991","#b7ff2e","#ad5cff","#00f6c6","#ffab39"];
 const W=600,H=400;
 export default function NeonInfusionScene(){
@@ -20,8 +20,8 @@ export default function NeonInfusionScene(){
    ctx.drawImage(image,(W-image.width*scale)/2,(H-image.height*scale)/2,image.width*scale,image.height*scale);
    try{
     const original=ctx.getImageData(0,0,W,H);
-    model.current={original,output:new ImageData(W,H),ink:new Float32Array(W*H),hue:new Uint8Array(W*H),visited:new Uint8Array(W*H),queue:[],head:0,stamp:0,activeColor:0};
-    setReady(true);
+    model.current={original,output:new ImageData(W,H),ink:new Float32Array(W*H),hue:new Uint8Array(W*H),visited:new Uint16Array(W*H),queue:[],head:0,stamp:0,activeColor:0,seedRGB:null,mask:new Uint8Array(W*H)};
+    // Vegetation likelihood: green-dominant, moderately dark, and textured. Sky and water stay unmasked.\n    const data=original.data,mask=model.current.mask;\n    for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const k=y*W+x,i=k*4,r=data[i],g=data[i+1],b=data[i+2];\n      const vegetation=g>r*.78&&g>b*.9&&g>24&&(r+g+b)<565;\n      const skyBlue=b>g*1.08&&b>r*1.12;\n      mask[k]=vegetation&&!skyBlue?1:0;\n    }\n    setReady(true);
    }catch(e){console.warn("Neon Infusion requires a CORS-enabled photograph",e);}
   };
   image.src=BACKDROP_PHOTOS[photo]?.url||"";
@@ -42,66 +42,21 @@ export default function NeonInfusionScene(){
        const k=y*W+x;ink[k]=Math.max(0,ink[k]-(1-d/radius)*.22);
       }
      }else{
-      // Slowly expand through adjacent vegetation-like pixels while held.
-      for(let n=0;n<520&&m.head<m.queue.length;n++){
-       const k=m.queue[m.head++],x=k%W,y=(k/W)|0,off=k*4;
-       ink[k]=Math.min(1,ink[k]+.85);m.hue[k]=m.activeColor;
-       const neighbors=[k-1,k+1,k-W,k+W];
-       for(let j=0;j<4;j++){
-        const nx=x+(j===0?-1:j===1?1:0),ny=y+(j===2?-1:j===3?1:0);
-        if(nx<0||nx>=W||ny<0||ny>=H)continue;
-        const q=neighbors[j];if(m.visited[q]===m.stamp)continue;
-        const a=q*4,r=source[a],g=source[a+1],b=source[a+2];
-        // Exclude bright sky, blue water, and neutral rock; preserve photo detail.
-        const vegetation=g>r*.78&&g>b*.83&&g>30&&(r+g+b)<610;
-        const contrast=Math.abs(r-source[off])+Math.abs(g-source[off+1])+Math.abs(b-source[off+2]);
-        if(!vegetation||contrast>145)continue;
+      // Grow from the held point through adjacent, similarly colored vegetation.
+      // 8-connected neighbors avoid the diamond-shaped Manhattan-distance frontier.
+      // Expansion is blocked by strong image edges and non-vegetation pixels.
+      const offsets=[[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]];
+      for(let n=0;n<115&&m.head<m.queue.length;n++){
+       const k=m.queue[m.head++],x=k%W,y=(k/W)|0,i=k*4;
+       ink[k]=1;m.hue[k]=m.activeColor;
+       for(const [dx,dy] of offsets){
+        const nx=x+dx,ny=y+dy;if(nx<1||nx>=W-1||ny<1||ny>=H-1)continue;
+        const q=ny*W+nx;if(m.visited[q]===m.stamp||!m.mask[q])continue;
+        const a=q*4;
+        const edge=Math.abs(source[a]-source[i])+Math.abs(source[a+1]-source[i+1])+Math.abs(source[a+2]-source[i+2]);
+        const seed=m.seedRGB;
+        const similarity=Math.abs(source[a]-seed[0])*.45+Math.abs(source[a+1]-seed[1])*.4+Math.abs(source[a+2]-seed[2])*.35;
+        if(edge>100||similarity>115)continue;
         m.visited[q]=m.stamp;m.queue.push(q);
        }
       }
-     }
-    }
-    for(let k=0;k<ink.length;k++){
-     const i=k*4,amount=ink[k],r=source[i],g=source[i+1],b=source[i+2];
-     if(amount>.001){
-      const hex=COLORS[m.hue[k]],cr=parseInt(hex.slice(1,3),16),cg=parseInt(hex.slice(3,5),16),cb=parseInt(hex.slice(5,7),16);
-      const luminance=(r*.25+g*.6+b*.15)/255;
-      const shade=.38+luminance*.9;
-      const mix=amount*.9;
-      dest[i]=r*(1-mix)+Math.min(255,cr*shade)*mix;
-      dest[i+1]=g*(1-mix)+Math.min(255,cg*shade)*mix;
-      dest[i+2]=b*(1-mix)+Math.min(255,cb*shade)*mix;
-     }else{dest[i]=r;dest[i+1]=g;dest[i+2]=b;}
-     dest[i+3]=255;
-    }
-    ctx.putImageData(m.output,0,0);
-   }
-   raf.current=requestAnimationFrame(frame);
-  };raf.current=requestAnimationFrame(frame);return()=>cancelAnimationFrame(raf.current);
- },[]);
- const coords=e=>{const r=canvas.current.getBoundingClientRect();return {x:Math.max(0,Math.min(W-1,Math.floor((e.clientX-r.left)*W/r.width))),y:Math.max(0,Math.min(H-1,Math.floor((e.clientY-r.top)*H/r.height)))};};
- const down=e=>{
-  const m=model.current;if(!m)return;
-  const p=coords(e);pointer.current={...p,down:true,erase:eraseRef.current};
-  e.currentTarget.setPointerCapture(e.pointerId);
-  if(!eraseRef.current){
-   m.stamp=(m.stamp%254)+1;m.queue=[];m.head=0;
-   m.activeColor=Math.max(0,COLORS.indexOf(colorRef.current));
-   const seed=p.y*W+p.x;m.queue.push(seed);m.visited[seed]=m.stamp;
-  }
- };
- const move=e=>{if(!pointer.current.down)return;Object.assign(pointer.current,coords(e));};
- const stop=()=>{pointer.current.down=false;};
- const reset=()=>{if(model.current){model.current.ink.fill(0);model.current.queue=[];model.current.head=0;}};
- return <div style={{height:"100%",width:"100%",position:"relative",background:"#334b3d"}}>
-  <canvas ref={canvas} width={W} height={H} onPointerDown={down} onPointerMove={move} onPointerUp={stop} onPointerCancel={stop} style={{height:"100%",width:"100%",objectFit:"cover",touchAction:"none",display:"block",cursor:"crosshair"}}/>
-  {!ready&&<div style={{position:"absolute",inset:0,display:"grid",placeItems:"center",color:"white"}}>Loading landscape…</div>}
-  <div style={{position:"absolute",bottom:15,left:15,right:15,display:"flex",alignItems:"center",flexWrap:"wrap",gap:8,padding:10,background:"#ffffffea",borderRadius:16}}>
-   <button onClick={()=>setErase(false)} style={{border:!erase?"2px solid #222":"1px solid #bbb",borderRadius:12,padding:"7px 12px",background:"white"}}>Hold to infuse</button>
-   <button onClick={()=>setErase(true)} style={{border:erase?"2px solid #222":"1px solid #bbb",borderRadius:12,padding:"7px 12px",background:"white"}}>Swipe to erase</button>
-   {COLORS.map(c=><button key={c} aria-label={"Neon "+c} onClick={()=>{setColor(c);setErase(false);}} style={{height:28,width:28,borderRadius:20,background:c,border:color===c?"3px solid #242424":"2px solid white"}}/>)}
-   <button onClick={reset} style={{marginLeft:"auto",padding:"7px 12px",borderRadius:12,border:"1px solid #bbb",background:"white"}}>Reset</button>
-  </div>
-  <select aria-label="Landscape" value={photo} onChange={e=>setPhoto(+e.target.value)} style={{position:"absolute",top:68,right:15,padding:8,borderRadius:10,border:0,background:"#ffffffe8"}}>{BACKDROP_PHOTOS.map((p,i)=><option key={p.id} value={i}>{p.label||p.id}</option>)}</select>
- </div>;
-}
