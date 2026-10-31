@@ -35,7 +35,9 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
     scene.add(group);
     const objects = [];
     const geometry = new THREE.SphereGeometry(1, 32, 24);
-    const colors = ["#bdb1e9", "#d7d7f5", "#f6cbd9", "#badfe5"];
+    const colors = kind === "pearls"
+      ? ["#174b35", "#2e6946", "#4c855b", "#8caf78"]
+      : ["#bdb1e9", "#d7d7f5", "#f6cbd9", "#badfe5"];
     let backdropMesh = null;
     let backdropTexture = null;
     let backdropAspect = 1;
