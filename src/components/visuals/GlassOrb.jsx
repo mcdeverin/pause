@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { breathScale } from "../../lib/breathExpansion";
 import loadGlassOrb from "../../lib/glassOrb";
 
 // Liquid glass: the breath only scales it, exactly like the original orb, so both
@@ -16,7 +17,7 @@ export default function GlassOrb({ breath = 0, reducedMotion = false, animate = 
     };
   }, []);
 
-  const scale = 1 + 0.35 * breath;
+  const scale = breathScale(breath);
 
   return (
     <div
