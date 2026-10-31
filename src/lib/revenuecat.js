@@ -30,3 +30,18 @@ export const restorePurchases = async () => {
   const { customerInfo } = await Purchases.restorePurchases();
   return customerInfo;
 };
+
+// INTRO_ELIGIBILITY_STATUS values reported by the store: 0 unknown, 1 ineligible,
+// 2 eligible, 3 no introductory offer exists.
+export const TRIAL_ELIGIBLE_STATUS = 2;
+
+// iOS only: the store decides who can still get the introductory offer. Anything
+// other than a clear "eligible" answer is treated as no trial, so the paywall
+// never promises an offer Apple will not apply.
+export const getTrialEligibility = async (productIds) => {
+  const ids = (productIds || []).filter(Boolean);
+  if (!ids.length) return {};
+  return await Purchases.checkTrialOrIntroductoryPriceEligibility({
+    productIdentifiers: ids
+  });
+};

@@ -15,10 +15,41 @@ const DISPLAY_FALLBACK = {
   lifetime: "$49.99",
 };
 
-export function getLocalizedPrice(offerings, key) {
+// Packages are looked up by their store product ID inside the default offering,
+// so the package identifiers chosen in RevenueCat can be anything.
+export function getPackage(offerings, key) {
   const packages = offerings?.all?.default?.availablePackages || [];
-  const pkg = packages.find((p) => p?.product?.identifier === PRODUCT_IDS[key]);
+  return packages.find((p) => p?.product?.identifier === PRODUCT_IDS[key]) || null;
+}
+
+export function getLocalizedPrice(offerings, key) {
+  const pkg = getPackage(offerings, key);
   return pkg?.product?.priceString || DISPLAY_FALLBACK[key];
+}
+
+/** Renewal price with its period, e.g. "$29.99/year". */
+export function getPlanPriceLabel(offerings, key) {
+  const price = getLocalizedPrice(offerings, key);
+  if (key === "annual") return `${price}/year`;
+  if (key === "monthly") return `${price}/month`;
+  return price;
+}
+
+const UNIT_DAYS = { DAY: 1, WEEK: 7, MONTH: 30, YEAR: 365 };
+
+/**
+ * Length in days of the free introductory offer configured in App Store Connect,
+ * or null when the product has no free trial. This reads the store's own offer —
+ * nothing here creates or times a trial.
+ */
+export function getIntroTrialDays(offerings, key) {
+  const intro = getPackage(offerings, key)?.product?.introPrice;
+  if (!intro || !intro.periodNumberOfUnits) return null;
+  // Only a zero-price introductory period counts as a free trial.
+  if (Number(intro.price) !== 0) return null;
+  const unitDays = UNIT_DAYS[String(intro.periodUnit || "").toUpperCase()];
+  if (!unitDays) return null;
+  return intro.periodNumberOfUnits * unitDays;
 }
 
 function splitPriceString(priceString) {

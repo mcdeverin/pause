@@ -1,22 +1,53 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import LiquidOrb from "./LiquidOrb";
-import { getOfferings, purchasePackage, restorePurchases, checkEntitlement } from '../lib/revenuecat';
-import { PRODUCT_IDS, getLocalizedPrice, formatDailyPrice } from '../lib/pricing';
+import {
+  getOfferings,
+  purchasePackage,
+  restorePurchases,
+  checkEntitlement,
+  getTrialEligibility,
+  TRIAL_ELIGIBLE_STATUS,
+} from '../lib/revenuecat';
+import {
+  PRODUCT_IDS,
+  getLocalizedPrice,
+  getPlanPriceLabel,
+  getPackage,
+  getIntroTrialDays,
+  formatDailyPrice,
+} from '../lib/pricing';
 
 const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
 export default function PaywallScreen({ theme = "day", onClose, onPurchase, triggerCategory }) {
   const [selected, setSelected] = useState(PRODUCT_IDS.annual);
   const [offerings, setOfferings] = useState(null);
+  const [eligibility, setEligibility] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    getOfferings().then(o => {
-      setOfferings(o);
-      console.log('DEFAULT OFFERING:', JSON.stringify(o?.all?.default));
-    }).catch(console.error);
+    let cancelled = false;
+    (async () => {
+      try {
+        const fresh = await getOfferings();
+        if (cancelled) return;
+        setOfferings(fresh);
+
+        // Only the subscription plans can carry a trial, so only they are asked about.
+        const subscriptionIds = ["annual", "monthly"]
+          .map((key) => getPackage(fresh, key)?.product?.identifier)
+          .filter(Boolean);
+        if (!subscriptionIds.length) return;
+
+        const result = await getTrialEligibility(subscriptionIds);
+        if (!cancelled) setEligibility(result || {});
+      } catch (e) {
+        // No offerings or no eligibility answer simply means no trial is shown.
+      }
+    })();
+    return () => { cancelled = true; };
   }, []);
 
   const isDayTheme = theme === "day";
@@ -36,16 +67,38 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
   const annualDaily = formatDailyPrice(annualPrice, "annual");
   const monthlyDaily = formatDailyPrice(monthlyPrice, "monthly");
 
+  // The trial length is the store's own introductory offer, and it is only
+  // mentioned when the store also says this customer can still use it.
+  const trialDays = {
+    annual: getIntroTrialDays(offerings, "annual"),
+    monthly: getIntroTrialDays(offerings, "monthly"),
+  };
+  const hasTrial = (key) => {
+    if (!trialDays[key]) return false;
+    const productId = getPackage(offerings, key)?.product?.identifier;
+    return eligibility?.[productId]?.status === TRIAL_ELIGIBLE_STATUS;
+  };
+  const trialCaption = (key) => (hasTrial(key) ? `${trialDays[key]}-day free trial` : "");
+
+  const planKey =
+    selected === PRODUCT_IDS.lifetime ? "lifetime"
+      : selected === PRODUCT_IDS.monthly ? "monthly"
+        : "annual";
+
   const ctaLabel = () => {
     if (loading) return '· processing ·';
-    if (selected === PRODUCT_IDS.lifetime) return 'get always pause+ forever';
-    return 'start 7-day free trial';
+    if (planKey === 'lifetime') return `buy forever — ${lifetimePrice}`;
+    if (hasTrial(planKey)) return `start ${trialDays[planKey]}-day free trial`;
+    return `subscribe — ${getPlanPriceLabel(offerings, planKey)}`;
   };
 
   const disclosureText = () => {
-    if (selected === PRODUCT_IDS.lifetime) return 'one-time purchase · yours forever · no subscription.';
-    if (selected === PRODUCT_IDS.monthly) return '7 days free, then $4.99/month. auto-renews until canceled. cancel anytime in Settings.';
-    return '7 days free, then $29.99/year. auto-renews until canceled. cancel anytime in Settings.';
+    if (planKey === 'lifetime') return 'one-time purchase · yours forever · no subscription.';
+    const price = getPlanPriceLabel(offerings, planKey);
+    if (hasTrial(planKey)) {
+      return `${trialDays[planKey]} days free, then ${price}. auto-renews until canceled. cancel anytime in Settings.`;
+    }
+    return `auto-renews at ${price} until canceled. cancel anytime in Settings.`;
   };
 
   const handlePurchase = async () => {
@@ -53,29 +106,25 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
     setError(null);
     try {
       const freshOfferings = await getOfferings();
-      const defaultOffering = freshOfferings?.all?.default;
-      const packages = defaultOffering?.availablePackages;
+      const pkg = getPackage(freshOfferings, planKey);
 
-      console.log('packages:', JSON.stringify(packages?.map(p => ({
-        identifier: p.identifier,
-        productId: p.product?.identifier
-      }))));
+      if (!pkg) {
+        setError('this plan is not available right now. please try again in a moment.');
+        return;
+      }
 
-      const pkg = packages?.find(p => p.product?.identifier === selected);
-
-      console.log('selected:', selected);
-      console.log('found pkg:', pkg?.identifier);
-
-      if (!pkg) throw new Error('Package not found: ' + selected);
-
+      // Apple applies the introductory offer itself when this customer is eligible.
       await purchasePackage(pkg);
+
+      // All three plans grant the same entitlement, so one check covers them all.
       const isPro = await checkEntitlement();
-      if (isPro) onPurchase(selected);
-      else setError('purchase completed but entitlement not found.');
+      if (isPro) onPurchase(pkg.product.identifier);
+      else setError('purchase completed but premium is not active yet. try restore purchases.');
     } catch (e) {
-      console.log('PURCHASE ERROR:', JSON.stringify(e));
-      if (!e.userCancelled) {
-        setError('purchase failed. please try again.');
+      // Backing out of the App Store sheet is not a failure worth a message.
+      const cancelled = e?.userCancelled ?? e?.userInfo?.userCancelled;
+      if (!cancelled) {
+        setError('purchase could not be completed. please try again.');
       }
     } finally {
       setLoading(false);
@@ -327,7 +376,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             <TierPill
               id={PRODUCT_IDS.annual}
               label="yearly"
-              caption="7-day free trial"
+              caption={trialCaption("annual")}
               amount={annualDaily || annualPrice}
               unit="/day"
               secondary={`${annualPrice} billed annually`}
@@ -343,7 +392,7 @@ export default function PaywallScreen({ theme = "day", onClose, onPurchase, trig
             <TierPill
               id={PRODUCT_IDS.monthly}
               label="monthly"
-              caption="7-day free trial"
+              caption={trialCaption("monthly")}
               amount={monthlyDaily || monthlyPrice}
               unit="/day"
               secondary={`${monthlyPrice} billed monthly`}
