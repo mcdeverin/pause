@@ -137,6 +137,17 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
+      if (kind === "dropletsSingle") {
+        // The photo plane must remain in the WebGL transmission pass, but its
+        // rectangular bounds must not show over the page-wide CSS photograph.
+        // Clip only the glass sphere footprint in the final transparent canvas.
+        const sphereRadius = .88 * 1.18;
+        const distance = camera.position.z;
+        const radiusPx = (sphereRadius / (distance * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)))) * height / 2;
+        const mask = `radial-gradient(circle ${Math.ceil(radiusPx + 3)}px at center, black 97%, transparent 100%)`;
+        renderer.domElement.style.maskImage = mask;
+        renderer.domElement.style.webkitMaskImage = mask;
+      }
       if (backdropMesh) {
         const distance = camera.position.z - backdropMesh.position.z;
         const visibleHeight = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * distance;
