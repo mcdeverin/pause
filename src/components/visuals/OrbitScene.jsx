@@ -59,12 +59,12 @@ export default function OrbitScene({ accent = "#d90a3d", motion = 0.6, paused = 
     const step=Math.min(dt,.025),energy=.7+motion*1.25;
     for(const item of spheres){
      const p=item.mesh.position;
-     const force=p.clone().multiplyScalar(-3.2);
+     const force=p.clone().multiplyScalar(-1.45);
      force.z*=.8;
      const away=p.clone().sub(pointer),dist=away.length();
-     if(dist<2.7)force.addScaledVector(away.normalize(),(2.7-dist)*(touching?55:30)*energy);
+     if(dist<3.3)force.addScaledVector(away.normalize(),(3.3-dist)*(touching?78:46)*energy);
      item.velocity.addScaledVector(force,step*energy);
-     item.velocity.multiplyScalar(Math.exp(-1.05*step));
+     item.velocity.multiplyScalar(Math.exp(-.62*step));
     }
     spheres.forEach(item=>item.mesh.position.addScaledVector(item.velocity,step*energy));
     for(let pass=0;pass<3;pass++){
