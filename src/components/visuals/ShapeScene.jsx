@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 // Native Three.js scene: no React Three Fiber or Drei dependency.
 // Existing React Three Fiber prototypes remain in Git history.
-export default function ShapeScene({ kind, breathRef, motionRef }) {
+export default function ShapeScene({ kind, breathRef, motionRef, background = "photo", photoUrl }) {
   const host = useRef(null);
   useEffect(() => {
     const element = host.current;
@@ -33,6 +33,9 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
     const objects = [];
     const geometry = new THREE.SphereGeometry(1, 32, 24);
     const colors = ["#bdb1e9", "#d7d7f5", "#f6cbd9", "#badfe5"];
+    let backdropMesh = null;
+    let backdropTexture = null;
+    let backdropAspect = 1;
     let environment = null;
     let ribbonGeometry = null;
     let particleGeometry = null;
@@ -67,17 +70,48 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
       const count = droplets ? 140 : 46;
       if (droplets) { camera.fov = 60; camera.position.z = 3; camera.updateProjectionMatrix(); }
       const material = droplets
-        ? new THREE.MeshBasicMaterial({ color: "#ffffff", refractionRatio: .95 })
+        ? new THREE.MeshPhysicalMaterial({
+            color: 0xffffff, metalness: 0, roughness: 0.015,
+            transmission: 1, thickness: 1.2, ior: 1.33,
+            clearcoat: 1, clearcoatRoughness: 0.01,
+            transparent: false, depthWrite: true
+          })
         : null;
       if (droplets) {
-        const urls = ["px", "nx", "py", "ny", "pz", "nz"].map(side => `https://threejs.org/examples/textures/cube/Park3Med/${side}.jpg`);
-        new THREE.CubeTextureLoader().load(urls, texture => {
-          if (disposed) { texture.dispose(); return; }
-          texture.mapping = THREE.CubeRefractionMapping;
-          environment = texture;
-          material.envMap = texture;
-          material.needsUpdate = true;
-        }, undefined, error => console.warn("Droplet environment texture could not load", error));
+        // Three.js transmission samples the actual scene behind the glass.
+        // Never use the Park3Med cubemap: it cannot match the selected photo.
+        const canvas = document.createElement("canvas");
+        canvas.width = 1024; canvas.height = 1024;
+        const ctx = canvas.getContext("2d");
+        const gradient = ctx.createLinearGradient(0, 0, 0, 1024);
+        if (background === "dark") {
+          gradient.addColorStop(0, "#414956"); gradient.addColorStop(1, "#11151c");
+        } else {
+          gradient.addColorStop(0, "#fdfcfa"); gradient.addColorStop(1, "#e3ddef");
+        }
+        ctx.fillStyle = gradient; ctx.fillRect(0, 0, 1024, 1024);
+        backdropTexture = new THREE.CanvasTexture(canvas);
+        backdropTexture.colorSpace = THREE.SRGBColorSpace;
+        const planeMaterial = new THREE.MeshBasicMaterial({ map: backdropTexture, side: THREE.DoubleSide, toneMapped: false });
+        backdropMesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), planeMaterial);
+        backdropMesh.position.z = -8;
+        scene.add(backdropMesh);
+        if (background === "photo" && photoUrl) {
+          const image = new Image();
+          image.crossOrigin = "anonymous";
+          image.onload = () => {
+            if (disposed) return;
+            const width = image.naturalWidth, height = image.naturalHeight;
+            if (!width || !height) return;
+            // Draw a center-cropped, square cover image; UV cropping below
+            // adjusts it again to the card aspect ratio.
+            const scale = Math.max(1024 / width, 1024 / height);
+            ctx.drawImage(image, (1024 - width * scale) / 2, (1024 - height * scale) / 2, width * scale, height * scale);
+            backdropTexture.needsUpdate = true;
+          };
+          image.onerror = () => console.warn("Nature photo could not be loaded for glass refraction", photoUrl);
+          image.src = photoUrl;
+        }
       }
       for (let i = 0; i < count; i++) {
         const angle = i * 2.399963229728653;
@@ -98,6 +132,15 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
+      if (backdropMesh) {
+        const distance = camera.position.z - backdropMesh.position.z;
+        const visibleHeight = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * distance;
+        backdropMesh.scale.set(visibleHeight * camera.aspect, visibleHeight, 1);
+        const uv = backdropTexture;
+        if (camera.aspect > 1) { uv.repeat.set(1, 1 / camera.aspect); uv.offset.set(0, (1 - 1 / camera.aspect) / 2); }
+        else { uv.repeat.set(camera.aspect, 1); uv.offset.set((1 - camera.aspect) / 2, 0); }
+        uv.needsUpdate = true;
+      }
     };
     const observer = new ResizeObserver(resize);
     observer.observe(element);
@@ -153,9 +196,11 @@ export default function ShapeScene({ kind, breathRef, motionRef }) {
       particleGeometry?.dispose();
       particleMaterial?.dispose();
       environment?.dispose();
+      if (backdropMesh) { backdropMesh.geometry.dispose(); backdropMesh.material.dispose(); }
+      backdropTexture?.dispose();
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [kind, breathRef, motionRef]);
+  }, [kind, breathRef, motionRef, background, photoUrl]);
   return <div ref={host} style={{ width: "100%", height: "100%" }} />;
 }
