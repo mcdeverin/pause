@@ -3,8 +3,12 @@ import * as THREE from "three";
 
 // Original procedural blob study inspired by organic surface deformation.
 // Intentionally independent of the Blobmixer source and production visuals.
-export default function OrganicBlobScene({ breathRef, motionRef }) {
+export default function OrganicBlobScene({ breathRef, motionRef, color = "#e8d7f6" }) {
   const host = useRef(null);
+  const materialRef = useRef(null);
+  useEffect(() => {
+    if (materialRef.current) materialRef.current.color.set(color);
+  }, [color]);
   useEffect(() => {
     const element = host.current;
     if (!element) return;
@@ -46,6 +50,7 @@ export default function OrganicBlobScene({ breathRef, motionRef }) {
       iridescenceThicknessRange: [120, 430],
       side: THREE.FrontSide,
     });
+    materialRef.current = material;
     const uniforms = { time: { value: 0 }, breath: { value: .4 }, motion: { value: .6 } };
     material.onBeforeCompile = shader => {
       Object.assign(shader.uniforms, { uBlobTime: uniforms.time, uBlobBreath: uniforms.breath, uBlobMotion: uniforms.motion });
@@ -119,6 +124,7 @@ export default function OrganicBlobScene({ breathRef, motionRef }) {
       cancelAnimationFrame(frame);
       observer.disconnect();
       geometry.dispose();
+      materialRef.current = null;
       material.dispose();
       renderer.dispose();
       renderer.domElement.remove();
