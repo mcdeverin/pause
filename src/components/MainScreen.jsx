@@ -126,8 +126,9 @@ export default function MainScreen({
         </button>
       </div>
 
-      {/* Brand heading */}
-      <div style={{ margin: "14px 32px 0", textAlign: "center" }}>
+      {/* Brand heading — eased down from the wordmark so the space above it and
+          the space around the breathing circle read as evenly spread. */}
+      <div style={{ margin: "clamp(18px, 5.5vh, 56px) 32px 0", textAlign: "center" }}>
         <p
           style={{
             margin: 0,
