@@ -1,16 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 // Experimental 3D crystal. A rigid, faceted gemstone: no noise or liquid deformation.
 // Breathing changes scale; slow rotation and moving light reveal the facets.
 export const CRYSTAL_DEFAULTS = {
-  tint: "#d7d9f4",
-  edge: "#b0c4df",
-  facets: 1,
-  opacity: 0.94,
-  roughness: 0.12,
-  metalness: 0.12,
-  transmission: 0.22,
+  tint: "#f4f8ff",
+  edge: "#c5d4e4",
+  facets: 2,
+  opacity: 1,
+  roughness: 0.015,
+  metalness: 0,
+  transmission: 0.97,
+  dispersion: 0.16,
+  ior: 1.52,
+  thickness: 2.5,
+  edges: 0.06,
   light: 2.4,
   rotation: 0.25,
   size: 1,
@@ -23,6 +28,7 @@ export default function CrystalPrototype({
   animate = true,
   reducedMotion = false,
   breath,
+  dark = false,
 }) {
   const hostRef = useRef(null);
   const settingsRef = useRef(settings);
@@ -37,6 +43,7 @@ export default function CrystalPrototype({
     const host = hostRef.current;
     if (!host) return undefined;
     let renderer, observer, frame = 0, disposed = false;
+    let pmrem, room, environment;
     let geometry, edgesGeometry;
     const materials = [];
     const scene = new THREE.Scene();
@@ -50,6 +57,15 @@ export default function CrystalPrototype({
       renderer.setClearColor(0x000000, 0);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.4;
+      // A matching scene backdrop gives the transmission pass something to refract.
+      // The final app integration will need its actual background rendered here.
+      scene.background = new THREE.Color(dark ? "#252c39" : "#f0eef3");
+      pmrem = new THREE.PMREMGenerator(renderer);
+      room = new RoomEnvironment();
+      environment = pmrem.fromScene(room);
+      scene.environment = environment.texture;
       renderer.domElement.style.cssText =
         "display:block;width:100%;height:100%;pointer-events:none";
       host.appendChild(renderer.domElement);
@@ -62,19 +78,20 @@ export default function CrystalPrototype({
         metalness: CRYSTAL_DEFAULTS.metalness,
         roughness: CRYSTAL_DEFAULTS.roughness,
         transmission: CRYSTAL_DEFAULTS.transmission,
-        thickness: 1.1,
-        ior: 1.48,
+        thickness: CRYSTAL_DEFAULTS.thickness,
+        dispersion: CRYSTAL_DEFAULTS.dispersion,
+        ior: CRYSTAL_DEFAULTS.ior,
         clearcoat: 1,
         clearcoatRoughness: 0.06,
         flatShading: true,
-        transparent: true,
-        opacity: CRYSTAL_DEFAULTS.opacity,
+        transparent: false,
+        opacity: 1,
         side: THREE.FrontSide,
       });
       const edgeMaterial = new THREE.LineBasicMaterial({
         color: CRYSTAL_DEFAULTS.edge,
         transparent: true,
-        opacity: 0.22,
+        opacity: CRYSTAL_DEFAULTS.edges,
         depthWrite: false,
       });
       materials.push(shellMaterial, edgeMaterial);
@@ -91,7 +108,6 @@ export default function CrystalPrototype({
         edgesGeometry?.dispose();
         geometry = new THREE.IcosahedronGeometry(3.05, level);
         // Split faces for hard normals, giving each cut a separate reflection.
-        geometry = geometry.toNonIndexed ? geometry : geometry;
         geometry.computeVertexNormals();
         edgesGeometry = new THREE.EdgesGeometry(geometry, 17);
         shell.geometry = geometry;
@@ -134,10 +150,14 @@ export default function CrystalPrototype({
           rebuild(s.facets ?? 1);
           shellMaterial.color.set(s.tint ?? CRYSTAL_DEFAULTS.tint);
           edgeMaterial.color.set(s.edge ?? CRYSTAL_DEFAULTS.edge);
-          shellMaterial.opacity = s.opacity ?? 0.94;
-          shellMaterial.roughness = s.roughness ?? 0.12;
-          shellMaterial.metalness = s.metalness ?? 0.12;
-          shellMaterial.transmission = s.transmission ?? 0.22;
+          shellMaterial.opacity = 1;
+          shellMaterial.dispersion = s.dispersion ?? 0.16;
+          shellMaterial.ior = s.ior ?? 1.52;
+          shellMaterial.thickness = s.thickness ?? 2.5;
+          edgeMaterial.opacity = s.edges ?? 0.06;
+          shellMaterial.roughness = s.roughness ?? 0.015;
+          shellMaterial.metalness = s.metalness ?? 0;
+          shellMaterial.transmission = s.transmission ?? 0.97;
           key.intensity = s.light ?? 2.4;
           const b = THREE.MathUtils.clamp(breathRef.current ?? s.breath ?? 0.5, 0, 1);
           const scale = (s.size ?? 1) * (0.89 + (s.breathStrength ?? 0.19) * b);
@@ -163,6 +183,9 @@ export default function CrystalPrototype({
       geometry?.dispose();
       edgesGeometry?.dispose();
       materials.forEach((material) => material.dispose());
+      environment?.dispose();
+      room?.dispose();
+      pmrem?.dispose();
       renderer?.dispose();
       renderer?.domElement?.remove();
     };
