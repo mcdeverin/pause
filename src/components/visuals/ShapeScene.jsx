@@ -91,6 +91,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
               uViewport: { value: new THREE.Vector2(1, 1) },
               uCanvasOrigin: { value: new THREE.Vector2(0, 0) },
               uCanvasSize: { value: new THREE.Vector2(1, 1) },
+              uPixelRatio: { value: 1 },
               uSphereRadius: { value: 50 },
             },
             vertexShader: `
@@ -109,6 +110,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
               uniform vec2 uViewport;
               uniform vec2 uCanvasOrigin;
               uniform vec2 uCanvasSize;
+              uniform float uPixelRatio;
               uniform float uSphereRadius;
               varying vec3 vNormal;
               varying vec3 vView;
@@ -125,13 +127,14 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
 
                 // gl_FragCoord is local to the WebGL canvas. Convert to
                 // viewport coordinates to align with BackgroundLayer's image.
-                vec2 localTopLeft = vec2(gl_FragCoord.x, uCanvasSize.y - gl_FragCoord.y);
+                vec2 cssPixel = gl_FragCoord.xy / uPixelRatio;
+                vec2 localTopLeft = vec2(cssPixel.x, uCanvasSize.y - cssPixel.y);
                 vec2 globalTopLeft = uCanvasOrigin + localTopLeft;
                 vec2 photoUV = vec2(globalTopLeft.x / uViewport.x, 1.0 - globalTopLeft.y / uViewport.y);
 
                 // The interior bends what is ACTUALLY behind it. No skybox,
                 // fixed reflection photo, background plane or CSS square.
-                vec2 displacement = direction.xy * (uSphereRadius / uViewport) * 0.72;
+                vec2 displacement = direction.xy * (uSphereRadius / uViewport) * 0.22;
                 vec2 distortedUV = clamp(photoUV + vec2(displacement.x, -displacement.y), vec2(0.001), vec2(0.999));
 
                 if (uHasPhoto > 0.5) {
@@ -174,8 +177,8 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
           const fitScale = Math.max(vw / photoImage.naturalWidth, vh / photoImage.naturalHeight);
           const fitW = photoImage.naturalWidth * fitScale;
           const fitH = photoImage.naturalHeight * fitScale;
-          const offsetX = Math.max(-100, Math.min(100, Number(backgroundSettings.photoOffsetX) || 0));
-          const offsetY = Math.max(-100, Math.min(100, Number(backgroundSettings.photoOffsetY) || 0));
+          const offsetX = Math.max(-40, Math.min(40, Number(backgroundSettings.photoOffsetX) || 0));
+          const offsetY = Math.max(-40, Math.min(40, Number(backgroundSettings.photoOffsetY) || 0));
           // CSS object-position uses a fraction of the excess cover area.
           const x = (vw - fitW) * (0.5 + offsetX / 100);
           const y = (vh - fitH) * (0.5 + offsetY / 100);
@@ -184,11 +187,11 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
           context.translate(vw / 2, vh / 2);
           context.scale(zoom, zoom);
           context.translate(-vw / 2, -vh / 2);
-          const blur = Number(backgroundSettings.backgroundBlur) || 0;
+          const blur = Math.max(0, Math.min(100, Number(backgroundSettings.backgroundBlur) || 0)) * .24;
           context.filter = blur > 0 ? `blur(${Math.min(30, blur)}px)` : "none";
           context.drawImage(photoImage, x, y, fitW, fitH);
           context.restore();
-          const dim = Math.min(100, Math.max(0, Number(backgroundSettings.backgroundDim) || 0)) / 100;
+          const dim = Math.min(70, Math.max(0, Number(backgroundSettings.backgroundDim) || 0)) / 100;
           if (dim > 0) {
             context.fillStyle = `rgba(0,0,0,${dim})`;
             context.fillRect(0, 0, vw, vh);
@@ -284,6 +287,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
         uniforms.uViewport.value.set(photoSpace === "element" ? width : window.innerWidth, photoSpace === "element" ? height : window.innerHeight);
         uniforms.uCanvasOrigin.value.set(photoSpace === "element" ? 0 : rect.left, photoSpace === "element" ? 0 : rect.top);
         uniforms.uCanvasSize.value.set(width, height);
+        uniforms.uPixelRatio.value = renderer.getPixelRatio();
         redrawPhoto();
       }
       if (backdropMesh) {
