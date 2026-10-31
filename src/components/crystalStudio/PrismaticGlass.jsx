@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { breathScale } from "@/lib/breathExpansion";
 import { drawBackdrop, getBackdropPhoto, PRISMATIC_DEFAULTS } from "@/lib/crystalStudio";
 
 const RADIUS = 3.05;
@@ -295,7 +296,7 @@ export default function PrismaticGlass({
 
       const breath = THREE.MathUtils.clamp(sharedBreath?.current ?? 0.3, 0, 1);
       const gemScale = live.current.sessionBreathing
-        ? 1 + 0.35 * breath
+        ? breathScale(breath)
         : (s.size ?? 1) * (0.89 + (s.breathStrength ?? 0.19) * breath);
       gem.scale.setScalar(gemScale);
       if (live.current.transparentCanvas) {
