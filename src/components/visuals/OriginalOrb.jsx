@@ -26,7 +26,7 @@ export default function OriginalOrb({ breath = 0, options = {}, reducedMotion = 
           width: "100%",
           height: "100%",
           background: `radial-gradient(circle at 35% 35%, ${from} 0%, ${to} 100%)`,
-          borderRadius: "60% 40% 70% 30% / 50% 60% 40% 70%",
+          borderRadius: "60% 40% 70% 30% / 50% 50% 50% 50%",
           transform: `scale(${scale})`,
           transition: reducedMotion ? "none" : "transform 0.12s linear",
           animation: reducedMotion || !animate ? "none" : "liquidMorph 8s ease-in-out infinite",
