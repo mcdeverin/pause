@@ -34,17 +34,6 @@ export default function BreathingRing({ theme, options = {}, fill = 0, label, sh
         justifyContent: "center",
       }}
     >
-      {/* Soft inner atmosphere */}
-      <div
-        style={{
-          position: "absolute",
-          width: "72%",
-          height: "72%",
-          borderRadius: "50%",
-          background: `radial-gradient(circle at 40% 38%, ${colors.ringFrom}2E 0%, ${colors.ringTo}12 62%, transparent 78%)`,
-        }}
-      />
-
       <svg
         viewBox={`0 0 ${VIEWBOX} ${VIEWBOX}`}
         width="100%"
