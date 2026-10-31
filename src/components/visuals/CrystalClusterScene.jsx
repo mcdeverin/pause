@@ -6,7 +6,7 @@ function crystalGeometry(radius, height, sides = 6) {
   const positions = [];
   const add = (a,b,c) => positions.push(...a,...b,...c);
   const ring = (y,r,offset=0) => Array.from({length:sides},(_,i)=>{const a=i*Math.PI*2/sides+offset;return [Math.cos(a)*r,y,Math.sin(a)*r];});
-  const bottom=ring(-height*.42,radius*.64), middle=ring(-height*.16,radius), top=ring(height*.32,radius*.9);
+  const bottom=ring(-height*.45,radius*.78), middle=ring(-height*.22,radius), top=ring(height*.25,radius*.94);
   for(let i=0;i<sides;i++){const j=(i+1)%sides;add(bottom[i],middle[j],middle[i]);add(bottom[i],bottom[j],middle[j]);add(middle[i],middle[j],top[j]);add(middle[i],top[j],top[i]);add(top[i],top[j],[0,height*.58,0]);add([0,-height*.48,0],bottom[j],bottom[i]);}
   const geometry=new THREE.BufferGeometry();
   geometry.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));
@@ -31,16 +31,23 @@ export default function CrystalClusterScene({breathRef, background="photo", phot
     const key=new THREE.DirectionalLight(0xffffff,3.2);key.position.set(2,4,5);scene.add(key);
     const fill=new THREE.DirectionalLight(0xb4b8ff,2);fill.position.set(-3,-1,2);scene.add(fill);
     const group=new THREE.Group();scene.add(group);
-    const materials=["#f1e9ff","#d8eafa","#f7e4ef","#d5f3ee"].map(color=>new THREE.MeshPhysicalMaterial({color,metalness:0,roughness:.06,transmission:.86,thickness:1.1,ior:1.48,clearcoat:1,clearcoatRoughness:.04,flatShading:true,side:THREE.DoubleSide}));
+    const materials=[
+      {color:"#f4f5f2",transmission:.93,roughness:.085,thickness:1.4},
+      {color:"#e2e2df",transmission:.82,roughness:.13,thickness:1.8},
+      {color:"#725080",transmission:.52,roughness:.13,thickness:1.5},
+      {color:"#a17cac",transmission:.64,roughness:.1,thickness:1.3},
+      {color:"#4b315d",transmission:.38,roughness:.16,thickness:1.8},
+      {color:"#faf9f6",transmission:.96,roughness:.035,thickness:1.1}
+    ].map(p=>new THREE.MeshPhysicalMaterial({...p,metalness:0,ior:1.54,clearcoat:1,clearcoatRoughness:.06,flatShading:true,side:THREE.DoubleSide}));
     const pieces=[];
-    for(let i=0;i<19;i++){
-      const angle=i*2.39996323,ring=Math.sqrt((i+.3)/19);
-      const height=.85+(i%5)*.18,radius=.19+(i%4)*.035;
+    for(let i=0;i<28;i++){
+      const angle=i*2.39996323,ring=Math.sqrt((i+.3)/28);
+      const height=.64+(i%7)*.19+(i%9===0?.38:0),radius=.14+(i%5)*.031;
       const geometry=crystalGeometry(radius,height,5+(i%3));
       const mesh=new THREE.Mesh(geometry,materials[i%materials.length]);
-      const base=new THREE.Vector3(Math.cos(angle)*ring*.88,Math.sin(angle)*ring*.7,Math.sin(i*1.7)*.25);
+      const base=new THREE.Vector3(Math.cos(angle)*ring*.78,Math.sin(angle)*ring*.49,Math.sin(i*1.7)*.28);
       mesh.position.copy(base);
-      mesh.rotation.set(Math.sin(i*2)*.3,angle*.2,Math.cos(i*1.6)*.36);
+      mesh.rotation.set(Math.sin(i*2)*.16,angle*.27,Math.cos(i*1.6)*.21);
       group.add(mesh);pieces.push({mesh,base});
     }
     let backdrop=null;
