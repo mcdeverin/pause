@@ -17,22 +17,28 @@ const VISUAL_KEYS = [
   "photoOffsetY",
 ];
 
-// Returns a draft with every visual setting back at its default, for every
-// style — dropping all fine-tuning hands each one its own colours again. The
-// style the user is looking at stays selected, so restoring is something they
-// can watch happen on the Ring as easily as on the Original. It only ever
-// touches the unsaved draft, so nothing is stored until Save My Pause.
+// Returns a draft back at the app's original look: the first breathing visual
+// (the moving blue-and-green orb) with its own default colours, the off-white
+// Classic background and no adjustment on it. Any fine-tuning is dropped, so
+// every style hands its colours back. Interface appearance and the "During your
+// session" preferences are left alone, and only the unsaved draft changes — so
+// nothing is stored until Save My Pause.
 export function restoreVisualDefaults(draft) {
-  const restored = { ...draft, visualOptions: {} };
+  const restored = {
+    ...draft,
+    visual: DEFAULT_PREFERENCES.visual,
+    visualOptions: {},
+  };
   VISUAL_KEYS.forEach((key) => {
     restored[key] = DEFAULT_PREFERENCES[key];
   });
   return restored;
 }
 
-// True when every style's fine-tuning, the background and its adjustments all
-// already match their defaults.
+// True when the chosen visual, every style's fine-tuning, the background and its
+// adjustments all already match their defaults.
 export function visualSettingsAtDefaults(draft) {
+  if (draft.visual !== DEFAULT_PREFERENCES.visual) return false;
   if (VISUAL_KEYS.some((key) => draft[key] !== DEFAULT_PREFERENCES[key])) return false;
 
   return VISUAL_STYLES.every((style) => {
