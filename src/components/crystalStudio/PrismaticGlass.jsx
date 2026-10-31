@@ -268,8 +268,10 @@ export default function PrismaticGlass({
         resize();
       }
 
-      backdrop.visible = !live.current.transparentCanvas;
-      if (!live.current.transparentCanvas) applyBackdrop(nextMode, nextPhoto);
+      // Keep the real backdrop inside the transmission pass even in production.
+      // The canvas is circularly clipped below, so no rectangular studio panel appears.
+      backdrop.visible = true;
+      applyBackdrop(nextMode, nextPhoto);
       if (isPlaying && !reduce) elapsed += dt;
 
       setDetail(s.facets ?? PRISMATIC_DEFAULTS.facets);
@@ -291,7 +293,16 @@ export default function PrismaticGlass({
       fill.position.set(-Math.cos(angle) * 8, -3.5, -Math.sin(angle) * 8);
 
       const breath = THREE.MathUtils.clamp(sharedBreath?.current ?? 0.3, 0, 1);
-      gem.scale.setScalar((s.size ?? 1) * (0.89 + (s.breathStrength ?? 0.19) * breath));
+      const gemScale = (s.size ?? 1) * (0.89 + (s.breathStrength ?? 0.19) * breath);
+      gem.scale.setScalar(gemScale);
+      if (live.current.transparentCanvas) {
+        // The perspective-projected silhouette of the sphere; outside stays transparent.
+        const projectedRadius = Math.atan((RADIUS * gemScale * 1.015) / camera.position.z) /
+          THREE.MathUtils.degToRad(camera.fov / 2) * 50;
+        renderer.domElement.style.clipPath = `circle(${projectedRadius.toFixed(2)}% at 50% 50%)`;
+      } else {
+        renderer.domElement.style.clipPath = "none";
+      }
       gem.rotation.y = reduce ? 0.6 : elapsed * (s.rotation ?? PRISMATIC_DEFAULTS.rotation);
       gem.rotation.x = 0.16 + (reduce ? 0 : Math.sin(elapsed * 0.16) * 0.07);
       gem.position.y = reduce ? 0 : Math.sin(elapsed * 0.5) * (s.float ?? PRISMATIC_DEFAULTS.float);
