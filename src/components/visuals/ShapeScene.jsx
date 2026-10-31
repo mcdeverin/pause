@@ -93,6 +93,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
               uCanvasSize: { value: new THREE.Vector2(1, 1) },
               uPixelRatio: { value: 1 },
               uSphereRadius: { value: 50 },
+              uSphereCenter: { value: new THREE.Vector2(0, 0) },
             },
             vertexShader: `
               varying vec3 vNormal;
@@ -112,6 +113,7 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
               uniform vec2 uCanvasSize;
               uniform float uPixelRatio;
               uniform float uSphereRadius;
+              uniform vec2 uSphereCenter;
               varying vec3 vNormal;
               varying vec3 vView;
               void main() {
@@ -132,21 +134,24 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
                 vec2 globalTopLeft = uCanvasOrigin + localTopLeft;
                 vec2 photoUV = vec2(globalTopLeft.x / uViewport.x, 1.0 - globalTopLeft.y / uViewport.y);
 
-                // The interior bends what is ACTUALLY behind it. No skybox,
-                // fixed reflection photo, background plane or CSS square.
-                vec2 displacement = direction.xy * (uSphereRadius / uViewport) * 0.22;
+                // A water sphere behaves as a thick radial lens. Anchor the
+                // sampling to its projected center, not an arbitrary world-
+                // space refracted direction (which shifted the entire image).
+                vec2 radial = (globalTopLeft - uSphereCenter) / max(uSphereRadius, 1.0);
+                float radius = min(length(radial), 1.0);
+                float bend = 0.11 + 0.34 * pow(radius, 3.0);
+                vec2 displacement = -radial * bend * (uSphereRadius / uViewport);
                 vec2 distortedUV = clamp(photoUV + vec2(displacement.x, -displacement.y), vec2(0.001), vec2(0.999));
 
                 if (uHasPhoto > 0.5) {
                   vec3 behind = texture2D(uPhoto, distortedUV).rgb;
-                  // The app already draws the photo behind this canvas.
-                  // Blend refracted pixels over that real image rather than
-                  // replacing the entire sphere with an opaque, dark copy.
-                  // A small white lift simulates scattered light in water.
-                  vec3 glass = mix(behind, vec3(0.94, 0.97, 1.0), 0.12 + 0.16 * fresnel);
-                  glass = mix(glass, vec3(1.0), clamp(glint * 0.9 + glint2 * 0.55, 0.0, 1.0));
-                  float alpha = clamp(0.57 + 0.25 * fresnel + 0.16 * glint + 0.12 * glint2, 0.0, 0.96);
-                  gl_FragColor = vec4(glass, alpha);
+                  // Keep the center optically clear, add a restrained
+                  // dark water meniscus at the rim and tight white caustics.
+                  float edge = smoothstep(0.73, 1.0, radius);
+                  vec3 glass = behind * (1.0 - 0.21 * edge);
+                  glass += vec3(0.025, 0.035, 0.045) * (1.0 - edge);
+                  glass = mix(glass, vec3(1.0), clamp(glint * 0.86 + glint2 * 0.42, 0.0, 0.92));
+                  gl_FragColor = vec4(glass, 0.96);
                 } else {
                   // Solid/gradient backgrounds: leave the app canvas visible
                   // instead of inventing an internal photograph.
@@ -347,7 +352,20 @@ export default function ShapeScene({ kind, breathRef, motionRef, background = "p
         const rect = element.getBoundingClientRect();
         const uniforms = materialForScreenPhoto.uniforms;
         uniforms.uCanvasOrigin.value.set(photoSpace === "element" ? 0 : rect.left, photoSpace === "element" ? 0 : rect.top);
-        uniforms.uSphereRadius.value = (kind === "dropletsSingle" ? .88 : .16) * (.92 + b * .12) * (1 + b * .18) / (camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * element.clientHeight / 2;
+        const single = kind === "dropletsSingle";
+        const mesh = objects[0]?.mesh;
+        if (mesh) {
+          mesh.updateWorldMatrix(true, false);
+          const world = mesh.getWorldPosition(new THREE.Vector3());
+          const projected = world.clone().project(camera);
+          uniforms.uSphereCenter.value.set(
+            (photoSpace === "element" ? 0 : rect.left) + (projected.x * .5 + .5) * element.clientWidth,
+            (photoSpace === "element" ? 0 : rect.top) + (-projected.y * .5 + .5) * element.clientHeight
+          );
+          const radiusWorld = single ? .88 : mesh.scale.x * .16;
+          const distance = Math.max(.1, camera.position.z - world.z);
+          uniforms.uSphereRadius.value = radiusWorld / (distance * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * element.clientHeight / 2;
+        }
       }
       renderer.render(scene, camera);
       frame = requestAnimationFrame(animate);
