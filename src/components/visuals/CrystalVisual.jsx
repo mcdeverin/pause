@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import PrismaticGlass from "../crystalStudio/PrismaticGlass";
 import { PRISMATIC_DEFAULTS } from "../../lib/crystalStudio";
+import { isPhotoBackground } from "../../lib/design";
 
 // The Crystal choice uses the exact Prismatic Glass renderer from Crystal Comparison.
 // The existing breathing clock remains the single source of breath timing.
@@ -14,12 +15,13 @@ export default function CrystalVisual({
 }) {
   const breathRef = useRef(breath);
   breathRef.current = breath;
+  const selectedPhoto = isPhotoBackground(backgroundSettings.background) ? photo : null;
   return (
     <PrismaticGlass
       settings={PRISMATIC_DEFAULTS}
       breathRef={breathRef}
-      mode={photo ? "photo" : theme === "night" ? "dark" : "light"}
-      photo={photo}
+      mode={selectedPhoto ? "photo" : theme === "night" ? "dark" : "light"}
+      photo={selectedPhoto}
       playing={animate}
       reducedMotion={reducedMotion}
       quality="balanced"
