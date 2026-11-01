@@ -60,3 +60,52 @@ export default function NeonInfusionScene(){
         m.visited[q]=m.stamp;m.queue.push(q);
        }
       }
+
+     }
+    }
+    for(let k=0;k<ink.length;k++){
+     const i=k*4,amount=ink[k],r=source[i],g=source[i+1],b=source[i+2];
+     if(amount>.001){
+      const hex=COLORS[m.hue[k]],cr=parseInt(hex.slice(1,3),16),cg=parseInt(hex.slice(3,5),16),cb=parseInt(hex.slice(5,7),16);
+      const luminance=(r*.25+g*.6+b*.15)/255;
+      const shade=.38+luminance*.9;
+      const mix=amount*.95;
+      dest[i]=r*(1-mix)+Math.min(255,cr*shade)*mix;
+      dest[i+1]=g*(1-mix)+Math.min(255,cg*shade)*mix;
+      dest[i+2]=b*(1-mix)+Math.min(255,cb*shade)*mix;
+     }else{dest[i]=r;dest[i+1]=g;dest[i+2]=b;}
+     dest[i+3]=255;
+    }
+    ctx.putImageData(m.output,0,0);
+   }
+   raf.current=requestAnimationFrame(frame);
+  };raf.current=requestAnimationFrame(frame);return()=>cancelAnimationFrame(raf.current);
+ },[]);
+ const coords=e=>{const r=canvas.current.getBoundingClientRect();return {x:Math.max(0,Math.min(W-1,Math.floor((e.clientX-r.left)*W/r.width))),y:Math.max(0,Math.min(H-1,Math.floor((e.clientY-r.top)*H/r.height)))};};
+ const down=e=>{
+  const m=model.current;if(!m)return;
+  const p=coords(e);pointer.current={...p,down:true,erase:eraseRef.current};
+  e.currentTarget.setPointerCapture(e.pointerId);
+  if(!eraseRef.current){
+   m.stamp=(m.stamp%65534)+1;m.queue=[];m.head=0;
+   m.activeColor=Math.max(0,COLORS.indexOf(colorRef.current));
+   const seed=p.y*W+p.x;if(!m.mask[seed])return;
+   const i=seed*4;m.seedRGB=[m.original.data[i],m.original.data[i+1],m.original.data[i+2]];
+   m.queue.push(seed);m.visited[seed]=m.stamp;
+  }
+ };
+ const move=e=>{if(!pointer.current.down)return;Object.assign(pointer.current,coords(e));};
+ const stop=()=>{pointer.current.down=false;};
+ const reset=()=>{if(model.current){model.current.ink.fill(0);model.current.queue=[];model.current.head=0;}};
+ return <div style={{height:"100%",width:"100%",position:"relative",background:"#334b3d"}}>
+  <canvas ref={canvas} width={W} height={H} onPointerDown={down} onPointerMove={move} onPointerUp={stop} onPointerCancel={stop} style={{height:"100%",width:"100%",objectFit:"cover",touchAction:"none",display:"block",cursor:"crosshair"}}/>
+  {!ready&&<div style={{position:"absolute",inset:0,display:"grid",placeItems:"center",color:"white"}}>Loading landscape…</div>}
+  <div style={{position:"absolute",bottom:15,left:15,right:15,display:"flex",alignItems:"center",flexWrap:"wrap",gap:8,padding:10,background:"#ffffffea",borderRadius:16}}>
+   <button onClick={()=>setErase(false)} style={{border:!erase?"2px solid #222":"1px solid #bbb",borderRadius:12,padding:"7px 12px",background:"white"}}>Hold to infuse</button>
+   <button onClick={()=>setErase(true)} style={{border:erase?"2px solid #222":"1px solid #bbb",borderRadius:12,padding:"7px 12px",background:"white"}}>Swipe to erase</button>
+   {COLORS.map(c=><button key={c} aria-label={"Neon "+c} onClick={()=>{setColor(c);setErase(false);}} style={{height:28,width:28,borderRadius:20,background:c,border:color===c?"3px solid #242424":"2px solid white"}}/>)}
+   <button onClick={reset} style={{marginLeft:"auto",padding:"7px 12px",borderRadius:12,border:"1px solid #bbb",background:"white"}}>Reset</button>
+  </div>
+  <select aria-label="Landscape" value={photo} onChange={e=>setPhoto(+e.target.value)} style={{position:"absolute",top:68,right:15,padding:8,borderRadius:10,border:0,background:"#ffffffe8"}}>{BACKDROP_PHOTOS.map((p,i)=><option key={p.id} value={i}>{p.label||p.id}</option>)}</select>
+ </div>;
+}
