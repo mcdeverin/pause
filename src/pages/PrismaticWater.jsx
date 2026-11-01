@@ -1,3 +1,4 @@
+import ExpandPill from "@/components/visuals/ExpandPill";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import PrismaticWaterScene from "@/components/visuals/PrismaticWaterScene";
@@ -13,7 +14,7 @@ export default function PrismaticWater(){
  {!expanded&&<><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}><Link to="/" style={{color:"#645e66",textDecoration:"none",fontSize:14}}>← Back to Always Pause</Link><span style={{fontSize:11,letterSpacing:".16em",fontWeight:700,color:"#8d8187"}}>SENSORY</span></div><h1 style={{fontSize:"clamp(30px,5vw,46px)",margin:"0 0 6px"}}>Prismatic Water</h1><p style={{fontSize:14,color:"#80777d",margin:"0 0 22px"}}>Glide your finger or cursor across the shimmering water.</p></>}
  <div style={{position:"relative",height:expanded?"100dvh":"min(68dvh,690px)",minHeight:expanded?0:340,borderRadius:expanded?0:22,overflow:"hidden"}}>
  <PrismaticWaterScene strength={strength} softness={softness} motion={motion} palette={palette} paused={false}/>
- <button type="button" onClick={()=>setExpanded(v=>!v)} aria-label={expanded?"Exit full screen":"Expand Prismatic Water to full screen"} title={expanded?"Exit full screen":"Full screen"} style={{position:"absolute",top:16,right:16,zIndex:5,width:42,height:42,display:"grid",placeItems:"center",border:0,borderRadius:14,background:"#ffffffd9",color:"#353036",cursor:"pointer",boxShadow:"0 2px 12px #00000012"}}><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square" aria-hidden="true"><path d={expanded?"M21 13V3h10 M3 21v10h10":"M21 3v10h10 M3 31V21h10"}/></svg></button>
+ <ExpandPill expanded={expanded} onClick={()=>setExpanded(v=>!v)} label="Prismatic Water" />
  </div>
  </div></main>;
 }
