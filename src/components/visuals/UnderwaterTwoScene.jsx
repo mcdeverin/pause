@@ -15,7 +15,7 @@ function Fish({position=[0,0,0],scale=1,offset=0,color="#65b6d2"}) {
  <mesh position={[-.1,-.45,0]} rotation={[0,0,Math.PI]}><coneGeometry args={[.32,.7,3]}/><meshPhysicalMaterial color="#8dd4dd" side={THREE.DoubleSide} transparent opacity={.7}/></mesh>
  </group>;
 }
-function Plankton(){const ref=useRef();const coords=useMemo(()=>{const a=new Float32Array(450*3);for(let i=0;i<450;i++){a[i*3]=(Math.random()-.5)*25;a[i*3+1]=(Math.random()-.5)*15;a[i*3+2]=(Math.random()-.5)*22}return a},[]);useFrame(({clock})=>{if(ref.current)ref.current.rotation.y=clock.elapsedTime*.012});return <points ref={ref}><bufferGeometry><bufferAttribute attach="attributes-position" args={[coords,3]}/></bufferGeometry><pointsMaterial color="#b2e9e5" size={.045} transparent opacity={.5} sizeAttenuation depthWrite={false}/></points>}
+function Plankton(){const ref=useRef();const coords=useMemo(()=>{const a=new Float32Array(450*3);for(let i=0;i<450;i++){a[i*3]=(Math.random()-.5)*25;a[i*3+1]=(Math.random()-.5)*15;a[i*3+2]=(Math.random()-.5)*22}return a},[]);useFrame(({clock})=>{if(ref.current)ref.current.rotation.y=clock.elapsedTime*.012});return <points ref={ref}><bufferGeometry><bufferAttribute attach="attributes-position" args={[coords,3]} count={coords.length/3} /></bufferGeometry><pointsMaterial color="#b2e9e5" size={.045} transparent opacity={.5} sizeAttenuation depthWrite={false}/></points>}
 export default function UnderwaterTwoScene(){return <div style={{height:"100%",width:"100%",background:"#062936",position:"relative"}}>
  <Canvas camera={{position:[0,0,8],fov:48}} dpr={[1,1.8]}>
  <color attach="background" args={["#062936"]}/><fog attach="fog" args={["#062936",7,25]}/>
