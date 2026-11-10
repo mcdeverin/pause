@@ -35,6 +35,18 @@ export default function MainScreen({
   onShowShortcuts,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [tourStep, setTourStep] = useState(() => {
+    try { return localStorage.getItem("alwaysPauseTourPendingV1") === "true" ? 0 : -1; } catch { return -1; }
+  });
+  const finishTour = () => {
+    try { localStorage.removeItem("alwaysPauseTourPendingV1"); localStorage.setItem("alwaysPauseTourSeenV1", "true"); } catch { /* optional tour */ }
+    setTourStep(-1);
+    setMenuOpen(false);
+  };
+  const nextTour = () => {
+    if (tourStep === 0) { setMenuOpen(true); setTourStep(1); }
+    else finishTour();
+  };
   // The orb stays dominant: it scales with the viewport, and shrinks further
   // when the moment shortcuts share the screen.
   const measureOrb = useCallback(() => {
@@ -298,6 +310,19 @@ export default function MainScreen({
           />
         )}
       </AnimatePresence>
+      {tourStep >= 0 && (
+        <div role="dialog" aria-modal="true" aria-label="Quick tour" style={{ position: "fixed", inset: 0, zIndex: 90, background: "rgba(6,23,28,.28)", pointerEvents: "auto" }}>
+          <div style={{ position: "absolute", top: tourStep === 0 ? "calc(env(safe-area-inset-top, 44px) + 65px)" : "48%", right: 18, width: "min(300px, calc(100vw - 36px))", borderRadius: 20, background: "#f7f3ed", color: "#203b3c", padding: 20, boxShadow: "0 10px 40px rgba(0,0,0,.3)" }}>
+            <div style={{ fontSize: 23, lineHeight: 1, textAlign: "right", marginBottom: 8 }}>{tourStep === 0 ? "↗" : "→"}</div>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 23, marginBottom: 8 }}>{tourStep === 0 ? "Explore at your pace." : "Make it yours."}</div>
+            <p style={{ fontSize: 14, lineHeight: 1.5, margin: "0 0 16px" }}>{tourStep === 0 ? "The menu is where you'll find breathing techniques and sensory experiences." : "Choose Personalize Pause in the menu to change your scenery, breathing visual, and voice guidance."}</p>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+              <button type="button" onClick={finishTour} style={{ border: 0, background: "none", color: "#496064", cursor: "pointer" }}>Skip tour</button>
+              <button type="button" onClick={nextTour} style={{ border: 0, background: "#244749", color: "white", padding: "11px 19px", borderRadius: 25, cursor: "pointer" }}>{tourStep === 0 ? "Show me" : "Got it"}</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
