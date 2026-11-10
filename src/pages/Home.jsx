@@ -19,8 +19,10 @@ import MomentsScreen from "../components/moments/MomentsScreen";
 import { track } from "../lib/analytics";
 import { describeSavedBackground, describeVisual } from "../lib/analyticsProps";
 import { isFreeTechnique } from "../lib/access";
+import { loadNarrationManifest } from "../lib/narration";
 
 export default function Home() {
+  useEffect(() => { void loadNarrationManifest(); }, []);
   const [mode, setMode] = useState("idle");
   const [sessionVoice, setSessionVoice] = useState(false);
   const [preparingPause, setPreparingPause] = useState(false);
