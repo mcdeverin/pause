@@ -81,6 +81,9 @@ export default function MainScreen({
     >
       <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
 
+      {/* Soft top scrim protects white copy over bright nature photographs. */}
+      {photoBackground && <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: "44%", background: "linear-gradient(to bottom, rgba(9,27,35,.46), rgba(9,27,35,.25) 65%, transparent)", pointerEvents: "none", zIndex: 0 }} />}
+
       {/* Header: wordmark + menu */}
       <div
         style={{
@@ -163,8 +166,8 @@ export default function MainScreen({
             fontSize: "15px",
             fontWeight: 400,
             letterSpacing: "0.005em",
-            color: ink.secondary,
-            textShadow: ink.shadow,
+            color: photoBackground ? "#FFFFFF" : ink.secondary,
+            textShadow: photoBackground ? "0 2px 12px rgba(0,0,0,.75), 0 1px 3px rgba(0,0,0,.6)" : ink.shadow,
             lineHeight: 1.45,
           }}
         >
