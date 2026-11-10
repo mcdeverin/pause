@@ -32,6 +32,7 @@ export const DEFAULT_PREFERENCES = {
   showTimer: true,
   showInstructions: true,
   voiceGuide: false,
+  voiceId: "quiet",
   showShortcuts: false,
   saveMoments: false,
   // Whether the one-time introductory Plus offer has been shown. Kept apart from
