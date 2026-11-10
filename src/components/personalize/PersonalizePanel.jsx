@@ -16,6 +16,7 @@ import { restoreVisualDefaults, visualSettingsAtDefaults } from "../../lib/perso
 import { isGalleryPhotoId } from "../../lib/backgroundGallery";
 import { resolveBackgroundImage } from "../../lib/backgroundImage";
 import { track } from "../../lib/analytics";
+import { VOICES } from "../../lib/voices";
 
 function SectionLabel({ children, theme, isFirst }) {
   const colors = getColors(theme);
@@ -461,15 +462,15 @@ export default function PersonalizePanel({
             })}
           </div>
 
-          {/* Voice selection — audio clips can be added without changing this saved preference. */}
           <SectionLabel theme={draftTheme}>Voice guidance</SectionLabel>
-          <p style={{ color: colors.secondary, fontSize: 13, margin: "0 0 12px" }}>Choose how your breathing cues sound. More voices are coming.</p>
+          <p style={{ color: colors.secondary, fontSize: 13, margin: "0 0 12px" }}>Choose your preferred voice for future guided sessions. ElevenLabs recordings are being prepared; voice playback is not available yet.</p>
           <div role="group" aria-label="Choose voice" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-            {[{ id: "default", label: "Natural voice" }, { id: "quiet", label: "No voice" }].map((option) => (
-              <button type="button" key={option.id} aria-pressed={(draft.voiceId || "quiet") === option.id}
-                onClick={() => update("voiceId", option.id)}
-                style={{ border: "1px solid " + colors.border, background: (draft.voiceId || "quiet") === option.id ? colors.accentSoft : colors.track, color: colors.text, borderRadius: 14, minHeight: 48, cursor: "pointer", fontSize: 14, fontWeight: 600 }}>
-                {option.label}
+            <button type="button" aria-pressed={(draft.voiceId || "quiet") === "quiet"} onClick={() => update("voiceId", "quiet")}
+              style={{ border: "1px solid " + colors.border, background: (draft.voiceId || "quiet") === "quiet" ? colors.accentSoft : colors.track, color: colors.text, borderRadius: 14, minHeight: 48, cursor: "pointer", fontSize: 14, fontWeight: 600 }}>Quiet guidance</button>
+            {VOICES.map((voice) => (
+              <button type="button" key={voice.id} aria-pressed={draft.voiceId === voice.id} onClick={() => update("voiceId", voice.id)}
+                style={{ border: "1px solid " + colors.border, background: draft.voiceId === voice.id ? colors.accentSoft : colors.track, color: colors.text, borderRadius: 14, minHeight: 58, cursor: "pointer", fontSize: 14, fontWeight: 600 }}>
+                {voice.name}<span style={{ display: "block", fontSize: 11, fontWeight: 400, opacity: .7 }}>{voice.accent} · {voice.tone}</span>
               </button>
             ))}
           </div>
