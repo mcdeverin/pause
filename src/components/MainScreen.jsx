@@ -96,9 +96,9 @@ export default function MainScreen({
           style={{
             margin: 0,
             fontFamily: FONT,
-            fontSize: "21px",
-            fontWeight: 800,
-            letterSpacing: "0.01em",
+            fontSize: "22px",
+            fontWeight: 700,
+            letterSpacing: "-0.035em",
             color: ink.text,
             textShadow: ink.shadow,
             lineHeight: 1,
@@ -137,7 +137,7 @@ export default function MainScreen({
           on mobile web browsers with shorter usable viewports. */}
       <div
         style={{
-          margin: "clamp(18px, 4vh, 44px) 32px 0",
+          margin: "clamp(20px, 4vh, 44px) 24px 0",
           textAlign: "center",
           flexShrink: 0,
         }}
@@ -145,10 +145,10 @@ export default function MainScreen({
         <p
           style={{
             margin: 0,
-            fontFamily: FONT,
-            fontSize: "23px",
-            fontWeight: 800,
-            letterSpacing: "-0.01em",
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontSize: "clamp(36px, 7vw, 52px)",
+            fontWeight: 400,
+            letterSpacing: "-0.035em",
             color: ink.text,
             textShadow: ink.shadow,
             lineHeight: 1.25,
@@ -161,7 +161,7 @@ export default function MainScreen({
             margin: "6px 0 0",
             fontFamily: FONT,
             fontSize: "15px",
-            fontWeight: 500,
+            fontWeight: 400,
             letterSpacing: "0.005em",
             color: ink.secondary,
             textShadow: ink.shadow,
@@ -222,9 +222,9 @@ export default function MainScreen({
             border: "none",
             cursor: "pointer",
             fontFamily: FONT,
-            fontSize: "17px",
-            fontWeight: 700,
-            letterSpacing: "0.01em",
+            fontSize: "15px",
+            fontWeight: 500,
+            letterSpacing: "0.015em",
             color: ink.text,
             textShadow: ink.shadow,
           }}
