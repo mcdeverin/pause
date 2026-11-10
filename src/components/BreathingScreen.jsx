@@ -8,6 +8,7 @@ import { FONT, getColors, isPhotoBackground } from "../lib/design";
 import { getBreathingInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
+import { narrationCueForPhase } from "../lib/narration";
 import { usePhotoLightness } from "../hooks/usePhotoLightness";
 
 const TOTAL_CYCLES = 4;
@@ -149,7 +150,8 @@ export default function BreathingScreen({
     if (phaseSequence !== spokenPhaseRef.current) {
       spokenPhaseRef.current = phaseSequence;
       const raw = String(currentLabel || "").toLowerCase();
-      const cue = raw.includes("inhale") ? "Breathe in" : raw.includes("exhale") ? "Breathe out" : raw.includes("hold") ? "Hold gently" : raw.includes("hum") ? "Hum softly" : currentLabel;
+      const scriptedCue = narrationCueForPhase(activeTechnique, clock.index, Math.floor(phaseSequence / activePhases.length));
+      const cue = scriptedCue || (raw.includes("inhale") ? "Breathe in" : raw.includes("exhale") ? "Breathe out" : raw.includes("hold") ? "Hold gently" : raw.includes("hum") ? "Hum softly" : currentLabel);
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(cue);
       utterance.rate = 0.85;
@@ -157,7 +159,7 @@ export default function BreathingScreen({
       window.speechSynthesis.speak(utterance);
     }
     return undefined;
-  }, [voiceGuide, phaseSequence, currentLabel]);
+  }, [voiceGuide, phaseSequence, currentLabel, activeTechnique, clock.index, activePhases.length]);
 
   useEffect(() => () => {
     if (voiceGuide && typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
