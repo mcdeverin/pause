@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Leaf, Crosshair, Moon, Sun, Volume2, VolumeX, ArrowLeft } from "lucide-react";
+import { Leaf, Crosshair, Moon, Sun, ArrowLeft } from "lucide-react";
 import BackgroundLayer from "./BackgroundLayer";
 import { MOMENTS } from "../lib/moments";
 
@@ -8,7 +8,7 @@ const ICONS = { calm: Leaf, focus: Crosshair, wind_down: Moon, reset: Sun };
 
 export default function PauseSetup({ theme, backgroundSettings, photo, onBack, onBegin, busy = false, voiceAvailable = true, defaultVoice = false }) {
   const [moment, setMoment] = useState(null);
-  const [voice, setVoice] = useState(defaultVoice);
+  const [voice, setVoice] = useState(typeof defaultVoice === "string" ? defaultVoice : defaultVoice ? "full" : "none");
   const selected = MOMENTS.find((entry) => entry.id === moment);
   return (
     <motion.main className="screen-fit" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -34,15 +34,23 @@ export default function PauseSetup({ theme, backgroundSettings, photo, onBack, o
           ); })}
         </div>
         <div style={{ textAlign: "center", marginTop: 8, fontSize: 14, fontWeight: 600 }}>How would you like to be guided?</div>
-        <div role="group" aria-label="Guidance preference" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          <button type="button" aria-pressed={voice} disabled={!voiceAvailable} onClick={() => setVoice(true)}
-            style={{ ...glass, opacity: voiceAvailable ? 1 : .55, background: voice ? "rgba(255,255,255,.28)" : glass.background, borderColor: voice ? "#fff" : "rgba(255,255,255,.5)", minHeight: 72, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 5 }}>
-            <Volume2 size={20} />Guided by voice
-          </button>
-          <button type="button" aria-pressed={!voice} onClick={() => setVoice(false)}
-            style={{ ...glass, background: !voice ? "rgba(255,255,255,.28)" : glass.background, borderColor: !voice ? "#fff" : "rgba(255,255,255,.5)", minHeight: 72, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 5 }}>
-            <VolumeX size={20} />Quiet guidance
-          </button>
+        <div role="group" aria-label="Guidance preference" style={{ display: "grid", gridTemplateColumns: "1fr", gap: 9 }}>
+          {[
+            { id: "full", title: "Fully Guided", description: "Voice guidance for every breathing phase." },
+            { id: "partial", title: "Lightly Guided", description: "Occasional voice guidance throughout your session." },
+            { id: "none", title: "No Voice Guidance", description: "Follow the orb without spoken instructions." },
+          ].map((option) => {
+            const active = voice === option.id;
+            const disabled = !voiceAvailable && option.id !== "none";
+            return (
+              <button key={option.id} type="button" aria-pressed={active} disabled={disabled}
+                onClick={() => setVoice(option.id)}
+                style={{ ...glass, opacity: disabled ? .55 : 1, background: active ? "rgba(255,255,255,.28)" : glass.background, borderColor: active ? "#fff" : "rgba(255,255,255,.5)", minHeight: 65, padding: "12px 18px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: 4, textAlign: "left" }}>
+                <span style={{ fontWeight: 600 }}>{option.title}</span>
+                <span style={{ fontSize: 12, opacity: .88 }}>{option.description}</span>
+              </button>
+            );
+          })}
         </div>
         {!voiceAvailable && <p style={{ textAlign: "center", fontSize: 12, margin: 0 }}>Voice cues aren't available on this device yet.</p>}
       </div>
