@@ -133,19 +133,21 @@ export default function BreathingScreen({
   // so the two always agree instead of the bar showing whole-session progress.
   const { label: currentLabel, breath, phaseProgress, phaseRemaining, timeRemaining } = clock;
 
+  const phaseSequence = Math.floor(clock.elapsed / Math.max(1, activePhases.reduce((a, b) => a + b, 0))) * activePhases.length + clock.index;
+
   // Haptics fire on phase changes, from the same clock as the visuals.
   useEffect(() => {
-    if (clock.phaseIndex === hapticPhaseRef.current) return;
-    hapticPhaseRef.current = clock.phaseIndex;
+    if (phaseSequence === hapticPhaseRef.current) return;
+    hapticPhaseRef.current = phaseSequence;
     triggerHaptic(currentLabel);
-  }, [clock.phaseIndex, currentLabel]);
+  }, [phaseSequence, currentLabel]);
 
   // Spoken phase cues follow the same clock as the animation and haptics.
   // Browser/device voices vary; no recording or external audio service is used.
   useEffect(() => {
     if (!voiceGuide || typeof window === "undefined" || !("speechSynthesis" in window)) return undefined;
-    if (clock.phaseIndex !== spokenPhaseRef.current) {
-      spokenPhaseRef.current = clock.phaseIndex;
+    if (phaseSequence !== spokenPhaseRef.current) {
+      spokenPhaseRef.current = phaseSequence;
       const raw = String(currentLabel || "").toLowerCase();
       const cue = raw.includes("inhale") ? "Breathe in" : raw.includes("exhale") ? "Breathe out" : raw.includes("hold") ? "Hold gently" : raw.includes("hum") ? "Hum softly" : currentLabel;
       window.speechSynthesis.cancel();
@@ -155,7 +157,7 @@ export default function BreathingScreen({
       window.speechSynthesis.speak(utterance);
     }
     return undefined;
-  }, [voiceGuide, clock.phaseIndex, currentLabel]);
+  }, [voiceGuide, phaseSequence, currentLabel]);
 
   useEffect(() => () => {
     if (voiceGuide && typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
