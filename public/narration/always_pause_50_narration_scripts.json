@@ -1,0 +1,2008 @@
+{
+  "version": "draft-1",
+  "source": "Technique_export (3).csv",
+  "note": "Authoring drafts; audio duration, clinical appropriateness, and actual device sync are not yet validated. Never stretch the breathing clock to fit audio.",
+  "techniques": [
+    {
+      "technique_id": "69ca561206566afe944a446e",
+      "technique_name": "4-4-4 Triangle",
+      "category": "Focus",
+      "difficulty": "Beginner",
+      "intro_text": "We will move through three even parts: breathe in, pause, and breathe out.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 8000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your attention. Carry this steadiness into what comes next.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a446d",
+      "technique_name": "Panic Reset Breath",
+      "category": "Stress Relief",
+      "difficulty": "Beginner",
+      "intro_text": "You can take this one breath at a time. Keep each breath comfortable and unforced.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 6000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "long exhale",
+          "start_ms": 2000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice the ground beneath you. You can return to this breath whenever you need.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a446c",
+      "technique_name": "Morning Activation Breath",
+      "category": "Energy",
+      "difficulty": "Beginner",
+      "intro_text": "Welcome to a short, steady rhythm to begin your day.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 8000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 2000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 4000,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 3,
+          "phase_label": "hold",
+          "start_ms": 6000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your energy. Return to your natural breathing whenever you are ready.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a446b",
+      "technique_name": "Vagal Toning Breath",
+      "category": "Energy",
+      "difficulty": "Intermediate",
+      "intro_text": "Follow a smooth breath in and a longer breath out, without straining.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 4000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "hold",
+          "start_ms": 10000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your energy. Return to your natural breathing whenever you are ready.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a446a",
+      "technique_name": "Power Breathing",
+      "category": "Advanced",
+      "difficulty": "Advanced",
+      "intro_text": "This is a brisk breathing pattern. Stay seated, and stop if you feel lightheaded.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 6000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "sharp inhale",
+          "start_ms": 0,
+          "duration_ms": 2000,
+          "spoken_text": "Quick breath in.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 2000,
+          "duration_ms": 1000,
+          "spoken_text": "Hold.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "sharp exhale",
+          "start_ms": 3000,
+          "duration_ms": 2000,
+          "spoken_text": "Quick breath out.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 3,
+          "phase_label": "hold",
+          "start_ms": 5000,
+          "duration_ms": 1000,
+          "spoken_text": "Hold.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Return to a comfortable natural breath. Rest before standing or moving on.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4469",
+      "technique_name": "Slow Deep Breathing",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Let your breath become slow and easy, without forcing its depth.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 6000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 6000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4468",
+      "technique_name": "Mindful Breath Awareness",
+      "category": "Focus",
+      "difficulty": "Beginner",
+      "intro_text": "Notice the sensation of breathing, just as it is.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 8000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 4000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your attention. Carry this steadiness into what comes next.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4467",
+      "technique_name": "Anti-Anxiety Breath",
+      "category": "Stress Relief",
+      "difficulty": "Beginner",
+      "intro_text": "We will make room for a gentle inhale and a longer release.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 14000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 6000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 3,
+          "phase_label": "hold",
+          "start_ms": 12000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice the ground beneath you. You can return to this breath whenever you need.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4466",
+      "technique_name": "Counting Breath",
+      "category": "Focus",
+      "difficulty": "Beginner",
+      "intro_text": "Follow the count at an easy pace, letting the breath remain comfortable.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 10000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale counting to 5",
+          "start_ms": 0,
+          "duration_ms": 5000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale counting to 5",
+          "start_ms": 5000,
+          "duration_ms": 5000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your attention. Carry this steadiness into what comes next.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4465",
+      "technique_name": "3-Part Yogic Breath",
+      "category": "Energy",
+      "difficulty": "Intermediate",
+      "intro_text": "We will fill the breath in three stages: belly, chest, and upper chest.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 16000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "belly",
+          "start_ms": 0,
+          "duration_ms": 3000,
+          "spoken_text": "Fill your belly gently.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "chest",
+          "start_ms": 3000,
+          "duration_ms": 2000,
+          "spoken_text": "Now fill your chest.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "collar",
+          "start_ms": 5000,
+          "duration_ms": 3000,
+          "spoken_text": "Let the breath rise to your upper chest.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 3,
+          "phase_label": "hold",
+          "start_ms": 8000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 4,
+          "phase_label": "exhale",
+          "start_ms": 10000,
+          "duration_ms": 3000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 5,
+          "phase_label": "hold",
+          "start_ms": 13000,
+          "duration_ms": 3000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your energy. Return to your natural breathing whenever you are ready.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4464",
+      "technique_name": "Grounding Breath",
+      "category": "Stress Relief",
+      "difficulty": "Beginner",
+      "intro_text": "Feel the support beneath you as you follow this steady rhythm.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 15000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 5000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 5000,
+          "duration_ms": 3000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 8000,
+          "duration_ms": 7000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 6750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice the ground beneath you. You can return to this breath whenever you need.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4463",
+      "technique_name": "Sleep Onset Breathing",
+      "category": "Sleep",
+      "difficulty": "Beginner",
+      "intro_text": "Settle into a comfortable position. If a breath hold feels difficult, return to natural breathing.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 19000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 7000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 6750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale slowly",
+          "start_ms": 11000,
+          "duration_ms": 8000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let the breath return to its own pace. Rest here for a moment.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4462",
+      "technique_name": "Energy Boost Breathing",
+      "category": "Energy",
+      "difficulty": "Intermediate",
+      "intro_text": "This pattern uses two short inhales followed by a longer exhale. Keep it gentle.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 6000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "sharp inhale",
+          "start_ms": 0,
+          "duration_ms": 1000,
+          "spoken_text": "In.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "sharp inhale",
+          "start_ms": 1000,
+          "duration_ms": 1000,
+          "spoken_text": "In.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "slow exhale",
+          "start_ms": 2000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your energy. Return to your natural breathing whenever you are ready.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4461",
+      "technique_name": "478 Variation",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "We will breathe in, pause briefly, then lengthen the exhale.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 16000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 8000,
+          "duration_ms": 8000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4460",
+      "technique_name": "Straw Breathing",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Relax your jaw. Exhale gently through softly pursed lips, as if through a straw.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale through pursed lips",
+          "start_ms": 4000,
+          "duration_ms": 8000,
+          "spoken_text": "Breathe out through pursed lips.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a445f",
+      "technique_name": "Nadi Shodhana Advanced",
+      "category": "Advanced",
+      "difficulty": "Advanced",
+      "intro_text": "This is an advanced alternate-nostril practice. Follow the nostril instructions you have learned, and never force a hold.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 20000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 8000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 12000,
+          "duration_ms": 8000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Return to a comfortable natural breath. Rest before standing or moving on.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a445e",
+      "technique_name": "Lion's Breath",
+      "category": "Stress Relief",
+      "difficulty": "Beginner",
+      "intro_text": "Breathe in through your nose. On the exhale, open your mouth wide and release gently.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 10000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale through nose",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in through your nose.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale through mouth wide",
+          "start_ms": 4000,
+          "duration_ms": 6000,
+          "spoken_text": "Open wide and breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice the ground beneath you. You can return to this breath whenever you need.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a445d",
+      "technique_name": "Relaxing Breath",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Ease into a steady breath, a short pause, and a long exhale.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 14000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 5000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 5000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 7000,
+          "duration_ms": 7000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 6750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a445c",
+      "technique_name": "Heart Coherence Breathing",
+      "category": "Sleep",
+      "difficulty": "Beginner",
+      "intro_text": "Let your inhale and exhale find an even, comfortable rhythm.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 10000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 5000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 5000,
+          "duration_ms": 5000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let the breath return to its own pace. Rest here for a moment.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a445b",
+      "technique_name": "Combat Tactical Breathing",
+      "category": "Focus",
+      "difficulty": "Beginner",
+      "intro_text": "We will move through four equal parts, keeping the breath controlled and relaxed.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 16000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 8000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 3,
+          "phase_label": "hold",
+          "start_ms": 12000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your attention. Carry this steadiness into what comes next.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a445a",
+      "technique_name": "7-11 Breathing",
+      "category": "Calm",
+      "difficulty": "Intermediate",
+      "intro_text": "Allow plenty of time to breathe out. Shorten the count if you need to.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 18000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 7000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 6750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 7000,
+          "duration_ms": 11000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 10750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4459",
+      "technique_name": "Breath of Fire",
+      "category": "Advanced",
+      "difficulty": "Advanced",
+      "intro_text": "This is a rapid advanced practice. Stay seated and stop if you feel dizzy.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 2000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "sharp inhale",
+          "start_ms": 0,
+          "duration_ms": 1000,
+          "spoken_text": "In.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "sharp exhale",
+          "start_ms": 1000,
+          "duration_ms": 1000,
+          "spoken_text": "Out.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Return to a comfortable natural breath. Rest before standing or moving on.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4458",
+      "technique_name": "Equal Breathing (Sama Vritti)",
+      "category": "Sleep",
+      "difficulty": "Beginner",
+      "intro_text": "Find a balanced rhythm, with equal time breathing in and out.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 10000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 5000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 5000,
+          "duration_ms": 5000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let the breath return to its own pace. Rest here for a moment.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4457",
+      "technique_name": "3-6 Breathing",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Let the exhale last a little longer than the inhale.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 9000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 3000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 3000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4456",
+      "technique_name": "Cyclic Sighing",
+      "category": "Stress Relief",
+      "difficulty": "Beginner",
+      "intro_text": "Take one inhale, add a small second inhale, then release slowly.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 11000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 3000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "second inhale",
+          "start_ms": 3000,
+          "duration_ms": 1000,
+          "spoken_text": "Sip.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "long exhale",
+          "start_ms": 4000,
+          "duration_ms": 7000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 6750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice the ground beneath you. You can return to this breath whenever you need.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4455",
+      "technique_name": "4-8 Sleep Breathing",
+      "category": "Sleep",
+      "difficulty": "Beginner",
+      "intro_text": "Let the out-breath be long and unhurried as you prepare to rest.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 4000,
+          "duration_ms": 8000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let the breath return to its own pace. Rest here for a moment.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4454",
+      "technique_name": "Buteyko Breathing",
+      "category": "Focus",
+      "difficulty": "Intermediate",
+      "intro_text": "This practice includes a pause after exhaling. Never push through air hunger.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 15000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 3000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 3000,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "hold empty",
+          "start_ms": 5000,
+          "duration_ms": 10000,
+          "spoken_text": "Rest after the exhale.",
+          "max_audio_ms": 9750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your attention. Carry this steadiness into what comes next.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4453",
+      "technique_name": "Tummo Inner Fire",
+      "category": "Advanced",
+      "difficulty": "Advanced",
+      "intro_text": "This advanced pattern includes a long hold. Practice only if you already know the technique, and stop if uncomfortable.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 28000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 16000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 15750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 20000,
+          "duration_ms": 8000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Return to a comfortable natural breath. Rest before standing or moving on.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4452",
+      "technique_name": "2-6 Calming Breath",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "A short gentle inhale, followed by a slow and easy exhale.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 8000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 2000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4451",
+      "technique_name": "Bhramari (Humming Bee)",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "On each exhale, make a gentle humming sound. Keep your throat relaxed.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 10000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hum exhale",
+          "start_ms": 4000,
+          "duration_ms": 6000,
+          "spoken_text": "Hum softly as you breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4450",
+      "technique_name": "Kapalabhati (Skull Shining)",
+      "category": "Advanced",
+      "difficulty": "Advanced",
+      "intro_text": "This advanced technique uses an active exhale and a passive inhale. Avoid straining.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 3000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "sharp exhale",
+          "start_ms": 0,
+          "duration_ms": 1000,
+          "spoken_text": "Out.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "natural inhale",
+          "start_ms": 1000,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Return to a comfortable natural breath. Rest before standing or moving on.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a444f",
+      "technique_name": "4-6 Breathing",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Let the exhale soften and extend beyond the inhale.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 10000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 4000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a444e",
+      "technique_name": "Pursed Lip Breathing",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Breathe in through your nose and exhale softly through pursed lips.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 6000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale slowly",
+          "start_ms": 2000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a444d",
+      "technique_name": "6-2-7 Breathing",
+      "category": "Calm",
+      "difficulty": "Intermediate",
+      "intro_text": "Take a gentle breath in, pause briefly, and let it out slowly.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 15000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 6000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 6000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 8000,
+          "duration_ms": 7000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 6750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a444c",
+      "technique_name": "3-3-6 Breathing",
+      "category": "Stress Relief",
+      "difficulty": "Beginner",
+      "intro_text": "Breathe in, pause, then give yourself extra time to breathe out.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 3000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 3000,
+          "duration_ms": 3000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 6000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice the ground beneath you. You can return to this breath whenever you need.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a444b",
+      "technique_name": "Wim Hof Breathing",
+      "category": "Advanced",
+      "difficulty": "Advanced",
+      "intro_text": "This is an advanced rhythmic breathing pattern. Stay seated or lying down, never in water or while driving.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 5000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 3000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 2750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 3000,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Return to a comfortable natural breath. Rest before standing or moving on.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a444a",
+      "technique_name": "1-4-2 Ratio Breathing",
+      "category": "Sleep",
+      "difficulty": "Advanced",
+      "intro_text": "This is a long-hold practice. Keep it easy and skip the hold if it feels uncomfortable.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 28000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 16000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 15750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 20000,
+          "duration_ms": 8000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let the breath return to its own pace. Rest here for a moment.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4449",
+      "technique_name": "Sitali Cooling Breath",
+      "category": "Calm",
+      "difficulty": "Intermediate",
+      "intro_text": "If comfortable, breathe in through a curled tongue or gently parted lips, then exhale through your nose.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 6000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4448",
+      "technique_name": "Alternate Nostril Breathing",
+      "category": "Advanced",
+      "difficulty": "Intermediate",
+      "intro_text": "Use a gentle hand position to alternate nostrils. Avoid forcing any holds.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 16000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale left",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in through the left.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale right",
+          "start_ms": 8000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out through the right.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 3,
+          "phase_label": "hold",
+          "start_ms": 12000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Return to a comfortable natural breath. Rest before standing or moving on.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "specialist_review_required",
+      "production_notes": "Specialized breathing instructions/long holds require technique-specific review; do not auto-publish."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4447",
+      "technique_name": "4-4-6-2 Breathing",
+      "category": "Focus",
+      "difficulty": "Intermediate",
+      "intro_text": "Follow a measured inhale, pause, long exhale, and brief rest.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 16000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 8000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 3,
+          "phase_label": "hold",
+          "start_ms": 14000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your attention. Carry this steadiness into what comes next.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4446",
+      "technique_name": "Ocean Breathing (Ujjayi)",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Create a soft ocean-like sound in the throat without tightening or straining.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 10000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 5000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 5000,
+          "duration_ms": 5000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4445",
+      "technique_name": "Triangle Breathing",
+      "category": "Focus",
+      "difficulty": "Beginner",
+      "intro_text": "Three equal phases: inhale, hold, and exhale.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 8000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your attention. Carry this steadiness into what comes next.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4444",
+      "technique_name": "5-5 Coherence Breathing",
+      "category": "Energy",
+      "difficulty": "Beginner",
+      "intro_text": "Let each inhale and exhale flow at the same easy pace.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 10000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 5000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 5000,
+          "duration_ms": 5000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 4750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice your energy. Return to your natural breathing whenever you are ready.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4443",
+      "technique_name": "Belly Breathing",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Allow your belly to rise gently as you breathe in.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 2000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 6000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4442",
+      "technique_name": "2-1-4-1 Breathing",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "A brief inhale and pause, then a longer exhale and a moment of rest.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 8000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 2000,
+          "duration_ms": 1000,
+          "spoken_text": "Hold.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 3000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 3,
+          "phase_label": "hold",
+          "start_ms": 7000,
+          "duration_ms": 1000,
+          "spoken_text": "Hold.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4441",
+      "technique_name": "Extended Exhale",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Take your time breathing out, without pushing out every last bit of air.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 4000,
+          "duration_ms": 8000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a4440",
+      "technique_name": "Resonance Breathing",
+      "category": "Sleep",
+      "difficulty": "Beginner",
+      "intro_text": "Settle into a smooth, even rhythm that feels natural to you.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 12000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 6000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "exhale",
+          "start_ms": 6000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let the breath return to its own pace. Rest here for a moment.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a443f",
+      "technique_name": "Physiological Sigh",
+      "category": "Stress Relief",
+      "difficulty": "Beginner",
+      "intro_text": "Take a gentle inhale, add a smaller second sip of air, then exhale slowly.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 9000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 2000,
+          "spoken_text": "Breathe in.",
+          "max_audio_ms": 1750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "inhale again",
+          "start_ms": 2000,
+          "duration_ms": 1000,
+          "spoken_text": "Sip.",
+          "max_audio_ms": 750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 3000,
+          "duration_ms": 6000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 5750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Notice the ground beneath you. You can return to this breath whenever you need.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a443e",
+      "technique_name": "4-7-8 Breathing",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "We will breathe in for four, hold for seven, and exhale for eight. Keep it comfortable.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 19000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 7000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 6750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 11000,
+          "duration_ms": 8000,
+          "spoken_text": "Slowly breathe out.",
+          "max_audio_ms": 7750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    },
+    {
+      "technique_id": "69ca561206566afe944a443d",
+      "technique_name": "Box Breathing",
+      "category": "Calm",
+      "difficulty": "Beginner",
+      "intro_text": "Follow the four sides of the box: inhale, hold, exhale, and rest.",
+      "intro_timing": "before_breathing_clock_starts",
+      "cycle_duration_ms": 16000,
+      "phase_cues": [
+        {
+          "phase_index": 0,
+          "phase_label": "inhale",
+          "start_ms": 0,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe in gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 1,
+          "phase_label": "hold",
+          "start_ms": 4000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 2,
+          "phase_label": "exhale",
+          "start_ms": 8000,
+          "duration_ms": 4000,
+          "spoken_text": "Breathe out.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        },
+        {
+          "phase_index": 3,
+          "phase_label": "hold",
+          "start_ms": 12000,
+          "duration_ms": 4000,
+          "spoken_text": "Pause gently.",
+          "max_audio_ms": 3750,
+          "repeat_policy": "first_two_cycles_then_short_cues"
+        }
+      ],
+      "closing_text": "Let your breathing settle naturally. Take this moment with you.",
+      "closing_timing": "after_breathing_clock_stops",
+      "review_status": "draft_needs_audio_duration_validation",
+      "production_notes": "Validate generated clip duration and phase fit before publishing."
+    }
+  ]
+}
