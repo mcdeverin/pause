@@ -152,8 +152,8 @@ export default function MainScreen({
             fontSize: "clamp(36px, 7vw, 52px)",
             fontWeight: 400,
             letterSpacing: "-0.035em",
-            color: ink.text,
-            textShadow: ink.shadow,
+            color: photoBackground ? "#FFFFFF" : ink.text,
+            textShadow: photoBackground ? "0 2px 16px rgba(0,0,0,.5)" : ink.shadow,
             lineHeight: 1.25,
           }}
         >
