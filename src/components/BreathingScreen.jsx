@@ -33,6 +33,7 @@ export default function BreathingScreen({
   photo = null,
   showTimer = true,
   showInstructions = true,
+  voiceGuide = false,
 }) {
   const activeTechnique = technique || DEFAULT_TECHNIQUE;
   const reducedMotion = useReducedMotion();
@@ -89,6 +90,7 @@ export default function BreathingScreen({
       : `${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
   const hapticPhaseRef = useRef(-1);
+  const spokenPhaseRef = useRef(-1);
   const infoCardRef = useRef(null);
   const visualRef = useRef(null);
 
@@ -137,6 +139,27 @@ export default function BreathingScreen({
     hapticPhaseRef.current = clock.phaseIndex;
     triggerHaptic(currentLabel);
   }, [clock.phaseIndex, currentLabel]);
+
+  // Spoken phase cues follow the same clock as the animation and haptics.
+  // Browser/device voices vary; no recording or external audio service is used.
+  useEffect(() => {
+    if (!voiceGuide || typeof window === "undefined" || !("speechSynthesis" in window)) return undefined;
+    if (clock.phaseIndex !== spokenPhaseRef.current) {
+      spokenPhaseRef.current = clock.phaseIndex;
+      const raw = String(currentLabel || "").toLowerCase();
+      const cue = raw.includes("inhale") ? "Breathe in" : raw.includes("exhale") ? "Breathe out" : raw.includes("hold") ? "Hold gently" : raw.includes("hum") ? "Hum softly" : currentLabel;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(cue);
+      utterance.rate = 0.85;
+      utterance.volume = 0.85;
+      window.speechSynthesis.speak(utterance);
+    }
+    return undefined;
+  }, [voiceGuide, clock.phaseIndex, currentLabel]);
+
+  useEffect(() => () => {
+    if (voiceGuide && typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+  }, [voiceGuide]);
 
   // The information card is height-capped to the space above the breathing
   // visual, so its text can never reach or cover the animation. On a very short
