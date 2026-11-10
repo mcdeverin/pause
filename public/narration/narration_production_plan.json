@@ -1,0 +1,623 @@
+{
+  "version": 1,
+  "source": "always_pause_50_narration_scripts.json",
+  "status": "production_planning_no_audio_generated",
+  "note": "Video-first means defer ElevenLabs narration, not omit instructional safety review. No video assets have been created. Preserve source breathing phase timing.",
+  "voices": [
+    {
+      "name": "Olivia",
+      "id": "kbX5GFsXCR5EpQkZJgeu"
+    },
+    {
+      "name": "Zara",
+      "id": "wdymxIQkYn7MJCYCQF2Q"
+    },
+    {
+      "name": "Tarun",
+      "id": "I3l9G0ww7jdDDZ7DbY0k"
+    },
+    {
+      "name": "Lauren",
+      "id": "v8DWAeuEGQSfwxqdH9t2"
+    },
+    {
+      "name": "Alex",
+      "id": "sDM8wW0sbrZWFoUX5r07"
+    },
+    {
+      "name": "Luca",
+      "id": "4JVOFy4SLQs9my0OLhEw"
+    }
+  ],
+  "techniques": [
+    {
+      "technique_id": "69ca561206566afe944a446e",
+      "name": "4-4-4 Triangle",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        4000,
+        4000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a446d",
+      "name": "Panic Reset Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        2000,
+        4000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a446c",
+      "name": "Morning Activation Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        2000,
+        2000,
+        2000,
+        2000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a446b",
+      "name": "Vagal Toning Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        6000,
+        2000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a446a",
+      "name": "Power Breathing",
+      "production_mode": "video_first_deferred",
+      "video_status": "not_created",
+      "review_status": "requires_demonstration_and_safety_review",
+      "phase_durations_ms": [
+        2000,
+        1000,
+        2000,
+        1000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4469",
+      "name": "Slow Deep Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        6000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4468",
+      "name": "Mindful Breath Awareness",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        4000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4467",
+      "name": "Anti-Anxiety Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        2000,
+        6000,
+        2000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4466",
+      "name": "Counting Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        5000,
+        5000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4465",
+      "name": "3-Part Yogic Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        3000,
+        2000,
+        3000,
+        2000,
+        3000,
+        3000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4464",
+      "name": "Grounding Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        5000,
+        3000,
+        7000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4463",
+      "name": "Sleep Onset Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        7000,
+        8000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4462",
+      "name": "Energy Boost Breathing",
+      "production_mode": "video_first_deferred",
+      "video_status": "not_created",
+      "review_status": "requires_demonstration_and_safety_review",
+      "phase_durations_ms": [
+        1000,
+        1000,
+        4000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4461",
+      "name": "478 Variation",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        4000,
+        8000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4460",
+      "name": "Straw Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        8000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a445f",
+      "name": "Nadi Shodhana Advanced",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        8000,
+        8000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a445e",
+      "name": "Lion's Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a445d",
+      "name": "Relaxing Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        5000,
+        2000,
+        7000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a445c",
+      "name": "Heart Coherence Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        5000,
+        5000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a445b",
+      "name": "Combat Tactical Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        4000,
+        4000,
+        4000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a445a",
+      "name": "7-11 Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        7000,
+        11000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4459",
+      "name": "Breath of Fire",
+      "production_mode": "video_first_deferred",
+      "video_status": "not_created",
+      "review_status": "requires_demonstration_and_safety_review",
+      "phase_durations_ms": [
+        1000,
+        1000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4458",
+      "name": "Equal Breathing (Sama Vritti)",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        5000,
+        5000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4457",
+      "name": "3-6 Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        3000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4456",
+      "name": "Cyclic Sighing",
+      "production_mode": "video_first_deferred",
+      "video_status": "not_created",
+      "review_status": "requires_demonstration_and_safety_review",
+      "phase_durations_ms": [
+        3000,
+        1000,
+        7000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4455",
+      "name": "4-8 Sleep Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        8000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4454",
+      "name": "Buteyko Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        3000,
+        2000,
+        10000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4453",
+      "name": "Tummo Inner Fire",
+      "production_mode": "video_first_deferred",
+      "video_status": "not_created",
+      "review_status": "requires_demonstration_and_safety_review",
+      "phase_durations_ms": [
+        4000,
+        16000,
+        8000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4452",
+      "name": "2-6 Calming Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        2000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4451",
+      "name": "Bhramari (Humming Bee)",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4450",
+      "name": "Kapalabhati (Skull Shining)",
+      "production_mode": "video_first_deferred",
+      "video_status": "not_created",
+      "review_status": "requires_demonstration_and_safety_review",
+      "phase_durations_ms": [
+        1000,
+        2000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a444f",
+      "name": "4-6 Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a444e",
+      "name": "Pursed Lip Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        2000,
+        4000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a444d",
+      "name": "6-2-7 Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        6000,
+        2000,
+        7000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a444c",
+      "name": "3-3-6 Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        3000,
+        3000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a444b",
+      "name": "Wim Hof Breathing",
+      "production_mode": "video_first_deferred",
+      "video_status": "not_created",
+      "review_status": "requires_demonstration_and_safety_review",
+      "phase_durations_ms": [
+        3000,
+        2000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a444a",
+      "name": "1-4-2 Ratio Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        16000,
+        8000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4449",
+      "name": "Sitali Cooling Breath",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        2000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4448",
+      "name": "Alternate Nostril Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        4000,
+        4000,
+        4000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4447",
+      "name": "4-4-6-2 Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        4000,
+        6000,
+        2000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4446",
+      "name": "Ocean Breathing (Ujjayi)",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        5000,
+        5000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4445",
+      "name": "Triangle Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        4000,
+        4000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4444",
+      "name": "5-5 Coherence Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        5000,
+        5000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4443",
+      "name": "Belly Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        2000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4442",
+      "name": "2-1-4-1 Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        2000,
+        1000,
+        4000,
+        1000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4441",
+      "name": "Extended Exhale",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        8000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a4440",
+      "name": "Resonance Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        6000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a443f",
+      "name": "Physiological Sigh",
+      "production_mode": "video_first_deferred",
+      "video_status": "not_created",
+      "review_status": "requires_demonstration_and_safety_review",
+      "phase_durations_ms": [
+        2000,
+        1000,
+        6000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a443e",
+      "name": "4-7-8 Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        7000,
+        8000
+      ]
+    },
+    {
+      "technique_id": "69ca561206566afe944a443d",
+      "name": "Box Breathing",
+      "production_mode": "elevenlabs_audio",
+      "video_status": null,
+      "review_status": "requires_audio_duration_validation",
+      "phase_durations_ms": [
+        4000,
+        4000,
+        4000,
+        4000
+      ]
+    }
+  ]
+}
