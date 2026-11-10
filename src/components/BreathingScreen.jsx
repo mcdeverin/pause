@@ -35,6 +35,7 @@ export default function BreathingScreen({
   showTimer = true,
   showInstructions = true,
   voiceGuide = false,
+  narrationMode = "none",
 }) {
   const activeTechnique = technique || DEFAULT_TECHNIQUE;
   const reducedMotion = useReducedMotion();
@@ -146,9 +147,12 @@ export default function BreathingScreen({
   // Spoken phase cues follow the same clock as the animation and haptics.
   // Browser/device voices vary; no recording or external audio service is used.
   useEffect(() => {
-    if (!voiceGuide || typeof window === "undefined" || !("speechSynthesis" in window)) return undefined;
+    const mode = narrationMode === "none" && voiceGuide ? "full" : narrationMode;
+    if (mode === "none" || typeof window === "undefined" || !("speechSynthesis" in window)) return undefined;
     if (phaseSequence !== spokenPhaseRef.current) {
       spokenPhaseRef.current = phaseSequence;
+      const cycleIndex = Math.floor(phaseSequence / activePhases.length);
+      if (mode === "partial" && cycleIndex >= 2 && cycleIndex % 4 !== 0) return undefined;
       const raw = String(currentLabel || "").toLowerCase();
       const scriptedCue = narrationCueForPhase(activeTechnique, clock.index, Math.floor(phaseSequence / activePhases.length));
       const cue = scriptedCue || (raw.includes("inhale") ? "Breathe in" : raw.includes("exhale") ? "Breathe out" : raw.includes("hold") ? "Hold gently" : raw.includes("hum") ? "Hum softly" : currentLabel);
@@ -159,7 +163,7 @@ export default function BreathingScreen({
       window.speechSynthesis.speak(utterance);
     }
     return undefined;
-  }, [voiceGuide, phaseSequence, currentLabel, activeTechnique, clock.index, activePhases.length]);
+  }, [voiceGuide, narrationMode, phaseSequence, currentLabel, activeTechnique, clock.index, activePhases.length]);
 
   useEffect(() => () => {
     if (voiceGuide && typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
