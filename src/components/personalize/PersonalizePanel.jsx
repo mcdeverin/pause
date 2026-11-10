@@ -463,10 +463,24 @@ export default function PersonalizePanel({
           </div>
 
           <SectionLabel theme={draftTheme}>Voice guidance</SectionLabel>
-          <p style={{ color: colors.secondary, fontSize: 13, margin: "0 0 12px" }}>Choose your preferred voice for future guided sessions. ElevenLabs recordings are being prepared; voice playback is not available yet.</p>
+          <p style={{ color: colors.secondary, fontSize: 13, margin: "0 0 12px" }}>Choose how much narration accompanies your breathing.</p>
+          <div role="group" aria-label="Narration level" style={{ display: "grid", gridTemplateColumns: "1fr", gap: 8, marginBottom: 16 }}>
+            {[
+              { id: "full", label: "Fully Guided", description: "Voice guidance for every breathing phase." },
+              { id: "partial", label: "Lightly Guided", description: "Occasional guidance throughout the session." },
+              { id: "none", label: "No Voice Guidance", description: "Follow the orb without spoken instructions." },
+            ].map((option) => (
+              <button type="button" key={option.id} aria-pressed={(draft.narrationMode || "full") === option.id}
+                onClick={() => update("narrationMode", option.id)}
+                style={{ border: "1px solid " + colors.border, background: (draft.narrationMode || "full") === option.id ? colors.accentSoft : colors.track, color: colors.text, borderRadius: 14, minHeight: 56, padding: "9px 12px", cursor: "pointer", textAlign: "left", fontSize: 14, fontWeight: 600 }}>
+                {option.label}<span style={{ display: "block", fontSize: 12, fontWeight: 400, opacity: .75 }}>{option.description}</span>
+              </button>
+            ))}
+          </div>
+          <p style={{ color: colors.secondary, fontSize: 13, margin: "0 0 12px" }}>Choose a preferred voice. Recorded narration is being prepared; the app currently uses device speech.</p>
           <div role="group" aria-label="Choose voice" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             <button type="button" aria-pressed={(draft.voiceId || "quiet") === "quiet"} onClick={() => update("voiceId", "quiet")}
-              style={{ border: "1px solid " + colors.border, background: (draft.voiceId || "quiet") === "quiet" ? colors.accentSoft : colors.track, color: colors.text, borderRadius: 14, minHeight: 48, cursor: "pointer", fontSize: 14, fontWeight: 600 }}>Quiet guidance</button>
+              style={{ border: "1px solid " + colors.border, background: (draft.voiceId || "quiet") === "quiet" ? colors.accentSoft : colors.track, color: colors.text, borderRadius: 14, minHeight: 48, cursor: "pointer", fontSize: 14, fontWeight: 600 }}>Device default</button>
             {VOICES.map((voice) => (
               <button type="button" key={voice.id} aria-pressed={draft.voiceId === voice.id} onClick={() => update("voiceId", voice.id)}
                 style={{ border: "1px solid " + colors.border, background: draft.voiceId === voice.id ? colors.accentSoft : colors.track, color: colors.text, borderRadius: 14, minHeight: 58, cursor: "pointer", fontSize: 14, fontWeight: 600 }}>
