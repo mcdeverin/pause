@@ -461,6 +461,19 @@ export default function PersonalizePanel({
             })}
           </div>
 
+          {/* Voice selection — audio clips can be added without changing this saved preference. */}
+          <SectionLabel theme={draftTheme}>Voice guidance</SectionLabel>
+          <p style={{ color: colors.secondary, fontSize: 13, margin: "0 0 12px" }}>Choose how your breathing cues sound. More voices are coming.</p>
+          <div role="group" aria-label="Choose voice" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            {[{ id: "default", label: "Natural voice" }, { id: "quiet", label: "No voice" }].map((option) => (
+              <button type="button" key={option.id} aria-pressed={(draft.voiceId || "quiet") === option.id}
+                onClick={() => update("voiceId", option.id)}
+                style={{ border: "1px solid " + colors.border, background: (draft.voiceId || "quiet") === option.id ? colors.accentSoft : colors.track, color: colors.text, borderRadius: 14, minHeight: 48, cursor: "pointer", fontSize: 14, fontWeight: 600 }}>
+                {option.label}
+              </button>
+            ))}
+          </div>
+
           {/* Session details */}
           <SectionLabel theme={draftTheme}>During your session</SectionLabel>
           <PreferenceToggle
