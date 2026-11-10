@@ -94,7 +94,7 @@ export default function MainScreen({
       <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
 
       {/* Soft top scrim protects white copy over bright nature photographs. */}
-      {photoBackground && <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: "44%", background: "linear-gradient(to bottom, rgba(9,27,35,.46), rgba(9,27,35,.25) 65%, transparent)", pointerEvents: "none", zIndex: 0 }} />}
+      {photoBackground && <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: "44%", background: "linear-gradient(to bottom, rgba(9,27,35,.62), rgba(9,27,35,.40) 65%, transparent)", pointerEvents: "none", zIndex: 0 }} />}
 
       {/* Header: wordmark + menu */}
       <div
@@ -114,8 +114,8 @@ export default function MainScreen({
             fontSize: "22px",
             fontWeight: 700,
             letterSpacing: "-0.035em",
-            color: ink.text,
-            textShadow: ink.shadow,
+            color: photoBackground ? "#FFFFFF" : ink.text,
+            textShadow: photoBackground ? "0 2px 10px rgba(0,0,0,.55)" : ink.shadow,
             lineHeight: 1,
           }}
         >
@@ -153,6 +153,8 @@ export default function MainScreen({
       <div
         style={{
           margin: "clamp(20px, 4vh, 44px) 24px 0",
+          position: "relative",
+          zIndex: 1,
           textAlign: "center",
           flexShrink: 0,
         }}
