@@ -10,11 +10,11 @@ export default function MomentShortcuts({ theme, ink, onSelect, notice, onHide }
   const colors = ink || getColors(theme);
 
   return (
-    <div style={{ padding: "0 20px" }}>
+    <div style={{ padding: "0 24px" }}>
       {/* The prompt and its hide control are one glass capsule: the whole pill
           hides the shortcuts, and the translucent surface keeps it readable over
           any photograph or colour. */}
-      <div style={{ display: "flex", justifyContent: "center", margin: "0 0 10px" }}>
+      <div style={{ display: "flex", justifyContent: "center", margin: "0 0 12px" }}>
         <button
           type="button"
           onClick={onHide}
@@ -25,15 +25,15 @@ export default function MomentShortcuts({ theme, ink, onSelect, notice, onHide }
             alignItems: "center",
             gap: 8,
             maxWidth: "100%",
-            minHeight: 36,
+            minHeight: 34,
             padding: "0 12px 0 15px",
             borderRadius: 999,
             ...FROST_GLASS,
             cursor: "pointer",
             color: FROST_INK,
             fontFamily: FONT,
-            fontSize: "14px",
-            fontWeight: 700,
+            fontSize: "13px",
+            fontWeight: 500,
             letterSpacing: "0.005em",
             lineHeight: 1.35,
             transition: "opacity 0.2s ease",
@@ -58,16 +58,19 @@ export default function MomentShortcuts({ theme, ink, onSelect, notice, onHide }
                 display: "flex",
                 alignItems: "center",
                 gap: 9,
-                minHeight: 54,
-                padding: "11px 13px",
-                borderRadius: 16,
-                border: "none",
+                minHeight: 56,
+                padding: "12px 15px",
+                borderRadius: 28,
+                border: "1px solid rgba(255,255,255,.5)",
                 cursor: "pointer",
-                background: colors.momentTints[moment.id],
-                color: colors.momentInk[moment.id],
+                background: "rgba(15, 37, 42, 0.38)",
+                backdropFilter: "blur(14px)",
+                WebkitBackdropFilter: "blur(14px)",
+                color: "#FFFFFF",
+                boxShadow: "0 2px 14px rgba(0,0,0,.10)",
                 fontFamily: FONT,
                 fontSize: "14px",
-                fontWeight: 700,
+                fontWeight: 500,
                 letterSpacing: "0.005em",
                 lineHeight: 1.25,
                 textAlign: "left",
