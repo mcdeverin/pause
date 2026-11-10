@@ -12,7 +12,7 @@ const STEPS = [
   { title: "How would you like to pause?", subtitle: "There's no wrong way.", key: "experience",
     options: ["Guided breathing", "Sensory experiences", "A little of both", "I'm not sure yet"] },
   { title: "When do you need a moment most?", subtitle: "Select all that apply.", key: "moments", multiple: true,
-    options: ["When I'm overwhelmed", "Before sleep", "During my day", "Whenever I need a reset"] },
+    options: ["When I'm overwhelmed", "Before sleep", "Just a moment during my day", "Whenever I need a reset"] },
   { title: "This moment is yours.", subtitle: "Your space to breathe, explore, and return to yourself.", options: [] },
 ];
 
