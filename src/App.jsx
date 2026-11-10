@@ -11,6 +11,7 @@ import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
 import GhostStudio from './pages/GhostStudio.jsx';
 
+const Onboarding = lazy(() => import('./pages/Onboarding.jsx'));
 const Popcorn = lazy(() => import('./pages/Popcorn.jsx'));
 const LiquidSurface = lazy(() => import('./pages/LiquidSurface.jsx'));
 const PrismaticWater = lazy(() => import('./pages/PrismaticWater.jsx'));
@@ -48,6 +49,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/onboarding" element={<Suspense fallback={<div className="fixed inset-0 bg-slate-900" />}><Onboarding /></Suspense>} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/theme-studio" element={<GhostStudio />} />
