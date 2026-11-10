@@ -27,7 +27,6 @@ BUFFER_MS = 250
 # These are Kokoro voices, not the previously selected ElevenLabs voice IDs.
 VOICES = {
     "af_nicole": "a",
-    "af_heart": "a",
     "am_michael": "a",
     "bf_emma": "b",
     "bm_george": "b",
