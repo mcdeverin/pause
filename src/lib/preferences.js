@@ -32,7 +32,7 @@ export const DEFAULT_PREFERENCES = {
   showTimer: true,
   showInstructions: true,
   voiceGuide: false,
-  showShortcuts: true,
+  showShortcuts: false,
   saveMoments: false,
   // Whether the one-time introductory Plus offer has been shown. Kept apart from
   // the subscription itself, which only RevenueCat can report.
@@ -68,6 +68,13 @@ export function loadPreferences() {
 
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    // Reset the previous expanded-by-default home layout once, then respect
+    // whatever the user chooses with Show moments / Hide moments thereafter.
+    if (!Object.prototype.hasOwnProperty.call(stored, "momentsCollapsedDefaultV1")) {
+      stored.showShortcuts = false;
+      stored.momentsCollapsedDefaultV1 = true;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+    }
     const merged = { ...DEFAULT_PREFERENCES, ...stored };
     return {
       ...merged,
