@@ -24,7 +24,7 @@ import { loadNarrationManifest } from "../lib/narration";
 export default function Home() {
   useEffect(() => { void loadNarrationManifest(); }, []);
   const [mode, setMode] = useState("idle");
-  const [sessionVoice, setSessionVoice] = useState(false);
+  const [sessionVoice, setSessionVoice] = useState("none");
   const [preparingPause, setPreparingPause] = useState(false);
   const [technique, setTechnique] = useState(null);
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
@@ -185,7 +185,7 @@ export default function Home() {
   // Choosing how you feel is always free: a shortcut uses the free exercises in
   // its own category where it can, and otherwise a starter exercise — it never
   // opens the offer.
-  const startMoment = useCallback(async (momentId, voice = false) => {
+  const startMoment = useCallback(async (momentId, voice = "none") => {
     setPreparingPause(true);
     const moment = MOMENTS.find((entry) => entry.id === momentId);
     if (!moment) { setPreparingPause(false); return; }
@@ -343,7 +343,7 @@ export default function Home() {
           <PauseSetup key="pause-setup" theme={theme} backgroundSettings={preferences} photo={photo}
             onBack={() => setMode("idle")} onBegin={startMoment} busy={preparingPause}
             voiceAvailable={typeof window !== "undefined" && "speechSynthesis" in window}
-            defaultVoice={preferences.voiceId === "default"} />
+            defaultVoice={preferences.narrationMode || (preferences.voiceGuide ? "full" : "none")} />
         )}
         {mode === "breathing" && technique && (
           <BreathingScreen
@@ -358,7 +358,8 @@ export default function Home() {
             photo={photo}
             showTimer={preferences.showTimer}
             showInstructions={preferences.showInstructions}
-            voiceGuide={sessionVoice}
+            voiceGuide={sessionVoice !== "none"}
+            narrationMode={sessionVoice}
           />
         )}
       </AnimatePresence>
