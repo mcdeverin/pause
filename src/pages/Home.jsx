@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import MainScreen from "../components/MainScreen";
+import PauseSetup from "../components/PauseSetup";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
 import PaywallScreen from "../components/PaywallScreen";
@@ -21,6 +22,8 @@ import { isFreeTechnique } from "../lib/access";
 
 export default function Home() {
   const [mode, setMode] = useState("idle");
+  const [sessionVoice, setSessionVoice] = useState(false);
+  const [preparingPause, setPreparingPause] = useState(false);
   const [technique, setTechnique] = useState(null);
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
 
@@ -180,13 +183,15 @@ export default function Home() {
   // Choosing how you feel is always free: a shortcut uses the free exercises in
   // its own category where it can, and otherwise a starter exercise — it never
   // opens the offer.
-  const startMoment = useCallback(async (momentId) => {
+  const startMoment = useCallback(async (momentId, voice = false) => {
+    setPreparingPause(true);
     const moment = MOMENTS.find((entry) => entry.id === momentId);
-    if (!moment) return;
+    if (!moment) { setPreparingPause(false); return; }
 
     const available = await ensureTechniques();
     if (available.length === 0) {
       flashNotice("Your techniques are still loading. Try again in a moment.");
+      setPreparingPause(false);
       return;
     }
 
@@ -200,9 +205,12 @@ export default function Home() {
         : available.filter((t) => isFreeTechnique(t) && hasUsablePhases(t));
     if (pool.length === 0) {
       flashNotice("No breathing exercise fits that one yet.");
+      setPreparingPause(false);
       return;
     }
 
+    setSessionVoice(voice);
+    setPreparingPause(false);
     beginSession(getRandomTechnique(pool), moment.id);
   }, [ensureTechniques, hasFullAccess, beginSession, flashNotice]);
 
@@ -298,7 +306,7 @@ export default function Home() {
         {mode === "idle" && (
           <MainScreen
             key="main"
-            onTap={() => startBreathing()}
+            onTap={() => setMode("setup")}
             onSupportClick={() => setShowSupport(true)}
             theme={theme}
             onOpenAbout={() => setShowAbout(true)}
@@ -324,10 +332,15 @@ export default function Home() {
                 featureCategory: "technique",
               })
             }
-            showShortcuts={preferences.showShortcuts}
+            showShortcuts={false}
             onSelectMoment={startMoment}
             shortcutNotice={shortcutNotice}
           />
+        )}
+        {mode === "setup" && (
+          <PauseSetup key="pause-setup" theme={theme} backgroundSettings={preferences} photo={photo}
+            onBack={() => setMode("idle")} onBegin={startMoment} busy={preparingPause}
+            voiceAvailable={typeof window !== "undefined" && "speechSynthesis" in window} />
         )}
         {mode === "breathing" && technique && (
           <BreathingScreen
@@ -342,6 +355,7 @@ export default function Home() {
             photo={photo}
             showTimer={preferences.showTimer}
             showInstructions={preferences.showInstructions}
+            voiceGuide={sessionVoice}
           />
         )}
       </AnimatePresence>
