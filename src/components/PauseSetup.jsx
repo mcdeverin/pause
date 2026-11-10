@@ -6,9 +6,9 @@ import { MOMENTS } from "../lib/moments";
 
 const ICONS = { calm: Leaf, focus: Crosshair, wind_down: Moon, reset: Sun };
 
-export default function PauseSetup({ theme, backgroundSettings, photo, onBack, onBegin, busy = false, voiceAvailable = true }) {
+export default function PauseSetup({ theme, backgroundSettings, photo, onBack, onBegin, busy = false, voiceAvailable = true, defaultVoice = false }) {
   const [moment, setMoment] = useState(null);
-  const [voice, setVoice] = useState(false);
+  const [voice, setVoice] = useState(defaultVoice);
   const selected = MOMENTS.find((entry) => entry.id === moment);
   return (
     <motion.main className="screen-fit" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
