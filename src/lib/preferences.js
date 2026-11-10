@@ -32,6 +32,7 @@ export const DEFAULT_PREFERENCES = {
   showTimer: true,
   showInstructions: true,
   voiceGuide: false,
+  narrationMode: "full",
   voiceId: "quiet",
   showShortcuts: false,
   saveMoments: false,
