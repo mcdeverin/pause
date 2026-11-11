@@ -85,11 +85,11 @@ export default function Onboarding() {
         </AnimatePresence>
         <div style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", gap: 13, pointerEvents: "auto" }}>
           {current.options.length > 0 && (
-            <div role="group" aria-label={current.title} style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10, width: "100%" }}>
+            <div role="group" aria-label={current.title} style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: current.options.length <= 4 ? 14 : 10, width: "100%" }}>
               {current.options.map((option) => {
                 const active = current.multiple ? selected.includes(option) : selected === option;
                 return <button key={option} type="button" aria-pressed={active} onClick={() => choose(option)}
-                  style={{ width: "100%", padding: "12px 10px", minHeight: 62, borderRadius: 22, border: active ? "1px solid white" : "1px solid rgba(255,255,255,.45)", color: "white", background: active ? "rgba(255,255,255,.29)" : "rgba(12,35,41,.33)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", fontSize: 15, fontWeight: active ? 600 : 400, cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: 8 }}>
+                  style={{ width: "100%", padding: "12px 10px", minHeight: current.options.length <= 4 ? "clamp(76px, 12dvh, 130px)" : "clamp(58px, 8dvh, 86px)", borderRadius: 22, border: active ? "1px solid white" : "1px solid rgba(255,255,255,.45)", color: "white", background: active ? "rgba(255,255,255,.29)" : "rgba(12,35,41,.33)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", fontSize: 15, fontWeight: active ? 600 : 400, cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: 8 }}>
                   {option}{active && <span aria-hidden="true">✓</span>}
                 </button>;
               })}
