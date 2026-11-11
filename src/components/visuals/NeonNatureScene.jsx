@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { BACKDROP_PHOTOS } from "@/lib/crystalStudio";
 
 const COLORS = ["#ff388b","#adff36","#7c48ff","#00edca","#ff9c45"];
-export default function NeonNatureScene(){
+export default function NeonNatureScene({ preview = false }){
  const canvasRef=useRef(null), baseRef=useRef(null), paintRef=useRef(null), active=useRef(false), last=useRef(null);
  const [mode,setMode]=useState("paint"),[color,setColor]=useState(COLORS[0]),[photo,setPhoto]=useState(0);
  const modeRef=useRef(mode),colorRef=useRef(color);modeRef.current=mode;colorRef.current=color;
@@ -17,6 +17,13 @@ export default function NeonNatureScene(){
    const scale=Math.max(w/img.width,h/img.height),sw=img.width*scale,sh=img.height*scale;
    b.drawImage(img,(w-sw)/2,(h-sh)/2,sw,sh);baseRef.current=base;
    const layer=document.createElement("canvas");layer.width=w;layer.height=h;paintRef.current=layer;
+   if (preview) {
+    const p=layer.getContext("2d");
+    p.lineCap="round";p.lineJoin="round";p.lineWidth=32;p.globalAlpha=.85;
+    [["#ff388b",[[130,400],[240,290],[380,340],[480,200]]],["#adff36",[[500,460],[590,360],[700,380],[810,220]]],["#00edca",[[160,190],[280,155],[360,195]]]].forEach(([stroke,points])=>{
+      p.strokeStyle=stroke;p.shadowColor=stroke;p.shadowBlur=35;p.beginPath();points.forEach(([x,y],i)=>i?p.lineTo(x,y):p.moveTo(x,y));p.stroke();
+    });
+   }
    ctx.drawImage(base,0,0);
   };
   img.src=BACKDROP_PHOTOS[photo]?.url||"";
@@ -48,12 +55,12 @@ export default function NeonNatureScene(){
  const reset=()=>{const c=paintRef.current;if(c)c.getContext("2d").clearRect(0,0,c.width,c.height);};
  return <div style={{width:"100%",height:"100%",position:"relative",background:"#284537"}}>
   <canvas ref={canvasRef} onPointerDown={e=>{active.current=true;last.current=null;e.currentTarget.setPointerCapture(e.pointerId);draw(e);}} onPointerMove={draw} onPointerUp={()=>{active.current=false;last.current=null;}} onPointerCancel={()=>{active.current=false;last.current=null;}} style={{width:"100%",height:"100%",objectFit:"cover",touchAction:"none",cursor:"crosshair",display:"block"}}/>
-  <div style={{position:"absolute",left:16,bottom:16,right:16,display:"flex",flexWrap:"wrap",alignItems:"center",gap:8,padding:10,background:"#ffffffdf",borderRadius:16}}>
+  {!preview && <div style={{position:"absolute",left:16,bottom:16,right:16,display:"flex",flexWrap:"wrap",alignItems:"center",gap:8,padding:10,background:"#ffffffdf",borderRadius:16}}>
    <button onClick={()=>setMode("paint")} style={{border:mode==="paint"?"2px solid #222":"1px solid #bbb",borderRadius:12,padding:"8px 12px",background:"white"}}>Paint</button>
    <button onClick={()=>setMode("erase")} style={{border:mode==="erase"?"2px solid #222":"1px solid #bbb",borderRadius:12,padding:"8px 12px",background:"white"}}>Erase</button>
    {COLORS.map(c=><button key={c} onClick={()=>{setColor(c);setMode("paint");}} aria-label={"Paint "+c} style={{width:28,height:28,borderRadius:"50%",background:c,border:color===c?"3px solid #222":"2px solid white"}}/>)}
    <button onClick={reset} style={{marginLeft:"auto",border:"1px solid #bbb",background:"white",borderRadius:12,padding:"8px 12px"}}>Reset</button>
-  </div>
-  <select aria-label="Landscape" value={photo} onChange={e=>setPhoto(+e.target.value)} style={{position:"absolute",right:16,top:70,border:0,borderRadius:10,padding:8,background:"#ffffffe8"}}>{BACKDROP_PHOTOS.map((p,i)=><option key={p.id} value={i}>{p.label||p.id}</option>)}</select>
+  </div>}
+  {!preview && <select aria-label="Landscape" value={photo} onChange={e=>setPhoto(+e.target.value)} style={{position:"absolute",right:16,top:70,border:0,borderRadius:10,padding:8,background:"#ffffffe8"}}>{BACKDROP_PHOTOS.map((p,i)=><option key={p.id} value={i}>{p.label||p.id}</option>)}</select>}
  </div>;
 }
