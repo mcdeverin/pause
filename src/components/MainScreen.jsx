@@ -108,9 +108,9 @@ export default function MainScreen({
         <p
           style={{
             margin: 0,
-            fontFamily: FONT,
+            fontFamily: HEADING_FONT,
             fontSize: "22px",
-            fontWeight: 700,
+            fontWeight: 400,
             letterSpacing: "-0.035em",
             color: photoBackground ? "#FFFFFF" : ink.text,
             textShadow: photoBackground ? "0 2px 10px rgba(0,0,0,.55)" : ink.shadow,
