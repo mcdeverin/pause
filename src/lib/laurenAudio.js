@@ -14,7 +14,7 @@ export function findLaurenClip(library, technique, position, phaseSeconds) {
   const name = normalize(technique?.name);
   const phase = normalize(position);
   const matches = (library?.recordings || []).filter(record =>
-    (record.used_by || []).some(use => normalize(use.technique) === name && normalize(use.position) === phase)
+    (record.used_by || []).some(use => normalize(use.technique) === name && (normalize(use.position) === phase || normalize(use.position) === phase.split(" ")[0]))
   );
   const eligible = matches.find(record => {
     const seconds = library.durations?.[record.clip_id];
@@ -24,9 +24,9 @@ export function findLaurenClip(library, technique, position, phaseSeconds) {
 }
 export function phasePosition(label) {
   const raw = normalize(label);
-  if (raw.includes("inhale") || raw.includes("breathe in")) return "inhale";
-  if (raw.includes("exhale") || raw.includes("breathe out")) return "exhale";
-  if (raw.includes("hold")) return "hold";
+  if (raw.includes("inhale") || raw.includes("breathe in")) return raw;
+  if (raw.includes("exhale") || raw.includes("breathe out")) return raw;
+  if (raw.includes("hold")) return raw;
   return raw;
 }
 export function playLaurenClip(clip, onEnded) {
