@@ -165,10 +165,10 @@ export default function BreathingScreen({
 
   // Haptics fire on phase changes, from the same clock as the visuals.
   useEffect(() => {
-    if (phaseSequence === hapticPhaseRef.current) return;
+    if (!readyToBreathe || phaseSequence === hapticPhaseRef.current) return;
     hapticPhaseRef.current = phaseSequence;
     triggerHaptic(currentLabel);
-  }, [phaseSequence, currentLabel]);
+  }, [phaseSequence, currentLabel, readyToBreathe]);
 
   // Start eligible MP3 cues only at boundaries emitted by the existing clock.
   // Late/missing/overlong clips are skipped rather than delaying the orb.
