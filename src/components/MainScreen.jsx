@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { Eye, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import NavigationSheet from "./NavigationSheet";
-import MomentShortcuts from "./MomentShortcuts";
-import { FONT, HEADING_FONT, FROST_GLASS, FROST_INK, isPhotoBackground } from "../lib/design";
+import { FONT, HEADING_FONT, isPhotoBackground } from "../lib/design";
 import { getCanvasInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import { usePhotoLightness } from "../hooks/usePhotoLightness";
@@ -47,15 +46,14 @@ export default function MainScreen({
     if (tourStep === 0) { setMenuOpen(true); setTourStep(1); }
     else finishTour();
   };
-  // The orb stays dominant: it scales with the viewport, and shrinks further
-  // when the moment shortcuts share the screen.
+  // The orb stays dominant and scales with the viewport.
   const measureOrb = useCallback(() => {
     if (typeof window === "undefined") return ORB_MAX;
-    const heightShare = showShortcuts ? 0.3 : 0.42;
+    const heightShare = 0.42;
     return Math.round(
       Math.min(ORB_MAX, window.innerWidth * 0.62, window.innerHeight * heightShare)
     );
-  }, [showShortcuts]);
+  }, []);
 
   const [orbSize, setOrbSize] = useState(measureOrb);
 
@@ -249,49 +247,6 @@ export default function MainScreen({
           Tap to pause
         </button>
       </div>
-
-      {showShortcuts && (
-        <MomentShortcuts
-          theme={theme}
-          ink={ink}
-          onSelect={onSelectMoment}
-          notice={shortcutNotice}
-          onHide={onHideShortcuts}
-        />
-      )}
-
-      {/* Hidden shortcuts leave a discreet way back — the orb already takes the
-          freed space, so nothing sits empty. */}
-      {/* Hidden shortcuts leave a way back. The control sits on the same opaque
-          capsule as the hide control, so it stays visible on any background. */}
-      {!showShortcuts && (
-        <div style={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
-          <button
-            type="button"
-            onClick={onShowShortcuts}
-            aria-label="Show moment shortcuts"
-            title="Show moment shortcuts"
-            style={{
-              minHeight: 30,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "0 11px",
-              borderRadius: 999,
-              ...FROST_GLASS,
-              cursor: "pointer",
-              fontFamily: FONT,
-              fontSize: "11.5px",
-              fontWeight: 500,
-              letterSpacing: "0.01em",
-              color: FROST_INK,
-            }}
-          >
-            <Eye size={13} strokeWidth={2} />
-            Show moments
-          </button>
-        </div>
-      )}
 
       <AnimatePresence>
         {menuOpen && (
