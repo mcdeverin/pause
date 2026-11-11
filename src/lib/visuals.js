@@ -127,6 +127,13 @@ const COLOR = (key, label, def) => ({
 // Only styles listed here are selectable — nothing unfinished is offered.
 export const VISUAL_STYLES = [
   {
+    id: "lagoon",
+    label: "Lagoon Liquid Orb",
+    collection: "classics",
+    description: "A luminous blue-green liquid orb that moves with your breath.",
+    controls: [],
+  },
+  {
     id: "orb",
     label: "Original",
     collection: "classics",
