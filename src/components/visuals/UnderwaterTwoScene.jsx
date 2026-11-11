@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
 const palettes=[
@@ -9,57 +9,101 @@ const palettes=[
 ];
 const bounds={x:7.6,y:5.1};
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+
+function makeKoiTexture(index) {
+ const canvas=document.createElement("canvas");canvas.width=768;canvas.height=320;
+ const c=canvas.getContext("2d"), w=canvas.width,h=canvas.height;
+ const white=["#eee9dd","#f6eee4","#dedfd7","#f0e4cb","#e3e5de","#f1e8d7"][index];
+ const base=c.createLinearGradient(0,0,0,h);
+ base.addColorStop(0,"#9e9d91");base.addColorStop(.17,white);base.addColorStop(.48,"#fff8e9");base.addColorStop(.82,white);base.addColorStop(1,"#8a968e");
+ c.fillStyle=base;c.fillRect(0,0,w,h);
+ const patterns=[
+  [[.2,.48,.18,.38],[.48,.44,.16,.48],[.73,.56,.12,.4]],
+  [[.31,.5,.21,.48],[.65,.48,.16,.5]],
+  [[.19,.5,.15,.4],[.48,.3,.14,.25],[.58,.67,.12,.26],[.79,.5,.13,.3]],
+  [[.27,.5,.15,.36],[.54,.52,.21,.48],[.8,.43,.09,.29]],
+  [[.25,.47,.17,.43],[.61,.54,.22,.38]],
+  [[.18,.5,.2,.42],[.45,.44,.11,.32],[.7,.5,.18,.43]]
+ ];
+ const red=["#d74a26","#d74821","#dc652c","#d8852b","#292f2e","#d64b23"][index];
+ for(const [x,y,rx,ry] of patterns[index]){
+  c.save();c.translate(x*w,y*h);c.rotate((x-.5)*.8);
+  const g=c.createRadialGradient(0,0,4,0,0,rx*w);
+  g.addColorStop(0,red);g.addColorStop(.68,red);g.addColorStop(1,red+"00");
+  c.fillStyle=g;c.beginPath();c.ellipse(0,0,rx*w,ry*h,0,0,Math.PI*2);c.fill();c.restore();
+ }
+ // Fine overlapping scale outlines, subtle enough not to resemble a grid.
+ c.strokeStyle="rgba(66,70,62,.10)";c.lineWidth=1;
+ for(let row=0;row<12;row++)for(let col=0;col<34;col++){
+  const x=col*24+(row%2)*12,y=row*27;
+  c.beginPath();c.arc(x,y,16,.05,Math.PI-.05);c.stroke();
+ }
+ const shine=c.createLinearGradient(0,0,0,h);shine.addColorStop(0,"#ffffff00");shine.addColorStop(.3,"#ffffff33");shine.addColorStop(.48,"#ffffff5a");shine.addColorStop(.64,"#ffffff00");c.fillStyle=shine;c.fillRect(0,0,w,h);
+ const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;return texture;
+}
 function Koi({index,interaction,paused}){
- const ref=useRef(),tail=useRef(),left=useRef(),right=useRef();
- const seed=useMemo(()=>index*7.13+1.6,[index]);
- const state=useRef({x:Math.sin(seed)*5,y:Math.cos(seed*1.4)*3,angle:seed*2.1,speed:.36+index*.045,interest:0,decision:0,target:seed*2.1});
- const personality=useMemo(()=>({curiosity:[.9,.45,.7,.25,.8,.55][index],fear:[.28,.9,.48,.7,.35,.6][index]}),[index]);
- const colors=palettes[index];
+ const root=useRef(),body=useRef(),tail=useRef(),left=useRef(),right=useRef();
+ const seed=index*7.13+1.6;
+ const texture=useMemo(()=>makeKoiTexture(index),[index]);
+ const shape=useMemo(()=>{
+  const sh=new THREE.Shape();
+  sh.moveTo(1.48,0);
+  sh.bezierCurveTo(1.35,.23,1.04,.32,.77,.38);
+  sh.bezierCurveTo(.22,.58,-.53,.49,-.94,.25);
+  sh.bezierCurveTo(-1.18,.15,-1.4,.09,-1.47,0);
+  sh.bezierCurveTo(-1.4,-.09,-1.18,-.15,-.94,-.25);
+  sh.bezierCurveTo(-.53,-.49,.22,-.58,.77,-.38);
+  sh.bezierCurveTo(1.04,-.32,1.35,-.23,1.48,0);
+  const geo=new THREE.ShapeGeometry(sh,28);
+  const uv=geo.attributes.uv, pos=geo.attributes.position;
+  for(let i=0;i<uv.count;i++)uv.setXY(i,(pos.getX(i)+1.5)/3,(pos.getY(i)+.6)/1.2);
+  return geo;
+ },[]);
+ const state=useRef({x:Math.sin(seed)*5,y:Math.cos(seed*1.4)*3,angle:seed*2.1,speed:.35+index*.055,decision:0,target:seed*2.1});
  useFrame(({clock},dt)=>{
-  if(paused||!ref.current)return;
+  if(paused||!root.current)return;
   const s=state.current,t=clock.elapsedTime,d=clamp(dt,0,.04),i=interaction.current;
   s.decision-=d;
-  if(s.decision<=0){s.decision=1.5+(index%4)*.65;s.target+=Math.sin(t*.61+seed)*.9;}
+  if(s.decision<=0){s.decision=1.5+(index%4)*.65;s.target+=Math.sin(t*.61+seed)*1.15;}
   const dx=i.x-s.x,dy=i.y-s.y,dist=Math.hypot(dx,dy);
   let desired=s.target,velocity=s.speed;
-  if(i.active&&dist<4.5){
-   const direction=Math.atan2(dy,dx);
-   const approach=i.stillness>.3&&i.intensity<.7;
-   const pull=approach?personality.curiosity:-personality.fear;
-   desired=direction+(pull<0?Math.PI:0);
-   velocity=s.speed+(approach?.15:.65)*Math.abs(pull);
-   s.interest=clamp(s.interest+d*(approach?.3:-.6),0,1);
-  }else{s.interest=clamp(s.interest-d*.12,0,1);}
-  if(Math.abs(s.x)>bounds.x-1||Math.abs(s.y)>bounds.y-1)desired=Math.atan2(-s.y,-s.x);
-  let diff=Math.atan2(Math.sin(desired-s.angle),Math.cos(desired-s.angle));
-  s.angle+=clamp(diff,-d*1.1,d*1.1);
-  s.x=clamp(s.x+Math.cos(s.angle)*velocity*d,-bounds.x,bounds.x);
-  s.y=clamp(s.y+Math.sin(s.angle)*velocity*d,-bounds.y,bounds.y);
-  ref.current.position.set(s.x,s.y,.25+Math.sin(t*.9+seed)*.035);
-  ref.current.rotation.z=s.angle;
-  const wag=Math.sin(t*(3.6+velocity*2)+seed);
-  if(tail.current)tail.current.rotation.z=wag*.34;
-  if(left.current)left.current.rotation.z=.3+wag*.18;
-  if(right.current)right.current.rotation.z=-.3-wag*.18;
+  if(i.active&&dist<5){
+   const direction=Math.atan2(dy,dx),approach=i.stillness>.4&&i.intensity<.65;
+   const curious=[.95,.3,.75,.45,.8,.55][index];
+   desired=direction+(!approach&&curious<.6?Math.PI:0);
+   velocity=s.speed+(approach?.12:.5);
+  }
+  if(Math.abs(s.x)>6.3||Math.abs(s.y)>4)desired=Math.atan2(-s.y,-s.x);
+  const diff=Math.atan2(Math.sin(desired-s.angle),Math.cos(desired-s.angle));
+  s.angle+=clamp(diff,-d*.85,d*.85);
+  s.x=clamp(s.x+Math.cos(s.angle)*velocity*d,-7.2,7.2);
+  s.y=clamp(s.y+Math.sin(s.angle)*velocity*d,-4.8,4.8);
+  root.current.position.set(s.x,s.y,.26+Math.sin(t*.6+seed)*.03);
+  root.current.rotation.z=s.angle;
+  const wag=Math.sin(t*(3.5+velocity*2)+seed);
+  if(tail.current)tail.current.rotation.z=wag*.38;
+  if(body.current)body.current.rotation.z=wag*.017;
+  if(left.current)left.current.rotation.z=.4+wag*.22;
+  if(right.current)right.current.rotation.z=-.4-wag*.22;
  });
- return <group ref={ref} scale={.68+index%3*.12}>
-  <mesh position={[-.1,-.12,-.18]} scale={[1.7,.57,.1]}><sphereGeometry args={[1,20,12]}/><meshBasicMaterial color="#00160f" transparent opacity={.3} depthWrite={false}/></mesh>
-  <mesh scale={[1.35,.49,.22]}><sphereGeometry args={[1,36,20]}/><meshPhysicalMaterial color={colors[0]} roughness={.42} clearcoat={.4}/></mesh>
-  <mesh position={[.65,.01,.17]} scale={[.36,.33,.07]}><sphereGeometry args={[1,18,12]}/><meshStandardMaterial color={colors[1]}/></mesh>
-  <mesh position={[-.4,.18,.19]} scale={[.46,.23,.06]} rotation={[0,0,-.3]}><sphereGeometry args={[1,18,12]}/><meshStandardMaterial color={colors[2]}/></mesh>
-  <mesh position={[-.68,-.11,.18]} scale={[.31,.27,.06]}><sphereGeometry args={[1,18,12]}/><meshStandardMaterial color={colors[1]}/></mesh>
-  <mesh position={[1.03,.24,.08]} scale={[.055,.055,.045]}><sphereGeometry args={[1,10,8]}/><meshBasicMaterial color="#182120"/></mesh>
-  <mesh position={[1.03,-.24,.08]} scale={[.055,.055,.045]}><sphereGeometry args={[1,10,8]}/><meshBasicMaterial color="#182120"/></mesh>
-  <group ref={tail} position={[-1.25,0,0]}>
-   <mesh position={[-.36,.22,0]} rotation={[0,0,-.42]}><sphereGeometry args={[.65,.23,.055,16,10]}/><meshStandardMaterial color={colors[0]} transparent opacity={.86} side={THREE.DoubleSide}/></mesh>
-   <mesh position={[-.36,-.22,0]} rotation={[0,0,.42]}><sphereGeometry args={[.65,.23,.055,16,10]}/><meshStandardMaterial color={colors[0]} transparent opacity={.86} side={THREE.DoubleSide}/></mesh>
+ return <group ref={root} scale={.72+index%3*.13}>
+  <mesh position={[-.12,-.16,-.22]} scale={[1.12,1.1,1]}><primitive object={shape} attach="geometry"/><meshBasicMaterial color="#00160f" transparent opacity={.34} depthWrite={false}/></mesh>
+  <group ref={tail} position={[-1.35,0,-.01]}>
+   <mesh position={[-.33,.2,0]} rotation={[0,0,-.36]}><sphereGeometry args={[.55,.22,.025,20,10]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
+   <mesh position={[-.33,-.2,0]} rotation={[0,0,.36]}><sphereGeometry args={[.55,.22,.025,20,10]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
   </group>
-  <group ref={left} position={[-.1,.39,.02]}><mesh position={[-.15,.23,0]} rotation={[0,0,.6]}><sphereGeometry args={[.42,.18,.045,16,10]}/><meshStandardMaterial color={colors[0]} transparent opacity={.72}/></mesh></group>
-  <group ref={right} position={[-.1,-.39,.02]}><mesh position={[-.15,-.23,0]} rotation={[0,0,-.6]}><sphereGeometry args={[.42,.18,.045,16,10]}/><meshStandardMaterial color={colors[0]} transparent opacity={.72}/></mesh></group>
+  <group ref={left} position={[-.12,.38,.015]}><mesh position={[-.16,.24,0]} rotation={[0,0,.48]}><sphereGeometry args={[.43,.19,.028,18,10]}/><meshPhysicalMaterial color="#d8d2c1" transparent opacity={.66} side={THREE.DoubleSide}/></mesh></group>
+  <group ref={right} position={[-.12,-.38,.015]}><mesh position={[-.16,-.24,0]} rotation={[0,0,-.48]}><sphereGeometry args={[.43,.19,.028,18,10]}/><meshPhysicalMaterial color="#d8d2c1" transparent opacity={.66} side={THREE.DoubleSide}/></mesh></group>
+  <group ref={body}>
+   <mesh geometry={shape} position={[0,0,.045]}><meshBasicMaterial map={texture} side={THREE.DoubleSide}/></mesh>
+   <mesh position={[.98,.24,.075]}><sphereGeometry args={[.047,12,10]}/><meshBasicMaterial color="#151b18"/></mesh>
+   <mesh position={[.98,-.24,.075]}><sphereGeometry args={[.047,12,10]}/><meshBasicMaterial color="#151b18"/></mesh>
+   <mesh position={[1.32,0,.075]} scale={[.09,.11,.01]}><sphereGeometry args={[1,12,10]}/><meshBasicMaterial color="#d9b5a4"/></mesh>
+  </group>
  </group>;
 }
 function Water({interaction,paused}){
- const {viewport}=useThree();
+ 
  const rings=useRef([]),meshes=useRef([]);
  useFrame((_,dt)=>{
   if(!paused){
