@@ -1,0 +1,1004 @@
+{
+  "version": 1,
+  "voice": "Lauren",
+  "source": "always_pause_audio_manifest(1).json",
+  "note": "Audio durations are measured from supplied MP3 files. Phase timings are from the repo's existing authored narration plan. Timings must be reconciled against live Base44 technique data before release.",
+  "techniques": {
+    "4-4-4 Triangle": {
+      "techniqueId": "69ca561206566afe944a446e",
+      "intro": "clip_062",
+      "closing": "clip_038",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale",
+          "phaseMs": 4000,
+          "audioMs": 1149
+        }
+      ]
+    },
+    "Panic Reset Breath": {
+      "techniqueId": "69ca561206566afe944a446d",
+      "intro": "clip_064",
+      "closing": "clip_036",
+      "phases": [
+        {
+          "clipId": "clip_011",
+          "expectedLabel": "inhale",
+          "phaseMs": 2000,
+          "audioMs": 1019
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "long exhale",
+          "phaseMs": 4000,
+          "audioMs": 1149
+        }
+      ]
+    },
+    "Morning Activation Breath": {
+      "techniqueId": "69ca561206566afe944a446c",
+      "intro": "clip_063",
+      "closing": "clip_039",
+      "phases": [
+        {
+          "clipId": "clip_011",
+          "expectedLabel": "inhale",
+          "phaseMs": 2000,
+          "audioMs": 1019
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale",
+          "phaseMs": 2000,
+          "audioMs": 1149
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        }
+      ]
+    },
+    "Vagal Toning Breath": {
+      "techniqueId": "69ca561206566afe944a446b",
+      "intro": "clip_021",
+      "closing": "clip_039",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        }
+      ]
+    },
+    "Slow Deep Breathing": {
+      "techniqueId": "69ca561206566afe944a4469",
+      "intro": "clip_033",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 6000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Mindful Breath Awareness": {
+      "techniqueId": "69ca561206566afe944a4468",
+      "intro": "clip_037",
+      "closing": "clip_038",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale",
+          "phaseMs": 4000,
+          "audioMs": 1149
+        }
+      ]
+    },
+    "Anti-Anxiety Breath": {
+      "techniqueId": "69ca561206566afe944a4467",
+      "intro": "clip_060",
+      "closing": "clip_036",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        }
+      ]
+    },
+    "Counting Breath": {
+      "techniqueId": "69ca561206566afe944a4466",
+      "intro": "clip_022",
+      "closing": "clip_038",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale counting to 5",
+          "phaseMs": 5000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale counting to 5",
+          "phaseMs": 5000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "3-Part Yogic Breath": {
+      "techniqueId": "69ca561206566afe944a4465",
+      "intro": "clip_059",
+      "closing": "clip_039",
+      "phases": [
+        {
+          "clipId": "clip_018",
+          "expectedLabel": "belly",
+          "phaseMs": 3000,
+          "audioMs": 1750
+        },
+        {
+          "clipId": "clip_040",
+          "expectedLabel": "chest",
+          "phaseMs": 2000,
+          "audioMs": 1802
+        },
+        {
+          "clipId": "clip_029",
+          "expectedLabel": "collar",
+          "phaseMs": 3000,
+          "audioMs": 2873
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale",
+          "phaseMs": 3000,
+          "audioMs": 1149
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 3000,
+          "audioMs": 1907
+        }
+      ]
+    },
+    "Grounding Breath": {
+      "techniqueId": "69ca561206566afe944a4464",
+      "intro": "clip_017",
+      "closing": "clip_036",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 5000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 3000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 7000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Sleep Onset Breathing": {
+      "techniqueId": "69ca561206566afe944a4463",
+      "intro": "clip_047",
+      "closing": "clip_028",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 7000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale slowly",
+          "phaseMs": 8000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "478 Variation": {
+      "techniqueId": "69ca561206566afe944a4461",
+      "intro": "clip_058",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 8000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Straw Breathing": {
+      "techniqueId": "69ca561206566afe944a4460",
+      "intro": "clip_044",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_012",
+          "expectedLabel": "exhale through pursed lips",
+          "phaseMs": 8000,
+          "audioMs": 2456
+        }
+      ]
+    },
+    "Nadi Shodhana Advanced": {
+      "techniqueId": "69ca561206566afe944a445f",
+      "intro": "clip_053",
+      "closing": "clip_046",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 8000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 8000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Lion's Breath": {
+      "techniqueId": "69ca561206566afe944a445e",
+      "intro": "clip_009",
+      "closing": "clip_036",
+      "phases": [
+        {
+          "clipId": "clip_008",
+          "expectedLabel": "inhale through nose",
+          "phaseMs": 4000,
+          "audioMs": 1933
+        },
+        {
+          "clipId": "clip_042",
+          "expectedLabel": "exhale through mouth wide",
+          "phaseMs": 6000,
+          "audioMs": 1933
+        }
+      ]
+    },
+    "Relaxing Breath": {
+      "techniqueId": "69ca561206566afe944a445d",
+      "intro": "clip_016",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 5000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 7000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Heart Coherence Breathing": {
+      "techniqueId": "69ca561206566afe944a445c",
+      "intro": "clip_035",
+      "closing": "clip_028",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 5000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 5000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Combat Tactical Breathing": {
+      "techniqueId": "69ca561206566afe944a445b",
+      "intro": "clip_061",
+      "closing": "clip_038",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale",
+          "phaseMs": 4000,
+          "audioMs": 1149
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        }
+      ]
+    },
+    "7-11 Breathing": {
+      "techniqueId": "69ca561206566afe944a445a",
+      "intro": "clip_003",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 7000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 11000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Equal Breathing (Sama Vritti)": {
+      "techniqueId": "69ca561206566afe944a4458",
+      "intro": "clip_019",
+      "closing": "clip_028",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 5000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 5000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "3-6 Breathing": {
+      "techniqueId": "69ca561206566afe944a4457",
+      "intro": "clip_030",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_011",
+          "expectedLabel": "inhale",
+          "phaseMs": 3000,
+          "audioMs": 1019
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "4-8 Sleep Breathing": {
+      "techniqueId": "69ca561206566afe944a4455",
+      "intro": "clip_032",
+      "closing": "clip_028",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 8000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Buteyko Breathing": {
+      "techniqueId": "69ca561206566afe944a4454",
+      "intro": "clip_054",
+      "closing": "clip_038",
+      "phases": [
+        {
+          "clipId": "clip_011",
+          "expectedLabel": "inhale",
+          "phaseMs": 3000,
+          "audioMs": 1019
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale",
+          "phaseMs": 2000,
+          "audioMs": 1149
+        },
+        {
+          "clipId": "clip_045",
+          "expectedLabel": "hold empty",
+          "phaseMs": 10000,
+          "audioMs": 1698
+        }
+      ]
+    },
+    "2-6 Calming Breath": {
+      "techniqueId": "69ca561206566afe944a4452",
+      "intro": "clip_002",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_011",
+          "expectedLabel": "inhale",
+          "phaseMs": 2000,
+          "audioMs": 1019
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Bhramari (Humming Bee)": {
+      "techniqueId": "69ca561206566afe944a4451",
+      "intro": "clip_041",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_025",
+          "expectedLabel": "hum exhale",
+          "phaseMs": 6000,
+          "audioMs": 2821
+        }
+      ]
+    },
+    "4-6 Breathing": {
+      "techniqueId": "69ca561206566afe944a444f",
+      "intro": "clip_031",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Pursed Lip Breathing": {
+      "techniqueId": "69ca561206566afe944a444e",
+      "intro": "clip_007",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_011",
+          "expectedLabel": "inhale",
+          "phaseMs": 2000,
+          "audioMs": 1019
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale slowly",
+          "phaseMs": 4000,
+          "audioMs": 1149
+        }
+      ]
+    },
+    "6-2-7 Breathing": {
+      "techniqueId": "69ca561206566afe944a444d",
+      "intro": "clip_050",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 6000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 7000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "3-3-6 Breathing": {
+      "techniqueId": "69ca561206566afe944a444c",
+      "intro": "clip_010",
+      "closing": "clip_036",
+      "phases": [
+        {
+          "clipId": "clip_011",
+          "expectedLabel": "inhale",
+          "phaseMs": 3000,
+          "audioMs": 1019
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 3000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "1-4-2 Ratio Breathing": {
+      "techniqueId": "69ca561206566afe944a444a",
+      "intro": "clip_052",
+      "closing": "clip_028",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 16000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 8000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Sitali Cooling Breath": {
+      "techniqueId": "69ca561206566afe944a4449",
+      "intro": "clip_026",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Alternate Nostril Breathing": {
+      "techniqueId": "69ca561206566afe944a4448",
+      "intro": "clip_056",
+      "closing": "clip_046",
+      "phases": [
+        {
+          "clipId": "clip_006",
+          "expectedLabel": "inhale left",
+          "phaseMs": 4000,
+          "audioMs": 1933
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_013",
+          "expectedLabel": "exhale right",
+          "phaseMs": 4000,
+          "audioMs": 2090
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        }
+      ]
+    },
+    "4-4-6-2 Breathing": {
+      "techniqueId": "69ca561206566afe944a4447",
+      "intro": "clip_020",
+      "closing": "clip_038",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        }
+      ]
+    },
+    "Ocean Breathing (Ujjayi)": {
+      "techniqueId": "69ca561206566afe944a4446",
+      "intro": "clip_015",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 5000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 5000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Triangle Breathing": {
+      "techniqueId": "69ca561206566afe944a4445",
+      "intro": "clip_055",
+      "closing": "clip_038",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale",
+          "phaseMs": 4000,
+          "audioMs": 1149
+        }
+      ]
+    },
+    "5-5 Coherence Breathing": {
+      "techniqueId": "69ca561206566afe944a4444",
+      "intro": "clip_027",
+      "closing": "clip_039",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 5000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 5000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Belly Breathing": {
+      "techniqueId": "69ca561206566afe944a4443",
+      "intro": "clip_004",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 2000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "2-1-4-1 Breathing": {
+      "techniqueId": "69ca561206566afe944a4442",
+      "intro": "clip_001",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_011",
+          "expectedLabel": "inhale",
+          "phaseMs": 2000,
+          "audioMs": 1019
+        },
+        {
+          "clipId": "clip_024",
+          "expectedLabel": "hold",
+          "phaseMs": 1000,
+          "audioMs": 862
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale",
+          "phaseMs": 4000,
+          "audioMs": 1149
+        },
+        {
+          "clipId": "clip_024",
+          "expectedLabel": "hold",
+          "phaseMs": 1000,
+          "audioMs": 862
+        }
+      ]
+    },
+    "Extended Exhale": {
+      "techniqueId": "69ca561206566afe944a4441",
+      "intro": "clip_051",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 8000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Resonance Breathing": {
+      "techniqueId": "69ca561206566afe944a4440",
+      "intro": "clip_048",
+      "closing": "clip_028",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 6000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 6000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "4-7-8 Breathing": {
+      "techniqueId": "69ca561206566afe944a443e",
+      "intro": "clip_057",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 7000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_049",
+          "expectedLabel": "exhale",
+          "phaseMs": 8000,
+          "audioMs": 2038
+        }
+      ]
+    },
+    "Box Breathing": {
+      "techniqueId": "69ca561206566afe944a443d",
+      "intro": "clip_023",
+      "closing": "clip_034",
+      "phases": [
+        {
+          "clipId": "clip_005",
+          "expectedLabel": "inhale",
+          "phaseMs": 4000,
+          "audioMs": 1332
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        },
+        {
+          "clipId": "clip_014",
+          "expectedLabel": "exhale",
+          "phaseMs": 4000,
+          "audioMs": 1149
+        },
+        {
+          "clipId": "clip_043",
+          "expectedLabel": "hold",
+          "phaseMs": 4000,
+          "audioMs": 1907
+        }
+      ]
+    }
+  }
+}
