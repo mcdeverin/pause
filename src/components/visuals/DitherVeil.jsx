@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Renderer, Program, Mesh, Triangle, Texture, RenderTarget } from 'ogl';
+import { Renderer, Program, Mesh, Triangle, Texture, RenderTarget } from 'https://esm.sh/ogl@1.0.11';
 
 import './DitherVeil.css';
 
