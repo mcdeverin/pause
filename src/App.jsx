@@ -13,6 +13,7 @@ import GhostStudio from './pages/GhostStudio.jsx';
 
 const Onboarding = lazy(() => import('./pages/Onboarding.jsx'));
 const Cloud = lazy(() => import('./pages/Cloud.jsx'));
+const LiquidChromeExperience = lazy(() => import('./pages/LiquidChromeExperience.jsx'));
 const Popcorn = lazy(() => import('./pages/Popcorn.jsx'));
 const LiquidSurface = lazy(() => import('./pages/LiquidSurface.jsx'));
 const PrismaticWater = lazy(() => import('./pages/PrismaticWater.jsx'));
@@ -68,6 +69,7 @@ const AuthenticatedApp = () => {
       <Route path="/theme-studio" element={<GhostStudio />} />
       <Route path="/sensory/liquid-surface" element={<Suspense fallback={<div className="p-8">Loading Liquid Surface…</div>}><LiquidSurface /></Suspense>} />
       <Route path="/sensory/prismatic-water" element={<Suspense fallback={<div className="p-8">Loading Prismatic Water…</div>}><PrismaticWater /></Suspense>} />
+      <Route path="/sensory/liquid-chrome" element={<Suspense fallback={<div className="p-8">Loading Liquid Chrome…</div>}><LiquidChromeExperience /></Suspense>} />
       <Route path="/sensory/cloud" element={<Suspense fallback={<div className="p-8">Loading Cloud…</div>}><Cloud /></Suspense>} />
       <Route path="/sensory/popcorn" element={<Suspense fallback={<div className="p-8">Loading Popcorn…</div>}><Popcorn /></Suspense>} />
       <Route path="/sensory/underwater" element={<Suspense fallback={<div className="p-8">Loading Underwater…</div>}><Underwater /></Suspense>} />
