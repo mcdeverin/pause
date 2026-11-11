@@ -1,0 +1,1229 @@
+{
+  "version": 1,
+  "voices": [
+    {
+      "name": "Olivia",
+      "id": "kbX5GFsXCR5EpQkZJgeu"
+    },
+    {
+      "name": "Zara",
+      "id": "wdymxIQkYn7MJCYCQF2Q"
+    },
+    {
+      "name": "Tarun",
+      "id": "I3l9G0ww7jdDDZ7DbY0k"
+    },
+    {
+      "name": "Lauren",
+      "id": "v8DWAeuEGQSfwxqdH9t2"
+    },
+    {
+      "name": "Alex",
+      "id": "sDM8wW0sbrZWFoUX5r07"
+    },
+    {
+      "name": "Luca",
+      "id": "4JVOFy4SLQs9my0OLhEw"
+    }
+  ],
+  "recordings": [
+    {
+      "clip_id": "clip_001",
+      "text": "A brief inhale and pause, then a longer exhale and a moment of rest.",
+      "used_by": [
+        {
+          "technique": "2-1-4-1 Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_002",
+      "text": "A short gentle inhale, followed by a slow and easy exhale.",
+      "used_by": [
+        {
+          "technique": "2-6 Calming Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_003",
+      "text": "Allow plenty of time to breathe out. Shorten the count if you need to.",
+      "used_by": [
+        {
+          "technique": "7-11 Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_004",
+      "text": "Allow your belly to rise gently as you breathe in.",
+      "used_by": [
+        {
+          "technique": "Belly Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_005",
+      "text": "Breathe in gently.",
+      "used_by": [
+        {
+          "technique": "4-4-4 Triangle",
+          "position": "inhale"
+        },
+        {
+          "technique": "Vagal Toning Breath",
+          "position": "inhale"
+        },
+        {
+          "technique": "Slow Deep Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Mindful Breath Awareness",
+          "position": "inhale"
+        },
+        {
+          "technique": "Anti-Anxiety Breath",
+          "position": "inhale"
+        },
+        {
+          "technique": "Counting Breath",
+          "position": "inhale counting to 5"
+        },
+        {
+          "technique": "Grounding Breath",
+          "position": "inhale"
+        },
+        {
+          "technique": "Sleep Onset Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "478 Variation",
+          "position": "inhale"
+        },
+        {
+          "technique": "Straw Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Nadi Shodhana Advanced",
+          "position": "inhale"
+        },
+        {
+          "technique": "Relaxing Breath",
+          "position": "inhale"
+        },
+        {
+          "technique": "Heart Coherence Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Combat Tactical Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "7-11 Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Equal Breathing (Sama Vritti)",
+          "position": "inhale"
+        },
+        {
+          "technique": "4-8 Sleep Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Bhramari (Humming Bee)",
+          "position": "inhale"
+        },
+        {
+          "technique": "4-6 Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "6-2-7 Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "1-4-2 Ratio Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Sitali Cooling Breath",
+          "position": "inhale"
+        },
+        {
+          "technique": "4-4-6-2 Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Ocean Breathing (Ujjayi)",
+          "position": "inhale"
+        },
+        {
+          "technique": "Triangle Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "5-5 Coherence Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Belly Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Extended Exhale",
+          "position": "inhale"
+        },
+        {
+          "technique": "Resonance Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "4-7-8 Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Box Breathing",
+          "position": "inhale"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_006",
+      "text": "Breathe in through the left.",
+      "used_by": [
+        {
+          "technique": "Alternate Nostril Breathing",
+          "position": "inhale left"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_007",
+      "text": "Breathe in through your nose and exhale softly through pursed lips.",
+      "used_by": [
+        {
+          "technique": "Pursed Lip Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_008",
+      "text": "Breathe in through your nose.",
+      "used_by": [
+        {
+          "technique": "Lion's Breath",
+          "position": "inhale through nose"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_009",
+      "text": "Breathe in through your nose. On the exhale, open your mouth wide and release gently.",
+      "used_by": [
+        {
+          "technique": "Lion's Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_010",
+      "text": "Breathe in, pause, then give yourself extra time to breathe out.",
+      "used_by": [
+        {
+          "technique": "3-3-6 Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_011",
+      "text": "Breathe in.",
+      "used_by": [
+        {
+          "technique": "Panic Reset Breath",
+          "position": "inhale"
+        },
+        {
+          "technique": "Morning Activation Breath",
+          "position": "inhale"
+        },
+        {
+          "technique": "3-6 Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "Buteyko Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "2-6 Calming Breath",
+          "position": "inhale"
+        },
+        {
+          "technique": "Pursed Lip Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "3-3-6 Breathing",
+          "position": "inhale"
+        },
+        {
+          "technique": "2-1-4-1 Breathing",
+          "position": "inhale"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_012",
+      "text": "Breathe out through pursed lips.",
+      "used_by": [
+        {
+          "technique": "Straw Breathing",
+          "position": "exhale through pursed lips"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_013",
+      "text": "Breathe out through the right.",
+      "used_by": [
+        {
+          "technique": "Alternate Nostril Breathing",
+          "position": "exhale right"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_014",
+      "text": "Breathe out.",
+      "used_by": [
+        {
+          "technique": "4-4-4 Triangle",
+          "position": "exhale"
+        },
+        {
+          "technique": "Panic Reset Breath",
+          "position": "long exhale"
+        },
+        {
+          "technique": "Morning Activation Breath",
+          "position": "exhale"
+        },
+        {
+          "technique": "Mindful Breath Awareness",
+          "position": "exhale"
+        },
+        {
+          "technique": "3-Part Yogic Breath",
+          "position": "exhale"
+        },
+        {
+          "technique": "Combat Tactical Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "Buteyko Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "Pursed Lip Breathing",
+          "position": "exhale slowly"
+        },
+        {
+          "technique": "Triangle Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "2-1-4-1 Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "Box Breathing",
+          "position": "exhale"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_015",
+      "text": "Create a soft ocean-like sound in the throat without tightening or straining.",
+      "used_by": [
+        {
+          "technique": "Ocean Breathing (Ujjayi)",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_016",
+      "text": "Ease into a steady breath, a short pause, and a long exhale.",
+      "used_by": [
+        {
+          "technique": "Relaxing Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_017",
+      "text": "Feel the support beneath you as you follow this steady rhythm.",
+      "used_by": [
+        {
+          "technique": "Grounding Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_018",
+      "text": "Fill your belly gently.",
+      "used_by": [
+        {
+          "technique": "3-Part Yogic Breath",
+          "position": "belly"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_019",
+      "text": "Find a balanced rhythm, with equal time breathing in and out.",
+      "used_by": [
+        {
+          "technique": "Equal Breathing (Sama Vritti)",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_020",
+      "text": "Follow a measured inhale, pause, long exhale, and brief rest.",
+      "used_by": [
+        {
+          "technique": "4-4-6-2 Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_021",
+      "text": "Follow a smooth breath in and a longer breath out, without straining.",
+      "used_by": [
+        {
+          "technique": "Vagal Toning Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_022",
+      "text": "Follow the count at an easy pace, letting the breath remain comfortable.",
+      "used_by": [
+        {
+          "technique": "Counting Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_023",
+      "text": "Follow the four sides of the box: inhale, hold, exhale, and rest.",
+      "used_by": [
+        {
+          "technique": "Box Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_024",
+      "text": "Hold.",
+      "used_by": [
+        {
+          "technique": "2-1-4-1 Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "2-1-4-1 Breathing",
+          "position": "hold"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_025",
+      "text": "Hum softly as you breathe out.",
+      "used_by": [
+        {
+          "technique": "Bhramari (Humming Bee)",
+          "position": "hum exhale"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_026",
+      "text": "If comfortable, breathe in through a curled tongue or gently parted lips, then exhale through your nose.",
+      "used_by": [
+        {
+          "technique": "Sitali Cooling Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_027",
+      "text": "Let each inhale and exhale flow at the same easy pace.",
+      "used_by": [
+        {
+          "technique": "5-5 Coherence Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_028",
+      "text": "Let the breath return to its own pace. Rest here for a moment.",
+      "used_by": [
+        {
+          "technique": "Sleep Onset Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Heart Coherence Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Equal Breathing (Sama Vritti)",
+          "position": "closing"
+        },
+        {
+          "technique": "4-8 Sleep Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "1-4-2 Ratio Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Resonance Breathing",
+          "position": "closing"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_029",
+      "text": "Let the breath rise to your upper chest.",
+      "used_by": [
+        {
+          "technique": "3-Part Yogic Breath",
+          "position": "collar"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_030",
+      "text": "Let the exhale last a little longer than the inhale.",
+      "used_by": [
+        {
+          "technique": "3-6 Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_031",
+      "text": "Let the exhale soften and extend beyond the inhale.",
+      "used_by": [
+        {
+          "technique": "4-6 Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_032",
+      "text": "Let the out-breath be long and unhurried as you prepare to rest.",
+      "used_by": [
+        {
+          "technique": "4-8 Sleep Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_033",
+      "text": "Let your breath become slow and easy, without forcing its depth.",
+      "used_by": [
+        {
+          "technique": "Slow Deep Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_034",
+      "text": "Let your breathing settle naturally. Take this moment with you.",
+      "used_by": [
+        {
+          "technique": "Slow Deep Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "478 Variation",
+          "position": "closing"
+        },
+        {
+          "technique": "Straw Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Relaxing Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "7-11 Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "3-6 Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "2-6 Calming Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "Bhramari (Humming Bee)",
+          "position": "closing"
+        },
+        {
+          "technique": "4-6 Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Pursed Lip Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "6-2-7 Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Sitali Cooling Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "Ocean Breathing (Ujjayi)",
+          "position": "closing"
+        },
+        {
+          "technique": "Belly Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "2-1-4-1 Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Extended Exhale",
+          "position": "closing"
+        },
+        {
+          "technique": "4-7-8 Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Box Breathing",
+          "position": "closing"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_035",
+      "text": "Let your inhale and exhale find an even, comfortable rhythm.",
+      "used_by": [
+        {
+          "technique": "Heart Coherence Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_036",
+      "text": "Notice the ground beneath you. You can return to this breath whenever you need.",
+      "used_by": [
+        {
+          "technique": "Panic Reset Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "Anti-Anxiety Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "Grounding Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "Lion's Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "3-3-6 Breathing",
+          "position": "closing"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_037",
+      "text": "Notice the sensation of breathing, just as it is.",
+      "used_by": [
+        {
+          "technique": "Mindful Breath Awareness",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_038",
+      "text": "Notice your attention. Carry this steadiness into what comes next.",
+      "used_by": [
+        {
+          "technique": "4-4-4 Triangle",
+          "position": "closing"
+        },
+        {
+          "technique": "Mindful Breath Awareness",
+          "position": "closing"
+        },
+        {
+          "technique": "Counting Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "Combat Tactical Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Buteyko Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "4-4-6-2 Breathing",
+          "position": "closing"
+        },
+        {
+          "technique": "Triangle Breathing",
+          "position": "closing"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_039",
+      "text": "Notice your energy. Return to your natural breathing whenever you are ready.",
+      "used_by": [
+        {
+          "technique": "Morning Activation Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "Vagal Toning Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "3-Part Yogic Breath",
+          "position": "closing"
+        },
+        {
+          "technique": "5-5 Coherence Breathing",
+          "position": "closing"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_040",
+      "text": "Now fill your chest.",
+      "used_by": [
+        {
+          "technique": "3-Part Yogic Breath",
+          "position": "chest"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_041",
+      "text": "On each exhale, make a gentle humming sound. Keep your throat relaxed.",
+      "used_by": [
+        {
+          "technique": "Bhramari (Humming Bee)",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_042",
+      "text": "Open wide and breathe out.",
+      "used_by": [
+        {
+          "technique": "Lion's Breath",
+          "position": "exhale through mouth wide"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_043",
+      "text": "Pause gently.",
+      "used_by": [
+        {
+          "technique": "4-4-4 Triangle",
+          "position": "hold"
+        },
+        {
+          "technique": "Morning Activation Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "Morning Activation Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "Vagal Toning Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "Anti-Anxiety Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "Anti-Anxiety Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "3-Part Yogic Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "3-Part Yogic Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "Grounding Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "Sleep Onset Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "478 Variation",
+          "position": "hold"
+        },
+        {
+          "technique": "Nadi Shodhana Advanced",
+          "position": "hold"
+        },
+        {
+          "technique": "Relaxing Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "Combat Tactical Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "Combat Tactical Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "6-2-7 Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "3-3-6 Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "1-4-2 Ratio Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "Sitali Cooling Breath",
+          "position": "hold"
+        },
+        {
+          "technique": "Alternate Nostril Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "Alternate Nostril Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "4-4-6-2 Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "4-4-6-2 Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "Triangle Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "Belly Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "4-7-8 Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "Box Breathing",
+          "position": "hold"
+        },
+        {
+          "technique": "Box Breathing",
+          "position": "hold"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_044",
+      "text": "Relax your jaw. Exhale gently through softly pursed lips, as if through a straw.",
+      "used_by": [
+        {
+          "technique": "Straw Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_045",
+      "text": "Rest after the exhale.",
+      "used_by": [
+        {
+          "technique": "Buteyko Breathing",
+          "position": "hold empty"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_046",
+      "text": "Return to a comfortable natural breath. Rest before standing or moving on.",
+      "used_by": [
+        {
+          "technique": "Nadi Shodhana Advanced",
+          "position": "closing"
+        },
+        {
+          "technique": "Alternate Nostril Breathing",
+          "position": "closing"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_047",
+      "text": "Settle into a comfortable position. If a breath hold feels difficult, return to natural breathing.",
+      "used_by": [
+        {
+          "technique": "Sleep Onset Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_048",
+      "text": "Settle into a smooth, even rhythm that feels natural to you.",
+      "used_by": [
+        {
+          "technique": "Resonance Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_049",
+      "text": "Slowly breathe out.",
+      "used_by": [
+        {
+          "technique": "Vagal Toning Breath",
+          "position": "exhale"
+        },
+        {
+          "technique": "Slow Deep Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "Anti-Anxiety Breath",
+          "position": "exhale"
+        },
+        {
+          "technique": "Counting Breath",
+          "position": "exhale counting to 5"
+        },
+        {
+          "technique": "Grounding Breath",
+          "position": "exhale"
+        },
+        {
+          "technique": "Sleep Onset Breathing",
+          "position": "exhale slowly"
+        },
+        {
+          "technique": "478 Variation",
+          "position": "exhale"
+        },
+        {
+          "technique": "Nadi Shodhana Advanced",
+          "position": "exhale"
+        },
+        {
+          "technique": "Relaxing Breath",
+          "position": "exhale"
+        },
+        {
+          "technique": "Heart Coherence Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "7-11 Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "Equal Breathing (Sama Vritti)",
+          "position": "exhale"
+        },
+        {
+          "technique": "3-6 Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "4-8 Sleep Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "2-6 Calming Breath",
+          "position": "exhale"
+        },
+        {
+          "technique": "4-6 Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "6-2-7 Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "3-3-6 Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "1-4-2 Ratio Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "Sitali Cooling Breath",
+          "position": "exhale"
+        },
+        {
+          "technique": "4-4-6-2 Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "Ocean Breathing (Ujjayi)",
+          "position": "exhale"
+        },
+        {
+          "technique": "5-5 Coherence Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "Belly Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "Extended Exhale",
+          "position": "exhale"
+        },
+        {
+          "technique": "Resonance Breathing",
+          "position": "exhale"
+        },
+        {
+          "technique": "4-7-8 Breathing",
+          "position": "exhale"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_050",
+      "text": "Take a gentle breath in, pause briefly, and let it out slowly.",
+      "used_by": [
+        {
+          "technique": "6-2-7 Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_051",
+      "text": "Take your time breathing out, without pushing out every last bit of air.",
+      "used_by": [
+        {
+          "technique": "Extended Exhale",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_052",
+      "text": "This is a long-hold practice. Keep it easy and skip the hold if it feels uncomfortable.",
+      "used_by": [
+        {
+          "technique": "1-4-2 Ratio Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_053",
+      "text": "This is an advanced alternate-nostril practice. Follow the nostril instructions you have learned, and never force a hold.",
+      "used_by": [
+        {
+          "technique": "Nadi Shodhana Advanced",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_054",
+      "text": "This practice includes a pause after exhaling. Never push through air hunger.",
+      "used_by": [
+        {
+          "technique": "Buteyko Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_055",
+      "text": "Three equal phases: inhale, hold, and exhale.",
+      "used_by": [
+        {
+          "technique": "Triangle Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_056",
+      "text": "Use a gentle hand position to alternate nostrils. Avoid forcing any holds.",
+      "used_by": [
+        {
+          "technique": "Alternate Nostril Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_057",
+      "text": "We will breathe in for four, hold for seven, and exhale for eight. Keep it comfortable.",
+      "used_by": [
+        {
+          "technique": "4-7-8 Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_058",
+      "text": "We will breathe in, pause briefly, then lengthen the exhale.",
+      "used_by": [
+        {
+          "technique": "478 Variation",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_059",
+      "text": "We will fill the breath in three stages: belly, chest, and upper chest.",
+      "used_by": [
+        {
+          "technique": "3-Part Yogic Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_060",
+      "text": "We will make room for a gentle inhale and a longer release.",
+      "used_by": [
+        {
+          "technique": "Anti-Anxiety Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_061",
+      "text": "We will move through four equal parts, keeping the breath controlled and relaxed.",
+      "used_by": [
+        {
+          "technique": "Combat Tactical Breathing",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_062",
+      "text": "We will move through three even parts: breathe in, pause, and breathe out.",
+      "used_by": [
+        {
+          "technique": "4-4-4 Triangle",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_063",
+      "text": "Welcome to a short, steady rhythm to begin your day.",
+      "used_by": [
+        {
+          "technique": "Morning Activation Breath",
+          "position": "intro"
+        }
+      ]
+    },
+    {
+      "clip_id": "clip_064",
+      "text": "You can take this one breath at a time. Keep each breath comfortable and unforced.",
+      "used_by": [
+        {
+          "technique": "Panic Reset Breath",
+          "position": "intro"
+        }
+      ]
+    }
+  ],
+  "video_first": [
+    "Power Breathing",
+    "Energy Boost Breathing",
+    "Breath of Fire",
+    "Cyclic Sighing",
+    "Tummo Inner Fire",
+    "Kapalabhati (Skull Shining)",
+    "Wim Hof Breathing",
+    "Physiological Sigh"
+  ]
+}
