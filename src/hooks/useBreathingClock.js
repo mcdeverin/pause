@@ -10,7 +10,7 @@ import { buildBreathPlan, sessionStateAt } from "../lib/breathing";
 // interruption resumes the session where it stopped instead of jumping ahead.
 const MIN_PUBLISH_STEP = 0.032;
 
-export default function useBreathingClock({ phases, labels, cycles = 4, onComplete }) {
+export default function useBreathingClock({ phases, labels, cycles = 4, onComplete, enabled = true }) {
   const plan = useMemo(() => buildBreathPlan(phases, labels), [phases, labels]);
   const total = plan.duration * cycles;
 
@@ -83,7 +83,7 @@ export default function useBreathingClock({ phases, labels, cycles = 4, onComple
     document.addEventListener("pagehide", markHidden);
     window.addEventListener("pageshow", markVisible);
 
-    rafRef.current = requestAnimationFrame(frame);
+    if (enabled) rafRef.current = requestAnimationFrame(frame);
 
     return () => {
       cancelAnimationFrame(rafRef.current);
@@ -92,7 +92,7 @@ export default function useBreathingClock({ phases, labels, cycles = 4, onComple
       document.removeEventListener("pagehide", markHidden);
       window.removeEventListener("pageshow", markVisible);
     };
-  }, [plan, cycles, total]);
+  }, [plan, cycles, total, enabled]);
 
   // Ends the session early and returns the real elapsed time.
   const cancel = useCallback(() => {

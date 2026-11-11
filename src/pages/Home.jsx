@@ -342,8 +342,8 @@ export default function Home() {
         {mode === "setup" && (
           <PauseSetup key="pause-setup" theme={theme} backgroundSettings={preferences} photo={photo}
             onBack={() => setMode("idle")} onBegin={startMoment} busy={preparingPause}
-            voiceAvailable={typeof window !== "undefined" && "speechSynthesis" in window}
-            defaultVoice={preferences.narrationMode || (preferences.voiceGuide ? "full" : "none")} />
+            voiceAvailable={typeof window !== "undefined" && typeof window.Audio !== "undefined"}
+            defaultVoice={preferences.voiceGuide ? "full" : "none"} />
         )}
         {mode === "breathing" && technique && (
           <BreathingScreen

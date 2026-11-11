@@ -8,7 +8,7 @@ const ICONS = { calm: Leaf, focus: Crosshair, wind_down: Moon, reset: Sun };
 
 export default function PauseSetup({ theme, backgroundSettings, photo, onBack, onBegin, busy = false, voiceAvailable = true, defaultVoice = false }) {
   const [moment, setMoment] = useState(null);
-  const [voice, setVoice] = useState(typeof defaultVoice === "string" ? defaultVoice : defaultVoice ? "full" : "none");
+  const [voice, setVoice] = useState(typeof defaultVoice === "string" ? (defaultVoice === "none" ? "none" : "full") : defaultVoice ? "full" : "none");
   const selected = MOMENTS.find((entry) => entry.id === moment);
   return (
     <motion.main className="screen-fit" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -36,9 +36,8 @@ export default function PauseSetup({ theme, backgroundSettings, photo, onBack, o
         <div style={{ textAlign: "center", marginTop: 8, fontSize: 14, fontWeight: 600 }}>How would you like to be guided?</div>
         <div role="group" aria-label="Guidance preference" style={{ display: "grid", gridTemplateColumns: "1fr", gap: 9 }}>
           {[
-            { id: "full", title: "Fully Guided", description: "Voice guidance for every breathing phase." },
-            { id: "partial", title: "Lightly Guided", description: "Occasional voice guidance throughout your session." },
-            { id: "none", title: "No Voice Guidance", description: "Follow the orb without spoken instructions." },
+            { id: "full", title: "Guided", description: "Breathe with Lauren’s voice." },
+            { id: "none", title: "Not Guided", description: "Follow the breathing visual without voice." },
           ].map((option) => {
             const active = voice === option.id;
             const disabled = !voiceAvailable && option.id !== "none";
