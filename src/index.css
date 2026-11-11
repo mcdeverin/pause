@@ -52,6 +52,7 @@
     --sidebar-ring: 217 44% 36%;
 
     --font-nunito: 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-pause-heading: Georgia, 'Times New Roman', serif;
   }
 
   .dark {
@@ -156,6 +157,16 @@
 
   * {
     @apply border-border outline-ring/50;
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+  }
+
+  .pause-serif-heading {
+    font-family: var(--font-pause-heading);
+    font-weight: 400;
+    letter-spacing: -0.035em;
   }
 
   body {
