@@ -16,7 +16,7 @@ export default function SensoryStudio(){
  const [prismatic,setPrismatic]=useState({strength:.7,softness:.65,palette:"pearl"});
  const [liquid,setLiquid]=useState({background:"photo",strength:.7,viscosity:.65,photo:BACKDROP_PHOTOS[0]?.id});
  const [neonBackground,setNeonBackground]=useState("dark");
- const [scene,setScene]=useState("orbit"),[allowed,setAllowed]=useState(null),[accent,setAccent]=useState(palettes[0][1]),[motion,setMotion]=useState(.6),[paused,setPaused]=useState(false),[expanded,setExpanded]=useState(false);
+ const [scene,setScene]=useState("light"),[allowed,setAllowed]=useState(null),[accent,setAccent]=useState(palettes[0][1]),[motion,setMotion]=useState(.6),[paused,setPaused]=useState(false),[expanded,setExpanded]=useState(false);
  useEffect(()=>{base44.auth.me().then(me=>setAllowed(me?.role==="admin")).catch(()=>setAllowed(false));},[]);
  if(allowed===null)return <main style={{padding:32}}>Checking access…</main>;
  if(!allowed)return <main style={{padding:32}}>Private design studio. <Link to="/">Return to Pause</Link></main>;
