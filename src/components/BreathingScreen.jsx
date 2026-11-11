@@ -8,7 +8,7 @@ import { FONT, getColors, isPhotoBackground } from "../lib/design";
 import { getBreathingInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
-import { narrationCueForPhase } from "../lib/narration";
+import { loadLaurenLibrary, findLaurenClip, phasePosition, isVideoFirst, playLaurenClip } from "../lib/laurenAudio";
 import { usePhotoLightness } from "../hooks/usePhotoLightness";
 
 const TOTAL_CYCLES = 4;
@@ -82,8 +82,33 @@ export default function BreathingScreen({
       ? activeTechnique.scienceBlurbSource.trim()
       : null;
 
+  const guided = voiceGuide && narrationMode !== "none";
+  const [readyToBreathe, setReadyToBreathe] = useState(!guided);
+  const [laurenLibrary, setLaurenLibrary] = useState(null);
+  const stopAudioRef = useRef(null);
+  const [introPlaying, setIntroPlaying] = useState(guided);
   const [showInfo, setShowInfo] = useState(false);
   const [infoMaxHeight, setInfoMaxHeight] = useState(null);
+
+  // Audio introduction occurs before the clock starts; no breathing timing changes.
+  useEffect(() => {
+    let active = true;
+    if (!guided) return undefined;
+    loadLaurenLibrary().then(library => {
+      if (!active) return;
+      setLaurenLibrary(library);
+      const intro = !isVideoFirst(library, activeTechnique)
+        ? findLaurenClip(library, activeTechnique, "intro") : null;
+      if (!intro) { setIntroPlaying(false); setReadyToBreathe(true); return; }
+      stopAudioRef.current = playLaurenClip(intro, () => {
+        if (!active) return;
+        stopAudioRef.current = null;
+        setIntroPlaying(false);
+        setReadyToBreathe(true);
+      });
+    }).catch(() => { if (active) { setIntroPlaying(false); setReadyToBreathe(true); } });
+    return () => { active = false; stopAudioRef.current?.(); stopAudioRef.current = null; };
+  }, [guided, activeTechnique]);
 
   const finishedRef = useRef(false);
   const sessionIdRef = useRef(
@@ -129,6 +154,7 @@ export default function BreathingScreen({
     labels: activeLabels,
     cycles: TOTAL_CYCLES,
     onComplete: finish,
+    enabled: readyToBreathe,
   });
 
   // The bar fills across the phase being spoken above it (inhale, hold, exhale),
@@ -144,30 +170,20 @@ export default function BreathingScreen({
     triggerHaptic(currentLabel);
   }, [phaseSequence, currentLabel]);
 
-  // Spoken phase cues follow the same clock as the animation and haptics.
-  // Browser/device voices vary; no recording or external audio service is used.
+  // Start eligible MP3 cues only at boundaries emitted by the existing clock.
+  // Late/missing/overlong clips are skipped rather than delaying the orb.
   useEffect(() => {
-    const mode = narrationMode === "none" && voiceGuide ? "full" : narrationMode;
-    if (mode === "none" || typeof window === "undefined" || !("speechSynthesis" in window)) return undefined;
-    if (phaseSequence !== spokenPhaseRef.current) {
-      spokenPhaseRef.current = phaseSequence;
-      const cycleIndex = Math.floor(phaseSequence / activePhases.length);
-      if (mode === "partial" && cycleIndex >= 2 && cycleIndex % 4 !== 0) return undefined;
-      const raw = String(currentLabel || "").toLowerCase();
-      const scriptedCue = narrationCueForPhase(activeTechnique, clock.index, Math.floor(phaseSequence / activePhases.length));
-      const cue = scriptedCue || (raw.includes("inhale") ? "Breathe in" : raw.includes("exhale") ? "Breathe out" : raw.includes("hold") ? "Hold gently" : raw.includes("hum") ? "Hum softly" : currentLabel);
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(cue);
-      utterance.rate = 0.85;
-      utterance.volume = 0.85;
-      window.speechSynthesis.speak(utterance);
-    }
-    return undefined;
-  }, [voiceGuide, narrationMode, phaseSequence, currentLabel, activeTechnique, clock.index, activePhases.length]);
+    if (!guided || !readyToBreathe || !laurenLibrary || isVideoFirst(laurenLibrary, activeTechnique)) return;
+    if (phaseSequence === spokenPhaseRef.current) return;
+    spokenPhaseRef.current = phaseSequence;
+    stopAudioRef.current?.();
+    stopAudioRef.current = null;
+    const position = phasePosition(currentLabel);
+    const clip = findLaurenClip(laurenLibrary, activeTechnique, position, activePhases[clock.index]);
+    if (clip) stopAudioRef.current = playLaurenClip(clip);
+  }, [guided, readyToBreathe, laurenLibrary, phaseSequence, currentLabel, activeTechnique, activePhases, clock.index]);
 
-  useEffect(() => () => {
-    if (voiceGuide && typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
-  }, [voiceGuide]);
+  useEffect(() => () => { stopAudioRef.current?.(); }, []);
 
   // The information card is height-capped to the space above the breathing
   // visual, so its text can never reach or cover the animation. On a very short
@@ -187,6 +203,7 @@ export default function BreathingScreen({
   }, [showInfo]);
 
   const handleDone = () => {
+    stopAudioRef.current?.();
     const elapsed = clock.cancel();
     finish({ completed: false, elapsedSeconds: Math.round(elapsed) });
   };
@@ -355,11 +372,11 @@ export default function BreathingScreen({
               lineHeight: 1.3,
             }}
           >
-            {currentLabel}
+            {introPlaying ? "get comfortable" : currentLabel}
           </p>
         ) : (
           <span className="sr-only" aria-live="polite">
-            {currentLabel}
+            {introPlaying ? "get comfortable" : currentLabel}
           </span>
         )}
 
