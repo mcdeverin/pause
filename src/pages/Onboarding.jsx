@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
+import LagoonLiquidOrb from "../components/visuals/LagoonLiquidOrb";
+import OrbitScene from "../components/visuals/OrbitScene";
 import { FONT, HEADING_FONT } from "../lib/design";
 import { BACKDROP_PHOTOS, DEFAULT_BACKDROP_PHOTO } from "../lib/crystalStudio";
 
@@ -119,13 +121,25 @@ const textButton = { background: "transparent", border: 0, color: "white", fontS
 function ExperiencePreview({ kind, reduceMotion }) {
   const breathing = kind === "Guided breathing";
   const sensory = kind === "Sensory experiences";
-  const both = kind === "A little of both";
-  if (!breathing && !sensory && !both) return <div aria-hidden="true" style={{ height: "clamp(36px, 7dvh, 68px)", display: "grid", placeItems: "center", fontFamily: HEADING_FONT, fontSize: 38, opacity: .85 }}>✧</div>;
-  const size = "clamp(72px, 12dvh, 116px)";
-  const orb = <div style={{ width: both ? "70%" : "100%", height: both ? "70%" : "100%", borderRadius: "50%", background: "conic-gradient(from 22deg, #7bcdbb 0deg, #3c9fa3 65deg, #f5fffa 92deg, #76c6bd 147deg, #358d9b 208deg, #f4fffa 243deg, #71c9af 315deg, #7bcdbb 360deg)", filter: "drop-shadow(0 0 8px rgba(143,234,217,.4))", animation: reduceMotion ? "none" : "onboardingBreathe 5s ease-in-out infinite" }} />;
-  const pops = <svg viewBox="0 0 90 90" width="100%" height="100%" aria-hidden="true">{[[24,28,11,"#f6b8b5"],[55,20,13,"#b6d7ef"],[72,50,10,"#c9b5ed"],[32,62,14,"#d5e8b1"],[58,70,12,"#efc5dc"]].map(([x,y,r,c],i)=><g key={i} style={{ transformOrigin: x+"px "+y+"px", animation: reduceMotion ? "none" : `onboardingPop ${2.6+i*.4}s ease-in-out infinite alternate` }}><circle cx={x} cy={y} r={r} fill={c} opacity=".94"/><circle cx={x-3} cy={y-4} r={r*.3} fill="white" opacity=".7"/></g>)}</svg>;
-  return <div aria-hidden="true" style={{ width: size, height: size, flexShrink: 1, display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
-    {breathing ? orb : sensory ? pops : <><div style={{ position: "absolute", inset: "0 42% 0 0", display: "grid", placeItems: "center" }}>{orb}</div><div style={{ position: "absolute", inset: "0 0 0 38%" }}>{pops}</div></>}
-    <style>{`@keyframes onboardingBreathe {0%,100%{transform:scale(.87)}50%{transform:scale(1)}} @keyframes onboardingPop {0%{transform:scale(.83) translateY(2px)}100%{transform:scale(1.08) translateY(-3px)}}`}</style>
+  if (!breathing && !sensory) return null;
+  return <div aria-hidden="true" style={{ width: "min(100%, 170px)", height: "clamp(90px, 15dvh, 155px)", position: "relative", overflow: "hidden", borderRadius: 18, flexShrink: 1 }}>
+    {breathing ? <MiniBreathingOrb reducedMotion={reduceMotion} /> : <div style={{ position: "absolute", inset: 0, borderRadius: 18, overflow: "hidden" }} onPointerDown={e=>e.stopPropagation()} onPointerMove={e=>e.stopPropagation()}><OrbitScene accent="#c77d9b" motion={0.45} paused={Boolean(reduceMotion)} /></div>}
   </div>;
+}
+
+function MiniBreathingOrb({ reducedMotion }) {
+  const [breath, setBreath] = useState(0);
+  useEffect(() => {
+    if (reducedMotion) return;
+    let frame;
+    const start = performance.now();
+    const tick = (now) => {
+      // Four-second inhale, four-second exhale; preview only, not a session clock.
+      setBreath((1 - Math.cos(((now - start) / 8000) * Math.PI * 2)) / 2);
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [reducedMotion]);
+  return <div style={{ width: "100%", height: "100%", padding: 9, boxSizing: "border-box", pointerEvents: "none" }}><LagoonLiquidOrb breath={breath} reducedMotion={Boolean(reducedMotion)} /></div>;
 }
