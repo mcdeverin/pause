@@ -71,25 +71,25 @@ export default function Onboarding() {
       </div>
       {/* The scrim preserves readability while the photograph and water stay visible. */}
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "linear-gradient(180deg, rgba(5,21,28,.55) 0%, rgba(5,21,28,.08) 35%, rgba(5,21,28,.16) 52%, rgba(5,21,28,.72) 100%)" }} />
-      <div style={{ position: "absolute", inset: 0, zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom))", pointerEvents: "none" }}>
+      <div style={{ position: "absolute", inset: 0, zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: step === 2 ? "flex-start" : "space-between", padding: "max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom))", pointerEvents: "none" }}>
         <header style={{ width: "100%", maxWidth: 460, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", pointerEvents: "auto" }}>
           <span style={{ fontFamily: HEADING_FONT, fontSize: 22, letterSpacing: "-.035em" }}>always pause</span>
           {step > 0 && step < 4 && <button onClick={() => setStep((value) => value - 1)} style={{ ...textButton, position: "absolute", right: 0 }}>Back</button>}
         </header>
         <AnimatePresence mode="wait">
           <motion.section key={step} initial={reduceMotion ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? {} : { opacity: 0, y: -12 }} transition={{ duration: .32 }}
-            style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 12, pointerEvents: "none" }}>
+            style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 12, marginTop: step === 2 ? "clamp(30px, 6dvh, 80px)" : 0, pointerEvents: "none" }}>
             <h1 style={{ fontFamily: HEADING_FONT, fontSize: "clamp(36px, 8vw, 56px)", fontWeight: 400, lineHeight: 1.12, letterSpacing: "-.035em", margin: 0, textShadow: "0 2px 22px rgba(0,0,0,.22)" }}>{current.title}</h1>
             <p style={{ fontSize: 15, lineHeight: 1.5, margin: 0, opacity: .95, textShadow: "0 1px 12px rgba(0,0,0,.4)" }}>{current.subtitle}</p>
           </motion.section>
         </AnimatePresence>
-        <div style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", gap: 13, pointerEvents: "auto" }}>
+        <div style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", gap: 13, flex: step === 2 ? 1 : "none", minHeight: 0, marginTop: step === 2 ? "clamp(20px, 4dvh, 48px)" : 0, pointerEvents: "auto" }}>
           {current.options.length > 0 && (
-            <div role="group" aria-label={current.title} style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: current.options.length <= 4 ? 14 : 10, width: "100%" }}>
+            <div role="group" aria-label={current.title} style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: current.options.length <= 4 ? 14 : 10, width: "100%", flex: step === 2 ? 1 : "none", minHeight: 0, gridTemplateRows: step === 2 ? "repeat(2, minmax(0, 1fr))" : undefined }}>
               {current.options.map((option) => {
                 const active = current.multiple ? selected.includes(option) : selected === option;
                 return <button key={option} type="button" aria-pressed={active} onClick={() => choose(option)}
-                  style={{ width: "100%", padding: "12px 10px", minHeight: current.options.length <= 4 ? "clamp(76px, 12dvh, 130px)" : "clamp(58px, 8dvh, 86px)", borderRadius: 22, border: active ? "1px solid white" : "1px solid rgba(255,255,255,.45)", color: "white", background: active ? "rgba(255,255,255,.29)" : "rgba(12,35,41,.33)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", fontSize: 15, fontWeight: active ? 600 : 400, cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: 8 }}>
+                  style={{ width: "100%", padding: "12px 10px", minHeight: step === 2 ? 0 : current.options.length <= 4 ? "clamp(76px, 12dvh, 130px)" : "clamp(58px, 8dvh, 86px)", borderRadius: 22, border: active ? "1px solid white" : "1px solid rgba(255,255,255,.45)", color: "white", background: active ? "rgba(255,255,255,.29)" : "rgba(12,35,41,.33)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", fontSize: 15, fontWeight: active ? 600 : 400, cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: 8 }}>
                   {option}{active && <span aria-hidden="true">✓</span>}
                 </button>;
               })}
