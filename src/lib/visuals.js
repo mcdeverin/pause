@@ -131,7 +131,10 @@ export const VISUAL_STYLES = [
     label: "Original",
     collection: "classics",
     description: "A luminous blue-green liquid orb that moves with your breath.",
-    controls: [],
+    controls: [
+      COLOR("colorFrom", "First color", "#76C7DF"),
+      COLOR("colorTo", "Second color", "#C6E7DB"),
+    ],
   },
   {
     id: "orb",
@@ -161,13 +164,6 @@ export const VISUAL_STYLES = [
     ],
   },
   {
-    id: "bubble",
-    label: "Bubble",
-    collection: "classics",
-    description: "Iridescent soap bubble.",
-    controls: [],
-  },
-  {
     id: "crystal",
     label: "Crystal",
     collection: "classics",
@@ -193,6 +189,13 @@ export const VISUAL_STYLES = [
     label: "Particles",
     collection: "classics",
     description: "A constellation of particles that expands with your breath.",
+    controls: [],
+  },
+  {
+    id: "bubble",
+    label: "Bubble",
+    collection: "classics",
+    description: "Iridescent soap bubble.",
     controls: [],
   },
   {
