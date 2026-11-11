@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import NavigationSheet from "./NavigationSheet";
 import MomentShortcuts from "./MomentShortcuts";
-import { FONT, FROST_GLASS, FROST_INK, isPhotoBackground } from "../lib/design";
+import { FONT, HEADING_FONT, FROST_GLASS, FROST_INK, isPhotoBackground } from "../lib/design";
 import { getCanvasInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import { usePhotoLightness } from "../hooks/usePhotoLightness";
@@ -162,7 +162,7 @@ export default function MainScreen({
         <p
           style={{
             margin: 0,
-            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontFamily: HEADING_FONT,
             fontSize: "clamp(36px, 7vw, 52px)",
             fontWeight: 400,
             letterSpacing: "-0.035em",
@@ -316,7 +316,7 @@ export default function MainScreen({
         <div role="dialog" aria-modal="true" aria-label="Quick tour" style={{ position: "fixed", inset: 0, zIndex: 90, background: "rgba(6,23,28,.28)", pointerEvents: "auto" }}>
           <div style={{ position: "absolute", top: tourStep === 0 ? "calc(env(safe-area-inset-top, 44px) + 65px)" : "48%", right: 18, width: "min(300px, calc(100vw - 36px))", borderRadius: 20, background: "#f7f3ed", color: "#203b3c", padding: 20, boxShadow: "0 10px 40px rgba(0,0,0,.3)" }}>
             <div style={{ fontSize: 23, lineHeight: 1, textAlign: "right", marginBottom: 8 }}>{tourStep === 0 ? "↗" : "→"}</div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 23, marginBottom: 8 }}>{tourStep === 0 ? "Explore at your pace." : "Make it yours."}</div>
+            <div style={{ fontFamily: HEADING_FONT, fontSize: 23, marginBottom: 8 }}>{tourStep === 0 ? "Explore at your pace." : "Make it yours."}</div>
             <p style={{ fontSize: 14, lineHeight: 1.5, margin: "0 0 16px" }}>{tourStep === 0 ? "The menu is where you'll find breathing techniques and sensory experiences." : "Choose Personalize Pause in the menu to change your scenery, breathing visual, and voice guidance."}</p>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
               <button type="button" onClick={finishTour} style={{ border: 0, background: "none", color: "#496064", cursor: "pointer" }}>Skip tour</button>
