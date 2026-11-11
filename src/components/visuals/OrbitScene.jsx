@@ -1,12 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 export default function OrbitScene({ accent = "#d90a3d", motion = 0.6, paused = false }) {
  const host = useRef(null), settings = useRef({accent,motion,paused});
+ const [webglUnavailable,setWebglUnavailable] = useState(false);
  settings.current = {accent,motion,paused};
  useEffect(() => {
   const el=host.current;if(!el)return;
-  const renderer=new THREE.WebGLRenderer({alpha:false,antialias:true});
+  let renderer;
+  try { renderer=new THREE.WebGLRenderer({alpha:false,antialias:true}); }
+  catch (error) { console.warn("Orbit: WebGL unavailable",error); setWebglUnavailable(true); return; }
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.6));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -91,5 +94,5 @@ export default function OrbitScene({ accent = "#d90a3d", motion = 0.6, paused = 
   frame=requestAnimationFrame(tick);
   return()=>{cancelAnimationFrame(frame);observer.disconnect();el.removeEventListener("pointermove",updatePointer);el.removeEventListener("pointerdown",press);el.removeEventListener("pointerup",release);el.removeEventListener("pointercancel",release);el.removeEventListener("pointerleave",leave);spheres.forEach(s=>s.mesh.material.dispose());geometry.dispose();reflection.dispose();pmrem.dispose();renderer.dispose();renderer.domElement.remove();};
  },[]);
- return <div ref={host} style={{width:"100%",height:"100%"}}/>;
+ return <div ref={host} style={{width:"100%",height:"100%"}}>{webglUnavailable&&<div role="status" style={{height:"100%",display:"grid",placeItems:"center",background:"#182c30",color:"#f6f5f4",textAlign:"center",padding:24}}>This visual needs WebGL. Try closing other graphics-heavy tabs and reloading.</div>}</div>;
 }
