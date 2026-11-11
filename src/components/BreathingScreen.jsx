@@ -83,31 +83,48 @@ export default function BreathingScreen({
       : null;
 
   const guided = voiceGuide && narrationMode !== "none";
-  const [readyToBreathe, setReadyToBreathe] = useState(!guided);
+  const [readyToBreathe, setReadyToBreathe] = useState(false);
   const [laurenLibrary, setLaurenLibrary] = useState(null);
   const stopAudioRef = useRef(null);
   const [introPlaying, setIntroPlaying] = useState(guided);
   const [showInfo, setShowInfo] = useState(false);
   const [infoMaxHeight, setInfoMaxHeight] = useState(null);
 
-  // Audio introduction occurs before the clock starts; no breathing timing changes.
+  // Preparation happens on the existing breathing screen. Never advance the
+  // breathing clock until the introduction and a short settling beat finish.
   useEffect(() => {
     let active = true;
-    if (!guided) return undefined;
-    loadLaurenLibrary().then(library => {
+    let timer;
+    const beginAfter = ms => {
       if (!active) return;
-      setLaurenLibrary(library);
-      const intro = !isVideoFirst(library, activeTechnique)
-        ? findLaurenClip(library, activeTechnique, "intro") : null;
-      if (!intro) { setIntroPlaying(false); setReadyToBreathe(true); return; }
-      stopAudioRef.current = playLaurenClip(intro, () => {
+      setIntroPlaying(false);
+      timer = window.setTimeout(() => {
+        if (active) setReadyToBreathe(true);
+      }, ms);
+    };
+    if (!guided) {
+      beginAfter(2000);
+    } else {
+      loadLaurenLibrary().then(library => {
         if (!active) return;
-        stopAudioRef.current = null;
-        setIntroPlaying(false);
-        setReadyToBreathe(true);
-      });
-    }).catch(() => { if (active) { setIntroPlaying(false); setReadyToBreathe(true); } });
-    return () => { active = false; stopAudioRef.current?.(); stopAudioRef.current = null; };
+        setLaurenLibrary(library);
+        const intro = !isVideoFirst(library, activeTechnique)
+          ? findLaurenClip(library, activeTechnique, "intro") : null;
+        if (!intro) { beginAfter(2000); return; }
+        setIntroPlaying(true);
+        stopAudioRef.current = playLaurenClip(intro, () => {
+          if (!active) return;
+          stopAudioRef.current = null;
+          beginAfter(1000);
+        });
+      }).catch(() => { if (active) beginAfter(2000); });
+    }
+    return () => {
+      active = false;
+      window.clearTimeout(timer);
+      stopAudioRef.current?.();
+      stopAudioRef.current = null;
+    };
   }, [guided, activeTechnique]);
 
   const finishedRef = useRef(false);
@@ -126,11 +143,17 @@ export default function BreathingScreen({
   const finish = (payload) => {
     if (finishedRef.current) return;
     finishedRef.current = true;
-    onDone({
+    stopAudioRef.current?.();
+    stopAudioRef.current = null;
+    const closing = guided && laurenLibrary && !isVideoFirst(laurenLibrary, activeTechnique) && payload?.completed
+      ? findLaurenClip(laurenLibrary, activeTechnique, "closing") : null;
+    const complete = () => onDone({
       sessionId: sessionIdRef.current,
       completed: Boolean(payload?.completed),
       elapsedSeconds: payload?.elapsedSeconds || 0,
     });
+    if (closing) stopAudioRef.current = playLaurenClip(closing, complete);
+    else complete();
   };
 
   // ── Haptic feedback ──────────────────────────────────────────────
@@ -204,6 +227,7 @@ export default function BreathingScreen({
 
   const handleDone = () => {
     stopAudioRef.current?.();
+    stopAudioRef.current = null;
     const elapsed = clock.cancel();
     finish({ completed: false, elapsedSeconds: Math.round(elapsed) });
   };
@@ -372,7 +396,7 @@ export default function BreathingScreen({
               lineHeight: 1.3,
             }}
           >
-            {introPlaying ? "get comfortable" : currentLabel}
+            {!readyToBreathe ? "get comfortable" : currentLabel}
           </p>
         ) : (
           <span className="sr-only" aria-live="polite">
