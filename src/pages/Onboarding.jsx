@@ -5,6 +5,7 @@ import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
 import LagoonLiquidOrb from "../components/visuals/LagoonLiquidOrb";
 import OrbitScene from "../components/visuals/OrbitScene";
 import PrismaticWaterScene from "../components/visuals/PrismaticWaterScene";
+import NeonNatureScene from "../components/visuals/NeonNatureScene";
 import { FONT, HEADING_FONT } from "../lib/design";
 import { BACKDROP_PHOTOS, DEFAULT_BACKDROP_PHOTO } from "../lib/crystalStudio";
 
@@ -151,7 +152,7 @@ function ExperiencePreview({ kind, reduceMotion }) {
 function SensoryCardScene({ title, reducedMotion }) {
   if (title === "Popcorn") return <OrbitScene accent="#c77d9b" motion={0.45} paused={Boolean(reducedMotion)} />;
   if (title === "Iridescent Water") return <PrismaticWaterScene palette="lagoon" strength={0.7} softness={0.65} motion={0.65} paused={Boolean(reducedMotion)} />;
-  if (title === "Liquid Surface") return <LiquidSurfaceScene strength={0.8} viscosity={0.76} paused={Boolean(reducedMotion)} />;
+  if (title === "Neon Paint") return <NeonNatureScene preview />;
   if (title === "Underwater") return <iframe title="Underwater jellyfish preview" src="https://holtsetio.com/lab/aurelia/" loading="lazy" tabIndex={-1} style={{ width: "100%", height: "calc(100% + 250px)", marginTop: -45, border: 0, pointerEvents: "none", background: "#031426" }} />;
   return null;
 }
@@ -183,6 +184,6 @@ const BREATHING_CARDS = [
 const SENSORY_CARDS = [
   { title: "Popcorn", kind: "sensory", accent: "#c77d9b" },
   { title: "Iridescent Water", kind: "sensory", accent: "#8accc9" },
-  { title: "Liquid Surface", kind: "sensory", accent: "#8fb6dc" },
+  { title: "Neon Paint", kind: "sensory", accent: "#ff388b" },
   { title: "Underwater", kind: "sensory", accent: "#82b7a2" },
 ];
