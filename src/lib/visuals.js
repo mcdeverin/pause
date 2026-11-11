@@ -19,7 +19,7 @@ const VISIBLE_COLLECTIONS = ["classics"];
 
 // Styles kept in the registry but no longer offered in the gallery. A pause
 // already saved with one still renders; it just can't be picked again.
-const HIDDEN_STYLE_IDS = ["glass", "living", "classicOrb"];
+const HIDDEN_STYLE_IDS = ["glass", "living", "classicOrb", "orb"];
 
 export const PALETTES = {
   bubble: {
@@ -128,7 +128,7 @@ const COLOR = (key, label, def) => ({
 export const VISUAL_STYLES = [
   {
     id: "lagoon",
-    label: "Lagoon Liquid Orb",
+    label: "Original",
     collection: "classics",
     description: "A luminous blue-green liquid orb that moves with your breath.",
     controls: [],
