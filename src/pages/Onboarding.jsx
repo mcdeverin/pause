@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
 import LagoonLiquidOrb from "../components/visuals/LagoonLiquidOrb";
 import OrbitScene from "../components/visuals/OrbitScene";
+import PrismaticWaterScene from "../components/visuals/PrismaticWaterScene";
 import { FONT, HEADING_FONT } from "../lib/design";
 import { BACKDROP_PHOTOS, DEFAULT_BACKDROP_PHOTO } from "../lib/crystalStudio";
 
@@ -99,7 +100,7 @@ export default function Onboarding() {
         <div style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", gap: 13, flex: (exploring || current.options.length > 0) ? 1 : "none", minHeight: 0, marginTop: (exploring || current.options.length > 0) ? "clamp(16px, 3dvh, 40px)" : 0, pointerEvents: "auto" }}>
           {exploring && <div role="group" aria-label="Explore experiences" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12, flex: 1, minHeight: 0 }}>
             {explorationCards.map((card) => <button type="button" key={card.title} aria-pressed={previewChoice === card.title} onClick={() => setPreviewChoice(card.title)} style={{ position: "relative", isolation: "isolate", overflow: "hidden", borderRadius: 22, border: previewChoice === card.title ? "2px solid white" : "1px solid rgba(255,255,255,.5)", background: "rgba(12,35,41,.48)", color: "white", cursor: "pointer", minHeight: 0, padding: 0 }}>
-              <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>{card.kind === "breathing" ? <MiniBreathingOrb reducedMotion={reduceMotion} /> : <OrbitScene accent={card.accent || "#c77d9b"} motion={0.4} paused={Boolean(reduceMotion)} />}</div>
+              <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>{card.kind === "breathing" ? <MiniBreathingOrb reducedMotion={reduceMotion} colors={card.colors} period={card.period} /> : <SensoryCardScene title={card.title} reducedMotion={reduceMotion} />}</div>
               <div aria-hidden="true" style={{ position: "absolute", inset: "40% 0 0", background: "linear-gradient(transparent,rgba(7,24,27,.92))", pointerEvents: "none" }} />
               <span style={{ position: "absolute", bottom: 14, left: 8, right: 8, zIndex: 1, fontWeight: 600, fontSize: 14 }}>{card.title}{previewChoice === card.title ? " ✓" : ""}</span>
             </button>)}
@@ -147,29 +148,37 @@ function ExperiencePreview({ kind, reduceMotion }) {
   </div>;
 }
 
-function MiniBreathingOrb({ reducedMotion }) {
+function SensoryCardScene({ title, reducedMotion }) {
+  if (title === "Popcorn") return <OrbitScene accent="#c77d9b" motion={0.45} paused={Boolean(reducedMotion)} />;
+  if (title === "Iridescent Water") return <PrismaticWaterScene palette="lagoon" strength={0.7} softness={0.65} motion={0.65} paused={Boolean(reducedMotion)} />;
+  if (title === "Liquid Surface") return <LiquidSurfaceScene strength={0.8} viscosity={0.76} paused={Boolean(reducedMotion)} />;
+  if (title === "Underwater") return <iframe title="Underwater jellyfish preview" src="https://holtsetio.com/lab/aurelia/" loading="lazy" tabIndex={-1} style={{ width: "100%", height: "calc(100% + 250px)", marginTop: -45, border: 0, pointerEvents: "none", background: "#031426" }} />;
+  return null;
+}
+
+function MiniBreathingOrb({ reducedMotion, colors, period = 8000 }) {
   const [breath, setBreath] = useState(0);
   useEffect(() => {
     if (reducedMotion) return;
     let frame;
     const start = performance.now();
     const tick = (now) => {
-      setBreath((1 - Math.cos(((now - start) / 8000) * Math.PI * 2)) / 2);
+      setBreath((1 - Math.cos(((now - start) / period) * Math.PI * 2)) / 2);
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [reducedMotion]);
+  }, [reducedMotion, period]);
   return <div style={{ width: "100%", height: "100%", display: "grid", placeItems: "center", pointerEvents: "none" }}>
-    <div style={{ width: "min(86%, 260px)", aspectRatio: "1", transform: "scale(1.12)" }}><LagoonLiquidOrb breath={breath} reducedMotion={Boolean(reducedMotion)} /></div>
+    <div style={{ width: "min(86%, 260px)", aspectRatio: "1", transform: "scale(1.12)" }}><LagoonLiquidOrb breath={breath} reducedMotion={Boolean(reducedMotion)} options={{ colorFrom: colors?.[0], colorTo: colors?.[1] }} /></div>
   </div>;
 }
 
 const BREATHING_CARDS = [
-  { title: "Box Breathing", kind: "breathing" },
-  { title: "4-7-8 Breathing", kind: "breathing" },
-  { title: "Calming Breath", kind: "breathing" },
-  { title: "Slow Breathing", kind: "breathing" },
+  { title: "Box Breathing", kind: "breathing", colors: ["#76C7DF", "#C6E7DB"], period: 8000 },
+  { title: "4-7-8 Breathing", kind: "breathing", colors: ["#c5a7ec", "#f1cce6"], period: 9500 },
+  { title: "Calming Breath", kind: "breathing", colors: ["#91c9a2", "#e6ebae"], period: 11000 },
+  { title: "Slow Breathing", kind: "breathing", colors: ["#f0b48b", "#f5d7b9"], period: 12000 },
 ];
 const SENSORY_CARDS = [
   { title: "Popcorn", kind: "sensory", accent: "#c77d9b" },
