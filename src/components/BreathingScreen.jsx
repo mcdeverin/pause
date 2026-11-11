@@ -9,6 +9,7 @@ import { getBreathingInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
 import { narrationCueForPhase } from "../lib/narration";
+import { createLaurenPlayer, laurenPhaseClip } from "../lib/laurenAudio";
 import { usePhotoLightness } from "../hooks/usePhotoLightness";
 
 const TOTAL_CYCLES = 4;
@@ -93,6 +94,8 @@ export default function BreathingScreen({
   );
   const hapticPhaseRef = useRef(-1);
   const spokenPhaseRef = useRef(-1);
+  const laurenPlayerRef = useRef(null);
+  if (!laurenPlayerRef.current) laurenPlayerRef.current = createLaurenPlayer();
   const infoCardRef = useRef(null);
   const visualRef = useRef(null);
 
@@ -101,6 +104,8 @@ export default function BreathingScreen({
   const finish = (payload) => {
     if (finishedRef.current) return;
     finishedRef.current = true;
+    laurenPlayerRef.current?.stop();
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
     onDone({
       sessionId: sessionIdRef.current,
       completed: Boolean(payload?.completed),
@@ -144,30 +149,48 @@ export default function BreathingScreen({
     triggerHaptic(currentLabel);
   }, [phaseSequence, currentLabel]);
 
-  // Spoken phase cues follow the same clock as the animation and haptics.
-  // Browser/device voices vary; no recording or external audio service is used.
+  // Recorded Lauren MP3s follow the same clock as the orb and haptics.
+  // The clock is never stretched to fit a recording. If an asset is missing or
+  // blocked by the iOS WebView, use the existing device speech as fallback.
   useEffect(() => {
     const mode = narrationMode === "none" && voiceGuide ? "full" : narrationMode;
-    if (mode === "none" || typeof window === "undefined" || !("speechSynthesis" in window)) return undefined;
-    if (phaseSequence !== spokenPhaseRef.current) {
-      spokenPhaseRef.current = phaseSequence;
-      const cycleIndex = Math.floor(phaseSequence / activePhases.length);
-      if (mode === "partial" && cycleIndex >= 2 && cycleIndex % 4 !== 0) return undefined;
-      const raw = String(currentLabel || "").toLowerCase();
-      const scriptedCue = narrationCueForPhase(activeTechnique, clock.index, Math.floor(phaseSequence / activePhases.length));
-      const cue = scriptedCue || (raw.includes("inhale") ? "Breathe in" : raw.includes("exhale") ? "Breathe out" : raw.includes("hold") ? "Hold gently" : raw.includes("hum") ? "Hum softly" : currentLabel);
+    if (mode === "none") {
+      laurenPlayerRef.current?.stop();
+      if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+      return undefined;
+    }
+    if (phaseSequence === spokenPhaseRef.current) return undefined;
+    spokenPhaseRef.current = phaseSequence;
+    laurenPlayerRef.current?.stop();
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+    const cycleIndex = Math.floor(phaseSequence / activePhases.length);
+    if (mode === "partial" && cycleIndex >= 2 && cycleIndex % 4 !== 0) return undefined;
+
+    const raw = String(currentLabel || "").toLowerCase();
+    const scriptedCue = narrationCueForPhase(activeTechnique, clock.index, cycleIndex);
+    const cue = scriptedCue || (raw.includes("inhale") ? "Breathe in" : raw.includes("exhale") ? "Breathe out" : raw.includes("hold") ? "Hold gently" : raw.includes("hum") ? "Hum softly" : currentLabel);
+    const speakFallback = () => {
+      // A delayed playback failure must not speak an old phase.
+      if (spokenPhaseRef.current !== phaseSequence) return;
+      if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(cue);
       utterance.rate = 0.85;
       utterance.volume = 0.85;
       window.speechSynthesis.speak(utterance);
-    }
+    };
+
+    const clipId = laurenPhaseClip(activeTechnique, clock.index, currentLabel, activePhases[clock.index]);
+    if (clipId && laurenPlayerRef.current?.play(clipId, { onError: speakFallback })) return undefined;
+    speakFallback();
     return undefined;
   }, [voiceGuide, narrationMode, phaseSequence, currentLabel, activeTechnique, clock.index, activePhases.length]);
 
+  // Stop recorded and synthesized audio when the session is dismissed.
   useEffect(() => () => {
-    if (voiceGuide && typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
-  }, [voiceGuide]);
+    laurenPlayerRef.current?.stop();
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+  }, []);
 
   // The information card is height-capped to the space above the breathing
   // visual, so its text can never reach or cover the animation. On a very short
