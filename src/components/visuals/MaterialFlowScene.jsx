@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import LiquidChrome from "./LiquidChrome";
 
 // Original SVG-filter lava and CPU-rendered chrome. No WebGL contexts or paid assets.
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
@@ -263,5 +264,9 @@ function LavaGooScene({paused=false}){
   </div>;
 }
 export default function MaterialFlowScene(props){
-  return props.mode==="lava"?<LavaGooScene paused={props.paused}/>:<PixelMaterialScene {...props}/>;
+  return props.mode==="lava"
+    ? <LavaGooScene paused={props.paused}/>
+    : props.mode==="chrome"
+      ? <LiquidChrome speed={props.paused ? 0 : 0.2} color="#ffffff" amplitude={0.3} detail={4} thickness={1} interactive={!props.paused} frequencyX={3} frequencyY={3} depth={1} roughness={0.3} exposure={1} rippleStrength={1} rippleSize={1} tilt={1} intro lightMode={false}/>
+      : <PixelMaterialScene {...props}/>;
 }
