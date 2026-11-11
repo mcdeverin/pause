@@ -86,7 +86,6 @@ export default function BreathingScreen({
   const [readyToBreathe, setReadyToBreathe] = useState(false);
   const [laurenLibrary, setLaurenLibrary] = useState(null);
   const stopAudioRef = useRef(null);
-  const [introPlaying, setIntroPlaying] = useState(guided);
   const [showInfo, setShowInfo] = useState(false);
   const [infoMaxHeight, setInfoMaxHeight] = useState(null);
 
@@ -97,7 +96,6 @@ export default function BreathingScreen({
     let timer;
     const beginAfter = ms => {
       if (!active) return;
-      setIntroPlaying(false);
       timer = window.setTimeout(() => {
         if (active) setReadyToBreathe(true);
       }, ms);
@@ -111,7 +109,6 @@ export default function BreathingScreen({
         const intro = !isVideoFirst(library, activeTechnique)
           ? findLaurenClip(library, activeTechnique, "intro") : null;
         if (!intro) { beginAfter(2000); return; }
-        setIntroPlaying(true);
         stopAudioRef.current = playLaurenClip(intro, () => {
           if (!active) return;
           stopAudioRef.current = null;
