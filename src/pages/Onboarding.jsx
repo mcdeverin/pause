@@ -72,9 +72,9 @@ export default function Onboarding() {
       {/* The scrim preserves readability while the photograph and water stay visible. */}
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "linear-gradient(180deg, rgba(5,21,28,.55) 0%, rgba(5,21,28,.08) 35%, rgba(5,21,28,.16) 52%, rgba(5,21,28,.72) 100%)" }} />
       <div style={{ position: "absolute", inset: 0, zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom))", pointerEvents: "none" }}>
-        <header style={{ width: "100%", maxWidth: 460, display: "flex", alignItems: "center", justifyContent: "space-between", pointerEvents: "auto" }}>
+        <header style={{ width: "100%", maxWidth: 460, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", pointerEvents: "auto" }}>
           <span style={{ fontFamily: HEADING_FONT, fontSize: 22, letterSpacing: "-.035em" }}>always pause</span>
-          {step > 0 && step < 4 && <button onClick={() => setStep((value) => value - 1)} style={textButton}>Back</button>}
+          {step > 0 && step < 4 && <button onClick={() => setStep((value) => value - 1)} style={{ ...textButton, position: "absolute", right: 0 }}>Back</button>}
         </header>
         <AnimatePresence mode="wait">
           <motion.section key={step} initial={reduceMotion ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? {} : { opacity: 0, y: -12 }} transition={{ duration: .32 }}
