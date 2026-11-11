@@ -46,17 +46,28 @@ function Koi({index,interaction,paused}){
  const seed=index*7.13+1.6;
  const texture=useMemo(()=>makeKoiTexture(index),[index]);
  const shape=useMemo(()=>{
-  const sh=new THREE.Shape();
-  sh.moveTo(1.48,0);
-  sh.bezierCurveTo(1.35,.23,1.04,.32,.77,.38);
-  sh.bezierCurveTo(.22,.58,-.53,.49,-.94,.25);
-  sh.bezierCurveTo(-1.18,.15,-1.4,.09,-1.47,0);
-  sh.bezierCurveTo(-1.4,-.09,-1.18,-.15,-.94,-.25);
-  sh.bezierCurveTo(-.53,-.49,.22,-.58,.77,-.38);
-  sh.bezierCurveTo(1.04,-.32,1.35,-.23,1.48,0);
-  const geo=new THREE.ShapeGeometry(sh,28);
-  const uv=geo.attributes.uv, pos=geo.attributes.position;
-  for(let i=0;i<uv.count;i++)uv.setXY(i,(pos.getX(i)+1.5)/3,(pos.getY(i)+.6)/1.2);
+  // Rounded, tapered koi body: cross-section rings give the fish genuine depth.
+  const vertices=[],uvs=[],indices=[];
+  const segments=38,sides=20;
+  for(let j=0;j<=segments;j++){
+   const u=j/segments,x=-1.48+u*2.96;
+   const fullness=Math.pow(Math.max(0,Math.sin(Math.PI*u)),.68);
+   const shoulder=1+.17*Math.exp(-Math.pow((u-.72)/.17,2));
+   const width=.48*fullness*shoulder,depth=.22*fullness;
+   for(let k=0;k<=sides;k++){
+    const a=k/sides*Math.PI*2;
+    vertices.push(x,Math.cos(a)*width,Math.sin(a)*depth);
+    uvs.push(u,.5+Math.cos(a)*.5);
+   }
+  }
+  for(let j=0;j<segments;j++)for(let k=0;k<sides;k++){
+   const a=j*(sides+1)+k,b=a+sides+1;
+   indices.push(a,b,a+1,b,b+1,a+1);
+  }
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute("position",new THREE.Float32BufferAttribute(vertices,3));
+  geo.setAttribute("uv",new THREE.Float32BufferAttribute(uvs,2));
+  geo.setIndex(indices);geo.computeVertexNormals();
   return geo;
  },[]);
  const state=useRef({x:Math.sin(seed)*5,y:Math.cos(seed*1.4)*3,angle:seed*2.1,speed:.35+index*.055,decision:0,target:seed*2.1});
@@ -87,7 +98,7 @@ function Koi({index,interaction,paused}){
   if(right.current)right.current.rotation.z=-.4-wag*.22;
  });
  return <group ref={root} scale={.72+index%3*.13}>
-  <mesh geometry={shape} position={[-.12,-.16,-.22]} scale={[1.12,1.1,1]}><meshBasicMaterial color="#00160f" transparent opacity={.34} depthWrite={false}/></mesh>
+  <mesh geometry={shape} position={[-.16,-.2,-.33]} scale={[1.1,1.12,.18]}><meshBasicMaterial color="#00140e" transparent opacity={.24} depthWrite={false}/></mesh>
   <group ref={tail} position={[-1.35,0,-.01]}>
    <mesh position={[-.33,.2,0]} rotation={[0,0,-.36]} scale={[.55,.22,.025]}><sphereGeometry args={[1,20,12]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
    <mesh position={[-.33,-.2,0]} rotation={[0,0,.36]} scale={[.55,.22,.025]}><sphereGeometry args={[1,20,12]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
@@ -95,16 +106,16 @@ function Koi({index,interaction,paused}){
   <group ref={left} position={[-.12,.38,.015]}><mesh position={[-.16,.24,0]} rotation={[0,0,.48]} scale={[.43,.19,.028]}><sphereGeometry args={[1,18,12]}/><meshPhysicalMaterial color="#d8d2c1" transparent opacity={.66} side={THREE.DoubleSide}/></mesh></group>
   <group ref={right} position={[-.12,-.38,.015]}><mesh position={[-.16,-.24,0]} rotation={[0,0,-.48]} scale={[.43,.19,.028]}><sphereGeometry args={[1,18,12]}/><meshPhysicalMaterial color="#d8d2c1" transparent opacity={.66} side={THREE.DoubleSide}/></mesh></group>
   <group ref={body}>
-   <mesh geometry={shape} position={[0,0,.045]}><meshBasicMaterial map={texture} side={THREE.DoubleSide}/></mesh>
-   <mesh position={[.98,.24,.075]}><sphereGeometry args={[.047,12,10]}/><meshBasicMaterial color="#151b18"/></mesh>
-   <mesh position={[.98,-.24,.075]}><sphereGeometry args={[.047,12,10]}/><meshBasicMaterial color="#151b18"/></mesh>
-   <mesh position={[1.32,0,.075]} scale={[.09,.11,.01]}><sphereGeometry args={[1,12,10]}/><meshBasicMaterial color="#d9b5a4"/></mesh>
+   <mesh geometry={shape} position={[0,0,.045]}><meshPhysicalMaterial map={texture} roughness={.43} metalness={.04} clearcoat={.7} clearcoatRoughness={.24} side={THREE.DoubleSide}/></mesh>
+   <mesh position={[1.03,.205,.18]}><sphereGeometry args={[.047,12,10]}/><meshBasicMaterial color="#151b18"/></mesh>
+   <mesh position={[1.03,-.205,.18]}><sphereGeometry args={[.047,12,10]}/><meshBasicMaterial color="#151b18"/></mesh>
+   <mesh position={[1.43,0,.045]} scale={[.09,.11,.01]}><sphereGeometry args={[1,12,10]}/><meshBasicMaterial color="#d9b5a4"/></mesh>
   </group>
  </group>;
 }
 function Water({interaction,paused}){
  
- const rings=useRef([]),meshes=useRef([]);
+ const rings=useRef([]),meshes=useRef([]),surface=useRef();
  useFrame((_,dt)=>{
   if(!paused){
    const i=interaction.current;
@@ -115,7 +126,22 @@ function Water({interaction,paused}){
   meshes.current.forEach((m,k)=>{if(!m)return;const r=rings.current[rings.current.length-1-k];m.visible=!!r;if(!r)return;m.position.set(r.x,r.y,.48);m.scale.setScalar(.15+r.age*2.25);m.material.opacity=Math.sin(Math.PI*r.age/2.2)*.27;});
  });
  return <><mesh position={[0,0,-.6]}><planeGeometry args={[50,40]}/><meshBasicMaterial color="#102e2b"/></mesh>
-  <mesh position={[0,0,-.45]}><planeGeometry args={[50,40]}/><meshBasicMaterial color="#163e36" transparent opacity={.55}/></mesh>
+  <mesh position={[0,0,-.45]}><planeGeometry args={[50,40]}/><meshBasicMaterial color="#214a3d" transparent opacity={.46}/></mesh>
+  <mesh ref={surface} position={[0,0,.43]}>
+   <planeGeometry args={[50,40]}/>
+   <shaderMaterial transparent depthWrite={false} uniforms={{time:{value:0}}}
+    vertexShader={`varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`}
+    fragmentShader={`uniform float time;varying vec2 vUv;
+      void main(){
+       vec2 p=vUv*vec2(13.0,9.0);
+       float a=sin(p.x*3.1+sin(p.y*2.4+time*.34)+time*.47);
+       float b=sin(p.y*4.4+sin(p.x*2.1-time*.28)-time*.39);
+       float caustic=pow(max(0.0,a*b),5.0);
+       float glint=pow(max(0.0,sin(p.x*1.4+p.y*2.3+time*.23)),16.0);
+       vec3 color=vec3(.43,.76,.66)*caustic+vec3(.28,.55,.5)*glint;
+       gl_FragColor=vec4(color,clamp(caustic*.16+glint*.055,0.0,.20));
+      }`}/>
+  </mesh>
   {Array.from({length:12},(_,k)=><mesh key={k} ref={el=>meshes.current[k]=el} visible={false} position={[0,0,.48]}><ringGeometry args={[.96,1,96]}/><meshBasicMaterial color="#c4f0e2" transparent opacity={.2} depthWrite={false} side={THREE.DoubleSide}/></mesh>)}
  </>;
 }
@@ -138,7 +164,7 @@ export default function UnderwaterTwoScene({paused=false}){
  const interaction=useRef({x:0,y:0,active:false,intensity:0,stillness:0,pulse:0,last:0,lastPulse:0});
  return <div style={{height:"100%",width:"100%",position:"relative",background:"#102e2b",touchAction:"none"}}>
   <Canvas orthographic camera={{position:[0,0,18],zoom:60,near:.1,far:100}} dpr={[1,1.7]} gl={{antialias:true,alpha:false}} style={{touchAction:"none"}}>
-   <ambientLight intensity={1.7}/><directionalLight position={[-3,5,9]} intensity={2}/><Pond interaction={interaction} paused={paused}/>
+   <ambientLight intensity={1.05}/><directionalLight position={[-3,5,9]} intensity={2.3}/><directionalLight position={[5,-4,6]} intensity={.65} color="#c1f0df"/><Pond interaction={interaction} paused={paused}/>
   </Canvas>
   <div style={{position:"absolute",bottom:18,left:20,color:"#e5f5eb",fontSize:13,textShadow:"0 2px 8px #001b16",pointerEvents:"none"}}>Touch the water · Hold to invite a curious koi · Drag to make ripples</div>
  </div>;
