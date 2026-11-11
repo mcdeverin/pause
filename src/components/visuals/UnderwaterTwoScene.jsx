@@ -89,11 +89,11 @@ function Koi({index,interaction,paused}){
  return <group ref={root} scale={.72+index%3*.13}>
   <mesh position={[-.12,-.16,-.22]} scale={[1.12,1.1,1]}><primitive object={shape} attach="geometry"/><meshBasicMaterial color="#00160f" transparent opacity={.34} depthWrite={false}/></mesh>
   <group ref={tail} position={[-1.35,0,-.01]}>
-   <mesh position={[-.33,.2,0]} rotation={[0,0,-.36]}><sphereGeometry args={[.55,.22,.025,20,10]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
-   <mesh position={[-.33,-.2,0]} rotation={[0,0,.36]}><sphereGeometry args={[.55,.22,.025,20,10]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
+   <mesh position={[-.33,.2,0]} rotation={[0,0,-.36]} scale={[.55,.22,.025]}><sphereGeometry args={[1,20,12]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
+   <mesh position={[-.33,-.2,0]} rotation={[0,0,.36]} scale={[.55,.22,.025]}><sphereGeometry args={[1,20,12]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
   </group>
-  <group ref={left} position={[-.12,.38,.015]}><mesh position={[-.16,.24,0]} rotation={[0,0,.48]}><sphereGeometry args={[.43,.19,.028,18,10]}/><meshPhysicalMaterial color="#d8d2c1" transparent opacity={.66} side={THREE.DoubleSide}/></mesh></group>
-  <group ref={right} position={[-.12,-.38,.015]}><mesh position={[-.16,-.24,0]} rotation={[0,0,-.48]}><sphereGeometry args={[.43,.19,.028,18,10]}/><meshPhysicalMaterial color="#d8d2c1" transparent opacity={.66} side={THREE.DoubleSide}/></mesh></group>
+  <group ref={left} position={[-.12,.38,.015]}><mesh position={[-.16,.24,0]} rotation={[0,0,.48]} scale={[.43,.19,.028]}><sphereGeometry args={[1,18,12]}/><meshPhysicalMaterial color="#d8d2c1" transparent opacity={.66} side={THREE.DoubleSide}/></mesh></group>
+  <group ref={right} position={[-.12,-.38,.015]}><mesh position={[-.16,-.24,0]} rotation={[0,0,-.48]} scale={[.43,.19,.028]}><sphereGeometry args={[1,18,12]}/><meshPhysicalMaterial color="#d8d2c1" transparent opacity={.66} side={THREE.DoubleSide}/></mesh></group>
   <group ref={body}>
    <mesh geometry={shape} position={[0,0,.045]}><meshBasicMaterial map={texture} side={THREE.DoubleSide}/></mesh>
    <mesh position={[.98,.24,.075]}><sphereGeometry args={[.047,12,10]}/><meshBasicMaterial color="#151b18"/></mesh>
