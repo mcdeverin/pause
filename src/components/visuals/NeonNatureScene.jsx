@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const COLORS = ["#ff388b","#adff36","#7c48ff","#00edca","#ff9c45"];
-export default function NeonNatureScene({ preview = false }){
+export default function NeonNatureScene({ preview = false, backgroundMode = "dark" }){
  const canvasRef=useRef(null), baseRef=useRef(null), paintRef=useRef(null), active=useRef(false), last=useRef(null);
  const [mode,setMode]=useState("paint"),[color,setColor]=useState(COLORS[0]);
  const modeRef=useRef(mode),colorRef=useRef(color);modeRef.current=mode;colorRef.current=color;
@@ -11,10 +11,13 @@ export default function NeonNatureScene({ preview = false }){
   const base=document.createElement("canvas");base.width=w;base.height=h;
   const b=base.getContext("2d");
   const gradient=b.createLinearGradient(0,0,w,h);
-  gradient.addColorStop(0,"#07142e");gradient.addColorStop(.55,"#071b32");gradient.addColorStop(1,"#031d28");
+  if(backgroundMode==="light") {gradient.addColorStop(0,"#fffdf8");gradient.addColorStop(.55,"#f6f0e6");gradient.addColorStop(1,"#fffaf2");}
+  else {gradient.addColorStop(0,"#07142e");gradient.addColorStop(.55,"#071b32");gradient.addColorStop(1,"#031d28");}
   b.fillStyle=gradient;b.fillRect(0,0,w,h);baseRef.current=base;
-  const layer=document.createElement("canvas");layer.width=w;layer.height=h;paintRef.current=layer;
-  if(preview){
+  let layer=paintRef.current;
+  if(!layer){layer=document.createElement("canvas");layer.width=w;layer.height=h;paintRef.current=layer;}
+  if(preview && !layer.datasetPreviewInitialized){
+   layer.datasetPreviewInitialized=true;
    const p=layer.getContext("2d");p.lineCap="round";p.lineJoin="round";
    // Layered translucent curves resemble flowing neon pigment rather than rigid zigzags.
    [["#ff388b",120,390,300,180,560,500,760,200],
@@ -30,7 +33,7 @@ export default function NeonNatureScene({ preview = false }){
    });
   }
   ctx.drawImage(base,0,0);
- },[preview]);
+ },[preview,backgroundMode]);
  useEffect(()=>{
   let frame;const canvas=canvasRef.current;
   const render=()=>{
@@ -55,7 +58,7 @@ export default function NeonNatureScene({ preview = false }){
   p.restore();last.current={x,y};
  };
  const reset=()=>{const c=paintRef.current;if(c)c.getContext("2d").clearRect(0,0,c.width,c.height);};
- return <div style={{width:"100%",height:"100%",position:"relative",background:"#07142e"}}>
+ return <div style={{width:"100%",height:"100%",position:"relative",background:backgroundMode==="light"?"#fffaf2":"#07142e"}}>
   <canvas ref={canvasRef} onPointerDown={e=>{active.current=true;last.current=null;e.currentTarget.setPointerCapture(e.pointerId);draw(e);}} onPointerMove={draw} onPointerUp={()=>{active.current=false;last.current=null;}} onPointerCancel={()=>{active.current=false;last.current=null;}} style={{width:"100%",height:"100%",objectFit:"cover",touchAction:"none",cursor:"crosshair",display:"block"}}/>
   {!preview && <div style={{position:"absolute",left:16,bottom:16,right:16,display:"flex",flexWrap:"wrap",alignItems:"center",gap:8,padding:10,background:"#ffffffdf",borderRadius:16}}>
    <button onClick={()=>setMode("paint")} style={{border:mode==="paint"?"2px solid #222":"1px solid #bbb",borderRadius:12,padding:"8px 12px",background:"white"}}>Paint</button>
