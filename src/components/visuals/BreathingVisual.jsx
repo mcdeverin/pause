@@ -1,5 +1,6 @@
 import { resolveOptions } from "../../lib/visuals";
 import OriginalOrb from "./OriginalOrb";
+import LagoonLiquidOrb from "./LagoonLiquidOrb";
 import RingVisual from "./RingVisual";
 import BubbleVisual from "./BubbleVisual";
 import CrystalVisual from "./CrystalVisual";
@@ -20,6 +21,7 @@ const RainDropletVisual = (props) => <StudioBreathingShape {...props} kind="drop
 // of them keeps its own timing.
 const REGISTRY = {
   orb: OriginalOrb,
+  lagoon: LagoonLiquidOrb,
   classicOrb: OriginalOrb,
   ring: RingVisual,
   bubble: BubbleVisual,
