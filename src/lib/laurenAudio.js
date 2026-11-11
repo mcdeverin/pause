@@ -37,7 +37,7 @@ export function findLaurenClip(library, technique, position, phaseSeconds) {
   return {
     ...record,
     seconds: library.durations[record.clip_id],
-    url: `/audio/lauren/${record.clip_id}.mp3`,
+    url: `/audio/lauren/AlwaysPause_Lauren_COMPLETE/${record.clip_id}.mp3`,
   };
 }
 
