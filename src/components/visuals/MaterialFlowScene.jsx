@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 
-// Three original CPU-rendered sensory simulations. No WebGL contexts or third-party assets.
+// Original SVG-filter lava and CPU-rendered chrome. No WebGL contexts or paid assets.
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
-export default function MaterialFlowScene({mode="lava",paused=false}){
+function PixelMaterialScene({mode="chrome",paused=false}){
   const ref=useRef(null);
   useEffect(()=>{
     const canvas=ref.current,ctx=canvas.getContext("2d",{alpha:false});
@@ -182,4 +182,86 @@ export default function MaterialFlowScene({mode="lava",paused=false}){
       canvas.removeEventListener("pointerup",up);canvas.removeEventListener("pointercancel",up)};
   },[mode,paused]);
   return <canvas ref={ref} aria-label={mode==="lava"?"Interactive flowing lava":mode==="chrome"?"Interactive reflective chrome fluid":"Interactive rainbow fluid"} style={{width:"100%",height:"100%",display:"block",touchAction:"none",cursor:"crosshair"}}/>;
+}
+
+function LavaGooScene({paused=false}){
+  const root=useRef(null);
+  const blobsRef=useRef([]);
+  useEffect(()=>{
+    const host=root.current;
+    if(!host)return;
+    const elements=[...host.querySelectorAll("[data-wax]")];
+    const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const blobs=elements.map((el,i)=>({
+      el,i,x:0,y:0,vx:0,vy:0,
+      ax:.12+((i*17)%13)/100,ay:.19+((i*7)%15)/100,
+      sx:.11+((i*5)%11)/100,sy:.075+((i*3)%9)/100,
+      px:i*1.91,py:i*2.67,
+      orbit:.38+i*.09
+    }));
+    blobsRef.current=blobs;
+    const target={x:0,y:0,until:0,inside:false,down:false};
+    let width=1,height=1,raf=0,last=0,t=0,blend=0,inView=true;
+    const resize=()=>{const r=host.getBoundingClientRect();width=Math.max(1,r.width);height=Math.max(1,r.height)};
+    const ro=new ResizeObserver(resize);ro.observe(host);resize();
+    const io=new IntersectionObserver(entries=>{inView=!!entries[0]?.isIntersecting},{threshold:0.01});io.observe(host);
+    const setTarget=e=>{const r=host.getBoundingClientRect();target.x=e.clientX-r.left;target.y=e.clientY-r.top;target.until=performance.now()+4000};
+    const onDown=e=>{target.down=true;setTarget(e);host.setPointerCapture?.(e.pointerId)};
+    const onMove=e=>{if(e.pointerType==="mouse"||target.down)setTarget(e)};
+    const onEnter=e=>{if(e.pointerType==="mouse"){target.inside=true;setTarget(e)}};
+    const onLeave=()=>{target.inside=false;target.down=false};
+    const onUp=()=>{target.down=false};
+    host.addEventListener("pointerdown",onDown);
+    host.addEventListener("pointermove",onMove);
+    host.addEventListener("pointerenter",onEnter);
+    host.addEventListener("pointerleave",onLeave);
+    host.addEventListener("pointerup",onUp);
+    host.addEventListener("pointercancel",onUp);
+    const ease=(k,dt)=>1-Math.pow(1-k,dt*60);
+    const mix=(a,b,w)=>a+(b-a)*w;
+    const tick=now=>{
+      raf=requestAnimationFrame(tick);
+      if(paused||document.hidden||!inView){last=now;return}
+      const dt=Math.min(.05,(now-(last||now))/1000);last=now;
+      t+=dt*(reduced?.3:1);
+      const follow=target.inside||now<target.until;
+      blend=mix(blend,follow?1:0,ease(follow?.08:.02,dt));
+      const base=Math.min(width,height);
+      for(const b of blobs){
+        const lx=width*(.5+b.ax*Math.sin(t*b.sx*2+b.px));
+        const ly=height*(.5+b.ay*Math.sin(t*b.sy*2+b.py));
+        let fx,fy;
+        if(b.i===0){fx=target.x;fy=target.y}
+        else{
+          const prev=blobs[b.i-1],orbit=base*b.orbit*.16;
+          fx=prev.x+Math.cos(t*1.3+b.px)*orbit;
+          fy=prev.y+Math.sin(t*1.1+b.py)*orbit;
+        }
+        const tx=mix(lx,fx,blend),ty=mix(ly,fy,blend);
+        const ox=b.x,oy=b.y;
+        if(!b.x&&!b.y){b.x=lx;b.y=ly}
+        b.x=mix(b.x,tx,ease(.09,dt));b.y=mix(b.y,ty,ease(.09,dt));
+        b.vx=b.x-ox;b.vy=b.y-oy;
+        const speed=Math.hypot(b.vx,b.vy)/Math.max(.3,dt*60);
+        const stretch=reduced?1:1+Math.min(speed*.012,.35);
+        const angle=Math.atan2(b.vy,b.vx);
+        b.el.style.transform=`translate3d(${b.x}px,${b.y}px,0) translate(-50%,-50%) rotate(${angle}rad) scale(${stretch},${1/stretch})`;
+      }
+    };
+    raf=requestAnimationFrame(tick);
+    return()=>{cancelAnimationFrame(raf);ro.disconnect();io.disconnect();
+      host.removeEventListener("pointerdown",onDown);host.removeEventListener("pointermove",onMove);
+      host.removeEventListener("pointerenter",onEnter);host.removeEventListener("pointerleave",onLeave);
+      host.removeEventListener("pointerup",onUp);host.removeEventListener("pointercancel",onUp)};
+  },[paused]);
+  return <div ref={root} aria-label="Interactive flowing lava wax. Touch or move your pointer to attract the wax." style={{position:"relative",width:"100%",height:"100%",overflow:"hidden",touchAction:"none",background:"radial-gradient(ellipse at 45% 35%,#30203d 0%,#171126 58%,#0d0c1a 100%)",isolation:"isolate"}}>
+    <svg width="0" height="0" aria-hidden="true" style={{position:"absolute",pointerEvents:"none"}}><defs><filter id="always-pause-lava-goo" x="-30%" y="-30%" width="160%" height="160%" colorInterpolationFilters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="13" result="blur"/><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10"/></filter></defs></svg>
+    <div style={{position:"absolute",inset:0,filter:"url(#always-pause-lava-goo)",pointerEvents:"none"}}>
+      {Array.from({length:9},(_,i)=><div key={i} data-wax="" style={{position:"absolute",left:0,top:0,width:`${i===0?27:11+(i*7)%12}%`,aspectRatio:"1",borderRadius:"50%",willChange:"transform",background:"radial-gradient(circle at 35% 28%,#ffe9cc 0%,#ffc3c7 16%,#f782b0 46%,#d34a96 75%,#8e286e 100%)",boxShadow:"inset -12px -14px 25px rgba(91,12,79,.28)"}}/>)}
+    </div>
+    <div style={{position:"absolute",inset:0,pointerEvents:"none",background:"radial-gradient(ellipse at 50% 105%,rgba(255,104,161,.12),transparent 52%)"}}/>
+  </div>;
+}
+export default function MaterialFlowScene(props){
+  return props.mode==="lava"?<LavaGooScene paused={props.paused}/>:<PixelMaterialScene {...props}/>;
 }
