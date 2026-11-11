@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { Renderer, Triangle, Program, Mesh, Texture } from 'ogl';
+import { Renderer, Triangle, Program, Mesh, Texture } from 'https://esm.sh/ogl@1.0.11';
 import { gsap } from 'gsap';
 
 import './MorphSlider.css';
