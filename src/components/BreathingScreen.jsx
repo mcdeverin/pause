@@ -397,7 +397,7 @@ export default function BreathingScreen({
           </p>
         ) : (
           <span className="sr-only" aria-live="polite">
-            {introPlaying ? "get comfortable" : currentLabel}
+            {!readyToBreathe ? "get comfortable" : currentLabel}
           </span>
         )}
 
