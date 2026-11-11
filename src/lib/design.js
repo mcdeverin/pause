@@ -5,6 +5,7 @@ import { getStyleLabel } from "./visuals";
 import { getGalleryImage } from "./backgroundGallery";
 
 export const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
+export const HEADING_FONT = "Georgia, 'Times New Roman', serif";
 
 // The two small controls that float over the background share one frosted
 // warm-ivory treatment, so they stay readable on both dark and light canvases.
