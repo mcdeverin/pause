@@ -39,7 +39,7 @@ function makeKoiTexture(index) {
   c.beginPath();c.arc(x,y,16,.05,Math.PI-.05);c.stroke();
  }
  const shine=c.createLinearGradient(0,0,0,h);shine.addColorStop(0,"#ffffff00");shine.addColorStop(.3,"#ffffff33");shine.addColorStop(.48,"#ffffff5a");shine.addColorStop(.64,"#ffffff00");c.fillStyle=shine;c.fillRect(0,0,w,h);
- const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;return texture;
+ const image=c.getImageData(0,0,w,h); const texture=new THREE.DataTexture(new Uint8Array(image.data),w,h,THREE.RGBAFormat); texture.colorSpace=THREE.SRGBColorSpace; texture.flipY=true; texture.needsUpdate=true; texture.generateMipmaps=true; texture.minFilter=THREE.LinearMipmapLinearFilter; texture.magFilter=THREE.LinearFilter; return texture;
 }
 function Koi({index,interaction,paused}){
  const root=useRef(),body=useRef(),tail=useRef(),left=useRef(),right=useRef();
@@ -87,7 +87,7 @@ function Koi({index,interaction,paused}){
   if(right.current)right.current.rotation.z=-.4-wag*.22;
  });
  return <group ref={root} scale={.72+index%3*.13}>
-  <mesh position={[-.12,-.16,-.22]} scale={[1.12,1.1,1]}><primitive object={shape} attach="geometry"/><meshBasicMaterial color="#00160f" transparent opacity={.34} depthWrite={false}/></mesh>
+  <mesh geometry={shape} position={[-.12,-.16,-.22]} scale={[1.12,1.1,1]}><meshBasicMaterial color="#00160f" transparent opacity={.34} depthWrite={false}/></mesh>
   <group ref={tail} position={[-1.35,0,-.01]}>
    <mesh position={[-.33,.2,0]} rotation={[0,0,-.36]} scale={[.55,.22,.025]}><sphereGeometry args={[1,20,12]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
    <mesh position={[-.33,-.2,0]} rotation={[0,0,.36]} scale={[.55,.22,.025]}><sphereGeometry args={[1,20,12]}/><meshPhysicalMaterial color="#f2e9d7" transparent opacity={.72} roughness={.7} side={THREE.DoubleSide}/></mesh>
