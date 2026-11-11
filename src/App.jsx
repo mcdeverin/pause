@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -21,6 +21,18 @@ const ShapesStudio = lazy(() => import('./pages/ShapesStudio.jsx'));
 const LiquidOrbStudio = lazy(() => import('./pages/LiquidOrbStudio.jsx'));
 
 // Add page imports here
+
+// Show onboarding only on a fresh installation. Returning users retain their
+// completed onboarding and existing personalization.
+function HomeEntry() {
+  let completed = false;
+  try {
+    completed = Boolean(localStorage.getItem("alwaysPauseOnboardingV1"));
+  } catch {
+    // Storage can be unavailable in private browsing; still allow onboarding.
+  }
+  return completed ? <Home /> : <Navigate to="/onboarding" replace />;
+}
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -48,7 +60,7 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<HomeEntry />} />
       <Route path="/onboarding" element={<Suspense fallback={<div className="fixed inset-0 bg-slate-900" />}><Onboarding /></Suspense>} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
