@@ -12,11 +12,11 @@ const LEGACY_THEME_KEY = "pauseTheme";
 export const DEFAULT_PREFERENCES = {
   // "light" | "dark" — the interface only. Null until resolved on load.
   appearance: null,
-  visual: "orb",
+  visual: "lagoon",
   // Per-style fine-tuning, keyed by visual id. Styles keep their defaults until
   // the user changes them.
   visualOptions: {},
-  background: "classic",
+  background: "nature-mountain-lake",
   // Background adjustments — applied to the background layer only.
   backgroundDim: 0,
   backgroundBlur: 0,
@@ -70,13 +70,7 @@ export function loadPreferences() {
 
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    // Reset the previous expanded-by-default home layout once, then respect
-    // whatever the user chooses with Show moments / Hide moments thereafter.
-    if (!Object.prototype.hasOwnProperty.call(stored, "momentsCollapsedDefaultV1")) {
-      stored.showShortcuts = false;
-      stored.momentsCollapsedDefaultV1 = true;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
-    }
+    // Saved visual and background choices always take precedence.
     const merged = { ...DEFAULT_PREFERENCES, ...stored };
     return {
       ...merged,
