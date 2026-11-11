@@ -12,7 +12,7 @@ const STEPS = [
   { title: "A moment, just for you.", subtitle: "Touch the water. Stay a while.", options: [] },
   { title: "What brings you here?", subtitle: "Choose what feels right. Select all that apply.", key: "goals", multiple: true,
     options: ["Feel calmer", "Sleep better", "Find focus", "Feel energized", "Feel more present", "Just exploring"] },
-  { title: "How would you like to pause?", subtitle: "There's no wrong way.", key: "experience",
+  { title: "How would you like to pause?", subtitle: "", key: "experience",
     options: ["Guided breathing", "Sensory experiences", "A little of both", "I'm not sure yet"] },
   { title: "When do you need a moment most?", subtitle: "Select all that apply.", key: "moments", multiple: true,
     options: ["When I'm overwhelmed", "Before sleep", "Just a moment during my day", "Whenever I need a reset"] },
