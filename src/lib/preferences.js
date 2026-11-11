@@ -90,7 +90,9 @@ export function loadPreferences() {
       // Selections saved before the collection existed simply have no options.
       visualOptions: normalizeVisualOptions(merged.visualOptions),
       // A style whose collection isn't offered right now falls back to Original.
-      visual: isStyleSelectable(merged.visual) ? merged.visual : DEFAULT_PREFERENCES.visual,
+      visual: merged.visual === "orb"
+        ? "lagoon"
+        : isStyleSelectable(merged.visual) ? merged.visual : DEFAULT_PREFERENCES.visual,
     };
   } catch {
     return { ...DEFAULT_PREFERENCES, appearance: resolveAppearance(null, legacyTheme) };
