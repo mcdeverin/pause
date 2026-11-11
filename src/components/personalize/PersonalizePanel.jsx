@@ -472,13 +472,6 @@ export default function PersonalizePanel({
           />
           <PreferenceToggle
             theme={draftTheme}
-            label="Show Breathing Instructions"
-            description="Show inhale, hold and exhale cues as you breathe."
-            checked={draft.showInstructions}
-            onChange={(value) => update("showInstructions", value)}
-          />
-          <PreferenceToggle
-            theme={draftTheme}
             label="Save My Moments"
             description="Privately save your breathing sessions to see your patterns over time."
             checked={draft.saveMoments}
