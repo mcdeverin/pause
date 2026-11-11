@@ -88,9 +88,12 @@ export default function Onboarding() {
             <div role="group" aria-label={current.title} style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: current.options.length <= 4 ? 14 : 10, width: "100%", flex: current.options.length > 0 ? 1 : "none", minHeight: 0, gridTemplateRows: current.options.length > 0 ? `repeat(${Math.ceil(current.options.length / 2)}, minmax(0, 1fr))` : undefined }}>
               {current.options.map((option) => {
                 const active = current.multiple ? selected.includes(option) : selected === option;
+                const preview = step === 2;
                 return <button key={option} type="button" aria-pressed={active} onClick={() => choose(option)}
-                  style={{ width: "100%", padding: "12px 10px", minHeight: 0, borderRadius: 22, border: active ? "1px solid white" : "1px solid rgba(255,255,255,.45)", color: "white", background: active ? "rgba(255,255,255,.29)" : "rgba(12,35,41,.33)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", fontSize: 15, fontWeight: active ? 600 : 400, cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center", gap: 8 }}>
-                  {option}{active && <span aria-hidden="true">✓</span>}
+                  style={{ width: "100%", padding: preview ? "10px 8px" : "12px 10px", minHeight: 0, borderRadius: 22, border: active ? "1px solid white" : "1px solid rgba(255,255,255,.45)", color: "white", background: active ? "rgba(255,255,255,.29)" : "rgba(12,35,41,.33)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", fontSize: 15, fontWeight: active ? 600 : 400, cursor: "pointer", display: "flex", flexDirection: preview ? "column" : "row", justifyContent: "center", alignItems: "center", gap: preview ? 5 : 8 }}>
+                  {preview && <ExperiencePreview kind={option} reduceMotion={reduceMotion} />}
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 5, textAlign: "center", lineHeight: 1.2 }}>{option}{active && <span aria-hidden="true">✓</span>}</span>
+                  {preview && option === "Guided breathing" && <span style={{ fontSize: 10, opacity: .85, lineHeight: 1.2 }}>Box · 4-7-8 · Calm</span>}
                 </button>;
               })}
             </div>
@@ -109,3 +112,18 @@ export default function Onboarding() {
   );
 }
 const textButton = { background: "transparent", border: 0, color: "white", fontSize: 13, padding: "8px 4px", cursor: "pointer" };
+
+
+function ExperiencePreview({ kind, reduceMotion }) {
+  const breathing = kind === "Guided breathing";
+  const sensory = kind === "Sensory experiences";
+  const both = kind === "A little of both";
+  if (!breathing && !sensory && !both) return <div aria-hidden="true" style={{ height: "clamp(36px, 7dvh, 68px)", display: "grid", placeItems: "center", fontFamily: HEADING_FONT, fontSize: 38, opacity: .85 }}>✧</div>;
+  const size = "clamp(40px, 8dvh, 76px)";
+  const orb = <div style={{ width: both ? "70%" : "100%", height: both ? "70%" : "100%", borderRadius: "50%", background: "conic-gradient(from 22deg, #7bcdbb 0deg, #3c9fa3 65deg, #f5fffa 92deg, #76c6bd 147deg, #358d9b 208deg, #f4fffa 243deg, #71c9af 315deg, #7bcdbb 360deg)", filter: "drop-shadow(0 0 8px rgba(143,234,217,.4))", animation: reduceMotion ? "none" : "onboardingBreathe 5s ease-in-out infinite" }} />;
+  const pops = <svg viewBox="0 0 90 90" width="100%" height="100%" aria-hidden="true">{[[24,28,11,"#f6b8b5"],[55,20,13,"#b6d7ef"],[72,50,10,"#c9b5ed"],[32,62,14,"#d5e8b1"],[58,70,12,"#efc5dc"]].map(([x,y,r,c],i)=><g key={i} style={{ transformOrigin: x+"px "+y+"px", animation: reduceMotion ? "none" : `onboardingPop ${2.6+i*.4}s ease-in-out infinite alternate` }}><circle cx={x} cy={y} r={r} fill={c} opacity=".94"/><circle cx={x-3} cy={y-4} r={r*.3} fill="white" opacity=".7"/></g>)}</svg>;
+  return <div aria-hidden="true" style={{ width: size, height: size, flexShrink: 1, display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
+    {breathing ? orb : sensory ? pops : <><div style={{ position: "absolute", inset: "0 42% 0 0", display: "grid", placeItems: "center" }}>{orb}</div><div style={{ position: "absolute", inset: "0 0 0 38%" }}>{pops}</div></>}
+    <style>{`@keyframes onboardingBreathe {0%,100%{transform:scale(.87)}50%{transform:scale(1)}} @keyframes onboardingPop {0%{transform:scale(.83) translateY(2px)}100%{transform:scale(1.08) translateY(-3px)}}`}</style>
+  </div>;
+}
