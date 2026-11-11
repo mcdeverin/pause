@@ -23,10 +23,14 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
   const [step, setStep] = useState(0);
+  const [exploring, setExploring] = useState(false);
+  const [previewChoice, setPreviewChoice] = useState("");
   const [answers, setAnswers] = useState({ goals: [], experience: "", moments: [] });
   const [startedAt] = useState(() => Date.now());
   const photo = BACKDROP_PHOTOS.find((item) => item.id === DEFAULT_BACKDROP_PHOTO) || BACKDROP_PHOTOS[0];
   const current = STEPS[step];
+  const explorationKind = answers.experience === "Guided breathing" ? "breathing" : answers.experience === "Sensory experiences" ? "sensory" : "both";
+  const explorationCards = explorationKind === "breathing" ? BREATHING_CARDS : explorationKind === "sensory" ? SENSORY_CARDS : [...BREATHING_CARDS.slice(0, 2), ...SENSORY_CARDS.slice(0, 2)];
   const selected = answers[current.key] || (current.multiple ? [] : "");
   const hasSelection = !current.key || (current.multiple ? selected.length > 0 : Boolean(selected));
 
@@ -49,6 +53,11 @@ export default function Onboarding() {
     }
   }
 
+  function back() {
+    if (exploring) { setExploring(false); setPreviewChoice(""); return; }
+    setStep((value) => Math.max(0, value - 1));
+  }
+
   function finish() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -61,8 +70,10 @@ export default function Onboarding() {
   }
 
   function next() {
+    if (exploring) { setExploring(false); setStep(3); return; }
     if (step === STEPS.length - 1) return finish();
     if (!hasSelection) return;
+    if (step === 2) { setPreviewChoice(""); setExploring(true); return; }
     setStep((value) => value + 1);
   }
 
@@ -73,20 +84,27 @@ export default function Onboarding() {
       </div>
       {/* The scrim preserves readability while the photograph and water stay visible. */}
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "linear-gradient(180deg, rgba(5,21,28,.55) 0%, rgba(5,21,28,.08) 35%, rgba(5,21,28,.16) 52%, rgba(5,21,28,.72) 100%)" }} />
-      <div style={{ position: "absolute", inset: 0, zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: current.options.length > 0 ? "flex-start" : "space-between", padding: "max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom))", pointerEvents: "none" }}>
+      <div style={{ position: "absolute", inset: 0, zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: (exploring || current.options.length > 0) ? "flex-start" : "space-between", padding: "max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom))", pointerEvents: "none" }}>
         <header style={{ width: "100%", maxWidth: 460, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", pointerEvents: "auto" }}>
           <span style={{ fontFamily: HEADING_FONT, fontSize: 22, letterSpacing: "-.035em" }}>always pause</span>
-          {step > 0 && step < 4 && <button onClick={() => setStep((value) => value - 1)} style={{ ...textButton, position: "absolute", right: 0 }}>Back</button>}
+          {(exploring || (step > 0 && step < 4)) && <button onClick={back} style={{ ...textButton, position: "absolute", right: 0 }}>Back</button>}
         </header>
         <AnimatePresence mode="wait">
-          <motion.section key={step} initial={reduceMotion ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? {} : { opacity: 0, y: -12 }} transition={{ duration: .32 }}
-            style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 12, marginTop: current.options.length > 0 ? "clamp(24px, 5dvh, 72px)" : 0, pointerEvents: "none" }}>
-            <h1 style={{ fontFamily: HEADING_FONT, fontSize: "clamp(36px, 8vw, 56px)", fontWeight: 400, lineHeight: 1.12, letterSpacing: "-.035em", margin: 0, textShadow: "0 2px 22px rgba(0,0,0,.22)" }}>{current.title}</h1>
-            <p style={{ fontSize: 15, lineHeight: 1.5, margin: 0, opacity: .95, textShadow: "0 1px 12px rgba(0,0,0,.4)" }}>{current.subtitle}</p>
+          <motion.section key={exploring ? "explore" : step} initial={reduceMotion ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? {} : { opacity: 0, y: -12 }} transition={{ duration: .32 }}
+            style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 12, marginTop: (exploring || current.options.length > 0) ? "clamp(24px, 5dvh, 72px)" : 0, pointerEvents: "none" }}>
+            <h1 style={{ fontFamily: HEADING_FONT, fontSize: "clamp(36px, 8vw, 56px)", fontWeight: 400, lineHeight: 1.12, letterSpacing: "-.035em", margin: 0, textShadow: "0 2px 22px rgba(0,0,0,.22)" }}>{exploring ? "Explore your pause." : current.title}</h1>
+            <p style={{ fontSize: 15, lineHeight: 1.5, margin: 0, opacity: .95, textShadow: "0 1px 12px rgba(0,0,0,.4)" }}>{exploring ? "Choose something you’d like to try." : current.subtitle}</p>
           </motion.section>
         </AnimatePresence>
-        <div style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", gap: 13, flex: current.options.length > 0 ? 1 : "none", minHeight: 0, marginTop: current.options.length > 0 ? "clamp(16px, 3dvh, 40px)" : 0, pointerEvents: "auto" }}>
-          {current.options.length > 0 && (
+        <div style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", gap: 13, flex: (exploring || current.options.length > 0) ? 1 : "none", minHeight: 0, marginTop: (exploring || current.options.length > 0) ? "clamp(16px, 3dvh, 40px)" : 0, pointerEvents: "auto" }}>
+          {exploring && <div role="group" aria-label="Explore experiences" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12, flex: 1, minHeight: 0 }}>
+            {explorationCards.map((card) => <button type="button" key={card.title} aria-pressed={previewChoice === card.title} onClick={() => setPreviewChoice(card.title)} style={{ position: "relative", isolation: "isolate", overflow: "hidden", borderRadius: 22, border: previewChoice === card.title ? "2px solid white" : "1px solid rgba(255,255,255,.5)", background: "rgba(12,35,41,.48)", color: "white", cursor: "pointer", minHeight: 0, padding: 0 }}>
+              <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>{card.kind === "breathing" ? <MiniBreathingOrb reducedMotion={reduceMotion} /> : <OrbitScene accent={card.accent || "#c77d9b"} motion={0.4} paused={Boolean(reduceMotion)} />}</div>
+              <div aria-hidden="true" style={{ position: "absolute", inset: "40% 0 0", background: "linear-gradient(transparent,rgba(7,24,27,.92))", pointerEvents: "none" }} />
+              <span style={{ position: "absolute", bottom: 14, left: 8, right: 8, zIndex: 1, fontWeight: 600, fontSize: 14 }}>{card.title}{previewChoice === card.title ? " ✓" : ""}</span>
+            </button>)}
+          </div>}
+          {!exploring && current.options.length > 0 && (
             <div role="group" aria-label={current.title} style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: current.options.length <= 4 ? 14 : 10, width: "100%", flex: current.options.length > 0 ? 1 : "none", minHeight: 0, gridTemplateRows: step === 2 ? "minmax(0, 1fr) auto" : current.options.length > 0 ? `repeat(${Math.ceil(current.options.length / 2)}, minmax(0, 1fr))` : undefined }}>
               {current.options.map((option) => {
                 const active = current.multiple ? selected.includes(option) : selected === option;
@@ -104,13 +122,13 @@ export default function Onboarding() {
               })}
             </div>
           )}
-          <div style={{ display: "flex", justifyContent: "center", gap: 7, padding: "8px 0" }} aria-label={"Step " + (step + 1) + " of 5"}>
+          <div style={{ display: "flex", justifyContent: "center", gap: 7, padding: "8px 0" }} aria-label={exploring ? "Explore experiences" : "Step " + (step + 1) + " of 5"}>
             {STEPS.map((_, i) => <span key={i} style={{ width: i === step ? 19 : 6, height: 6, borderRadius: 10, background: i === step ? "white" : "rgba(255,255,255,.45)", transition: "width .25s" }} />)}
           </div>
           <button onClick={next} disabled={!hasSelection} style={{ border: 0, borderRadius: 40, padding: "16px 22px", minHeight: 54, background: hasSelection ? "#f5f1e9" : "#d1d1d1", color: "#263e40", fontSize: 16, fontWeight: 600, cursor: hasSelection ? "pointer" : "not-allowed" }}>
-            {step === 0 ? "Begin your journey →" : step === 4 ? "Enter Always Pause →" : "Continue →"}
+            {exploring ? "Continue →" : step === 0 ? "Begin your journey →" : step === 4 ? "Enter Always Pause →" : "Continue →"}
           </button>
-          {step > 0 && step < 4 && <button onClick={() => setStep((value) => value + 1)} style={{ ...textButton, alignSelf: "center", padding: 5 }}>Skip for now</button>}
+          {(exploring || (step > 0 && step < 4)) && <button onClick={() => { if (exploring) { setExploring(false); setStep(3); } else setStep((value) => value + 1); }} style={{ ...textButton, alignSelf: "center", padding: 5 }}>Skip for now</button>}
           {step === 0 && <span style={{ fontSize: 12, textAlign: "center", opacity: .85 }}>Move your finger across the water</span>}
         </div>
       </div>
@@ -146,3 +164,16 @@ function MiniBreathingOrb({ reducedMotion }) {
     <div style={{ width: "min(86%, 260px)", aspectRatio: "1", transform: "scale(1.12)" }}><LagoonLiquidOrb breath={breath} reducedMotion={Boolean(reducedMotion)} /></div>
   </div>;
 }
+
+const BREATHING_CARDS = [
+  { title: "Box Breathing", kind: "breathing" },
+  { title: "4-7-8 Breathing", kind: "breathing" },
+  { title: "Calming Breath", kind: "breathing" },
+  { title: "Slow Breathing", kind: "breathing" },
+];
+const SENSORY_CARDS = [
+  { title: "Popcorn", kind: "sensory", accent: "#c77d9b" },
+  { title: "Iridescent Water", kind: "sensory", accent: "#8accc9" },
+  { title: "Liquid Surface", kind: "sensory", accent: "#8fb6dc" },
+  { title: "Underwater", kind: "sensory", accent: "#82b7a2" },
+];
