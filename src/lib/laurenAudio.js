@@ -14,7 +14,12 @@ export function findLaurenClip(library, technique, position, phaseSeconds) {
   const name = normalize(technique?.name);
   const phase = normalize(position);
   const matches = (library?.recordings || []).filter(record =>
-    (record.used_by || []).some(use => normalize(use.technique) === name && (normalize(use.position) === phase || normalize(use.position) === phase.split(" ")[0]))
+    (record.used_by || []).some(use => {
+      const target = normalize(use.position);
+      return normalize(use.technique) === name &&
+        (target === phase || (phase !== "intro" && phase !== "closing" &&
+        (target.startsWith(phase + " ") || phase.startsWith(target + " "))));
+    })
   );
   const eligible = matches.find(record => {
     const seconds = library.durations?.[record.clip_id];
