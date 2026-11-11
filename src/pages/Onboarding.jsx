@@ -94,10 +94,12 @@ export default function Onboarding() {
                 const compact = step === 2 && !featured;
                 const preview = featured;
                 return <button key={option} type="button" aria-pressed={active} onClick={() => choose(option)}
-                  style={{ width: "100%", padding: featured ? "18px 10px" : compact ? "13px 8px" : "12px 10px", minHeight: compact ? 52 : 0, borderRadius: compact ? 999 : 22, border: active ? "1px solid white" : "1px solid rgba(255,255,255,.45)", color: "white", background: active ? "rgba(255,255,255,.29)" : "rgba(12,35,41,.33)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", fontSize: 15, fontWeight: active ? 600 : 400, cursor: "pointer", display: "flex", flexDirection: preview ? "column" : "row", justifyContent: "center", alignItems: "center", gap: preview ? 10 : 8 }}>
-                  {preview && <ExperiencePreview kind={option} reduceMotion={reduceMotion} />}
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 5, textAlign: "center", lineHeight: 1.2 }}>{option}{active && <span aria-hidden="true">✓</span>}</span>
-                  {preview && option === "Guided breathing" && <span style={{ fontSize: 10, opacity: .85, lineHeight: 1.2 }}>Box · 4-7-8 · Calm</span>}
+                  style={{ width: "100%", position: "relative", overflow: "hidden", isolation: "isolate", padding: featured ? 0 : compact ? "13px 8px" : "12px 10px", minHeight: compact ? 52 : 0, borderRadius: compact ? 999 : 22, border: active ? "2px solid white" : "1px solid rgba(255,255,255,.45)", color: "white", background: active ? "rgba(255,255,255,.29)" : "rgba(12,35,41,.33)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", fontSize: 15, fontWeight: active ? 600 : 400, cursor: "pointer", display: "flex", flexDirection: featured ? "column" : "row", justifyContent: featured ? "flex-end" : "center", alignItems: "center", gap: featured ? 0 : 8 }}>
+                  {featured && <ExperiencePreview kind={option} reduceMotion={reduceMotion} />}
+                  {featured && <div aria-hidden="true" style={{ position: "absolute", inset: "42% 0 0", zIndex: 1, pointerEvents: "none", background: "linear-gradient(transparent, rgba(9,25,29,.76) 75%, rgba(9,25,29,.9))" }} />}
+                  <span style={{ position: "relative", zIndex: 2, pointerEvents: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 5, textAlign: "center", lineHeight: 1.2, padding: featured ? "0 8px 8px" : 0 }}>{option}{active && <span aria-hidden="true">✓</span>}</span>
+                  {featured && option === "Guided breathing" && <span style={{ position: "relative", zIndex: 2, pointerEvents: "none", fontSize: 10, opacity: .9, lineHeight: 1.2, paddingBottom: 16 }}>Box · 4-7-8 · Calm</span>}
+                  {featured && option === "Sensory experiences" && <span aria-hidden="true" style={{ height: 16, position: "relative", zIndex: 2, pointerEvents: "none" }} />}
                 </button>;
               })}
             </div>
@@ -120,10 +122,10 @@ const textButton = { background: "transparent", border: 0, color: "white", fontS
 
 function ExperiencePreview({ kind, reduceMotion }) {
   const breathing = kind === "Guided breathing";
-  const sensory = kind === "Sensory experiences";
-  if (!breathing && !sensory) return null;
-  return <div aria-hidden="true" style={{ width: "min(100%, 170px)", height: "clamp(90px, 15dvh, 155px)", position: "relative", overflow: "hidden", borderRadius: 18, flexShrink: 1 }}>
-    {breathing ? <MiniBreathingOrb reducedMotion={reduceMotion} /> : <div style={{ position: "absolute", inset: 0, borderRadius: 18, overflow: "hidden" }} onPointerDown={e=>e.stopPropagation()} onPointerMove={e=>e.stopPropagation()}><OrbitScene accent="#c77d9b" motion={0.45} paused={Boolean(reduceMotion)} /></div>}
+  return <div aria-hidden="true" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: breathing ? "none" : "auto" }}>
+    {breathing
+      ? <MiniBreathingOrb reducedMotion={reduceMotion} />
+      : <OrbitScene accent="#c77d9b" motion={0.45} paused={Boolean(reduceMotion)} />}
   </div>;
 }
 
@@ -134,12 +136,13 @@ function MiniBreathingOrb({ reducedMotion }) {
     let frame;
     const start = performance.now();
     const tick = (now) => {
-      // Four-second inhale, four-second exhale; preview only, not a session clock.
       setBreath((1 - Math.cos(((now - start) / 8000) * Math.PI * 2)) / 2);
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [reducedMotion]);
-  return <div style={{ width: "100%", height: "100%", padding: 9, boxSizing: "border-box", pointerEvents: "none" }}><LagoonLiquidOrb breath={breath} reducedMotion={Boolean(reducedMotion)} /></div>;
+  return <div style={{ width: "100%", height: "100%", display: "grid", placeItems: "center", pointerEvents: "none" }}>
+    <div style={{ width: "min(86%, 260px)", aspectRatio: "1", transform: "scale(1.12)" }}><LagoonLiquidOrb breath={breath} reducedMotion={Boolean(reducedMotion)} /></div>
+  </div>;
 }
