@@ -128,7 +128,7 @@ const COLOR = (key, label, def) => ({
 export const VISUAL_STYLES = [
   {
     id: "lagoon",
-    label: "Original",
+    label: "Classic",
     collection: "classics",
     description: "A luminous blue-green liquid orb that moves with your breath.",
     controls: [
