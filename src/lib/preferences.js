@@ -41,21 +41,13 @@ export const DEFAULT_PREFERENCES = {
   introOfferSeen: false,
 };
 
-function deviceAppearance() {
-  try {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  } catch {
-    return "light";
-  }
-}
-
 // A saved choice always wins. Users who never had one keep whatever appearance
-// they already saw, and a first-time installation follows the device theme.
+// they already saw, and a first-time installation starts in Light mode.
 function resolveAppearance(saved, legacyTheme) {
   if (saved === "light" || saved === "dark") return saved;
   if (legacyTheme === "day") return "light";
   if (legacyTheme === "night") return "dark";
-  return deviceAppearance();
+  return "light";
 }
 
 // Settings saved before backgrounds became customizable simply arrive without
