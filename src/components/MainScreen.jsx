@@ -42,10 +42,13 @@ export default function MainScreen({
     setTourStep(-1);
     setMenuOpen(false);
   };
-  const nextTour = () => {
-    if (tourStep === 0) { setMenuOpen(true); setTourStep(1); }
-    else finishTour();
-  };
+  const nextTour = () => setTourStep((step) => Math.min(step + 1, 3));
+  const tourCards = [
+    { title: "Your moment starts here.", body: "Tap the orb whenever you want a pause. You can choose what you need before a breathing session begins.", examples: ["Feel calmer", "Find focus", "Wind down"] },
+    { title: "Breathe your way.", body: "Choose Guided to hear breathing cues, or Not Guided to follow the orb quietly.", examples: ["Guided", "Not Guided"] },
+    { title: "Explore your senses.", body: "The Sensory menu has experiences to explore beyond breathing. Try one whenever you want a different kind of pause.", examples: ["Breathing techniques", "Sensory experiences"] },
+    { title: "Make it yours.", body: "Personalize your orb, colors, and background. Your choices stay saved until you change them.", examples: ["Classic orb", "Colors", "Background"] },
+  ];
   // The orb stays dominant and scales with the viewport.
   const measureOrb = useCallback(() => {
     if (typeof window === "undefined") return ORB_MAX;
@@ -268,14 +271,22 @@ export default function MainScreen({
         )}
       </AnimatePresence>
       {tourStep >= 0 && (
-        <div role="dialog" aria-modal="true" aria-label="Quick tour" style={{ position: "fixed", inset: 0, zIndex: 90, background: "rgba(6,23,28,.28)", pointerEvents: "auto" }}>
-          <div style={{ position: "absolute", top: tourStep === 0 ? "calc(env(safe-area-inset-top, 44px) + 65px)" : "48%", right: 18, width: "min(300px, calc(100vw - 36px))", borderRadius: 20, background: "#f7f3ed", color: "#203b3c", padding: 20, boxShadow: "0 10px 40px rgba(0,0,0,.3)" }}>
-            <div style={{ fontSize: 23, lineHeight: 1, textAlign: "right", marginBottom: 8 }}>{tourStep === 0 ? "↗" : "→"}</div>
-            <div style={{ fontFamily: HEADING_FONT, fontSize: 23, marginBottom: 8 }}>{tourStep === 0 ? "Explore at your pace." : "Make it yours."}</div>
-            <p style={{ fontSize: 14, lineHeight: 1.5, margin: "0 0 16px" }}>{tourStep === 0 ? "The menu is where you'll find breathing techniques and sensory experiences." : "Choose Personalize Pause in the menu to change your scenery, breathing visual, and voice guidance."}</p>
+        <div role="dialog" aria-modal="true" aria-label="Welcome to Always Pause" style={{ position: "fixed", inset: 0, zIndex: 90, background: "rgba(6,23,28,.38)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, pointerEvents: "auto" }}>
+          <div style={{ width: "min(420px, 100%)", maxHeight: "min(85dvh, 650px)", overflowY: "auto", borderRadius: 24, background: "#f7f3ed", color: "#203b3c", padding: "clamp(20px, 5vw, 32px)", boxShadow: "0 14px 50px rgba(0,0,0,.25)" }}>
+            <div style={{ fontSize: 12, letterSpacing: ".12em", opacity: .65, marginBottom: 18 }}>A LITTLE TOUR · {tourStep + 1} OF 4</div>
+            <h2 style={{ fontFamily: HEADING_FONT, fontWeight: 400, fontSize: "clamp(27px, 6vw, 34px)", lineHeight: 1.15, margin: "0 0 12px" }}>{tourCards[tourStep].title}</h2>
+            <p style={{ fontSize: 15, lineHeight: 1.55, margin: "0 0 20px" }}>{tourCards[tourStep].body}</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 9, marginBottom: 24 }}>
+              {tourCards[tourStep].examples.map((example) => (
+                <div key={example} style={{ border: "1px solid #c4d4cf", background: "#e8efeb", borderRadius: 14, padding: "15px 10px", textAlign: "center", fontSize: 14 }}>{example}</div>
+              ))}
+            </div>
+            <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 20 }}>
+              {tourCards.map((_, i) => <span key={i} style={{ width: i === tourStep ? 18 : 6, height: 6, borderRadius: 8, background: i === tourStep ? "#244749" : "#bdc8c4" }} />)}
+            </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-              <button type="button" onClick={finishTour} style={{ border: 0, background: "none", color: "#496064", cursor: "pointer" }}>Skip tour</button>
-              <button type="button" onClick={nextTour} style={{ border: 0, background: "#244749", color: "white", padding: "11px 19px", borderRadius: 25, cursor: "pointer" }}>{tourStep === 0 ? "Show me" : "Got it"}</button>
+              <button type="button" onClick={finishTour} style={{ border: 0, background: "none", color: "#496064", cursor: "pointer", padding: "12px 0" }}>Skip tour</button>
+              <button type="button" onClick={tourStep === 3 ? finishTour : nextTour} style={{ border: 0, background: "#244749", color: "white", padding: "12px 22px", borderRadius: 25, cursor: "pointer" }}>{tourStep === 3 ? "Start exploring" : "Continue →"}</button>
             </div>
           </div>
         </div>
