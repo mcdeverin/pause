@@ -15,7 +15,7 @@ export const FREE_TECHNIQUE_IDS = [
 ];
 
 // Original only.
-export const FREE_VISUAL_IDS = ["orb"];
+export const FREE_VISUAL_IDS = ["orb", "lagoon"];
 
 // Three starter photographs: nature, warm and evening.
 export const FREE_PHOTO_BACKGROUND_IDS = [
