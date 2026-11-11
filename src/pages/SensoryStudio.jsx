@@ -33,7 +33,7 @@ export default function SensoryStudio(){
  <div style={{display:expanded?"none":"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
  <label htmlFor="sensory-scene-select" style={{fontSize:13,fontWeight:700,color:"#625c70"}}>Experience</label>
  <select id="sensory-scene-select" value={scene} onChange={e=>{setScene(e.target.value);setPaused(false)}} style={{width:"min(100%,340px)",padding:"12px 16px",borderRadius:14,border:"1px solid #d6d0dc",background:"#fff",color:"#24252a",fontSize:15,cursor:"pointer"}}>
- {[["orbit","Orbit"],["liquid","Liquid Surface"],["prismatic","Prismatic Water"],["neon","Neon Paint"],["neon-reveal","Neon Reveal Slider"],["smoke","Fireworks"],["cloud","Cloud"],["underwater","Underwater"],["underwater2","Koi Pond"],["light","Liquid Light"],["lava","Lava Lamp"],["chromatic","Chromatic"],["chrome","Liquid Chrome"],["crystalized","Crystalized Ball"],["morph","Morph Slider"],["dither","Dither Veil"],["pixel","PixelSwap · Sky"],["balatro-prismatic","Prismatic Balatro"]].map(([id,label])=><option key={id} value={id}>{label}</option>)}
+ {[["orbit","Popcorn"],["liquid","Liquid Surface"],["prismatic","Prismatic Water"],["neon","Neon Paint"],["neon-reveal","Neon Reveal Slider"],["smoke","Fireworks"],["cloud","Cloud"],["underwater","Underwater"],["underwater2","Koi Pond"],["light","Liquid Light"],["lava","Lava Lamp"],["chromatic","Chromatic"],["chrome","Liquid Chrome"],["crystalized","Crystalized Ball"],["morph","Morph Slider"],["dither","Dither Veil"],["pixel","PixelSwap · Sky"],["balatro-prismatic","Prismatic Balatro"]].map(([id,label])=><option key={id} value={id}>{label}</option>)}
  </select>
  </div>
  <section style={{background:"#fff",borderRadius:expanded?0:22,padding:expanded?0:12,overflow:"hidden"}}>
@@ -50,6 +50,6 @@ export default function SensoryStudio(){
  {scene!=="underwater"&&scene!=="underwater2"&&<button onClick={()=>setPaused(v=>!v)} style={{border:"1px solid #ddd",borderRadius:20,background:"white",padding:"10px 20px",cursor:"pointer"}}>{paused?"Resume motion":"Pause motion"}</button>}
  </div>}
  </section>
- {!expanded&&<p style={{fontSize:13,color:"#898991",marginTop:18}}>Liquid Surface is a private cursor-reactive water distortion experiment. Orbit uses lightweight Three.js rather than advanced WebGPU reflections. Nothing here changes the production breathing gallery.</p>}
+ {!expanded&&<p style={{fontSize:13,color:"#898991",marginTop:18}}>Liquid Surface is a private cursor-reactive water distortion experiment. Popcorn uses lightweight Three.js rather than advanced WebGPU reflections. Nothing here changes the production breathing gallery.</p>}
  </main>;
 }
