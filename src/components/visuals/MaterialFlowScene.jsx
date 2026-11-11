@@ -11,9 +11,12 @@ export default function MaterialFlowScene({ mode = "lava", paused = false }) {
     const blobs = Array.from({length: 9}, (_, i) => ({
       x: .14 + Math.random()*.72, y: .14 + Math.random()*.72,
       vx: (Math.random()-.5)*.00025, vy: (Math.random()-.5)*.00035,
-      r: .085+Math.random()*.055, phase:i*1.7
+      r: .085+Math.random()*.055, phase:i*1.7, heat:Math.random()
     }));
     const strokes = [];
+    const lavaCanvas=document.createElement('canvas');
+    const lavaCtx=lavaCanvas.getContext('2d',{willReadFrequently:true});
+    let lavaPixels=null,lavaW=0,lavaH=0;
     const pointer = {down:false,x:0,y:0,prevX:0,prevY:0};
     const resize = () => {
       const r=canvas.getBoundingClientRect(); w=Math.max(1,r.width);h=Math.max(1,r.height);
@@ -57,8 +60,8 @@ export default function MaterialFlowScene({ mode = "lava", paused = false }) {
     const lava = () => {
       const scale=Math.min(1,210/w,160/h);
       const sw=Math.max(2,Math.round(w*scale)),sh=Math.max(2,Math.round(h*scale));
-      const off=document.createElement("canvas");off.width=sw;off.height=sh;
-      const c=off.getContext("2d"),image=c.createImageData(sw,sh),p=image.data;
+      if(sw!==lavaW||sh!==lavaH){lavaW=sw;lavaH=sh;lavaCanvas.width=sw;lavaCanvas.height=sh;lavaPixels=lavaCtx.createImageData(sw,sh)}
+      const image=lavaPixels,p=image.data;
       const aspect=w/h;
       for(let y=0;y<sh;y++)for(let x=0;x<sw;x++){
         const nx=x/sw,ny=y/sh;
@@ -77,8 +80,8 @@ export default function MaterialFlowScene({ mode = "lava", paused = false }) {
         p[i+2]=inside?Math.round(86+92*light):31;
         p[i+3]=255;
       }
-      c.putImageData(image,0,0);
-      ctx.imageSmoothingEnabled=true;ctx.drawImage(off,0,0,w,h);
+      lavaCtx.putImageData(image,0,0);
+      ctx.imageSmoothingEnabled=true;ctx.drawImage(lavaCanvas,0,0,w,h);
       // Subtle glassy edge / specular highlights, without expensive per-particle blur.
       const glaze=ctx.createLinearGradient(0,0,w,h);
       glaze.addColorStop(0,"#ffffff18");glaze.addColorStop(.5,"#ffffff00");glaze.addColorStop(1,"#00000018");
@@ -120,12 +123,19 @@ export default function MaterialFlowScene({ mode = "lava", paused = false }) {
       if(!paused&&!reduced){
         tick+=dt;
         for(const b of blobs){
-          b.vx+=(Math.sin(tick*.013+b.phase))*.000005*dt;
-          b.vy+=(Math.cos(tick*.012+b.phase))*.000006*dt;
+          if(mode==="lava"){
+            // Warm wax rises; cooler wax sinks. No third-party implementation.
+            b.heat=Math.max(0,Math.min(1,b.heat+(b.y>.62?.004:-.0035)*dt));
+            b.vy+=(.00004-b.heat*.000095)*dt;
+            b.vx+=Math.sin(tick*.012+b.phase)*.000007*dt;
+          }else{
+            b.vx+=(Math.sin(tick*.013+b.phase))*.000005*dt;
+            b.vy+=(Math.cos(tick*.012+b.phase))*.000006*dt;
+          }
           b.vx*=.985;b.vy*=.985;
           b.x+=b.vx*dt;b.y+=b.vy*dt;
           if(b.x<.08||b.x>.92)b.vx*=-1;
-          if(b.y<.08||b.y>.92)b.vy*=-1;
+          if(b.y<.08||b.y>.92){b.vy*=-.65;b.heat=b.y>.92?Math.max(b.heat,.35):Math.min(b.heat,.4)}
           b.x=Math.max(.06,Math.min(.94,b.x));b.y=Math.max(.06,Math.min(.94,b.y));
         }
         for(const s of strokes){
