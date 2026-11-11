@@ -79,7 +79,6 @@ export default function Onboarding() {
         <AnimatePresence mode="wait">
           <motion.section key={step} initial={reduceMotion ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? {} : { opacity: 0, y: -12 }} transition={{ duration: .32 }}
             style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 12, pointerEvents: "none" }}>
-            {step > 0 && step < 4 && <span style={{ fontSize: 11, letterSpacing: ".2em", fontWeight: 600 }}>0{step} / 03</span>}
             <h1 style={{ fontFamily: HEADING_FONT, fontSize: "clamp(36px, 8vw, 56px)", fontWeight: 400, lineHeight: 1.12, letterSpacing: "-.035em", margin: 0, textShadow: "0 2px 22px rgba(0,0,0,.22)" }}>{current.title}</h1>
             <p style={{ fontSize: 15, lineHeight: 1.5, margin: 0, opacity: .95, textShadow: "0 1px 12px rgba(0,0,0,.4)" }}>{current.subtitle}</p>
           </motion.section>
