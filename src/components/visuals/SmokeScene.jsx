@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 // Private Sensory Studio experiment. Neon Paint is intentionally untouched.
 const COLORS = ["#e9b5da", "#91d8d5", "#b8a9f3", "#f6c69c", "#e8e8ed"];
-const MAX_PARTICLES = 1600;
+const MAX_PARTICLES = 750;
+const FRAME_INTERVAL = 1000 / 30; // Cap expensive Canvas 2D rendering at 30 FPS.
 const FIREWORK_PALETTE = ["#ff4ca0","#ffbf46","#45e5ef","#a87aff","#b6ff67","#ff7652","#ffffff"];
 const random = (min, max) => min + Math.random() * (max - min);
 
@@ -19,13 +20,13 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
-    let raf = 0, last = 0, tick = 0;
+    let raf = 0, last = 0, tick = 0, previousFrame = 0, visible = !document.hidden;
     const pointer = pointerRef.current;
     particlesRef.current = [];
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
       canvas.width = Math.max(1, Math.round(bounds.width * dpr));
       canvas.height = Math.max(1, Math.round(bounds.height * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -54,7 +55,7 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
 
     const burst = (x, y, power, tint) => {
       const particles = particlesRef.current;
-      const count = Math.round(90 + power * 150);
+      const count = Math.round(55 + power * 85);
       const palette = [tint, ...FIREWORK_PALETTE.filter(c=>c!==tint)];
       for (let i = 0; i < count; i++) {
         if (particles.length >= MAX_PARTICLES) particles.shift();
@@ -65,6 +66,9 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
     };
 
     const draw = now => {
+      raf = requestAnimationFrame(draw);
+      if (!visible || now - previousFrame < FRAME_INTERVAL) return;
+      previousFrame = now;
       const dt = Math.min((now - (last || now)) / 16.667, 2);
       last = now;
       const w = canvas.clientWidth, h = canvas.clientHeight;
@@ -87,7 +91,7 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
           p.oldX = p.x; p.oldY = p.y;
           if (p.firework) {
             p.trail.push({x:p.x,y:p.y});
-            if (p.trail.length>9) p.trail.shift();
+            if (p.trail.length>6) p.trail.shift();
           }
           // Two spatial scales of curl create folding, drifting wisps.
           if (p.firework) {
@@ -96,7 +100,7 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
             p.x += p.vx*dt; p.y += p.vy*dt;
             if (!p.secondary && p.age > p.life*.55 && p.sparkle>.79 && particlesRef.current.length<MAX_PARTICLES-5) {
               p.secondary=true;
-              for(let k=0;k<4;k++) {
+              for(let k=0;k<2;k++) {
                 const a=random(0,Math.PI*2);
                 particlesRef.current.push({x:p.x,y:p.y,oldX:p.x,oldY:p.y,vx:Math.cos(a)*random(.4,1.5),vy:Math.sin(a)*random(.4,1.5),age:0,life:random(16,36),width:.8,tint:p.tint,offset:0,spin:0,firework:true,trail:[],sparkle:0,secondary:true});
               }
@@ -135,7 +139,6 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
         const fadeOut = Math.max(0, 1 - p.age / p.life) ** 1.35;
         const alpha = fadeIn * fadeOut;
         if (p.firework) {
-          ctx.save();
           ctx.globalCompositeOperation = backgroundMode==="light"?"source-over":"lighter";
           const trail=p.trail || [];
           if(trail.length>1) {
@@ -143,13 +146,15 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
             for(let i=1;i<trail.length;i++)ctx.lineTo(trail[i].x,trail[i].y);
             ctx.strokeStyle=p.tint;ctx.lineWidth=p.width*.85;ctx.globalAlpha=alpha*.55;ctx.stroke();
           }
-          ctx.shadowColor=p.tint;ctx.shadowBlur=backgroundMode==="light"?7:16;
+          // Avoid per-particle shadowBlur: the most expensive Canvas 2D operation here.
+          ctx.shadowBlur=0;
           ctx.globalAlpha=alpha*(backgroundMode==="light"?.75:1);
           ctx.fillStyle=p.tint;
           ctx.beginPath();ctx.arc(p.x,p.y,Math.max(.6,p.width*.7),0,Math.PI*2);ctx.fill();
           ctx.shadowBlur=0;ctx.fillStyle="#ffffff";ctx.globalAlpha=alpha*.8;
           ctx.beginPath();ctx.arc(p.x,p.y,.55,0,Math.PI*2);ctx.fill();
-          ctx.restore();
+          ctx.globalCompositeOperation="source-over";
+          ctx.globalAlpha=1;
           continue;
         }
         const tailX = p.x - p.vx * 5, tailY = p.y - p.vy * 5;
@@ -179,7 +184,6 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
         ctx.beginPath();ctx.arc(pointer.x,pointer.y,radius*.65,0,Math.PI*2);ctx.fill();
       }
       ctx.shadowBlur=0;ctx.globalAlpha = 1;
-      raf = requestAnimationFrame(draw);
     };
 
     const coords = e => {
@@ -200,7 +204,7 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
       const distance = Math.hypot(dx, dy);
       pointer.vx = dx; pointer.vy = dy;
       // Interpolate along the stroke to prevent dotted trails during quick gestures.
-      const steps = Math.min(24, Math.max(1, Math.ceil(distance / 5)));
+      const steps = Math.min(10, Math.max(1, Math.ceil(distance / 9)));
       for (let i = 1; i <= steps; i++) {
         const t = i / steps;
         emit(pointer.x + dx * t, pointer.y + dy * t, 2, colorRef.current, dx / steps, dy / steps);
@@ -216,8 +220,15 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
     canvas.addEventListener("pointerup", up);
     canvas.addEventListener("pointercancel", up);
     canvas.addEventListener("lostpointercapture", up);
+    const onVisibilityChange = () => {
+      visible = !document.hidden;
+      last = 0;
+      previousFrame = 0;
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
     raf = requestAnimationFrame(draw);
     return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       cancelAnimationFrame(raf);
       observer.disconnect();
       for (const [event, handler] of [["pointerdown", down], ["pointermove", move], ["pointerup", up], ["pointercancel", up], ["lostpointercapture", up]]) canvas.removeEventListener(event, handler);
