@@ -10,13 +10,13 @@ const STORAGE_KEY = "pausePreferences";
 const LEGACY_THEME_KEY = "pauseTheme";
 
 export const DEFAULT_PREFERENCES = {
-  // "light" | "dark" — the interface only. Null until resolved on load.
-  appearance: null,
+  // A calm, light first-launch canvas; saved appearance always wins.
+  appearance: "light",
   visual: "lagoon",
   // Per-style fine-tuning, keyed by visual id. Styles keep their defaults until
   // the user changes them.
   visualOptions: {},
-  background: "nature-mountain-lake",
+  background: "classic",
   // Background adjustments — applied to the background layer only.
   backgroundDim: 0,
   backgroundBlur: 0,
@@ -74,7 +74,7 @@ export function loadPreferences() {
     const merged = { ...DEFAULT_PREFERENCES, ...stored };
     return {
       ...merged,
-      appearance: resolveAppearance(merged.appearance, legacyTheme),
+      appearance: resolveAppearance(stored.appearance, legacyTheme),
       backgroundDim: clampDim(merged.backgroundDim),
       backgroundBlur: clampBlur(merged.backgroundBlur),
       photoZoom: clampPhotoZoom(merged.photoZoom),
