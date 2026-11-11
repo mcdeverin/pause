@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 // Private Sensory Studio experiment. Neon Paint is intentionally untouched.
 const COLORS = ["#e9b5da", "#91d8d5", "#b8a9f3", "#f6c69c", "#e8e8ed"];
-const MAX_PARTICLES = 1250;
+const MAX_PARTICLES = 1600;
+const FIREWORK_PALETTE = ["#ff4ca0","#ffbf46","#45e5ef","#a87aff","#b6ff67","#ff7652","#ffffff"];
 const random = (min, max) => min + Math.random() * (max - min);
 
 export default function SmokeScene({ backgroundMode = "dark", paused = false, preview = false }) {
@@ -53,12 +54,13 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
 
     const burst = (x, y, power, tint) => {
       const particles = particlesRef.current;
-      const count = Math.round(85 + power * 180);
+      const count = Math.round(90 + power * 150);
+      const palette = [tint, ...FIREWORK_PALETTE.filter(c=>c!==tint)];
       for (let i = 0; i < count; i++) {
         if (particles.length >= MAX_PARTICLES) particles.shift();
         const angle = (i / count) * Math.PI * 2 + random(-.09,.09);
-        const speed = random(1.1, 2.9) * (1 + power * 1.9);
-        particles.push({x,y,oldX:x,oldY:y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,age:0,life:random(45,105),width:random(.8,2.5),tint:i%5===0?"#fffbea":tint,offset:random(-100,100),spin:random(.3,.8),firework:true});
+        const speed = random(1.1, 3.1) * (1 + power * 1.9);
+        particles.push({x,y,oldX:x,oldY:y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,age:0,life:random(45,105),width:random(.8,2.5),tint:i%7===0?"#ffffff":palette[Math.floor((i/count)*palette.length)%palette.length],offset:random(-100,100),spin:random(.3,.8),firework:true,trail:[],sparkle:random(0,1),secondary:false});
       }
     };
 
@@ -83,11 +85,22 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
         for (const p of particlesRef.current) {
           p.age += dt;
           p.oldX = p.x; p.oldY = p.y;
+          if (p.firework) {
+            p.trail.push({x:p.x,y:p.y});
+            if (p.trail.length>9) p.trail.shift();
+          }
           // Two spatial scales of curl create folding, drifting wisps.
           if (p.firework) {
             p.vx *= Math.pow(.982,dt);
             p.vy = p.vy*Math.pow(.982,dt)+.024*dt;
             p.x += p.vx*dt; p.y += p.vy*dt;
+            if (!p.secondary && p.age > p.life*.55 && p.sparkle>.79 && particlesRef.current.length<MAX_PARTICLES-5) {
+              p.secondary=true;
+              for(let k=0;k<4;k++) {
+                const a=random(0,Math.PI*2);
+                particlesRef.current.push({x:p.x,y:p.y,oldX:p.x,oldY:p.y,vx:Math.cos(a)*random(.4,1.5),vy:Math.sin(a)*random(.4,1.5),age:0,life:random(16,36),width:.8,tint:p.tint,offset:0,spin:0,firework:true,trail:[],sparkle:0,secondary:true});
+              }
+            }
             continue;
           }
           const a = Math.sin(p.y * .013 + tick * .009 + p.offset) +
@@ -118,9 +131,27 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
       // Thin, translucent filaments plus a restrained soft halo give the smoke depth.
       ctx.lineCap = "round";
       for (const p of particlesRef.current) {
-        const fadeIn = Math.min(1, p.age / 10);
+        const fadeIn = Math.min(1, p.age / (p.firework ? 2 : 10));
         const fadeOut = Math.max(0, 1 - p.age / p.life) ** 1.35;
         const alpha = fadeIn * fadeOut;
+        if (p.firework) {
+          ctx.save();
+          ctx.globalCompositeOperation = backgroundMode==="light"?"source-over":"lighter";
+          const trail=p.trail || [];
+          if(trail.length>1) {
+            ctx.beginPath();ctx.moveTo(trail[0].x,trail[0].y);
+            for(let i=1;i<trail.length;i++)ctx.lineTo(trail[i].x,trail[i].y);
+            ctx.strokeStyle=p.tint;ctx.lineWidth=p.width*.85;ctx.globalAlpha=alpha*.55;ctx.stroke();
+          }
+          ctx.shadowColor=p.tint;ctx.shadowBlur=backgroundMode==="light"?7:16;
+          ctx.globalAlpha=alpha*(backgroundMode==="light"?.75:1);
+          ctx.fillStyle=p.tint;
+          ctx.beginPath();ctx.arc(p.x,p.y,Math.max(.6,p.width*.7),0,Math.PI*2);ctx.fill();
+          ctx.shadowBlur=0;ctx.fillStyle="#ffffff";ctx.globalAlpha=alpha*.8;
+          ctx.beginPath();ctx.arc(p.x,p.y,.55,0,Math.PI*2);ctx.fill();
+          ctx.restore();
+          continue;
+        }
         const tailX = p.x - p.vx * 5, tailY = p.y - p.vy * 5;
         ctx.strokeStyle = p.tint;
         ctx.globalAlpha = alpha * (backgroundMode === "light" ? .17 : .24);
@@ -138,6 +169,7 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
       }
       if (pointer.active) {
         const radius = 12 + pointer.charge * 32;
+        ctx.shadowColor=colorRef.current;ctx.shadowBlur=18+pointer.charge*24;
         ctx.globalAlpha = .3 + pointer.charge*.5;
         ctx.strokeStyle = colorRef.current;
         ctx.lineWidth = 2 + pointer.charge*2;
@@ -146,7 +178,7 @@ export default function SmokeScene({ backgroundMode = "dark", paused = false, pr
         ctx.fillStyle = colorRef.current;
         ctx.beginPath();ctx.arc(pointer.x,pointer.y,radius*.65,0,Math.PI*2);ctx.fill();
       }
-      ctx.globalAlpha = 1;
+      ctx.shadowBlur=0;ctx.globalAlpha = 1;
       raf = requestAnimationFrame(draw);
     };
 
