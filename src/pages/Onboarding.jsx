@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
+import { FONT, HEADING_FONT } from "../lib/design";
 import { BACKDROP_PHOTOS, DEFAULT_BACKDROP_PHOTO } from "../lib/crystalStudio";
 
 const STORAGE_KEY = "alwaysPauseOnboardingV1";
@@ -64,7 +65,7 @@ export default function Onboarding() {
   }
 
   return (
-    <main style={{ position: "fixed", inset: 0, width: "100%", height: "100dvh", overflow: "hidden", background: "#193b3c", color: "white", isolation: "isolate" }}>
+    <main style={{ position: "fixed", inset: 0, width: "100%", height: "100dvh", overflow: "hidden", background: "#193b3c", color: "white", isolation: "isolate", fontFamily: FONT }}>
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <LiquidSurfaceScene photoUrl={photo?.url} strength={reduceMotion ? 0 : 0.68} viscosity={0.7} paused={Boolean(reduceMotion)} />
       </div>
@@ -72,14 +73,14 @@ export default function Onboarding() {
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "linear-gradient(180deg, rgba(5,21,28,.55) 0%, rgba(5,21,28,.08) 35%, rgba(5,21,28,.16) 52%, rgba(5,21,28,.72) 100%)" }} />
       <div style={{ position: "absolute", inset: 0, zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom))", pointerEvents: "none" }}>
         <header style={{ width: "100%", maxWidth: 460, display: "flex", alignItems: "center", justifyContent: "space-between", pointerEvents: "auto" }}>
-          <span style={{ fontFamily: "Georgia, serif", fontSize: 22, letterSpacing: "-.035em" }}>always pause</span>
+          <span style={{ fontFamily: HEADING_FONT, fontSize: 22, letterSpacing: "-.035em" }}>always pause</span>
           {step > 0 && step < 4 && <button onClick={() => setStep((value) => value - 1)} style={textButton}>Back</button>}
         </header>
         <AnimatePresence mode="wait">
           <motion.section key={step} initial={reduceMotion ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? {} : { opacity: 0, y: -12 }} transition={{ duration: .32 }}
             style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 12, pointerEvents: "none" }}>
             {step > 0 && step < 4 && <span style={{ fontSize: 11, letterSpacing: ".2em", fontWeight: 600 }}>0{step} / 03</span>}
-            <h1 style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: "clamp(36px, 8vw, 56px)", fontWeight: 400, lineHeight: 1.12, letterSpacing: "-.035em", margin: 0, textShadow: "0 2px 22px rgba(0,0,0,.22)" }}>{current.title}</h1>
+            <h1 style={{ fontFamily: HEADING_FONT, fontSize: "clamp(36px, 8vw, 56px)", fontWeight: 400, lineHeight: 1.12, letterSpacing: "-.035em", margin: 0, textShadow: "0 2px 22px rgba(0,0,0,.22)" }}>{current.title}</h1>
             <p style={{ fontSize: 15, lineHeight: 1.5, margin: 0, opacity: .95, textShadow: "0 1px 12px rgba(0,0,0,.4)" }}>{current.subtitle}</p>
           </motion.section>
         </AnimatePresence>
