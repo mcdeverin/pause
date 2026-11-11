@@ -17,7 +17,7 @@ const VISUAL_KEYS = [
   "photoOffsetY",
 ];
 
-// Returns a draft back at the app's original look: the first breathing visual
+// Returns a draft to the current first-launch look: the first breathing visual
 // (the moving blue-and-green orb) with its own default colours, the off-white
 // Classic background and no adjustment on it. Any fine-tuning is dropped, so
 // every style hands its colours back. Interface appearance and the "During your
