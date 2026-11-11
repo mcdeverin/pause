@@ -127,9 +127,9 @@ function Water({interaction,paused}){
  });
  return <><mesh position={[0,0,-.6]}><planeGeometry args={[50,40]}/><meshBasicMaterial color="#102e2b"/></mesh>
   <mesh position={[0,0,-.45]}><planeGeometry args={[50,40]}/><meshBasicMaterial color="#214a3d" transparent opacity={.46}/></mesh>
-  <mesh ref={surface} position={[0,0,.43]}>
+  <mesh position={[0,0,.43]}>
    <planeGeometry args={[50,40]}/>
-   <shaderMaterial transparent depthWrite={false} uniforms={{time:{value:0}}}
+   <shaderMaterial ref={surface} transparent depthWrite={false} uniforms={{time:{value:0}}}
     vertexShader={`varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`}
     fragmentShader={`uniform float time;varying vec2 vUv;
       void main(){
