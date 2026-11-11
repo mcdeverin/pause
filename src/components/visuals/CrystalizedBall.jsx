@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef } from 'react';
-import { Renderer, Program, Mesh, Triangle, Geometry, RenderTarget, Texture } from 'ogl';
+import { Renderer, Program, Mesh, Triangle, Geometry, RenderTarget, Texture } from 'https://esm.sh/ogl@1.0.11';
 
 import './CrystalizedBall.css';
 
