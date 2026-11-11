@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Renderer, Triangle, Program, Mesh, Texture } from 'https://esm.sh/ogl@1.0.11';
-import { gsap } from 'gsap';
+import { gsap } from 'https://esm.sh/gsap@3.14.2';
 
 import './MorphSlider.css';
 
