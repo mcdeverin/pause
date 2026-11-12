@@ -23,7 +23,7 @@ import { BACKDROP_PHOTOS } from "../lib/crystalStudio";
 
 const groups = [
   {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"],["Liquid Surface","/sensory/liquid-surface"],["Rain","/sensory/rain"],["Pixel Swap Sky","/sensory/pixel-swap-sky"],["Galaxy","/sensory/galaxy"],["Grid Distortion","/sensory/grid-distortion"]]},
-  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"],["Neon Painting","/sensory/neon-painting"],["Prismatic Balatro","/sensory/prismatic-balatro"],["Anti Gravity","/sensory/anti-gravity"],["Prism","/sensory/prism"]]}
+  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Iridescence","/sensory/iridescence"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"],["Neon Painting","/sensory/neon-painting"],["Prismatic Balatro","/sensory/prismatic-balatro"],["Anti Gravity","/sensory/anti-gravity"],["Prism","/sensory/prism"]]}
 ];
 
 function Preview({name}) {
