@@ -1,0 +1,3 @@
+import Balatro from "../components/visuals/Balatro";
+import SensoryBackButton from "../components/visuals/SensoryBackButton";
+export default function PrismaticBalatroExperience(){return <main style={{position:"relative",width:"100%",height:"100dvh",overflow:"hidden",background:"#1b1326"}}><Balatro color1="#FF873B" color2="#F25BD0" color3="#55D9E8" swirl={0.25} pixelSize={1.5} mouseInteraction contrast={3.5} lighting={0.4} speed={1} rotationSpeed={0} scale={1} detail={5} crt={0} mouseStrength={1} clickSwirl intro lightMode={false}/><SensoryBackButton/></main>}
