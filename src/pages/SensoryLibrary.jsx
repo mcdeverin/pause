@@ -29,7 +29,7 @@ function Preview({name}) {
     "Cloud": <CloudScene preview />,
     "Liquid Chrome": <LiquidChromeScene />,
     "Popcorn": <OrbitScene />,
-    "Liquid Surface": <LiquidSurfaceScene />,
+    "Liquid Surface": <LiquidSurfaceScene preview />,
     "Prismatic Water": <PrismaticWaterScene />
   };
   return <div ref={ref} style={{width:"100%",height:"100%",background:name==="Underwater"?"linear-gradient(155deg,#194d78,#092744 70%,#071b35)":"#d7e8e9",pointerEvents:"none"}}>
