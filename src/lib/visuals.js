@@ -127,13 +127,6 @@ const COLOR = (key, label, def) => ({
 // Only styles listed here are selectable — nothing unfinished is offered.
 export const VISUAL_STYLES = [
   {
-    id: "screenFill",
-    label: "Rising Color",
-    collection: "classics",
-    description: "A solid color rises from the bottom as you inhale and lowers as you exhale.",
-    controls: [COLOR("color", "Fill color", "#83B8AE")],
-  },
-  {
     id: "lagoon",
     label: "Classic",
     collection: "classics",
@@ -169,6 +162,13 @@ export const VISUAL_STYLES = [
       COLOR("colorFrom", "First color", DEFAULT_VISUAL_COLORS.ring.colorFrom),
       COLOR("colorTo", "Second color", DEFAULT_VISUAL_COLORS.ring.colorTo),
     ],
+  },
+  {
+    id: "screenFill",
+    label: "Rise",
+    collection: "classics",
+    description: "A solid color rises from the bottom as you inhale and lowers as you exhale.",
+    controls: [COLOR("color", "Fill color", "#83B8AE")],
   },
   {
     id: "crystal",
