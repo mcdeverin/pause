@@ -58,7 +58,7 @@ export default function MomentsScreen({
     >
       <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} fixed />
 
-      <div style={{ width: "100%", maxWidth: 520, margin: "0 auto", padding: "0 22px", boxSizing: "border-box" }}>
+      <div style={{ width: "calc(100% - 28px)", maxWidth: 520, margin: "0 auto", padding: "20px 22px 28px", boxSizing: "border-box", position: "relative", zIndex: 1, borderRadius: 26, background: theme === "night" ? "rgba(22, 31, 39, 0.94)" : "rgba(250, 248, 252, 0.95)", boxShadow: "0 12px 44px rgba(18, 27, 39, 0.14)", border: theme === "night" ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(255,255,255,0.78)" }}>
         {/* Header */}
         <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 44 }}>
           <button
