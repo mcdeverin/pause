@@ -27,9 +27,9 @@ export default function SensoryLibrary() {
       <p style={{margin:"26px 0 18px",color:"#72817a",fontSize:14}}>{group.description}</p>
       <div style={{display:"grid",gap:12}}>{group.items.map(([name,path],i)=><Link key={path} to={path} style={{textDecoration:"none",color:"inherit",display:"flex",alignItems:"center",justifyContent:"space-between",border:"1px solid #24342f19",borderRadius:20,background:"#ffffffad",padding:"22px 22px",minHeight:65,boxSizing:"border-box"}}><span style={{fontFamily:HEADING_FONT,fontSize:25}}>{name}</span><span style={{fontSize:12,opacity:.5}}>{String(i+1).padStart(2,"0")} ↗</span></Link>)}</div>
     </div>
-    <nav aria-label="Primary navigation" style={{position:"fixed",bottom:"calc(env(safe-area-inset-bottom, 12px) + 18px)",left:"50%",transform:"translateX(-50%)",width:"min(330px,calc(100vw - 48px))",display:"flex",padding:5,borderRadius:28,background:"rgba(255,255,255,.54)",backdropFilter:"blur(24px) saturate(150%)",WebkitBackdropFilter:"blur(24px) saturate(150%)",border:"1px solid rgba(255,255,255,.85)",boxShadow:"0 8px 30px #1b332a19,inset 0 1px 0 #fff9",zIndex:10}}>
-      <Link to="/" style={{flex:1,textAlign:"center",padding:"13px 0",borderRadius:23,color:"#51665e",textDecoration:"none",fontSize:14,fontWeight:600}}>Breathing</Link>
-      <span aria-current="page" style={{flex:1,textAlign:"center",padding:"13px 0",borderRadius:23,background:"rgba(255,255,255,.75)",boxShadow:"0 2px 12px #20382c12,inset 0 1px 0 #fff",fontSize:14,fontWeight:700}}>Sensory</span>
+    <nav aria-label="Primary navigation" style={{position:"fixed",bottom:"calc(env(safe-area-inset-bottom, 12px) + 18px)",left:"50%",transform:"translateX(-50%)",width:"min(330px,calc(100vw - 48px))",display:"flex",alignItems:"center",padding:"7px 14px",borderRadius:19,background:"rgba(255,255,255,.28)",backdropFilter:"blur(18px)",WebkitBackdropFilter:"blur(18px)",border:"1px solid rgba(255,255,255,.35)",zIndex:10,boxSizing:"border-box"}}>
+      <Link to="/" style={{flex:1,textAlign:"center",padding:"12px 0 10px",borderBottom:"2px solid transparent",color:"#51665e",textDecoration:"none",fontSize:14,fontWeight:450,letterSpacing:".01em"}}>Breathing</Link>
+      <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0 10px",borderBottom:"2px solid #325c50",fontSize:14,fontWeight:650,letterSpacing:".01em"}}>Sensory</span>
     </nav>
   </main>;
 }
