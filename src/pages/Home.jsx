@@ -198,7 +198,7 @@ export default function Home() {
     }
 
     const inMoment = available.filter(
-      (t) => moment.categories.includes(t.category) && hasUsablePhases(t)
+      (t) => (moment.id === "explore_all" || moment.categories.includes(t.category)) && hasUsablePhases(t)
     );
     const playable = hasFullAccess ? inMoment : inMoment.filter(isFreeTechnique);
     const pool = playable;
