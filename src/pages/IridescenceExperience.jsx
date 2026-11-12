@@ -1,0 +1,3 @@
+import Iridescence from "../components/visuals/Iridescence";
+import SensoryBackButton from "../components/visuals/SensoryBackButton";
+export default function IridescenceExperience(){return <main style={{position:"relative",width:"100%",height:"100dvh",overflow:"hidden",background:"#080713"}}><Iridescence color="#8099cc" hueShift={0} saturation={1} brightness={1.5} contrast={1} speed={1} scale={1} detail={8} warp={1} rotation={0} mouseReact amplitude={0.1} stir={0.5} sheen={0.3} clickSwirl grain={0} fade={0}/><SensoryBackButton/></main>}
