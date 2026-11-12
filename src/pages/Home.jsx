@@ -1,8 +1,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
-import MainScreen from "../components/MainScreen";
-import PauseSetup from "../components/PauseSetup";
+import AdaptiveHome from "../components/AdaptiveHome";
 import TechniqueBrowser from "../components/TechniqueBrowser";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
@@ -49,7 +48,7 @@ export default function Home() {
   const [photos, setPhotos] = useState(getStoredPhotos);
 
   // Light / Dark restyles the interface only — the background keeps its own canvas.
-  const theme = preferences.appearance === "dark" ? "night" : "day";
+  const theme = (new Date().getHours() >= 21 || new Date().getHours() < 5) ? "night" : "day";
 
   // The photograph in use is whatever the saved preferences point at — a curated
   // collection image or one of this device's own photos.
@@ -308,50 +307,20 @@ export default function Home() {
 
       <AnimatePresence mode="wait">
         {mode === "idle" && (
-          <MainScreen
-            key="main"
-            onTap={() => setMode("setup")}
-            onSupportClick={() => setShowSupport(true)}
-            theme={theme}
-            onOpenAbout={() => setShowAbout(true)}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-            onHapticsChange={() => setHapticsEnabled(!hapticsEnabled)}
-            isPro={hasFullAccess}
-            isOwner={isOwner}
-            backgroundSettings={preferences}
-            photo={photo}
-            visual={preferences.visual}
-            visualOptions={preferences.visualOptions}
-            onHideShortcuts={() => updatePreference("showShortcuts", false)}
-            onShowShortcuts={() => updatePreference("showShortcuts", true)}
-            onOpenPersonalize={() => setShowPersonalize(true)}
-            onOpenMoments={() => setShowMoments(true)}
-            onOpenPausePlus={() => openPaywall({ source: "menu" })}
-            lockedCategories={lockedCategories}
-            onLockedCategoryTap={(category) =>
-              openPaywall({
-                source: "technique_category",
-                featureId: category,
-                featureCategory: "technique",
-              })
-            }
-            showShortcuts={false}
-            onSelectMoment={startMoment}
-            shortcutNotice={shortcutNotice}
-          />
-        )}
-        {mode === "setup" && (
-          <PauseSetup key="pause-setup" theme={theme} backgroundSettings={preferences} photo={photo}
-            onBack={() => setMode("idle")} onBegin={startMoment} busy={preparingPause}
-            voiceAvailable={typeof window !== "undefined" && typeof window.Audio !== "undefined"}
-            defaultVoice={preferences.voiceGuide ? "full" : "none"}
-            onVoiceChange={(value) => updatePreference("voiceGuide", value === "full")} />
+          <AdaptiveHome key="main" onStart={async (momentId) => {
+            const available = await ensureTechniques();
+            const moment = MOMENTS.find(m => m.id === momentId);
+            const eligible = available.filter(t => moment?.categories.includes(t.category) && hasUsablePhases(t) && (hasFullAccess || isFreeTechnique(t)));
+            if (!eligible.length) { flashNotice("No breathing technique is available for this moment yet."); return; }
+            setSessionVoice(preferences.voiceGuide ? "full" : "none");
+            beginSession(getRandomTechnique(eligible), momentId);
+          }} onExplore={() => { setBrowseMoment("explore_all"); setBrowseTechniques(techniques.filter(t => hasUsablePhases(t) && (hasFullAccess || isFreeTechnique(t)))); setSessionVoice(preferences.voiceGuide ? "full" : "none"); setMode("browse"); }}
+            onMoments={() => setShowMoments(true)} onAbout={() => setShowAbout(true)} onPlus={() => openPaywall({source:"menu"})} />
         )}
         {mode === "browse" && (
           <TechniqueBrowser key="technique-browser" techniques={browseTechniques} momentId={browseMoment}
             theme={theme} backgroundSettings={preferences} photo={photo}
-            onBack={() => setMode("setup")}
+            onBack={() => setMode("idle")}
             onChoose={(chosen) => beginSession(chosen, browseMoment)} />
         )}
         {mode === "breathing" && technique && (
@@ -369,24 +338,6 @@ export default function Home() {
             showInstructions={preferences.showInstructions}
             voiceGuide={sessionVoice !== "none"}
             narrationMode={sessionVoice}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Personalization */}
-      <AnimatePresence>
-        {showPersonalize && (
-          <PersonalizePanel
-            key="personalize"
-            theme={theme}
-            prefs={preferences}
-            photos={photos}
-            onSave={commitPreferences}
-            onAddPhoto={handlePhotoAdded}
-            onRemovePhoto={handlePhotoRemoved}
-            onClose={() => setShowPersonalize(false)}
-            isPro={hasFullAccess}
-            onRequestUpgrade={requestUpgrade}
           />
         )}
       </AnimatePresence>
