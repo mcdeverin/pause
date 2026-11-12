@@ -12,7 +12,7 @@ import NeonNatureScene from "../components/visuals/NeonNatureScene";
 import Balatro from "../components/visuals/Balatro";
 import Antigravity from "../components/visuals/Antigravity";
 import Prism from "../components/visuals/Prism";
-import GalaxyScene from "../components/visuals/GalaxyScene";
+import Galaxy from "../components/visuals/Galaxy";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import NavigationSheet from "../components/NavigationSheet";
@@ -36,7 +36,7 @@ function Preview({name}) {
   },[]);
   const scenes={
     "Cloud": <CloudScene preview />,
-    "Galaxy": <GalaxyScene preview />,
+    "Galaxy": <Galaxy density={1} glowIntensity={0.3} flareIntensity={1} starSpeed={0.5} mouseRepulsion clickWarp starColors={[]} hueShift={140} saturation={0} starSize={1} twinkleIntensity={0.3} speed={1} rotationSpeed={0.1} layers={4} direction="forward" repulsionStrength={2} mouseInteraction intro lightMode={false} transparent={false} />,
     "Pixel Swap Sky": <PixelSwapSky />,
     "Neon Painting": <NeonNatureScene preview backgroundMode="dark" />,
     "Prism": <Prism animationType="rotate" timeScale={0.5} height={3.5} baseWidth={5.5} scale={1.65} hueShift={0} colorFrequency={1} glow={1} colors={[]} saturation={1.5} noise={0} interactive hoverStrength={2} inertia={0.05} intro resolution={0.5} lightMode={false} />,
