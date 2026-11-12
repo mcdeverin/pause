@@ -1,6 +1,5 @@
 import GlassSurface from "../components/GlassSurface";
 import { useState, useEffect, useCallback } from "react";
-import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
@@ -113,7 +112,7 @@ export default function MainScreen({
         <button
           type="button"
           onClick={() => setMenuOpen(true)}
-          aria-label="Open menu"
+          aria-label="Open your space"
           aria-expanded={menuOpen}
           style={{
             position: "absolute",
@@ -132,7 +131,11 @@ export default function MainScreen({
             opacity: 0.85,
           }}
         >
-          <Menu size={23} strokeWidth={2.2} />
+          <svg width="29" height="29" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M16.2 3.8C22.7 3.5 28.3 8.9 28.2 15.9C28.1 23.1 22.8 28.2 15.7 28.1C8.5 28 3.7 22.6 3.9 15.8C4.1 8.9 9.5 4.1 16.2 3.8Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" opacity=".9"/>
+            <path d="M13.1 11.7C12.9 14.4 13.2 17.2 13 20.3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M19 11.3C18.8 14.1 19.1 17.1 18.8 20.1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
         </button>
       </div>
 
