@@ -184,6 +184,7 @@ function MiniBreathingOrb({ reducedMotion, colors, period = 8000 }) {
 
 const BREATHING_CARDS = [
   { title: "Box Breathing", kind: "breathing", colors: ["#76C7DF", "#C6E7DB"], period: 8000 },
+  { title: "4-7-8 Breathing", kind: "breathing", colors: ["#c5a7ec", "#f1cce6"], period: 9500 },
   { title: "Calming Breath", kind: "breathing", colors: ["#91c9a2", "#e6ebae"], period: 11000 },
   { title: "Slow Breathing", kind: "breathing", colors: ["#f0b48b", "#f5d7b9"], period: 12000 },
 ];
