@@ -202,11 +202,19 @@ const PREVIEW_PATTERNS = {
   "Slow Breathing": { phases: [5, 5], labels: ["inhale", "exhale"] },
 };
 
+const BREATHING_PREVIEW_FACTS = {
+  "Box Breathing": "Four equal parts: inhale for 4, hold for 4, exhale for 4, and hold for 4. The steady rhythm is often used to support focus.",
+  "4-7-8 Breathing": "Inhale for 4, hold for 7, and exhale for 8. This pattern emphasizes a long, gentle exhale.",
+  "Calming Breath": "Breathe in for 4 and out for 6. The longer exhale creates a slower, unhurried rhythm.",
+  "Slow Breathing": "Inhale for 5 and exhale for 5. This even pace works out to about six breaths per minute.",
+};
+
 function OnboardingBreathPreview({ card, reducedMotion, onBack }) {
   const pattern = PREVIEW_PATTERNS[card.title];
   const plan = buildBreathPlan(pattern.phases, pattern.labels);
   const [elapsed, setElapsed] = useState(0);
   const [replay, setReplay] = useState(0);
+  const [showFact, setShowFact] = useState(false);
   useEffect(() => {
     let frame;
     const start = performance.now();
@@ -221,7 +229,14 @@ function OnboardingBreathPreview({ card, reducedMotion, onBack }) {
   const complete = elapsed >= plan.duration;
   const phase = breathAt(plan, complete ? Math.max(0, plan.duration - .001) : elapsed);
   return <div style={{ flex: 1, minHeight: 0, borderRadius: 24, background: "rgba(12,35,41,.65)", border: "1px solid rgba(255,255,255,.35)", padding: "16px 18px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-    <button type="button" onClick={onBack} style={{ ...textButton, alignSelf: "flex-start" }}>← All experiences</button>
+    <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative" }}>
+      <button type="button" onClick={onBack} style={textButton}>← All experiences</button>
+      <button type="button" aria-label={"About " + card.title} aria-expanded={showFact} onClick={() => setShowFact((value) => !value)} style={{ width: 34, height: 34, borderRadius: "50%", border: "1px solid rgba(255,255,255,.65)", background: "rgba(255,255,255,.1)", color: "white", fontSize: 18, fontFamily: "Georgia, serif", fontStyle: "italic", cursor: "pointer" }}>i</button>
+      {showFact && <div role="note" style={{ position: "absolute", zIndex: 5, right: 0, top: 42, width: "min(74vw, 290px)", padding: "15px 17px", borderRadius: 16, background: "#f5f1e9", color: "#263e40", boxShadow: "0 12px 30px rgba(0,0,0,.25)", textAlign: "left", fontSize: 13, lineHeight: 1.5 }}>
+        <strong style={{ display: "block", marginBottom: 5 }}>{card.title}</strong>
+        {BREATHING_PREVIEW_FACTS[card.title]}
+      </div>}
+    </div>
     <div style={{ fontFamily: HEADING_FONT, fontSize: 25 }}>{card.title}</div>
     <div style={{ width: "min(52vw, 220px)", aspectRatio: "1", flexShrink: 1, minHeight: 0, display: "grid", placeItems: "center" }}>
       <div style={{ width: "100%", height: "100%", transform: `scale(${0.80 + phase.breath * 0.20})`, transition: reducedMotion ? "none" : "transform 100ms linear", willChange: "transform" }}>
