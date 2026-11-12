@@ -127,6 +127,13 @@ const COLOR = (key, label, def) => ({
 // Only styles listed here are selectable — nothing unfinished is offered.
 export const VISUAL_STYLES = [
   {
+    id: "screenFill",
+    label: "Rising Color",
+    collection: "classics",
+    description: "A solid color rises from the bottom as you inhale and lowers as you exhale.",
+    controls: [COLOR("color", "Fill color", "#83B8AE")],
+  },
+  {
     id: "lagoon",
     label: "Classic",
     collection: "classics",
