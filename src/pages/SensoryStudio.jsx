@@ -48,10 +48,10 @@ export default function SensoryStudio(){
  <select id="sensory-scene-select" value={scene} onChange={e=>{setScene(e.target.value);setPaused(false)}} style={{width:"min(100%,340px)",padding:"12px 16px",borderRadius:14,border:"1px solid #d6d0dc",background:"#fff",color:"#24252a",fontSize:15,cursor:"pointer"}}>
  {[
   ["Nature",[
-   ["rain","Rainfall"],["underwater2","Koi Pond"],["underwater","Underwater"],["cloud","Cloud"],["neon","Neon Paint"],["neon-reveal","Neon Reveal Slider"]
+   ["rain","Rainfall"],["underwater2","Koi Pond"],["underwater","Underwater"],["cloud","Cloud"]
   ]],
   ["Abstract",[
-   ["orbit","Popcorn"],["liquid","Liquid Surface"],["prismatic","Prismatic Water"],["smoke","Fireworks"],["light","Firefly"],["lava","Lava Lamp"],["chromatic","Chromatic"],["chrome","Liquid Chrome"],["crystalized","Crystalized Ball"],["morph","Morph Slider"],["dither","Dither Veil"],["pixel","PixelSwap · Sky"],["balatro-prismatic","Prismatic Balatro"],["particles","Particles"],["glow-cursor","Glow Cursor"],["halftone-reveal","Halftone Reveal"],["soft-aurora","Soft Aurora"],["antigravity","Antigravity"],["ghost-cursor","Ghost Cursor"],["prism","Prism"],["galaxy","Galaxy"],["iridescence","Iridescence"],["grid-distortion","Grid Distortion"],["pixel-transition","Pixel Transition"]
+   ["neon","Neon Paint"],["neon-reveal","Neon Reveal Slider"],["orbit","Popcorn"],["liquid","Liquid Surface"],["prismatic","Prismatic Water"],["smoke","Fireworks"],["light","Firefly"],["lava","Lava Lamp"],["chromatic","Chromatic"],["chrome","Liquid Chrome"],["crystalized","Crystalized Ball"],["morph","Morph Slider"],["dither","Dither Veil"],["pixel","PixelSwap · Sky"],["balatro-prismatic","Prismatic Balatro"],["particles","Particles"],["glow-cursor","Glow Cursor"],["halftone-reveal","Halftone Reveal"],["soft-aurora","Soft Aurora"],["antigravity","Antigravity"],["ghost-cursor","Ghost Cursor"],["prism","Prism"],["galaxy","Galaxy"],["iridescence","Iridescence"],["grid-distortion","Grid Distortion"],["pixel-transition","Pixel Transition"]
   ]]
  ].map(([group,experiences])=><optgroup key={group} label={group}>{experiences.map(([id,label])=><option key={id} value={id}>{label}</option>)}</optgroup>)}
  </select>
