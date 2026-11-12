@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { FONT, HEADING_FONT, PAUSE, getTimeCanvas, getMomentStyle } from "../lib/design";
 
-export default function AdaptiveHome({ onStart, onExplore, onMoments, onAbout, onPlus }) {
+export default function AdaptiveHome({ onStart, onExplore, onMoments, onAbout, onPlus, onPersonalize }) {
  const [time] = useState(() => getTimeCanvas());
  const [menu, setMenu] = useState(false);
  const moment = getMomentStyle(time.moment);
@@ -12,9 +12,10 @@ export default function AdaptiveHome({ onStart, onExplore, onMoments, onAbout, o
  return <main className="screen-fit" style={{position:"relative",display:"flex",flexDirection:"column",minHeight:"100dvh",boxSizing:"border-box",padding:"calc(env(safe-area-inset-top, 20px) + 12px) 24px calc(env(safe-area-inset-bottom, 0px) + 34px)",background:time.background,color:time.ink,fontFamily:FONT}}>
    <header style={{display:"flex",justifyContent:"center",alignItems:"center",minHeight:44,position:"relative"}}>
     <span style={{fontFamily:HEADING_FONT,fontSize:22,letterSpacing:"-.02em"}}>always pause.</span>
-    <button aria-label="Open menu" onClick={()=>setMenu(!menu)} style={{position:"absolute",right:0,top:0,width:44,height:44,borderRadius:999,...glass,color:time.ink,cursor:"pointer",display:"grid",placeItems:"center"}}><span style={{display:"grid",gap:5}}><i style={{width:12,height:2,background:"currentColor"}}/><i style={{width:12,height:2,background:"currentColor"}}/></span></button>
+    <button aria-label="Open menu" onClick={()=>setMenu(!menu)} style={{position:"absolute",right:0,top:0,width:44,height:44,borderRadius:999,...glass,color:time.ink,cursor:"pointer",display:"grid",placeItems:"center"}}><span aria-hidden="true" style={{display:"flex",alignItems:"center",gap:5}}><i style={{width:2,height:14,borderRadius:2,background:"currentColor"}}/><i style={{width:2,height:14,borderRadius:2,background:"currentColor"}}/></span></button>
    </header>
    {menu&&<nav style={{position:"absolute",top:"calc(env(safe-area-inset-top, 20px) + 64px)",right:24,zIndex:10,padding:16,borderRadius:20,...glass,display:"grid",gap:12,minWidth:180}}>
+     <button onClick={()=>{setMenu(false);onPersonalize?.()}} style={menuButton}>Personalize</button>
      <button onClick={()=>{setMenu(false);onMoments?.()}} style={menuButton}>Your moments</button>
      <button onClick={()=>{setMenu(false);onPlus?.()}} style={menuButton}>Always Pause+</button>
      <button onClick={()=>{setMenu(false);onAbout?.()}} style={menuButton}>About</button>
