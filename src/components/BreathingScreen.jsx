@@ -4,7 +4,7 @@ import BreathingVisual from "./visuals/BreathingVisual";
 import FullScreenFill from "./visuals/FullScreenFill";
 import SessionTimerPill from "./SessionTimerPill";
 import TechniqueInfoCard from "./TechniqueInfoCard";
-import { FONT, getColors, isPhotoBackground } from "../lib/design";
+import { FONT, HEADING_FONT, PAUSE, getMomentStyle, getTimeCanvas, getColors, isPhotoBackground } from "../lib/design";
 import { getBreathingInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
@@ -36,8 +36,12 @@ export default function BreathingScreen({
   showInstructions = true,
   voiceGuide = false,
   narrationMode = "none",
+  momentId = "calm",
 }) {
   const activeTechnique = technique || DEFAULT_TECHNIQUE;
+  const momentStyle = getMomentStyle(momentId);
+  const timeCanvas = getTimeCanvas();
+  const sessionInk = timeCanvas.key === "night" ? timeCanvas.ink : PAUSE.ink;
   const reducedMotion = useReducedMotion();
 
   // Parsed once per technique so re-renders (e.g. a preference change) never
@@ -250,7 +254,7 @@ export default function BreathingScreen({
       exit={{ opacity: 0 }}
       transition={{ duration: reducedMotion ? 0.3 : 1.4, ease: [0.22, 1, 0.36, 1] }}
     >
-      <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
+      <div aria-hidden="true" style={{position:"absolute",inset:0,background:timeCanvas.key === "night" ? timeCanvas.background : momentStyle.sessionCanvas}} />
       {visual === "screenFill" && (
         <div style={{ position: "absolute", inset: 0, zIndex: 0, overflow: "hidden", pointerEvents: "none" }}>
           <FullScreenFill breath={breath} options={visualOptions?.screenFill} />
@@ -269,24 +273,24 @@ export default function BreathingScreen({
           position: "relative", zIndex: 1,
         }}
       >
-        <div style={{ minWidth: 84 }}>{showTimer && <SessionTimerPill seconds={timeRemaining} theme={theme} />}</div>
+        <div style={{ minWidth: 84 }}>{showTimer && <span style={{display:"inline-flex",alignItems:"center",gap:8,height:44,padding:"0 14px",borderRadius:999,...(theme==="night"?PAUSE.nightGlass:PAUSE.glass),color:sessionInk,fontWeight:600,fontSize:14,fontVariantNumeric:"tabular-nums"}}><span style={{width:7,height:7,borderRadius:"50%",background:momentStyle.ink}}/>{Math.floor(timeRemaining/60)}:{String(Math.ceil(timeRemaining%60)).padStart(2,"0")}</span>}</div>
+        <button onClick={handleDone} aria-label="Close session" style={{width:44,height:44,borderRadius:999,...(theme==="night"?PAUSE.nightGlass:PAUSE.glass),color:sessionInk,fontSize:24,cursor:"pointer"}}>×</button>
 
 
       </div>
 
+      <div style={{position:"relative",zIndex:1,textAlign:"center",fontFamily:FONT,fontSize:12,fontWeight:700,letterSpacing:".1em",textTransform:"uppercase",color:theme==="night"?momentStyle.gradient[0]:momentStyle.ink,marginTop:16}}>{momentStyle.label}</div>
       {/* Technique name */}
       <p
         style={{
           margin: "4px 24px 0",
           position: "relative", zIndex: 1,
           textAlign: "center",
-          fontFamily: FONT,
-          fontSize: "19px",
-          fontWeight: 700,
-          letterSpacing: "0.01em",
-          textTransform: "lowercase",
-          color: ink.text,
-          textShadow: ink.shadow,
+          fontFamily: HEADING_FONT,
+          fontSize: "24px",
+          fontWeight: 400,
+          letterSpacing: "-0.02em",
+          color: sessionInk,
           lineHeight: 1.35,
         }}
       >
@@ -322,7 +326,8 @@ export default function BreathingScreen({
           ref={visualRef}
           style={{ width: "min(250px, 64vw, 31vh)", aspectRatio: "1 / 1", position: "relative", flexShrink: 0 }}
         >
-          {visual !== "screenFill" && <BreathingVisual
+          {visual === "orb" && <div aria-hidden="true" style={{position:"absolute",inset:"-10%",borderRadius:"50%",background:momentStyle.tint,opacity:.08}} />}
+          {visual === "orb" ? <div aria-hidden="true" style={{width:"100%",height:"100%",borderRadius:"50%",background:momentStyle.orb,boxShadow:"0 30px 80px -10px "+momentStyle.ink+"66",transform:`scale(${0.78+breath*.22})`,transition:reducedMotion?"none":"transform 120ms linear"}} /> : visual !== "screenFill" && <BreathingVisual
             id={visual}
             breath={breath}
             theme={theme}
@@ -378,14 +383,12 @@ export default function BreathingScreen({
               display: "flex",
               alignItems: "center",
               textAlign: "center",
-              fontFamily: FONT,
-              fontSize: "24px",
-              fontWeight: 700,
-              letterSpacing: "0.01em",
-              textTransform: "lowercase",
-              color: ink.text,
-              textShadow: ink.shadow,
-              lineHeight: 1.3,
+              fontFamily: HEADING_FONT,
+              fontSize: "40px",
+              fontWeight: 400,
+              letterSpacing: "-0.02em",
+              color: sessionInk,
+              lineHeight: 1,
               transform: classicBreathingText && readyToBreathe ? `scale(${1 + breath * 0.14})` : "scale(1)",
               transformOrigin: "center center",
               transition: reducedMotion ? "none" : "transform 120ms linear",
@@ -419,7 +422,7 @@ export default function BreathingScreen({
                 left: 0,
                 height: "100%",
                 borderRadius: 999,
-                background: `linear-gradient(90deg, ${colors.ringFrom} 0%, ${colors.ringTo} 100%)`,
+                background: momentStyle.ink,
               }}
               animate={{ width: `${phaseProgress * 100}%` }}
               transition={{ duration: reducedMotion ? 0.2 : 0.15, ease: "linear" }}
