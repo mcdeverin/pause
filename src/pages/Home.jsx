@@ -3,6 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import MainScreen from "../components/MainScreen";
 import PauseSetup from "../components/PauseSetup";
+import TechniqueBrowser from "../components/TechniqueBrowser";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
 import PaywallScreen from "../components/PaywallScreen";
@@ -26,6 +27,8 @@ export default function Home() {
   const [mode, setMode] = useState("idle");
   const [sessionVoice, setSessionVoice] = useState("none");
   const [preparingPause, setPreparingPause] = useState(false);
+  const [browseMoment, setBrowseMoment] = useState(null);
+  const [browseTechniques, setBrowseTechniques] = useState([]);
   const [technique, setTechnique] = useState(null);
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
 
@@ -210,7 +213,9 @@ export default function Home() {
 
     setSessionVoice(voice);
     setPreparingPause(false);
-    beginSession(getRandomTechnique(pool), moment.id);
+    setBrowseMoment(moment.id);
+    setBrowseTechniques(pool);
+    setMode("browse");
   }, [ensureTechniques, hasFullAccess, beginSession, flashNotice]);
 
   const openPaywall = useCallback((context = {}) => {
@@ -342,6 +347,12 @@ export default function Home() {
             voiceAvailable={typeof window !== "undefined" && typeof window.Audio !== "undefined"}
             defaultVoice={preferences.voiceGuide ? "full" : "none"}
             onVoiceChange={(value) => updatePreference("voiceGuide", value === "full")} />
+        )}
+        {mode === "browse" && (
+          <TechniqueBrowser key="technique-browser" techniques={browseTechniques} momentId={browseMoment}
+            theme={theme} backgroundSettings={preferences} photo={photo}
+            onBack={() => setMode("setup")}
+            onChoose={(chosen) => beginSession(chosen, browseMoment)} />
         )}
         {mode === "breathing" && technique && (
           <BreathingScreen
