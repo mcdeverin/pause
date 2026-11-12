@@ -1,0 +1,3 @@
+import Prism from "../components/visuals/Prism";
+import SensoryBackButton from "../components/visuals/SensoryBackButton";
+export default function PrismExperience(){return <main style={{position:"relative",width:"100%",height:"100dvh",overflow:"hidden",background:"#080713"}}><Prism animationType="rotate" timeScale={0.5} height={3.5} baseWidth={5.5} scale={1.65} hueShift={0} colorFrequency={1} glow={1} colors={[]} saturation={1.5} noise={0} interactive hoverStrength={2} inertia={0.05} intro resolution={0.5} lightMode={false}/><SensoryBackButton/></main>}
