@@ -237,10 +237,10 @@ export default function MainScreen({
         </button>
       </div>
 
-      {/* Subtle liquid-glass navigation; the hamburger remains available above. */}
-      <nav aria-label="Primary navigation" style={{position:"relative",zIndex:3,alignSelf:"center",width:"min(330px,calc(100vw - 48px))",display:"flex",padding:5,borderRadius:28,background:"rgba(255,255,255,.48)",backdropFilter:"blur(24px) saturate(150%)",WebkitBackdropFilter:"blur(24px) saturate(150%)",border:"1px solid rgba(255,255,255,.72)",boxShadow:"0 8px 30px rgba(12,34,30,.15),inset 0 1px 0 rgba(255,255,255,.7)"}}>
-        <span aria-current="page" style={{flex:1,textAlign:"center",padding:"13px 0",borderRadius:23,background:"rgba(255,255,255,.72)",boxShadow:"0 2px 12px rgba(20,40,32,.10),inset 0 1px 0 #fff",color:"#26453e",fontFamily:FONT,fontSize:14,fontWeight:700}}>Breathing</span>
-        <Link to="/sensory" style={{flex:1,textAlign:"center",padding:"13px 0",borderRadius:23,color:"#26453e",textDecoration:"none",fontFamily:FONT,fontSize:14,fontWeight:600}}>Sensory</Link>
+      {/* Quiet editorial navigation: no beveled or raised pill. */}
+      <nav aria-label="Primary navigation" style={{position:"relative",zIndex:3,alignSelf:"center",width:"min(330px,calc(100vw - 48px))",display:"flex",alignItems:"center",padding:"7px 14px",borderRadius:19,background:"rgba(255,255,255,.19)",backdropFilter:"blur(18px)",WebkitBackdropFilter:"blur(18px)",border:"1px solid rgba(255,255,255,.22)"}}>
+        <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0 10px",borderBottom:"2px solid currentColor",color:ink.text,fontFamily:FONT,fontSize:14,fontWeight:650,letterSpacing:".01em"}}>Breathing</span>
+        <Link to="/sensory" style={{flex:1,textAlign:"center",padding:"12px 0 10px",borderBottom:"2px solid transparent",color:ink.text,textDecoration:"none",fontFamily:FONT,fontSize:14,fontWeight:450,letterSpacing:".01em",opacity:.72}}>Sensory</Link>
       </nav>
       <AnimatePresence>
         {menuOpen && (
