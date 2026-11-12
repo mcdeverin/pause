@@ -6,7 +6,7 @@ import { MOMENTS } from "../lib/moments";
 
 const ICONS = { calm: Leaf, focus: Crosshair, wind_down: Moon, reset: Sun, energy: Zap, explore_all: Layers };
 
-export default function PauseSetup({ theme, backgroundSettings, photo, onBack, onBegin, busy = false, voiceAvailable = true, defaultVoice = false }) {
+export default function PauseSetup({ theme, backgroundSettings, photo, onBack, onBegin, busy = false, voiceAvailable = true, defaultVoice = false, onVoiceChange }) {
   const [moment, setMoment] = useState(null);
   const [voice, setVoice] = useState(typeof defaultVoice === "string" ? (defaultVoice === "none" ? "none" : "full") : defaultVoice ? "full" : "none");
   const selected = MOMENTS.find((entry) => entry.id === moment);
@@ -33,18 +33,18 @@ export default function PauseSetup({ theme, backgroundSettings, photo, onBack, o
             </button>
           ); })}
         </div>
-        <div style={{ textAlign: "center", marginTop: 2, fontSize: 14, fontWeight: 600 }}>How would you like to be guided?</div>
+        <div style={{ textAlign: "center", marginTop: 2, fontSize: 13, fontWeight: 500, opacity: .9 }}>Your guidance preference</div>
         <div role="group" aria-label="Guidance preference" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 8 }}>
           {[
-            { id: "full", title: "Guided", description: "Breathe with Lauren’s voice." },
-            { id: "none", title: "Not Guided", description: "Follow the breathing visual without voice." },
+            { id: "full", title: "Guided", description: "Lauren’s voice" },
+            { id: "none", title: "Not Guided", description: "Visual only" },
           ].map((option) => {
             const active = voice === option.id;
             const disabled = !voiceAvailable && option.id !== "none";
             return (
               <button key={option.id} type="button" aria-pressed={active} disabled={disabled}
-                onClick={() => setVoice(option.id)}
-                style={{ ...glass, opacity: disabled ? .55 : 1, background: active ? "rgba(255,255,255,.28)" : glass.background, borderColor: active ? "#fff" : "rgba(255,255,255,.5)", minHeight: 64, padding: "8px 12px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: 2, textAlign: "left" }}>
+                onClick={() => { setVoice(option.id); onVoiceChange?.(option.id); }}
+                style={{ ...glass, opacity: disabled ? .55 : 1, background: active ? "rgba(255,255,255,.28)" : glass.background, borderColor: active ? "#fff" : "rgba(255,255,255,.5)", minHeight: 52, padding: "7px 12px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: 2, textAlign: "left" }}>
                 <span style={{ fontWeight: 600 }}>{option.title}</span>
                 <span style={{ fontSize: 11, lineHeight: 1.3, opacity: .88 }}>{option.description}</span>
               </button>
