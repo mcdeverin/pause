@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 import { FONT, HEADING_FONT } from "../lib/design";
 
 const groups = [
-  {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"]]},
-  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Liquid Surface","/sensory/liquid-surface"],["Prismatic Water","/sensory/prismatic-water"]]}
+  {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"],["Liquid Surface","/sensory/liquid-surface"]]},
+  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"]]}
 ];
 
 function Preview({name}) {
