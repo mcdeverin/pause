@@ -205,6 +205,10 @@ export default function NavigationSheet({
             }}
           />
 
+        </div>
+
+        {/* Pinned footer */}
+        <div style={{ padding: "0 10px" }}>
           <SheetRow
             theme={theme}
             icon={Sparkles}
@@ -215,10 +219,7 @@ export default function NavigationSheet({
               onOpenPausePlus();
             }}
           />
-        </div>
 
-        {/* Pinned footer */}
-        <div style={{ padding: "0 10px" }}>
           <div style={{ height: 1, margin: "4px 14px 8px", background: colors.border }} />
           <SheetRow
             theme={theme}
