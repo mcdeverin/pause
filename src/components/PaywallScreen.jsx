@@ -200,11 +200,11 @@ export default function PaywallScreen({
         style={{
           width: "100%",
           boxSizing: "border-box",
-          background: pillBg,
+          background: "#fff",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          border: `1px solid ${border}`,
-          borderRadius: "18px",
+          border: isSelected ? `1.5px solid ${PAUSE.accent}` : "1px solid rgba(38,48,44,0.08)",
+          borderRadius: "20px",
           padding: "17px 18px",
           cursor: "pointer",
           display: "flex",
@@ -314,7 +314,7 @@ export default function PaywallScreen({
         style={{
           position: "fixed",
           inset: 0,
-          background: bg,
+          background: PAUSE.ivory,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -355,7 +355,7 @@ export default function PaywallScreen({
           onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
           onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.65")}
         >
-          close
+          ×
         </button>
 
         {/* Content */}
@@ -372,7 +372,7 @@ export default function PaywallScreen({
           }}
         >
           {/* 1. Orb */}
-          <LiquidOrb theme={theme} isBreathing={false} size={100} />
+          <div aria-hidden="true" style={{width:72,height:72,borderRadius:"50%",background:"radial-gradient(circle at 36% 32%, #CFE7DA 0%, #82B49E 48%, #39705F 100%)"}} />
 
           {/* 32pt gap */}
           <div style={{ height: "30px" }} />
@@ -392,9 +392,9 @@ export default function PaywallScreen({
             Always Pause+
           </p>
           <p style={{
-            fontFamily: FONT,
-            fontSize: "27px",
-            fontWeight: 800,
+            fontFamily: HEADING_FONT,
+            fontSize: "32px",
+            fontWeight: 400,
             letterSpacing: "-0.01em",
             color: textColor,
             margin: 0,
@@ -494,12 +494,12 @@ export default function PaywallScreen({
           <div style={{ width: "100%" }}>
             <TierPill
               id={PRODUCT_IDS.annual}
-              label="yearly"
+              label="Yearly"
               caption={trialCaption("annual")}
               amount={annualDaily || annualPrice}
               unit="/day"
               secondary={`${annualPrice} billed annually`}
-              badge="save 50%"
+              badge="Save 50%"
             />
           </div>
 
@@ -510,7 +510,7 @@ export default function PaywallScreen({
           <div style={{ width: "100%" }}>
             <TierPill
               id={PRODUCT_IDS.monthly}
-              label="monthly"
+              label="Monthly"
               caption={trialCaption("monthly")}
               amount={monthlyDaily || monthlyPrice}
               unit="/day"
@@ -525,7 +525,7 @@ export default function PaywallScreen({
           <div style={{ width: "100%" }}>
             <TierPill
               id={PRODUCT_IDS.lifetime}
-              label="forever"
+              label="Forever"
               caption="yours to keep"
               amount={lifetimePrice}
               secondary="One-time purchase"
