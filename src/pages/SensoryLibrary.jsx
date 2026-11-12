@@ -6,7 +6,6 @@ import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
 import PrismaticWaterScene from "../components/visuals/PrismaticWaterScene";
 import OrbitScene from "../components/visuals/OrbitScene";
 import { Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
 import { FONT, HEADING_FONT } from "../lib/design";
 
 const groups = [
@@ -42,10 +41,8 @@ export default function SensoryLibrary() {
   const [category,setCategory]=useState("All");
   const visibleGroups = category === "All" ? groups : groups.filter(g=>g.name===category);
   return <main style={{minHeight:"100dvh",boxSizing:"border-box",background:"#f5f5f1",color:"#24342f",padding:"calc(env(safe-area-inset-top, 28px) + 24px) 24px calc(env(safe-area-inset-bottom, 20px) + 118px)",fontFamily:FONT}}>
-    <header style={{display:"flex",alignItems:"center",justifyContent:"space-between",maxWidth:620,margin:"0 auto"}}>
-      <Link to="/" aria-label="Back to breathing" style={{color:"inherit",padding:8}}><ChevronLeft size={22}/></Link>
+    <header style={{display:"flex",alignItems:"center",justifyContent:"center",maxWidth:620,margin:"0 auto"}}>
       <span style={{fontFamily:HEADING_FONT,fontSize:23}}>always pause.</span>
-      <span style={{width:38}}/>
     </header>
     <div style={{maxWidth:900,margin:"clamp(36px,6vh,64px) auto 0"}}>
       <div role="tablist" aria-label="Sensory categories" style={{display:"flex",gap:28,borderBottom:"1px solid #24342f22"}}>
