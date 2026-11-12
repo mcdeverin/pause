@@ -8,6 +8,7 @@ import OrbitScene from "../components/visuals/OrbitScene";
 import LivingCanvasScene from "../components/visuals/LivingCanvasScene";
 import DitherVeil from "../components/visuals/DitherVeil";
 import PixelSwapSky from "../components/visuals/PixelSwapSky";
+import NeonNatureScene from "../components/visuals/NeonNatureScene";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import NavigationSheet from "../components/NavigationSheet";
@@ -16,7 +17,7 @@ import { BACKDROP_PHOTOS } from "../lib/crystalStudio";
 
 const groups = [
   {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"],["Liquid Surface","/sensory/liquid-surface"],["Rain","/sensory/rain"],["Pixel Swap Sky","/sensory/pixel-swap-sky"]]},
-  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"]]}
+  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"],["Neon Painting","/sensory/neon-painting"]]}
 ];
 
 function Preview({name}) {
@@ -32,6 +33,7 @@ function Preview({name}) {
   const scenes={
     "Cloud": <CloudScene preview />,
     "Pixel Swap Sky": <PixelSwapSky />,
+    "Neon Painting": <NeonNatureScene preview backgroundMode="dark" />,
     "Liquid Chrome": <MaterialFlowScene mode="chrome" paused={false} />,
     "Popcorn": <OrbitScene />,
     "Liquid Surface": <LiquidSurfaceScene preview photoUrl={BACKDROP_PHOTOS[0]?.url} />,
