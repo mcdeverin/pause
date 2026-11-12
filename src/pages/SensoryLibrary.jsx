@@ -67,7 +67,7 @@ export default function SensoryLibrary() {
             </div>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6,padding:"11px 2px 0"}}>
               <span aria-hidden="true" />
-              <span aria-hidden="true" style={{fontSize:17,color:"#74877f"}}>↗</span>
+              
             </div>
           </Link>)}
         </div>
