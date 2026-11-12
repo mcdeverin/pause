@@ -5,7 +5,7 @@ import { getStyleLabel } from "./visuals";
 import { getGalleryImage } from "./backgroundGallery";
 
 export const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
-export const HEADING_FONT = "Georgia, 'Times New Roman', serif";
+export const HEADING_FONT = "'Newsreader', Georgia, serif";
 
 // The two small controls that float over the background share one frosted
 // warm-ivory treatment, so they stay readable on both dark and light canvases.
@@ -223,4 +223,27 @@ export function formatClock(totalSeconds) {
   const mins = Math.floor(safe / 60);
   const secs = safe % 60;
   return `${mins}:${String(secs).padStart(2, "0")}`;
+}
+export const PAUSE = {
+ ink:"#26302C",ink2:"#56605B",ink3:"#7C837E",ivory:"#F7F5F0",accent:"#3F7D7A",
+ glass:{background:"rgba(255,255,255,0.72)",border:"1px solid rgba(38,48,44,0.08)",backdropFilter:"blur(16px)"},
+ nightGlass:{background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.12)",backdropFilter:"blur(16px)"},
+ moments:{
+ calm:{label:"Calm",tint:"#E1F0E7",ink:"#39705F",gradient:["#CFE7DA","#82B49E","#39705F"]},
+ focus:{label:"Focus",tint:"#E0EBF5",ink:"#3E6A94",gradient:["#D6E5F3","#8FB0D0","#3E6A94"]},
+ wind_down:{label:"Wind down",tint:"#EFE8F7",ink:"#63548F",gradient:["#B9AEDB","#7C6FAE","#3E3468"]},
+ reset:{label:"Reset",tint:"#FFF0D9",ink:"#9A6A29",gradient:["#FBE7C6","#D4A867","#9A6A29"]}},
+ times:{
+ morning:{label:"Morning",headline:"Start the day steady.",canvas:["#FDF7EF","#F8E9DC","#F2DFD4"],ink:"#2E2924",moment:"focus",minutes:2},
+ afternoon:{label:"Afternoon",headline:"A midday reset.",canvas:["#F9FBF7","#EDF3EC","#E3EDE6"],ink:"#26302C",moment:"reset",minutes:1},
+ evening:{label:"Evening",headline:"Let the day settle.",canvas:["#FBF9FC","#F0ECF6","#E6E0F0"],ink:"#26302C",moment:"calm",minutes:3},
+ night:{label:"Night",headline:"Time to switch off.",canvas:["#1B2030","#161A26","#11131C"],ink:"#EEEAF5",secondary:"#B9B3C8",moment:"wind_down",minutes:4}}
+};
+export function getTimeCanvas(date=new Date()){
+ const h=date.getHours();const key=h>=5&&h<11?"morning":h>=11&&h<17?"afternoon":h>=17&&h<21?"evening":"night";
+ const t=PAUSE.times[key];return {...t,key,background:"linear-gradient(180deg, "+t.canvas.join(", ")+")"};
+}
+export function getMomentStyle(id){
+ const m=PAUSE.moments[id]||PAUSE.moments.calm;
+ return {...m,orb:"radial-gradient(circle at 36% 32%, "+m.gradient[0]+" 0%, "+m.gradient[1]+" 48%, "+m.gradient[2]+" 100%)",sessionCanvas:"linear-gradient(180deg, #FFFFFF, "+m.tint+")"};
 }
