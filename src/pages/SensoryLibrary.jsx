@@ -9,6 +9,7 @@ import LivingCanvasScene from "../components/visuals/LivingCanvasScene";
 import DitherVeil from "../components/visuals/DitherVeil";
 import PixelSwapSky from "../components/visuals/PixelSwapSky";
 import NeonNatureScene from "../components/visuals/NeonNatureScene";
+import Balatro from "../components/visuals/Balatro";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import NavigationSheet from "../components/NavigationSheet";
@@ -17,7 +18,7 @@ import { BACKDROP_PHOTOS } from "../lib/crystalStudio";
 
 const groups = [
   {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"],["Liquid Surface","/sensory/liquid-surface"],["Rain","/sensory/rain"],["Pixel Swap Sky","/sensory/pixel-swap-sky"]]},
-  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"],["Neon Painting","/sensory/neon-painting"]]}
+  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"],["Neon Painting","/sensory/neon-painting"],["Prismatic Balatro","/sensory/prismatic-balatro"]]}
 ];
 
 function Preview({name}) {
@@ -34,6 +35,7 @@ function Preview({name}) {
     "Cloud": <CloudScene preview />,
     "Pixel Swap Sky": <PixelSwapSky />,
     "Neon Painting": <NeonNatureScene preview backgroundMode="dark" />,
+    "Prismatic Balatro": <Balatro color1="#FF873B" color2="#F25BD0" color3="#55D9E8" swirl={0.25} pixelSize={1.5} mouseInteraction contrast={3.5} lighting={0.4} speed={1} rotationSpeed={0} scale={1} detail={5} crt={0} mouseStrength={1} clickSwirl intro lightMode={false} />,
     "Liquid Chrome": <MaterialFlowScene mode="chrome" paused={false} />,
     "Popcorn": <OrbitScene />,
     "Liquid Surface": <LiquidSurfaceScene preview photoUrl={BACKDROP_PHOTOS[0]?.url} />,
