@@ -2,9 +2,9 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 // Full-screen, pointer-driven displacement: the image itself bends like water.
-export default function LiquidSurfaceScene({ photoUrl, strength=.65, viscosity=.65, paused=false }) {
+export default function LiquidSurfaceScene({ photoUrl, strength=.65, viscosity=.65, paused=false, preview=false }) {
  const host=useRef(null),opts=useRef({});
- opts.current={photoUrl,strength,viscosity,paused};
+ opts.current={photoUrl,strength,viscosity,paused,preview};
  useEffect(()=>{
   const el=host.current;if(!el)return;
   let renderer;
@@ -19,7 +19,7 @@ export default function LiquidSurfaceScene({ photoUrl, strength=.65, viscosity=.
    uTime:{value:0},uResolution:{value:new THREE.Vector2(1,1)},
    uTexture:{value:null},uPhoto:{value:0},uStrength:{value:.65},
    uRipple:{value:new THREE.Vector2(-10,-10)},uVelocity:{value:new THREE.Vector2()},
-   uAspect:{value:1}
+   uAspect:{value:1},uPreview:{value:0}
   };
   const material=new THREE.ShaderMaterial({
    uniforms,
@@ -28,7 +28,7 @@ export default function LiquidSurfaceScene({ photoUrl, strength=.65, viscosity=.
     precision highp float;
     varying vec2 vUv;
     uniform sampler2D uTexture;
-    uniform float uTime,uPhoto,uStrength,uAspect;
+    uniform float uTime,uPhoto,uStrength,uAspect,uPreview;
     uniform vec2 uRipple,uVelocity;
     vec3 gradient(vec2 p){
      vec3 peach=vec3(.99,.76,.67),pink=vec3(.97,.57,.77),blue=vec3(.64,.81,.91);
@@ -47,6 +47,11 @@ export default function LiquidSurfaceScene({ photoUrl, strength=.65, viscosity=.
      vec2 push=(direction*wave*.018+uVelocity*.035)*falloff*uStrength;
      vec2 ambient=vec2(sin(uv.y*12.+uTime*.27),cos(uv.x*11.-uTime*.22))*.0016;
      vec2 offset=push+ambient;
+     if(uPreview>.5){
+       float flow=sin(uv.x*9.0+uv.y*7.0-uTime*1.2)*cos(uv.y*11.0-uv.x*4.0+uTime*.85);
+       float wave2=sin(uv.y*17.0+uTime*1.5+sin(uv.x*8.0-uTime*.65));
+       offset+=vec2(flow*.014+wave2*.006,flow*.008-wave2*.011);
+     }
      vec3 col=imageAt(uv-offset);
      float light=dot(normalize(vec3(direction,1.)),normalize(vec3(-.55,.65,1.)));
      col+=vec3(.9,.75,.65)*max(0.,wave)*falloff*.07*uStrength;
@@ -106,6 +111,7 @@ export default function LiquidSurfaceScene({ photoUrl, strength=.65, viscosity=.
     uniforms.uTime.value=elapsed;
    }
    uniforms.uStrength.value=o.strength;
+   uniforms.uPreview.value=o.preview?1:0;
    renderer.render(scene,camera);
    frame=requestAnimationFrame(animate);
   };frame=requestAnimationFrame(animate);
