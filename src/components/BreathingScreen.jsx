@@ -196,10 +196,8 @@ export default function BreathingScreen({
     if (!guided || !readyToBreathe || !laurenLibrary || isVideoFirst(laurenLibrary, activeTechnique)) return;
     if (phaseSequence === spokenPhaseRef.current) return;
     spokenPhaseRef.current = phaseSequence;
-    // Do not repeat the old test narration on every breathing cycle.
-    // Lauren's recorded phase cues are used only on the first cycle;
-    // the remaining cycles stay quiet while the orb continues normally.
-    if (phaseSequence >= activePhases.length) return;
+    // Guide every cycle, not just the first. The breathing clock remains the
+    // source of truth: cues start on phase boundaries and must fit the phase.
     stopAudioRef.current?.();
     stopAudioRef.current = null;
     const position = phasePosition(currentLabel);
