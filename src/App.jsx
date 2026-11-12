@@ -20,6 +20,7 @@ const PrismaticWater = lazy(() => import('./pages/PrismaticWater.jsx'));
 const Underwater = lazy(() => import('./pages/Underwater.jsx'));
 const Rain = lazy(() => import('./pages/Rain.jsx'));
 const Firefly = lazy(() => import('./pages/Firefly.jsx'));
+const PrismExperience = lazy(() => import('./pages/PrismExperience.jsx'));
 const AntiGravityExperience = lazy(() => import('./pages/AntiGravityExperience.jsx'));
 const PrismaticBalatroExperience = lazy(() => import('./pages/PrismaticBalatroExperience.jsx'));
 const NeonPaintingExperience = lazy(() => import('./pages/NeonPaintingExperience.jsx'));
@@ -76,6 +77,7 @@ const AuthenticatedApp = () => {
       <Route path="/terms" element={<Terms />} />
       <Route path="/theme-studio" element={<GhostStudio />} />
       <Route path="/sensory/anti-gravity" element={<Suspense fallback={<div className="p-8">Loading Anti Gravity…</div>}><AntiGravityExperience /></Suspense>} />
+      <Route path="/sensory/prism" element={<Suspense fallback={<div className="p-8">Loading Prism…</div>}><PrismExperience /></Suspense>} />
       <Route path="/sensory/liquid-surface" element={<Suspense fallback={<div className="p-8">Loading Liquid Surface…</div>}><LiquidSurface /></Suspense>} />
       <Route path="/sensory/prismatic-water" element={<Suspense fallback={<div className="p-8">Loading Prismatic Water…</div>}><PrismaticWater /></Suspense>} />
       <Route path="/sensory/liquid-chrome" element={<Suspense fallback={<div className="p-8">Loading Liquid Chrome…</div>}><LiquidChromeExperience /></Suspense>} />
