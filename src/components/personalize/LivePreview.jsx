@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import BackgroundLayer from "../BackgroundLayer";
 import BreathingVisual from "../visuals/BreathingVisual";
+import FullScreenFill from "../visuals/FullScreenFill";
 import SessionTimerPill from "../SessionTimerPill";
 import { clampPhotoOffset } from "../../lib/background";
 import { FONT, getColors, isPhotoBackground } from "../../lib/design";
@@ -105,6 +106,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
       }}
     >
       <BackgroundLayer settings={settings} theme={theme} photo={photo} />
+      {settings.visual === "screenFill" && <FullScreenFill breath={breath} options={settings.visualOptions?.screenFill} />}
 
       <div
         style={{
@@ -113,6 +115,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
           justifyContent: "space-between",
           gap: 8,
           minHeight: 26,
+          position: "relative", zIndex: 1,
         }}
       >
         {settings.showTimer ? <SessionTimerPill seconds={clock.timeRemaining} theme={theme} /> : <span />}
@@ -148,7 +151,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
         {/* Sized so the visual's full-breath scale (up to 1.35×) still fits
             inside this row, keeping the cue below it uncovered. */}
         <div style={{ height: "min(112px, 72%)", aspectRatio: "1 / 1" }}>
-          <BreathingVisual
+          {settings.visual !== "screenFill" && <BreathingVisual
             id={settings.visual}
             breath={breath}
             theme={theme}
@@ -157,7 +160,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
             backgroundSettings={settings}
             reducedMotion={reducedMotion}
             showLabel={false}
-          />
+          />}
         </div>
       </div>
 
@@ -178,6 +181,7 @@ export default function LivePreview({ theme, settings = {}, photo = null, onPhot
           textShadow: ink.shadow,
           lineHeight: 1.3,
           visibility: settings.showInstructions ? "visible" : "hidden",
+          position: "relative", zIndex: 1,
         }}
       >
         {clock.label}
