@@ -5,7 +5,9 @@ import LiquidChromeScene from "../components/visuals/LiquidChromeScene";
 import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
 import PrismaticWaterScene from "../components/visuals/PrismaticWaterScene";
 import OrbitScene from "../components/visuals/OrbitScene";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import NavigationSheet from "../components/NavigationSheet";
 import { FONT, HEADING_FONT } from "../lib/design";
 
 const groups = [
@@ -39,10 +41,19 @@ function Preview({name}) {
 
 export default function SensoryLibrary() {
   const [category,setCategory]=useState("All");
+  const [menuOpen,setMenuOpen]=useState(false);
+  const navigate=useNavigate();
   const visibleGroups = category === "All" ? groups : groups.filter(g=>g.name===category);
   return <main style={{minHeight:"100dvh",boxSizing:"border-box",background:"#f5f5f1",color:"#24342f",padding:"calc(env(safe-area-inset-top, 28px) + 24px) 24px calc(env(safe-area-inset-bottom, 20px) + 118px)",fontFamily:FONT}}>
-    <header style={{display:"flex",alignItems:"center",justifyContent:"center",maxWidth:620,margin:"0 auto"}}>
+    <header style={{position:"relative",display:"flex",alignItems:"center",justifyContent:"center",maxWidth:620,minHeight:44,margin:"0 auto"}}>
       <span style={{fontFamily:HEADING_FONT,fontSize:23}}>always pause.</span>
+      <button type="button" onClick={()=>setMenuOpen(true)} aria-label="Open your space" aria-expanded={menuOpen} style={{position:"absolute",right:6,top:0,width:44,height:44,display:"flex",alignItems:"center",justifyContent:"center",border:0,background:"none",color:"#24342f",cursor:"pointer",padding:0}}>
+        <svg width="29" height="29" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M16.2 3.8C22.7 3.5 28.3 8.9 28.2 15.9C28.1 23.1 22.8 28.2 15.7 28.1C8.5 28 3.7 22.6 3.9 15.8C4.1 8.9 9.5 4.1 16.2 3.8Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" opacity=".9"/>
+          <path d="M13.1 11.7C12.9 14.4 13.2 17.2 13 20.3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          <path d="M19 11.3C18.8 14.1 19.1 17.1 18.8 20.1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+      </button>
     </header>
     <div style={{maxWidth:900,margin:"clamp(36px,6vh,64px) auto 0"}}>
       <div role="tablist" aria-label="Sensory categories" style={{display:"flex",gap:28,borderBottom:"1px solid #24342f22"}}>
@@ -72,5 +83,8 @@ export default function SensoryLibrary() {
         <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0",fontSize:14,fontWeight:650}}>Sensory</span>
       </nav>
     </GlassSurface>
+    <AnimatePresence>
+      {menuOpen && <NavigationSheet key="nav" theme="day" selectedCategory="All" onCategoryChange={()=>navigate("/")} isPro={false} onOpenPersonalize={()=>navigate("/")} onOpenMoments={()=>navigate("/")} onOpenPausePlus={()=>navigate("/")} onOpenAbout={()=>navigate("/")} onClose={()=>setMenuOpen(false)} />}
+    </AnimatePresence>
   </main>;
 }
