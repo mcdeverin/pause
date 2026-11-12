@@ -223,8 +223,10 @@ function OnboardingBreathPreview({ card, reducedMotion, onBack }) {
   return <div style={{ flex: 1, minHeight: 0, borderRadius: 24, background: "rgba(12,35,41,.65)", border: "1px solid rgba(255,255,255,.35)", padding: "16px 18px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
     <button type="button" onClick={onBack} style={{ ...textButton, alignSelf: "flex-start" }}>← All experiences</button>
     <div style={{ fontFamily: HEADING_FONT, fontSize: 25 }}>{card.title}</div>
-    <div style={{ width: "min(52vw, 220px)", aspectRatio: "1", flexShrink: 1, minHeight: 0 }}>
-      <LagoonLiquidOrb breath={phase.breath} reducedMotion={Boolean(reducedMotion)} options={{ colorFrom: card.colors[0], colorTo: card.colors[1] }} />
+    <div style={{ width: "min(52vw, 220px)", aspectRatio: "1", flexShrink: 1, minHeight: 0, display: "grid", placeItems: "center" }}>
+      <div style={{ width: "100%", height: "100%", transform: `scale(${0.80 + phase.breath * 0.20})`, transition: reducedMotion ? "none" : "transform 100ms linear", willChange: "transform" }}>
+        <LagoonLiquidOrb breath={phase.breath} reducedMotion={Boolean(reducedMotion)} options={{ colorFrom: card.colors[0], colorTo: card.colors[1] }} />
+      </div>
     </div>
     <div aria-live="polite" style={{ fontSize: 22, fontWeight: 600, textTransform: "lowercase" }}>{complete ? "your moment is complete" : phase.label}</div>
     <div style={{ fontSize: 13, opacity: .8 }}>{complete ? "Preview finished" : Math.ceil(phase.phaseRemaining) + " seconds"}</div>
