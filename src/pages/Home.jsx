@@ -314,7 +314,7 @@ export default function Home() {
             if (!eligible.length) { flashNotice("No breathing technique is available for this moment yet."); return; }
             setSessionVoice(preferences.voiceGuide ? "full" : "none");
             beginSession(getRandomTechnique(eligible), momentId);
-          }} onExplore={() => { setBrowseMoment("explore_all"); setBrowseTechniques(techniques.filter(t => hasUsablePhases(t) && (hasFullAccess || isFreeTechnique(t)))); setSessionVoice(preferences.voiceGuide ? "full" : "none"); setMode("browse"); }}
+          }} onExplore={async () => { const available = await ensureTechniques(); setBrowseMoment("explore_all"); setBrowseTechniques(available.filter(t => hasUsablePhases(t) && (hasFullAccess || isFreeTechnique(t)))); setSessionVoice(preferences.voiceGuide ? "full" : "none"); setMode("browse"); }}
             onMoments={() => setShowMoments(true)} onAbout={() => setShowAbout(true)} onPlus={() => openPaywall({source:"menu"})} />
         )}
         {mode === "browse" && (
