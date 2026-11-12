@@ -42,6 +42,7 @@ export default function BreathingScreen({
   const momentStyle = getMomentStyle(momentId);
   const timeCanvas = getTimeCanvas();
   const sessionInk = timeCanvas.key === "night" ? timeCanvas.ink : PAUSE.ink;
+  const displayCue = (value) => { const text = String(value || "").trim(); return text ? text.charAt(0).toUpperCase() + text.slice(1) : text; };
   const reducedMotion = useReducedMotion();
 
   // Parsed once per technique so re-renders (e.g. a preference change) never
@@ -324,9 +325,9 @@ export default function BreathingScreen({
       >
         <div
           ref={visualRef}
-          style={{ width: "min(250px, 64vw, 31vh)", aspectRatio: "1 / 1", position: "relative", flexShrink: 0 }}
+          style={{ width: "min(220px, 64vw, 31vh)", aspectRatio: "1 / 1", position: "relative", flexShrink: 0 }}
         >
-          {visual === "orb" && <div aria-hidden="true" style={{position:"absolute",inset:"-10%",borderRadius:"50%",background:momentStyle.tint,opacity:.08}} />}
+          {visual === "orb" && <div aria-hidden="true" style={{position:"absolute",inset:"-18%",borderRadius:"50%",background:momentStyle.ink,opacity:.08}} />}
           {visual === "orb" ? <div aria-hidden="true" style={{width:"100%",height:"100%",borderRadius:"50%",background:momentStyle.orb,boxShadow:"0 30px 80px -10px "+momentStyle.ink+"66",transform:`scale(${0.78+breath*.22})`,transition:reducedMotion?"none":"transform 120ms linear"}} /> : visual !== "screenFill" && <BreathingVisual
             id={visual}
             breath={breath}
@@ -394,7 +395,7 @@ export default function BreathingScreen({
               transition: reducedMotion ? "none" : "transform 120ms linear",
             }}
           >
-            {!readyToBreathe ? "get comfortable" : currentLabel}
+            {!readyToBreathe ? "Get comfortable" : displayCue(currentLabel)}
           </p>
         ) : (
           <span className="sr-only" aria-live="polite">
@@ -404,13 +405,13 @@ export default function BreathingScreen({
 
         {/* The ring's own arc already fills with the breath, so it needs no
             second progress bar underneath. */}
-        {visual !== "ring" && visual !== "lagoon" && visual !== "screenFill" && (
+        {( 
           <div
             style={{
               width: "min(180px, 60vw)",
               height: 4,
               borderRadius: 999,
-              background: ink.track,
+              background: timeCanvas.key === "night" ? "rgba(238,234,245,.1)" : "rgba(38,48,44,.1)",
               position: "relative",
               overflow: "hidden",
             }}
