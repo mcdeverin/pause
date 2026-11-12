@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
+import FullScreenFill from "./visuals/FullScreenFill";
 import SessionTimerPill from "./SessionTimerPill";
 import TechniqueInfoCard from "./TechniqueInfoCard";
 import { FONT, getColors, isPhotoBackground } from "../lib/design";
@@ -249,6 +250,9 @@ export default function BreathingScreen({
       transition={{ duration: reducedMotion ? 0.3 : 1.4, ease: [0.22, 1, 0.36, 1] }}
     >
       <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
+      {visual === "screenFill" && (
+        <FullScreenFill breath={breath} options={visualOptions?.screenFill} />
+      )}
 
       {/* Top bar: timer + info */}
       <div
@@ -259,6 +263,7 @@ export default function BreathingScreen({
           gap: 12,
           minHeight: 44,
           padding: "0 16px",
+          position: "relative", zIndex: 1,
         }}
       >
         <div style={{ minWidth: 84 }}>{showTimer && <SessionTimerPill seconds={timeRemaining} theme={theme} />}</div>
@@ -270,6 +275,7 @@ export default function BreathingScreen({
       <p
         style={{
           margin: "4px 24px 0",
+          position: "relative", zIndex: 1,
           textAlign: "center",
           fontFamily: FONT,
           fontSize: "19px",
@@ -306,13 +312,14 @@ export default function BreathingScreen({
           alignItems: "center",
           justifyContent: "center",
           padding: "8px 24px",
+          position: "relative", zIndex: 1,
         }}
       >
         <div
           ref={visualRef}
           style={{ width: "min(250px, 64vw, 31vh)", aspectRatio: "1 / 1", position: "relative", flexShrink: 0 }}
         >
-          <BreathingVisual
+          {visual !== "screenFill" && <BreathingVisual
             id={visual}
             breath={breath}
             theme={theme}
@@ -322,7 +329,7 @@ export default function BreathingScreen({
             reducedMotion={reducedMotion}
             label={currentLabel}
             showLabel={false}
-          />
+          />}
           {/* The ring has no bar under it, so the seconds left in the current
               phase are counted inside the circle itself. */}
           {visual === "ring" && showInstructions && (
@@ -357,6 +364,7 @@ export default function BreathingScreen({
           alignItems: "center",
           gap: 16,
           padding: "0 24px",
+          position: "relative", zIndex: 1,
         }}
       >
         {showBottomLabel ? (
