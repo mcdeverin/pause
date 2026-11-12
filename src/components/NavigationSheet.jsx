@@ -176,36 +176,9 @@ export default function NavigationSheet({
         </div>
 
         <div style={{ flex: 1, overflowY: "auto", padding: "0 10px" }}>
-          <button type="button" onClick={() => setBreathingExpanded(v => !v)} aria-expanded={breathingExpanded} aria-controls="breathing-menu" style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",margin:"10px 0 4px",padding:"9px 14px",border:0,background:"transparent",color:colors.tertiary,fontFamily:FONT,fontSize:12.5,fontWeight:700,letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer"}}>
-            <span>Breathing</span>{breathingExpanded?<ChevronDown size={17}/>:<ChevronRight size={17}/>}
-          </button>
-          {breathingExpanded && <div id="breathing-menu">{CATEGORIES.map(category => <SheetRow key={category.id} theme={theme} icon={category.icon} label={category.label} active={selectedCategory===category.id} locked={!isPro&&lockedCategories.includes(category.id)} onClick={() => handleCategory(category.id)}/>)}</div>}
-          <div style={{height:1,margin:"12px 14px",background:colors.border}}/>
-          <button type="button" onClick={() => setSensoryExpanded(v => !v)} aria-expanded={sensoryExpanded} aria-controls="sensory-menu" style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",margin:"0 0 4px",padding:"9px 14px",border:0,background:"transparent",color:colors.tertiary,fontFamily:FONT,fontSize:12.5,fontWeight:700,letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer"}}>
-            <span>Sensory</span>{sensoryExpanded?<ChevronDown size={17}/>:<ChevronRight size={17}/>}
-          </button>
-          {sensoryExpanded && <div id="sensory-menu">
-            {[
-              {id:"nature",label:"Nature",expanded:natureExpanded,toggle:()=>setNatureExpanded(v=>!v),items:[
-                {label:"Cloud",icon:CloudIcon,path:"/sensory/cloud"},
-                {label:"Underwater",icon:Waves,path:"/sensory/underwater"}
-              ]},
-              {id:"abstract",label:"Abstract",expanded:abstractExpanded,toggle:()=>setAbstractExpanded(v=>!v),items:[
-                {label:"Liquid Chrome",icon:Waves,path:"/sensory/liquid-chrome"},
-                {label:"Popcorn",icon:Orbit,path:"/sensory/popcorn"},
-                {label:"Liquid Surface",icon:Waves,path:"/sensory/liquid-surface"},
-                {label:"Prismatic Water",icon:Waves,path:"/sensory/prismatic-water"}
-              ]}
-            ].map(group=><div key={group.id}>
-              <button type="button" onClick={group.toggle} aria-expanded={group.expanded} aria-controls={`sensory-${group.id}-menu`} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"12px 18px 12px 28px",border:0,background:"transparent",color:colors.secondary,fontFamily:FONT,fontSize:15,fontWeight:650,cursor:"pointer",textAlign:"left"}}>
-                <span>{group.label}</span>{group.expanded?<ChevronDown size={17}/>:<ChevronRight size={17}/>}
-              </button>
-              {group.expanded && <div id={`sensory-${group.id}-menu`} style={{paddingLeft:20}}>{group.items.map(item=><SheetRow key={item.path} theme={theme} icon={item.icon} label={item.label} onClick={()=>{onClose();navigate(item.path);}}/>)}</div>}
-            </div>)}
-            {isOwner && <SheetRow theme={theme} icon={SlidersHorizontal} label="Sensory Studio · private" muted onClick={() => {onClose();navigate("/sensory-studio");}}/>}
-          </div>}
+          <SheetRow theme={theme} icon={Waves} label="Breathing" onClick={() => { onClose(); navigate("/"); }} />
+          <SheetRow theme={theme} icon={Sparkles} label="Sensory Studio" onClick={() => { onClose(); navigate("/sensory"); }} />
           <div style={{ height: 1, margin: "12px 14px", background: colors.border }} />
-
           <SheetRow
             theme={theme}
             icon={SlidersHorizontal}
