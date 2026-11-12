@@ -34,7 +34,7 @@ function Preview({name}) {
   };
   return <div ref={ref} style={{width:"100%",height:"100%",background:name==="Underwater"?"linear-gradient(155deg,#194d78,#092744 70%,#071b35)":"#d7e8e9",pointerEvents:"none"}}>
     {visible && (name==="Underwater"
-      ? <iframe title="Underwater visual preview" src="https://holtsetio.com/lab/aurelia/" loading="lazy" tabIndex={-1} aria-hidden="true" style={{border:0,width:"100%",height:"calc(100% + 90px)",marginTop:-40,pointerEvents:"none"}} />
+      ? <iframe title="Underwater visual preview" src="https://holtsetio.com/lab/aurelia/" loading="lazy" tabIndex={-1} aria-hidden="true" style={{border:0,width:"100%",height:"calc(100% + 650px)",marginTop:-40,pointerEvents:"none"}} />
       : scenes[name])}
   </div>;
 }
