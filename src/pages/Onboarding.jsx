@@ -67,7 +67,6 @@ export default function Onboarding() {
         durationMs: Date.now() - startedAt,
       }));
     } catch { /* Onboarding still works when local storage is unavailable. */ }
-    try { localStorage.setItem("alwaysPauseTourPendingV1", "true"); } catch { /* optional tour */ }
     navigate("/");
   }
 
