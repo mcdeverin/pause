@@ -23,7 +23,7 @@ export default function PauseSetup({ theme, backgroundSettings, photo, onBack, o
       <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", justifyContent: "center", gap: 8, maxWidth: 520, width: "100%", margin: "0 auto", padding: "8px 0", boxSizing: "border-box", position: "relative" }}>
         <div style={{ textAlign: "center", marginBottom: 2 }}>
           <h1 style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 400, fontSize: "clamp(30px, 6vw, 44px)", lineHeight: 1.1, margin: 0 }}>What do you need right now?</h1>
-          <p style={{ fontSize: 15, opacity: .92, marginTop: 6, marginBottom: 4 }}>A moment for whatever you're feeling.</p>
+          <p style={{ fontSize: 15, opacity: .92, marginTop: 6, marginBottom: 4 }}>Choose how you'd like to feel.</p>
         </div>
         <div role="group" aria-label="Choose your moment" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
           {MOMENTS.map((item) => { const Icon = ICONS[item.id]; const active = moment === item.id; return (
@@ -33,7 +33,7 @@ export default function PauseSetup({ theme, backgroundSettings, photo, onBack, o
             </button>
           ); })}
         </div>
-        <div style={{ textAlign: "center", marginTop: 2, fontSize: 13, fontWeight: 500, opacity: .9 }}>Your guidance preference</div>
+        <div style={{ textAlign: "center", marginTop: 2, fontSize: 13, fontWeight: 500, opacity: .9 }}>GUIDANCE</div>
         <div role="group" aria-label="Guidance preference" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 8 }}>
           {[
             { id: "full", title: "Guided", description: "Lauren’s voice" },
@@ -56,7 +56,7 @@ export default function PauseSetup({ theme, backgroundSettings, photo, onBack, o
       <div style={{ position: "relative", flexShrink: 0, width: "100%", maxWidth: 520, margin: "6px auto 0" }}>
         <button type="button" disabled={!selected || busy} onClick={() => onBegin(selected.id, voice)}
           style={{ width: "100%", border: 0, borderRadius: 999, minHeight: 56, fontSize: 16, fontWeight: 600, background: selected && !busy ? "#f6f1e9" : "#bdbdbd", color: "#213d40", cursor: selected && !busy ? "pointer" : "not-allowed" }}>
-          {busy ? "Preparing your moment…" : "Begin this moment →"}
+          {busy ? "Preparing your moment…" : "Continue →"}
         </button>
       </div>
     </motion.main>
