@@ -233,6 +233,7 @@ export default function BreathingScreen({
   // Every visual writes the phase in the same place, at the same size, so the cue
   // never moves or restyles itself when a different visual is chosen.
   const showBottomLabel = showInstructions;
+  const classicBreathingText = visual === "lagoon";
 
   return (
     <motion.div
@@ -383,6 +384,9 @@ export default function BreathingScreen({
               color: ink.text,
               textShadow: ink.shadow,
               lineHeight: 1.3,
+              transform: classicBreathingText && readyToBreathe ? `scale(${1 + breath * 0.14})` : "scale(1)",
+              transformOrigin: "center center",
+              transition: reducedMotion ? "none" : "transform 120ms linear",
             }}
           >
             {!readyToBreathe ? "get comfortable" : currentLabel}
@@ -395,7 +399,7 @@ export default function BreathingScreen({
 
         {/* The ring's own arc already fills with the breath, so it needs no
             second progress bar underneath. */}
-        {visual !== "ring" && (
+        {visual !== "ring" && visual !== "lagoon" && (
           <div
             style={{
               width: "min(180px, 60vw)",
