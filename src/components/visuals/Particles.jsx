@@ -870,7 +870,7 @@ const Particles = ({
   });
 
   return (
-    <div ref={containerRef} className={`particles-container${className ? ` ${className}` : ''}`} style={style}>
+    <div ref={containerRef} className={`particles-container${className ? ` ${className}` : ''}`} style={{ backgroundColor: lightMode ? "#ffffff" : "#000000", ...style }}>
       <canvas ref={canvasRef} className="particles-canvas" aria-hidden="true" />
     </div>
   );
