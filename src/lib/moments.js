@@ -15,6 +15,7 @@ export const MOMENTS = [
   { id: "wind_down", label: "Wind down", categories: ["Sleep"] },
   { id: "reset", label: "Reset", categories: ["Calm"] },
   { id: "energy", label: "Feel energized", categories: ["Energy"] },
+  { id: "explore_all", label: "Explore all", categories: ["All"] },
 ];
 
 export const PERIODS = [
@@ -114,7 +115,7 @@ export function getStats(moments, period, now = new Date()) {
     return !start || at >= start;
   });
 
-  const byMoment = { calm: 0, focus: 0, wind_down: 0, reset: 0, energy: 0 };
+  const byMoment = { calm: 0, focus: 0, wind_down: 0, reset: 0, energy: 0, explore_all: 0 };
   const days = new Set();
   let seconds = 0;
   let quick = 0;
@@ -138,6 +139,7 @@ const REFLECTIONS = {
   wind_down: "You made the most space for winding down",
   reset: "A quick reset was your most frequent pause",
   energy: "You most often reached for an energizing pause",
+  explore_all: "You most often explored different breathing techniques",
 };
 
 export function getReflection(stats, period) {
