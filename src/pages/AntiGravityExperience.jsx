@@ -1,0 +1,3 @@
+import Antigravity from "../components/visuals/Antigravity";
+import SensoryBackButton from "../components/visuals/SensoryBackButton";
+export default function AntiGravityExperience(){return <main style={{position:"relative",width:"100%",height:"100dvh",overflow:"hidden",background:"#090616"}}><Antigravity colors={["#5227FF","#FF9FFC","#B497CF"]} count={1500} magnetRadius={9} ringRadius={7} particleSize={0.9} autoAnimate colorMode="conic" colorSpeed={0.05} particleShape="capsule" particleVariance={1} fieldStrength={10} waveAmplitude={1} waveCount={3} waveSpeed={0.4} rotationSpeed={0} pulseSpeed={3} depthFactor={1} ambient={0.25} lerpSpeed={0.05} interactive clickBurst intro lightMode={false}/><SensoryBackButton/></main>}
