@@ -13,7 +13,7 @@ export default function GalaxyScene({preview=false}) {
     const click=()=>{warp=1;};
     const draw=now=>{const dt=last?Math.min((now-last)/1000,.05):0;last=now;t+=dt;warp=Math.max(0,warp-dt*.75);
       ctx.fillStyle="#02040d";ctx.fillRect(0,0,w,h);
-      const cx=w*(cursor.active?.5+(cursor.x-.5)*.07:.5),cy=h*(cursor.active?.5+(cursor.y-.5)*.07:.5);
+      const cx=w*(cursor.active ? .5+(cursor.x-.5)*.07 : .5),cy=h*(cursor.active ? .5+(cursor.y-.5)*.07 : .5);
       const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(w,h)*.65);
       glow.addColorStop(0,"rgba(27,36,92,.30)");glow.addColorStop(.4,"rgba(11,15,48,.16)");glow.addColorStop(1,"rgba(0,0,0,0)");
       ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
