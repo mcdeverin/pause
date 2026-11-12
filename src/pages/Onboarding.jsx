@@ -111,10 +111,7 @@ export default function Onboarding() {
             const card = explorationCards.find((item) => item.title === previewChoice);
             return card?.kind === "breathing"
               ? <OnboardingBreathPreview key={card.title} card={card} reducedMotion={reduceMotion} onBack={() => setPreviewChoice("")} />
-              : <div style={{ flex: 1, minHeight: 0, position: "relative", borderRadius: 22, overflow: "hidden", background: "rgba(12,35,41,.48)" }}>
-                  <SensoryCardScene title={card?.title} reducedMotion={reduceMotion} />
-                  <button type="button" onClick={() => setPreviewChoice("")} style={{ ...textButton, position: "absolute", top: 12, left: 12, zIndex: 3 }}>← All experiences</button>
-                </div>;
+              : <OnboardingSensoryPreview key={card.title} card={card} reducedMotion={reduceMotion} onBack={() => setPreviewChoice("")} />;
           })()}
           {!exploring && current.options.length > 0 && (
             <div role="group" aria-label={current.title} style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: current.options.length <= 4 ? 14 : 10, width: "100%", flex: current.options.length > 0 ? 1 : "none", minHeight: 0, gridTemplateRows: step === 2 ? "minmax(0, 1fr) auto" : current.options.length > 0 ? `repeat(${Math.ceil(current.options.length / 2)}, minmax(0, 1fr))` : undefined }}>
@@ -232,5 +229,26 @@ function OnboardingBreathPreview({ card, reducedMotion, onBack }) {
     <div aria-live="polite" style={{ fontSize: 22, fontWeight: 600, textTransform: "lowercase" }}>{complete ? "your moment is complete" : phase.label}</div>
     <div style={{ fontSize: 13, opacity: .8 }}>{complete ? "Preview finished" : Math.ceil(phase.phaseRemaining) + " seconds"}</div>
     <button type="button" onClick={() => { setElapsed(0); setReplay((n) => n + 1); }} style={{ ...textButton, padding: "10px 18px", border: "1px solid rgba(255,255,255,.5)", borderRadius: 24 }}>{complete ? "Try again" : "Restart preview"}</button>
+  </div>;
+}
+
+function OnboardingSensoryPreview({ card, reducedMotion, onBack }) {
+  const hint = {
+    "Popcorn": "Move your finger and watch the shapes respond.",
+    "Iridescent Water": "Trace the surface. Follow the ripples.",
+    "Neon Paint": "Draw slowly across the canvas.",
+    "Underwater": "Take a moment to watch the water.",
+  }[card.title] || "Explore at your own pace.";
+  return <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+    <div style={{ position: "relative", flex: 1, minHeight: 180, borderRadius: 24, overflow: "hidden", border: "1px solid rgba(255,255,255,.4)", background: "#102d32", isolation: "isolate" }}>
+      <div style={{ position: "absolute", inset: 0, touchAction: "none" }}>
+        <SensoryCardScene title={card.title} reducedMotion={reducedMotion} />
+      </div>
+      <button type="button" onClick={onBack} style={{ ...textButton, position: "absolute", top: 12, left: 12, zIndex: 3, borderRadius: 20, padding: "9px 12px", background: "rgba(7,28,32,.68)", backdropFilter: "blur(8px)" }}>← All experiences</button>
+    </div>
+    <div style={{ textAlign: "center", padding: "2px 8px 8px" }}>
+      <div style={{ fontFamily: HEADING_FONT, fontSize: 26 }}>{card.title}</div>
+      <p style={{ fontSize: 14, opacity: .85, margin: "6px 0 0" }}>{hint}</p>
+    </div>
   </div>;
 }
