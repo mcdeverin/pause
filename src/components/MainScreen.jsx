@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
+import FullScreenFill from "./visuals/FullScreenFill";
 import NavigationSheet from "./NavigationSheet";
 import { FONT, HEADING_FONT, isPhotoBackground } from "../lib/design";
 import { getCanvasInk } from "../lib/canvasInk";
@@ -79,6 +80,11 @@ export default function MainScreen({
       }}
     >
       <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
+      {visual === "screenFill" && (
+        <div style={{ position: "absolute", inset: 0, zIndex: 0, overflow: "hidden", pointerEvents: "none" }}>
+          <FullScreenFill breath={0.5} options={visualOptions?.screenFill} />
+        </div>
+      )}
 
       {/* Soft top scrim protects white copy over bright nature photographs. */}
       {photoBackground && <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: "44%", background: "linear-gradient(to bottom, rgba(9,27,35,.62), rgba(9,27,35,.40) 65%, transparent)", pointerEvents: "none", zIndex: 0 }} />}
@@ -190,6 +196,7 @@ export default function MainScreen({
           justifyContent: "center",
           gap: 18,
           padding: "0 24px",
+          position: "relative", zIndex: 1,
         }}
       >
         <button
@@ -209,14 +216,14 @@ export default function MainScreen({
           {/* The resting visual is whichever one they chose — at rest, not breathing.
               The ring rests as a complete circle instead of an empty track. */}
           <div style={{ width: orbSize, height: orbSize }}>
-            <BreathingVisual
+            {visual !== "screenFill" && <BreathingVisual
               id={visual}
               breath={visual === "ring" ? 1 : 0}
               theme={theme}
               options={visualOptions?.[visual]}
               photo={photo}
               backgroundSettings={backgroundSettings}
-            />
+            />}
           </div>
         </button>
 
