@@ -1,5 +1,10 @@
 import GlassSurface from "../components/GlassSurface";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import CloudScene from "../components/visuals/CloudScene";
+import LiquidChromeScene from "../components/visuals/LiquidChromeScene";
+import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
+import PrismaticWaterScene from "../components/visuals/PrismaticWaterScene";
+import OrbitScene from "../components/visuals/OrbitScene";
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { FONT, HEADING_FONT } from "../lib/design";
@@ -8,6 +13,30 @@ const groups = [
   {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"]]},
   {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Liquid Surface","/sensory/liquid-surface"],["Prismatic Water","/sensory/prismatic-water"]]}
 ];
+
+function Preview({name}) {
+  const ref = useRef(null);
+  const [visible,setVisible] = useState(false);
+  useEffect(()=>{
+    const el=ref.current;
+    if(!el)return;
+    const observer=new IntersectionObserver(([entry])=>setVisible(entry.isIntersecting),{rootMargin:"80px"});
+    observer.observe(el);
+    return ()=>observer.disconnect();
+  },[]);
+  const scenes={
+    "Cloud": <CloudScene preview />,
+    "Liquid Chrome": <LiquidChromeScene />,
+    "Popcorn": <OrbitScene />,
+    "Liquid Surface": <LiquidSurfaceScene />,
+    "Prismatic Water": <PrismaticWaterScene />
+  };
+  return <div ref={ref} style={{width:"100%",height:"100%",background:name==="Underwater"?"linear-gradient(155deg,#194d78,#092744 70%,#071b35)":"#d7e8e9",pointerEvents:"none"}}>
+    {visible && (name==="Underwater"
+      ? <iframe title="Underwater visual preview" src="https://holtsetio.com/lab/aurelia/" loading="lazy" tabIndex={-1} aria-hidden="true" style={{border:0,width:"100%",height:"calc(100% + 90px)",marginTop:-40,pointerEvents:"none"}} />
+      : scenes[name])}
+  </div>;
+}
 
 export default function SensoryLibrary() {
   const [category,setCategory]=useState("All");
@@ -18,23 +47,22 @@ export default function SensoryLibrary() {
       <span style={{fontFamily:HEADING_FONT,fontSize:23}}>always pause.</span>
       <span style={{width:38}}/>
     </header>
-    <div style={{maxWidth:620,margin:"72px auto 0"}}>
+    <div style={{maxWidth:900,margin:"clamp(36px,6vh,64px) auto 0"}}>
       <p style={{fontSize:11,letterSpacing:".19em",fontWeight:700,opacity:.55}}>SENSORY</p>
-      <h1 style={{fontFamily:HEADING_FONT,fontWeight:400,fontSize:"clamp(42px,9vw,66px)",letterSpacing:"-.04em",margin:"10px 0 8px"}}>Find your stillness.</h1>
-      <p style={{opacity:.65,fontSize:15,lineHeight:1.6,marginBottom:36}}>Explore a moment through movement, light, and sound.</p>
+      <h1 style={{fontFamily:HEADING_FONT,fontWeight:400,fontSize:"clamp(38px,6vw,56px)",letterSpacing:"-.04em",margin:"8px 0 6px"}}>Find your stillness.</h1>
+      <p style={{opacity:.65,fontSize:15,lineHeight:1.6,marginBottom:26}}>Explore a moment through movement, light, and sound.</p>
       <div role="tablist" aria-label="Sensory categories" style={{display:"flex",gap:28,borderBottom:"1px solid #24342f22"}}>
         {["All","Nature","Abstract"].map(name=><button key={name} role="tab" aria-selected={category===name} onClick={()=>setCategory(name)} style={{border:0,borderBottom:category===name?"2px solid #325c50":"2px solid transparent",padding:"12px 0",marginBottom:-1,background:"none",fontFamily:FONT,fontSize:15,fontWeight:category===name?650:400,color:category===name?"#24342f":"#78857f",cursor:"pointer"}}>{name}</button>)}
       </div>
-      {visibleGroups.map(group=><section key={group.name} aria-label={group.name} style={{marginTop:30}}>
+      {visibleGroups.map(group=><section key={group.name} aria-label={group.name} style={{marginTop:28}}>
         <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:12,marginBottom:14}}>
           <h2 style={{fontFamily:HEADING_FONT,fontSize:25,fontWeight:400,margin:0}}>{group.name}</h2>
-          <span style={{fontSize:12,color:"#72817a"}}>{group.description}</span>
+
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:14}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:18}}>
           {group.items.map(([name,path])=><Link key={path} to={path} aria-label={`Explore ${name}`} style={{display:"block",textDecoration:"none",color:"inherit",minWidth:0}}>
-            <div style={{position:"relative",aspectRatio:"4 / 5",borderRadius:18,overflow:"hidden",background:"#d9e1dd"}}>
-              <iframe src={path} title={`${name} preview`} loading="lazy" tabIndex={-1} aria-hidden="true" style={{position:"absolute",width:"200%",height:"200%",left:0,top:0,border:0,transform:"scale(.5)",transformOrigin:"top left",pointerEvents:"none"}} />
-              <div aria-hidden="true" style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(8,24,23,.22),transparent 40%)",pointerEvents:"none"}}/>
+            <div style={{position:"relative",aspectRatio:"4 / 4.3",borderRadius:16,overflow:"hidden",background:"#d9e1dd"}}>
+              <Preview name={name} />
             </div>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6,padding:"11px 2px 0"}}>
               <span style={{fontFamily:HEADING_FONT,fontSize:"clamp(17px,4vw,22px)",lineHeight:1.2}}>{name}</span>
