@@ -252,7 +252,9 @@ export default function BreathingScreen({
     >
       <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
       {visual === "screenFill" && (
-        <FullScreenFill breath={breath} options={visualOptions?.screenFill} />
+        <div style={{ position: "absolute", inset: 0, zIndex: 0, overflow: "hidden", pointerEvents: "none" }}>
+          <FullScreenFill breath={breath} options={visualOptions?.screenFill} />
+        </div>
       )}
 
       {/* Top bar: timer + info */}
