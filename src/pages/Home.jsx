@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import AdaptiveHome from "../components/AdaptiveHome";
+import MomentChooser from "../components/MomentChooser";
 import TechniqueBrowser from "../components/TechniqueBrowser";
 import BreathingScreen from "../components/BreathingScreen";
 import SupportScreen from "../components/SupportScreen";
@@ -21,6 +22,7 @@ import { describeSavedBackground, describeVisual } from "../lib/analyticsProps";
 import { isFreeTechnique } from "../lib/access";
 import { loadNarrationManifest } from "../lib/narration";
 
+function getSuggestedMoment(){const h=new Date().getHours();return h>=5&&h<11?"focus":h>=11&&h<17?"reset":h>=17&&h<21?"calm":"wind_down";}
 export default function Home() {
   useEffect(() => { void loadNarrationManifest(); }, []);
   const [mode, setMode] = useState("idle");
@@ -314,9 +316,17 @@ export default function Home() {
             if (!eligible.length) { flashNotice("No breathing technique is available for this moment yet."); return; }
             setSessionVoice(preferences.voiceGuide ? "full" : "none");
             beginSession(getRandomTechnique(eligible), momentId);
-          }} onExplore={async () => { const available = await ensureTechniques(); setBrowseMoment("explore_all"); setBrowseTechniques(available.filter(t => hasUsablePhases(t) && (hasFullAccess || isFreeTechnique(t)))); setSessionVoice(preferences.voiceGuide ? "full" : "none"); setMode("browse"); }}
+          }} onExplore={() => setMode("choose")}
             onMoments={() => setShowMoments(true)} onAbout={() => setShowAbout(true)} onPlus={() => openPaywall({source:"menu"})} />
         )}
+        {mode === "choose" && <MomentChooser key="choose" initialMoment={getSuggestedMoment()} initialGuided={preferences.voiceGuide} onBack={() => setMode("idle")} onBegin={async (momentId,guided) => {
+          const available = await ensureTechniques();
+          const moment = MOMENTS.find(m => m.id === momentId);
+          const eligible = available.filter(t => moment?.categories.includes(t.category) && hasUsablePhases(t) && (hasFullAccess || isFreeTechnique(t)));
+          if (!eligible.length) { flashNotice("No breathing technique is available for this moment yet."); return; }
+          setSessionVoice(guided ? "full" : "none");
+          beginSession(getRandomTechnique(eligible),momentId);
+        }} />}
         {mode === "browse" && (
           <TechniqueBrowser key="technique-browser" techniques={browseTechniques} momentId={browseMoment}
             theme={theme} backgroundSettings={preferences} photo={photo}
