@@ -19,7 +19,7 @@ import {
 } from '../lib/pricing';
 import { track } from '../lib/analytics';
 
-const FONT = "'Nunito Sans', ui-sans-serif, system-ui, -apple-system, sans-serif";
+import { FONT, HEADING_FONT, PAUSE } from "../lib/design";
 
 // One short line, only when a specific feature opened the offer.
 const CONTEXT_LINES = {
