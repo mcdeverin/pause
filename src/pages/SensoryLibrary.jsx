@@ -1,7 +1,7 @@
 import GlassSurface from "../components/GlassSurface";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronLeft, Menu } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { FONT, HEADING_FONT } from "../lib/design";
 
 const groups = [
@@ -10,8 +10,8 @@ const groups = [
 ];
 
 export default function SensoryLibrary() {
-  const [category,setCategory]=useState("Nature");
-  const group=groups.find(g=>g.name===category);
+  const [category,setCategory]=useState("All");
+  const visibleGroups = category === "All" ? groups : groups.filter(g=>g.name===category);
   return <main style={{minHeight:"100dvh",boxSizing:"border-box",background:"#f5f5f1",color:"#24342f",padding:"calc(env(safe-area-inset-top, 28px) + 24px) 24px calc(env(safe-area-inset-bottom, 20px) + 118px)",fontFamily:FONT}}>
     <header style={{display:"flex",alignItems:"center",justifyContent:"space-between",maxWidth:620,margin:"0 auto"}}>
       <Link to="/" aria-label="Back to breathing" style={{color:"inherit",padding:8}}><ChevronLeft size={22}/></Link>
@@ -23,10 +23,26 @@ export default function SensoryLibrary() {
       <h1 style={{fontFamily:HEADING_FONT,fontWeight:400,fontSize:"clamp(42px,9vw,66px)",letterSpacing:"-.04em",margin:"10px 0 8px"}}>Find your stillness.</h1>
       <p style={{opacity:.65,fontSize:15,lineHeight:1.6,marginBottom:36}}>Explore a moment through movement, light, and sound.</p>
       <div role="tablist" aria-label="Sensory categories" style={{display:"flex",gap:28,borderBottom:"1px solid #24342f22"}}>
-        {groups.map(g=><button key={g.name} role="tab" aria-selected={category===g.name} onClick={()=>setCategory(g.name)} style={{border:0,borderBottom:category===g.name?"2px solid #325c50":"2px solid transparent",padding:"12px 0",marginBottom:-1,background:"none",fontFamily:FONT,fontSize:16,fontWeight:category===g.name?650:400,color:category===g.name?"#24342f":"#78857f",cursor:"pointer"}}>{g.name}</button>)}
+        {["All","Nature","Abstract"].map(name=><button key={name} role="tab" aria-selected={category===name} onClick={()=>setCategory(name)} style={{border:0,borderBottom:category===name?"2px solid #325c50":"2px solid transparent",padding:"12px 0",marginBottom:-1,background:"none",fontFamily:FONT,fontSize:15,fontWeight:category===name?650:400,color:category===name?"#24342f":"#78857f",cursor:"pointer"}}>{name}</button>)}
       </div>
-      <p style={{margin:"26px 0 18px",color:"#72817a",fontSize:14}}>{group.description}</p>
-      <div style={{display:"grid",gap:12}}>{group.items.map(([name,path],i)=><Link key={path} to={path} style={{textDecoration:"none",color:"inherit",display:"flex",alignItems:"center",justifyContent:"space-between",border:"1px solid #24342f19",borderRadius:20,background:"#ffffffad",padding:"22px 22px",minHeight:65,boxSizing:"border-box"}}><span style={{fontFamily:HEADING_FONT,fontSize:25}}>{name}</span><span style={{fontSize:12,opacity:.5}}>{String(i+1).padStart(2,"0")} ↗</span></Link>)}</div>
+      {visibleGroups.map(group=><section key={group.name} aria-label={group.name} style={{marginTop:30}}>
+        <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:12,marginBottom:14}}>
+          <h2 style={{fontFamily:HEADING_FONT,fontSize:25,fontWeight:400,margin:0}}>{group.name}</h2>
+          <span style={{fontSize:12,color:"#72817a"}}>{group.description}</span>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:14}}>
+          {group.items.map(([name,path])=><Link key={path} to={path} aria-label={`Explore ${name}`} style={{display:"block",textDecoration:"none",color:"inherit",minWidth:0}}>
+            <div style={{position:"relative",aspectRatio:"4 / 5",borderRadius:18,overflow:"hidden",background:"#d9e1dd"}}>
+              <iframe src={path} title={`${name} preview`} loading="lazy" tabIndex={-1} aria-hidden="true" style={{position:"absolute",width:"200%",height:"200%",left:0,top:0,border:0,transform:"scale(.5)",transformOrigin:"top left",pointerEvents:"none"}} />
+              <div aria-hidden="true" style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(8,24,23,.22),transparent 40%)",pointerEvents:"none"}}/>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6,padding:"11px 2px 0"}}>
+              <span style={{fontFamily:HEADING_FONT,fontSize:"clamp(17px,4vw,22px)",lineHeight:1.2}}>{name}</span>
+              <span aria-hidden="true" style={{fontSize:17,color:"#74877f"}}>↗</span>
+            </div>
+          </Link>)}
+        </div>
+      </section>)}
     </div>
     <GlassSurface width="min(320px, calc(100vw - 48px))" height={76} borderRadius={38} distortionScale={-180} displace={0.5} backgroundOpacity={0.1} blur={11} style={{position:"fixed",bottom:"calc(env(safe-area-inset-bottom, 12px) + 18px)",left:"50%",transform:"translateX(-50%)",zIndex:10}}>
       <nav aria-label="Primary navigation" style={{width:"100%",display:"flex",alignItems:"center",padding:"0 18px",boxSizing:"border-box"}}>
