@@ -43,6 +43,8 @@ export default function SensoryLibrary() {
   const [category,setCategory]=useState("Nature");
   const [menuOpen,setMenuOpen]=useState(false);
   const navigate=useNavigate();
+  const touchStart=useRef(null);
+  const switchCategory=()=>setCategory(current=>current==="Nature"?"Abstract":"Nature");
   const visibleGroups = groups.filter(g=>g.name===category);
   return <main style={{minHeight:"100dvh",boxSizing:"border-box",background:"#f5f5f1",color:"#24342f",padding:"calc(env(safe-area-inset-top, 28px) + 24px) 24px calc(env(safe-area-inset-bottom, 20px) + 118px)",fontFamily:FONT}}>
     <header style={{position:"relative",display:"flex",alignItems:"center",justifyContent:"center",maxWidth:620,minHeight:44,margin:"0 auto"}}>
@@ -55,13 +57,7 @@ export default function SensoryLibrary() {
         </svg>
       </button>
     </header>
-    <div style={{maxWidth:900,margin:"clamp(36px,6vh,64px) auto 0",display:"grid",gridTemplateColumns:"clamp(94px, 19vw, 156px) minmax(0,1fr)",gap:"clamp(12px, 3vw, 36px)",alignItems:"start"}}>
-      <nav aria-label="Sensory categories" style={{position:"sticky",top:36,paddingTop:28,display:"flex",flexDirection:"column",gap:8}}>
-        {["Nature","Abstract"].map((name,index)=><button key={name} type="button" onClick={()=>setCategory(name)} aria-current={category===name?"page":undefined} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:0,padding:"9px 0",cursor:"pointer",textAlign:"left",fontFamily:FONT,color:category===name?"#24342f":"#89958e",fontSize:"clamp(12px, 2.7vw, 14px)",fontWeight:category===name?600:400,transition:"color 180ms ease"}}>
-          <span aria-hidden="true" style={{display:"block",width:category===name?26:15,height:1,flexShrink:0,background:category===name?"#426c60":"#b7c1ba",transition:"width 200ms ease"}}/>
-          <span>{name}</span>
-        </button>)}
-      </nav>
+    <div style={{maxWidth:900,margin:"clamp(36px,6vh,64px) auto 0",display:"grid",gridTemplateColumns:"minmax(0,1fr) clamp(72px, 17vw, 126px)",gap:"clamp(10px, 3vw, 32px)",alignItems:"start"}}>
       <div style={{minWidth:0}}>
       {visibleGroups.map(group=><section key={group.name} aria-label={group.name} style={{marginTop:0}}>
         <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:12,marginBottom:14}}>
@@ -81,6 +77,11 @@ export default function SensoryLibrary() {
         </div>
       </section>)}
       </div>
+      <nav aria-label="Sensory categories" onWheel={event=>{if(Math.abs(event.deltaY)>4){event.preventDefault();switchCategory();}}} onTouchStart={event=>{touchStart.current=event.touches[0].clientY;}} onTouchEnd={event=>{if(touchStart.current!==null&&Math.abs(event.changedTouches[0].clientY-touchStart.current)>24)switchCategory();touchStart.current=null;}} style={{position:"sticky",top:"clamp(110px, 30vh, 260px)",height:170,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",overflow:"hidden",touchAction:"pan-x",userSelect:"none",WebkitUserSelect:"none",maskImage:"linear-gradient(to bottom,transparent,black 25%,black 75%,transparent)",WebkitMaskImage:"linear-gradient(to bottom,transparent,black 25%,black 75%,transparent)"}}>
+        <button type="button" onClick={()=>setCategory(category==="Nature"?"Abstract":"Nature")} aria-label={`Switch to ${category==="Nature"?"Abstract":"Nature"}`} style={{border:0,background:"none",padding:"12px 0",cursor:"pointer",fontFamily:FONT,fontSize:"clamp(12px,2.5vw,15px)",color:"#8e9b94",opacity:.38,filter:"blur(1.4px)",transform:"scale(.87)",transition:"all 260ms ease"}}>{category==="Nature"?"Abstract":"Nature"}</button>
+        <div aria-live="polite" style={{fontFamily:FONT,fontSize:"clamp(13px,2.8vw,17px)",fontWeight:500,color:"#28483d",padding:"10px 0",whiteSpace:"nowrap"}}>{category}</div>
+        <button type="button" onClick={()=>setCategory(category==="Nature"?"Abstract":"Nature")} aria-label={`Switch to ${category==="Nature"?"Abstract":"Nature"}`} style={{border:0,background:"none",padding:"12px 0",cursor:"pointer",fontFamily:FONT,fontSize:"clamp(12px,2.5vw,15px)",color:"#8e9b94",opacity:.38,filter:"blur(1.4px)",transform:"scale(.87)",transition:"all 260ms ease"}}>{category==="Nature"?"Abstract":"Nature"}</button>
+      </nav>
     </div>
     <GlassSurface width="min(320px, calc(100vw - 48px))" height={76} borderRadius={38} distortionScale={-180} displace={0.5} backgroundOpacity={0.1} blur={11} style={{position:"fixed",bottom:"calc(env(safe-area-inset-bottom, 12px) + 18px)",left:"50%",transform:"translateX(-50%)",zIndex:10}}>
       <nav aria-label="Primary navigation" style={{width:"100%",display:"flex",alignItems:"center",padding:"0 18px",boxSizing:"border-box"}}>
