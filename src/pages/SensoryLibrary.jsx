@@ -66,7 +66,7 @@ export default function SensoryLibrary() {
               <Preview name={name} />
             </div>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6,padding:"11px 2px 0"}}>
-              <span style={{fontFamily:HEADING_FONT,fontSize:"clamp(17px,4vw,22px)",lineHeight:1.2}}>{name}</span>
+              <span aria-hidden="true" />
               <span aria-hidden="true" style={{fontSize:17,color:"#74877f"}}>↗</span>
             </div>
           </Link>)}
