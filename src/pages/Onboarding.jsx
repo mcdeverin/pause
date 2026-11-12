@@ -7,6 +7,7 @@ import OrbitScene from "../components/visuals/OrbitScene";
 import PrismaticWaterScene from "../components/visuals/PrismaticWaterScene";
 import NeonNatureScene from "../components/visuals/NeonNatureScene";
 import { FONT, HEADING_FONT } from "../lib/design";
+import { buildBreathPlan, breathAt } from "../lib/breathing";
 import { BACKDROP_PHOTOS, DEFAULT_BACKDROP_PHOTO } from "../lib/crystalStudio";
 
 const STORAGE_KEY = "alwaysPauseOnboardingV1";
@@ -56,6 +57,7 @@ export default function Onboarding() {
   }
 
   function back() {
+    if (exploring && previewChoice) { setPreviewChoice(""); return; }
     if (exploring) { setExploring(false); setPreviewChoice(""); return; }
     setStep((value) => Math.max(0, value - 1));
   }
@@ -98,13 +100,22 @@ export default function Onboarding() {
           </motion.section>
         </AnimatePresence>
         <div style={{ width: "100%", maxWidth: 460, display: "flex", flexDirection: "column", gap: 13, flex: (exploring || current.options.length > 0) ? 1 : "none", minHeight: 0, marginTop: (exploring || current.options.length > 0) ? "clamp(16px, 3dvh, 40px)" : 0, pointerEvents: "auto" }}>
-          {exploring && <div role="group" aria-label="Explore experiences" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12, flex: 1, minHeight: 0 }}>
+          {exploring && !previewChoice && <div role="group" aria-label="Explore experiences" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12, flex: 1, minHeight: 0 }}>
             {explorationCards.map((card) => <button type="button" key={card.title} aria-pressed={previewChoice === card.title} onClick={() => setPreviewChoice(card.title)} style={{ position: "relative", isolation: "isolate", overflow: "hidden", borderRadius: 22, border: previewChoice === card.title ? "2px solid white" : "1px solid rgba(255,255,255,.5)", background: "rgba(12,35,41,.48)", color: "white", cursor: "pointer", minHeight: 0, padding: 0 }}>
               <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>{card.kind === "breathing" ? <MiniBreathingOrb reducedMotion={reduceMotion} colors={card.colors} period={card.period} /> : <SensoryCardScene title={card.title} reducedMotion={reduceMotion} />}</div>
               <div aria-hidden="true" style={{ position: "absolute", inset: "40% 0 0", background: "linear-gradient(transparent,rgba(7,24,27,.92))", pointerEvents: "none" }} />
               <span style={{ position: "absolute", bottom: 14, left: 8, right: 8, zIndex: 1, fontWeight: 600, fontSize: 14 }}>{card.title}{previewChoice === card.title ? " ✓" : ""}</span>
             </button>)}
           </div>}
+          {exploring && previewChoice && (() => {
+            const card = explorationCards.find((item) => item.title === previewChoice);
+            return card?.kind === "breathing"
+              ? <OnboardingBreathPreview key={card.title} card={card} reducedMotion={reduceMotion} onBack={() => setPreviewChoice("")} />
+              : <div style={{ flex: 1, minHeight: 0, position: "relative", borderRadius: 22, overflow: "hidden", background: "rgba(12,35,41,.48)" }}>
+                  <SensoryCardScene title={card?.title} reducedMotion={reduceMotion} />
+                  <button type="button" onClick={() => setPreviewChoice("")} style={{ ...textButton, position: "absolute", top: 12, left: 12, zIndex: 3 }}>← All experiences</button>
+                </div>;
+          })()}
           {!exploring && current.options.length > 0 && (
             <div role="group" aria-label={current.title} style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: current.options.length <= 4 ? 14 : 10, width: "100%", flex: current.options.length > 0 ? 1 : "none", minHeight: 0, gridTemplateRows: step === 2 ? "minmax(0, 1fr) auto" : current.options.length > 0 ? `repeat(${Math.ceil(current.options.length / 2)}, minmax(0, 1fr))` : undefined }}>
               {current.options.map((option) => {
@@ -127,7 +138,7 @@ export default function Onboarding() {
             {STEPS.map((_, i) => <span key={i} style={{ width: i === step ? 19 : 6, height: 6, borderRadius: 10, background: i === step ? "white" : "rgba(255,255,255,.45)", transition: "width .25s" }} />)}
           </div>
           <button onClick={next} disabled={!hasSelection} style={{ border: 0, borderRadius: 40, padding: "16px 22px", minHeight: 54, background: hasSelection ? "#f5f1e9" : "#d1d1d1", color: "#263e40", fontSize: 16, fontWeight: 600, cursor: hasSelection ? "pointer" : "not-allowed" }}>
-            {exploring ? "Continue →" : step === 0 ? "Begin your journey →" : step === 4 ? "Enter Always Pause →" : "Continue →"}
+            {exploring ? (previewChoice ? "Continue onboarding →" : "Continue →") : step === 0 ? "Begin your journey →" : step === 4 ? "Enter Always Pause →" : "Continue →"}
           </button>
           {(exploring || (step > 0 && step < 4)) && <button onClick={() => { if (exploring) { setExploring(false); setStep(3); } else setStep((value) => value + 1); }} style={{ ...textButton, alignSelf: "center", padding: 5 }}>Skip for now</button>}
           {step === 0 && <span style={{ fontSize: 12, textAlign: "center", opacity: .85 }}>Move your finger across the water</span>}
@@ -186,3 +197,40 @@ const SENSORY_CARDS = [
   { title: "Neon Paint", kind: "sensory", accent: "#ff388b" },
   { title: "Underwater", kind: "sensory", accent: "#82b7a2" },
 ];
+
+const PREVIEW_PATTERNS = {
+  "Box Breathing": { phases: [4, 4, 4, 4], labels: ["inhale", "hold", "exhale", "hold"] },
+  "4-7-8 Breathing": { phases: [4, 7, 8], labels: ["inhale", "hold", "exhale"] },
+  "Calming Breath": { phases: [4, 6], labels: ["inhale", "exhale"] },
+  "Slow Breathing": { phases: [5, 5], labels: ["inhale", "exhale"] },
+};
+
+function OnboardingBreathPreview({ card, reducedMotion, onBack }) {
+  const pattern = PREVIEW_PATTERNS[card.title];
+  const plan = buildBreathPlan(pattern.phases, pattern.labels);
+  const [elapsed, setElapsed] = useState(0);
+  const [replay, setReplay] = useState(0);
+  useEffect(() => {
+    let frame;
+    const start = performance.now();
+    const tick = (now) => {
+      const seconds = Math.min((now - start) / 1000, plan.duration);
+      setElapsed(seconds);
+      if (seconds < plan.duration) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [card.title, replay, plan.duration]);
+  const complete = elapsed >= plan.duration;
+  const phase = breathAt(plan, complete ? Math.max(0, plan.duration - .001) : elapsed);
+  return <div style={{ flex: 1, minHeight: 0, borderRadius: 24, background: "rgba(12,35,41,.65)", border: "1px solid rgba(255,255,255,.35)", padding: "16px 18px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+    <button type="button" onClick={onBack} style={{ ...textButton, alignSelf: "flex-start" }}>← All experiences</button>
+    <div style={{ fontFamily: HEADING_FONT, fontSize: 25 }}>{card.title}</div>
+    <div style={{ width: "min(52vw, 220px)", aspectRatio: "1", flexShrink: 1, minHeight: 0 }}>
+      <LagoonLiquidOrb breath={phase.breath} reducedMotion={Boolean(reducedMotion)} options={{ colorFrom: card.colors[0], colorTo: card.colors[1] }} />
+    </div>
+    <div aria-live="polite" style={{ fontSize: 22, fontWeight: 600, textTransform: "lowercase" }}>{complete ? "your moment is complete" : phase.label}</div>
+    <div style={{ fontSize: 13, opacity: .8 }}>{complete ? "Preview finished" : Math.ceil(phase.phaseRemaining) + " seconds"}</div>
+    <button type="button" onClick={() => { setElapsed(0); setReplay((n) => n + 1); }} style={{ ...textButton, padding: "10px 18px", border: "1px solid rgba(255,255,255,.5)", borderRadius: 24 }}>{complete ? "Try again" : "Restart preview"}</button>
+  </div>;
+}
