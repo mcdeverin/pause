@@ -40,10 +40,10 @@ function Preview({name}) {
 }
 
 export default function SensoryLibrary() {
-  const [category,setCategory]=useState("All");
+  const [category,setCategory]=useState("Nature");
   const [menuOpen,setMenuOpen]=useState(false);
   const navigate=useNavigate();
-  const visibleGroups = category === "All" ? groups : groups.filter(g=>g.name===category);
+  const visibleGroups = groups.filter(g=>g.name===category);
   return <main style={{minHeight:"100dvh",boxSizing:"border-box",background:"#f5f5f1",color:"#24342f",padding:"calc(env(safe-area-inset-top, 28px) + 24px) 24px calc(env(safe-area-inset-bottom, 20px) + 118px)",fontFamily:FONT}}>
     <header style={{position:"relative",display:"flex",alignItems:"center",justifyContent:"center",maxWidth:620,minHeight:44,margin:"0 auto"}}>
       <span style={{fontFamily:HEADING_FONT,fontSize:23}}>always pause.</span>
@@ -55,11 +55,15 @@ export default function SensoryLibrary() {
         </svg>
       </button>
     </header>
-    <div style={{maxWidth:900,margin:"clamp(36px,6vh,64px) auto 0"}}>
-      <div role="tablist" aria-label="Sensory categories" style={{display:"flex",gap:28,borderBottom:"1px solid #24342f22"}}>
-        {["All","Nature","Abstract"].map(name=><button key={name} role="tab" aria-selected={category===name} onClick={()=>setCategory(name)} style={{border:0,borderBottom:category===name?"2px solid #325c50":"2px solid transparent",padding:"12px 0",marginBottom:-1,background:"none",fontFamily:FONT,fontSize:15,fontWeight:category===name?650:400,color:category===name?"#24342f":"#78857f",cursor:"pointer"}}>{name}</button>)}
-      </div>
-      {visibleGroups.map(group=><section key={group.name} aria-label={group.name} style={{marginTop:28}}>
+    <div style={{maxWidth:900,margin:"clamp(36px,6vh,64px) auto 0",display:"grid",gridTemplateColumns:"clamp(94px, 19vw, 156px) minmax(0,1fr)",gap:"clamp(12px, 3vw, 36px)",alignItems:"start"}}>
+      <nav aria-label="Sensory categories" style={{position:"sticky",top:36,paddingTop:28,display:"flex",flexDirection:"column",gap:8}}>
+        {["Nature","Abstract"].map((name,index)=><button key={name} type="button" onClick={()=>setCategory(name)} aria-current={category===name?"page":undefined} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:0,padding:"9px 0",cursor:"pointer",textAlign:"left",fontFamily:FONT,color:category===name?"#24342f":"#89958e",fontSize:"clamp(12px, 2.7vw, 14px)",fontWeight:category===name?600:400,transition:"color 180ms ease"}}>
+          <span aria-hidden="true" style={{display:"block",width:category===name?26:15,height:1,flexShrink:0,background:category===name?"#426c60":"#b7c1ba",transition:"width 200ms ease"}}/>
+          <span>{name}</span>
+        </button>)}
+      </nav>
+      <div style={{minWidth:0}}>
+      {visibleGroups.map(group=><section key={group.name} aria-label={group.name} style={{marginTop:0}}>
         <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:12,marginBottom:14}}>
           <h2 style={{fontFamily:HEADING_FONT,fontSize:25,fontWeight:400,margin:0}}>{group.name}</h2>
 
@@ -76,6 +80,7 @@ export default function SensoryLibrary() {
           </Link>)}
         </div>
       </section>)}
+      </div>
     </div>
     <GlassSurface width="min(320px, calc(100vw - 48px))" height={76} borderRadius={38} distortionScale={-180} displace={0.5} backgroundOpacity={0.1} blur={11} style={{position:"fixed",bottom:"calc(env(safe-area-inset-bottom, 12px) + 18px)",left:"50%",transform:"translateX(-50%)",zIndex:10}}>
       <nav aria-label="Primary navigation" style={{width:"100%",display:"flex",alignItems:"center",padding:"0 18px",boxSizing:"border-box"}}>
