@@ -6,6 +6,7 @@ import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
 import PrismaticWaterScene from "../components/visuals/PrismaticWaterScene";
 import OrbitScene from "../components/visuals/OrbitScene";
 import LivingCanvasScene from "../components/visuals/LivingCanvasScene";
+import DitherVeil from "../components/visuals/DitherVeil";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import NavigationSheet from "../components/NavigationSheet";
@@ -14,7 +15,7 @@ import { BACKDROP_PHOTOS } from "../lib/crystalStudio";
 
 const groups = [
   {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"],["Liquid Surface","/sensory/liquid-surface"],["Rain","/sensory/rain"]]},
-  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"],["Firefly","/sensory/firefly"]]}
+  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"]]}
 ];
 
 function Preview({name}) {
@@ -34,6 +35,7 @@ function Preview({name}) {
     "Liquid Surface": <LiquidSurfaceScene preview photoUrl={BACKDROP_PHOTOS[0]?.url} />,
     "Prismatic Water": <PrismaticWaterScene />,
     "Firefly": <LivingCanvasScene mode="light" paused={false} />,
+    "Dither Veil": <DitherVeil fit="contain" pattern="floyd" pixelSize={2} levels={2} palette="duotone" inkColor="#120f17" paperColor="#f4f1ea" contrast={1.15} brightness={0} revealRadius={200} softness={0.6} linger={1} rimColor="#a78bfa" rim={0} reverse={false} wander={true} clickBurst style={{width:"100%",height:"100%"}} />,
     "Rain": <video src="/videos/16312401-hd_1920_1080_60fps.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}} />
   };
   return <div ref={ref} style={{width:"100%",height:"100%",background:name==="Underwater"?"linear-gradient(155deg,#194d78,#092744 70%,#071b35)":"#d7e8e9",pointerEvents:"none"}}>
