@@ -1,3 +1,4 @@
+import GlassSurface from "../components/GlassSurface";
 import { useState, useEffect, useCallback } from "react";
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -237,11 +238,12 @@ export default function MainScreen({
         </button>
       </div>
 
-      {/* Quiet editorial navigation: no beveled or raised pill. */}
-      <nav aria-label="Primary navigation" style={{position:"relative",zIndex:3,alignSelf:"center",width:"min(330px,calc(100vw - 48px))",display:"flex",alignItems:"center",padding:"7px 14px",borderRadius:19,background:"rgba(255,255,255,.19)",backdropFilter:"blur(18px)",WebkitBackdropFilter:"blur(18px)",border:"1px solid rgba(255,255,255,.22)"}}>
-        <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0 10px",borderBottom:"2px solid currentColor",color:ink.text,fontFamily:FONT,fontSize:14,fontWeight:650,letterSpacing:".01em"}}>Breathing</span>
-        <Link to="/sensory" style={{flex:1,textAlign:"center",padding:"12px 0 10px",borderBottom:"2px solid transparent",color:ink.text,textDecoration:"none",fontFamily:FONT,fontSize:14,fontWeight:450,letterSpacing:".01em",opacity:.72}}>Sensory</Link>
-      </nav>
+      <GlassSurface width="min(320px, calc(100vw - 48px))" height={76} borderRadius={38} distortionScale={-180} displace={0.5} backgroundOpacity={0.1} blur={11} style={{alignSelf:"center",zIndex:3,flexShrink:0}}>
+        <nav aria-label="Primary navigation" style={{width:"100%",display:"flex",alignItems:"center",padding:"0 18px",boxSizing:"border-box"}}>
+          <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0",borderBottom:"2px solid currentColor",color:ink.text,fontFamily:FONT,fontSize:14,fontWeight:650}}>Breathing</span>
+          <Link to="/sensory" style={{flex:1,textAlign:"center",padding:"12px 0",borderBottom:"2px solid transparent",color:ink.text,textDecoration:"none",fontFamily:FONT,fontSize:14,opacity:.72}}>Sensory</Link>
+        </nav>
+      </GlassSurface>
       <AnimatePresence>
         {menuOpen && (
           <NavigationSheet
