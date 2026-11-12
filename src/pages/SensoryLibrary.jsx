@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import NavigationSheet from "../components/NavigationSheet";
 import { FONT, HEADING_FONT } from "../lib/design";
+import { BACKDROP_PHOTOS } from "../lib/crystalStudio";
 
 const groups = [
   {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"],["Liquid Surface","/sensory/liquid-surface"]]},
@@ -29,7 +30,7 @@ function Preview({name}) {
     "Cloud": <CloudScene preview />,
     "Liquid Chrome": <LiquidChromeScene />,
     "Popcorn": <OrbitScene />,
-    "Liquid Surface": <LiquidSurfaceScene preview />,
+    "Liquid Surface": <LiquidSurfaceScene preview photoUrl={BACKDROP_PHOTOS[0]?.url} />,
     "Prismatic Water": <PrismaticWaterScene />
   };
   return <div ref={ref} style={{width:"100%",height:"100%",background:name==="Underwater"?"linear-gradient(155deg,#194d78,#092744 70%,#071b35)":"#d7e8e9",pointerEvents:"none"}}>
