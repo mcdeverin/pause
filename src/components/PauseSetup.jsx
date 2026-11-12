@@ -12,15 +12,15 @@ export default function PauseSetup({ theme, backgroundSettings, photo, onBack, o
   const selected = MOMENTS.find((entry) => entry.id === moment);
   return (
     <motion.main className="screen-fit" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      style={{ position: "relative", isolation: "isolate", display: "flex", flexDirection: "column", padding: "calc(env(safe-area-inset-top, 44px) + 12px) 24px calc(env(safe-area-inset-bottom, 20px) + 24px)", color: "#fff", boxSizing: "border-box" }}>
+      style={{ position: "relative", isolation: "isolate", display: "flex", flexDirection: "column", overflow: "hidden", padding: "calc(env(safe-area-inset-top, 44px) + 12px) 24px calc(env(safe-area-inset-bottom, 20px) + 16px)", color: "#fff", boxSizing: "border-box" }}>
       <BackgroundLayer settings={backgroundSettings} theme={theme} photo={photo} />
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(8,27,32,.58), rgba(8,27,32,.20) 45%, rgba(8,27,32,.74))", pointerEvents: "none" }} />
-      <header style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <header style={{ position: "relative", flexShrink: 0, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <button type="button" onClick={onBack} aria-label="Back to home" style={backButton}><ArrowLeft size={22} /></button>
         <span style={{ fontFamily: "Georgia, serif", fontSize: 22 }}>always pause.</span>
         <span style={{ width: 44 }} />
       </header>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 18, maxWidth: 520, width: "100%", margin: "0 auto", position: "relative" }}>
+      <div style={{ flex: "1 1 auto", minHeight: 0, overflowY: "auto", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch", display: "flex", flexDirection: "column", justifyContent: "flex-start", gap: 18, maxWidth: 520, width: "100%", margin: "0 auto", padding: "20px 0 24px", boxSizing: "border-box", position: "relative" }}>
         <div style={{ textAlign: "center", marginBottom: 8 }}>
           <h1 style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 400, fontSize: "clamp(36px, 8vw, 52px)", lineHeight: 1.1, margin: 0 }}>What do you need right now?</h1>
           <p style={{ fontSize: 15, opacity: .92, marginTop: 12 }}>A moment for whatever you're feeling.</p>
@@ -53,7 +53,7 @@ export default function PauseSetup({ theme, backgroundSettings, photo, onBack, o
         </div>
         {!voiceAvailable && <p style={{ textAlign: "center", fontSize: 12, margin: 0 }}>Voice cues aren't available on this device yet.</p>}
       </div>
-      <div style={{ position: "relative", width: "100%", maxWidth: 520, margin: "0 auto" }}>
+      <div style={{ position: "relative", flexShrink: 0, width: "100%", maxWidth: 520, margin: "12px auto 0" }}>
         <button type="button" disabled={!selected || busy} onClick={() => onBegin(selected.id, voice)}
           style={{ width: "100%", border: 0, borderRadius: 999, minHeight: 56, fontSize: 16, fontWeight: 600, background: selected && !busy ? "#f6f1e9" : "#bdbdbd", color: "#213d40", cursor: selected && !busy ? "pointer" : "not-allowed" }}>
           {busy ? "Preparing your moment…" : "Begin this moment →"}
