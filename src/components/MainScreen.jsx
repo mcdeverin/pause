@@ -3,7 +3,7 @@ import { Menu } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import NavigationSheet from "./NavigationSheet";
-import { FONT, isPhotoBackground } from "../lib/design";
+import { FONT, HEADING_FONT, isPhotoBackground } from "../lib/design";
 import { getCanvasInk } from "../lib/canvasInk";
 import BackgroundLayer from "./BackgroundLayer";
 import { usePhotoLightness } from "../hooks/usePhotoLightness";
