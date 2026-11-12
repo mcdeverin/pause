@@ -1,6 +1,4 @@
-import GlassSurface from "../components/GlassSurface";
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import FullScreenFill from "./visuals/FullScreenFill";
@@ -168,7 +166,7 @@ export default function MainScreen({
             lineHeight: 1.25,
           }}
         >
-          Take a moment.
+          Find your moment of calm.
         </p>
         <p
           style={{
@@ -182,7 +180,7 @@ export default function MainScreen({
             lineHeight: 1.45,
           }}
         >
-          Whenever you need one.
+          A little space, just for you.
         </p>
       </div>
 
@@ -233,27 +231,23 @@ export default function MainScreen({
           style={{
             minHeight: 44,
             padding: "10px 26px",
-            background: "none",
+            background: photoBackground ? "rgba(255,255,255,.9)" : ink.text,
             border: "none",
+            borderRadius: 999,
             cursor: "pointer",
             fontFamily: FONT,
             fontSize: "15px",
             fontWeight: 500,
             letterSpacing: "0.015em",
-            color: ink.text,
-            textShadow: ink.shadow,
+            color: photoBackground ? "#24393a" : (theme === "night" ? "#20232d" : "#fff"),
+            textShadow: "none",
+            minWidth: 210,
           }}
         >
-          Tap to pause
+          Begin a moment →
         </button>
       </div>
 
-      <GlassSurface width="min(320px, calc(100vw - 48px))" height={76} borderRadius={38} distortionScale={-180} displace={0.5} backgroundOpacity={0.1} blur={11} style={{alignSelf:"center",zIndex:3,flexShrink:0}}>
-        <nav aria-label="Primary navigation" style={{width:"100%",display:"flex",alignItems:"center",padding:"0 18px",boxSizing:"border-box"}}>
-          <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0",color:ink.text,fontFamily:FONT,fontSize:14,fontWeight:650}}>Breathing</span>
-          <Link to="/sensory" style={{flex:1,textAlign:"center",padding:"12px 0",color:ink.text,textDecoration:"none",fontFamily:FONT,fontSize:14,opacity:.72}}>Sensory</Link>
-        </nav>
-      </GlassSurface>
       <AnimatePresence>
         {menuOpen && (
           <NavigationSheet
