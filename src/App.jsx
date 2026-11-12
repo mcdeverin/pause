@@ -18,6 +18,7 @@ const Popcorn = lazy(() => import('./pages/Popcorn.jsx'));
 const LiquidSurface = lazy(() => import('./pages/LiquidSurface.jsx'));
 const PrismaticWater = lazy(() => import('./pages/PrismaticWater.jsx'));
 const Underwater = lazy(() => import('./pages/Underwater.jsx'));
+const SensoryLibrary = lazy(() => import('./pages/SensoryLibrary.jsx'));
 const SensoryStudio = lazy(() => import('./pages/SensoryStudio.jsx'));
 const ShapesStudio = lazy(() => import('./pages/ShapesStudio.jsx'));
 const LiquidOrbStudio = lazy(() => import('./pages/LiquidOrbStudio.jsx'));
@@ -73,6 +74,7 @@ const AuthenticatedApp = () => {
       <Route path="/sensory/cloud" element={<Suspense fallback={<div className="p-8">Loading Cloud…</div>}><Cloud /></Suspense>} />
       <Route path="/sensory/popcorn" element={<Suspense fallback={<div className="p-8">Loading Popcorn…</div>}><Popcorn /></Suspense>} />
       <Route path="/sensory/underwater" element={<Suspense fallback={<div className="p-8">Loading Underwater…</div>}><Underwater /></Suspense>} />
+      <Route path="/sensory" element={<Suspense fallback={<div className="p-8">Loading Sensory…</div>}><SensoryLibrary /></Suspense>} />
       <Route path="/sensory-studio" element={<Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense>} />
       <Route path="/orb-studio" element={<Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense>} />
       <Route path="/liquid-orb-studio" element={<Suspense fallback={<div className="p-8">Loading Liquid Orb Studio…</div>}><LiquidOrbStudio /></Suspense>} />
