@@ -240,8 +240,8 @@ export default function MainScreen({
 
       <GlassSurface width="min(320px, calc(100vw - 48px))" height={76} borderRadius={38} distortionScale={-180} displace={0.5} backgroundOpacity={0.1} blur={11} style={{alignSelf:"center",zIndex:3,flexShrink:0}}>
         <nav aria-label="Primary navigation" style={{width:"100%",display:"flex",alignItems:"center",padding:"0 18px",boxSizing:"border-box"}}>
-          <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0",borderBottom:"2px solid currentColor",color:ink.text,fontFamily:FONT,fontSize:14,fontWeight:650}}>Breathing</span>
-          <Link to="/sensory" style={{flex:1,textAlign:"center",padding:"12px 0",borderBottom:"2px solid transparent",color:ink.text,textDecoration:"none",fontFamily:FONT,fontSize:14,opacity:.72}}>Sensory</Link>
+          <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0",color:ink.text,fontFamily:FONT,fontSize:14,fontWeight:650}}>Breathing</span>
+          <Link to="/sensory" style={{flex:1,textAlign:"center",padding:"12px 0",color:ink.text,textDecoration:"none",fontFamily:FONT,fontSize:14,opacity:.72}}>Sensory</Link>
         </nav>
       </GlassSurface>
       <AnimatePresence>
