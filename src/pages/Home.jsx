@@ -317,7 +317,7 @@ export default function Home() {
             setSessionVoice(preferences.voiceGuide ? "full" : "none");
             beginSession(getRandomTechnique(eligible), momentId);
           }} onExplore={() => setMode("choose")}
-            onMoments={() => setShowMoments(true)} onAbout={() => setShowAbout(true)} onPlus={() => openPaywall({source:"menu"})} />
+            onPersonalize={() => setShowPersonalize(true)} onMoments={() => setShowMoments(true)} onAbout={() => setShowAbout(true)} onPlus={() => openPaywall({source:"menu"})} />
         )}
         {mode === "choose" && <MomentChooser key="choose" initialMoment={getSuggestedMoment()} initialGuided={preferences.voiceGuide} onBack={() => setMode("idle")} onBegin={async (momentId,guided) => {
           const available = await ensureTechniques();
@@ -349,6 +349,24 @@ export default function Home() {
             showInstructions={preferences.showInstructions}
             voiceGuide={sessionVoice !== "none"}
             narrationMode={sessionVoice}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Personalize: retain all existing controls, previews and save/upgrade flows. */}
+      <AnimatePresence>
+        {showPersonalize && (
+          <PersonalizePanel
+            key="personalize"
+            theme={theme}
+            prefs={preferences}
+            photos={photos}
+            onSave={commitPreferences}
+            onAddPhoto={handlePhotoAdded}
+            onRemovePhoto={handlePhotoRemoved}
+            onClose={() => setShowPersonalize(false)}
+            isPro={hasFullAccess}
+            onRequestUpgrade={requestUpgrade}
           />
         )}
       </AnimatePresence>
