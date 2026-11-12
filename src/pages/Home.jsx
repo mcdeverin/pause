@@ -327,6 +327,7 @@ export default function Home() {
           <BreathingScreen
             key="breathing"
             technique={technique}
+            momentId={sessionMomentRef.current || "calm"}
             onDone={finishSession}
             theme={theme}
             hapticsEnabled={hapticsEnabled}
