@@ -401,7 +401,7 @@ export default function BreathingScreen({
 
         {/* The ring's own arc already fills with the breath, so it needs no
             second progress bar underneath. */}
-        {visual !== "ring" && visual !== "lagoon" && (
+        {visual !== "ring" && visual !== "lagoon" && visual !== "screenFill" && (
           <div
             style={{
               width: "min(180px, 60vw)",
