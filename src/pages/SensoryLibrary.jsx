@@ -48,9 +48,6 @@ export default function SensoryLibrary() {
       <span style={{width:38}}/>
     </header>
     <div style={{maxWidth:900,margin:"clamp(36px,6vh,64px) auto 0"}}>
-      <p style={{fontSize:11,letterSpacing:".19em",fontWeight:700,opacity:.55}}>SENSORY</p>
-      <h1 style={{fontFamily:HEADING_FONT,fontWeight:400,fontSize:"clamp(38px,6vw,56px)",letterSpacing:"-.04em",margin:"8px 0 6px"}}>Find your stillness.</h1>
-      <p style={{opacity:.65,fontSize:15,lineHeight:1.6,marginBottom:26}}>Explore a moment through movement, light, and sound.</p>
       <div role="tablist" aria-label="Sensory categories" style={{display:"flex",gap:28,borderBottom:"1px solid #24342f22"}}>
         {["All","Nature","Abstract"].map(name=><button key={name} role="tab" aria-selected={category===name} onClick={()=>setCategory(name)} style={{border:0,borderBottom:category===name?"2px solid #325c50":"2px solid transparent",padding:"12px 0",marginBottom:-1,background:"none",fontFamily:FONT,fontSize:15,fontWeight:category===name?650:400,color:category===name?"#24342f":"#78857f",cursor:"pointer"}}>{name}</button>)}
       </div>
