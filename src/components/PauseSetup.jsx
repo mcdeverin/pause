@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Leaf, Crosshair, Moon, Sun, ArrowLeft } from "lucide-react";
+import { Leaf, Crosshair, Moon, Sun, Zap, ArrowLeft } from "lucide-react";
 import BackgroundLayer from "./BackgroundLayer";
 import { MOMENTS } from "../lib/moments";
 
-const ICONS = { calm: Leaf, focus: Crosshair, wind_down: Moon, reset: Sun };
+const ICONS = { calm: Leaf, focus: Crosshair, wind_down: Moon, reset: Sun, energy: Zap };
 
 export default function PauseSetup({ theme, backgroundSettings, photo, onBack, onBegin, busy = false, voiceAvailable = true, defaultVoice = false }) {
   const [moment, setMoment] = useState(null);
