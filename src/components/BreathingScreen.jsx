@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Info } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import SessionTimerPill from "./SessionTimerPill";
@@ -264,24 +263,7 @@ export default function BreathingScreen({
       >
         <div style={{ minWidth: 84 }}>{showTimer && <SessionTimerPill seconds={timeRemaining} theme={theme} />}</div>
 
-        <button
-          type="button"
-          onClick={() => setShowInfo((value) => !value)}
-          aria-label="About this technique"
-          style={{
-            width: 44,
-            height: 44,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: ink.tertiary,
-          }}
-        >
-          <Info size={17} strokeWidth={2.2} />
-        </button>
+
       </div>
 
       {/* Technique name */}
