@@ -46,8 +46,8 @@ export default function SensoryLibrary() {
     </div>
     <GlassSurface width="min(320px, calc(100vw - 48px))" height={76} borderRadius={38} distortionScale={-180} displace={0.5} backgroundOpacity={0.1} blur={11} style={{position:"fixed",bottom:"calc(env(safe-area-inset-bottom, 12px) + 18px)",left:"50%",transform:"translateX(-50%)",zIndex:10}}>
       <nav aria-label="Primary navigation" style={{width:"100%",display:"flex",alignItems:"center",padding:"0 18px",boxSizing:"border-box"}}>
-        <Link to="/" style={{flex:1,textAlign:"center",padding:"12px 0",borderBottom:"2px solid transparent",color:"#51665e",textDecoration:"none",fontSize:14}}>Breathing</Link>
-        <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0",borderBottom:"2px solid #325c50",fontSize:14,fontWeight:650}}>Sensory</span>
+        <Link to="/" style={{flex:1,textAlign:"center",padding:"12px 0",color:"#51665e",textDecoration:"none",fontSize:14}}>Breathing</Link>
+        <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0",fontSize:14,fontWeight:650}}>Sensory</span>
       </nav>
     </GlassSurface>
   </main>;
