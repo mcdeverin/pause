@@ -1,3 +1,4 @@
+import GlassSurface from "../components/GlassSurface";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, Menu } from "lucide-react";
@@ -27,9 +28,11 @@ export default function SensoryLibrary() {
       <p style={{margin:"26px 0 18px",color:"#72817a",fontSize:14}}>{group.description}</p>
       <div style={{display:"grid",gap:12}}>{group.items.map(([name,path],i)=><Link key={path} to={path} style={{textDecoration:"none",color:"inherit",display:"flex",alignItems:"center",justifyContent:"space-between",border:"1px solid #24342f19",borderRadius:20,background:"#ffffffad",padding:"22px 22px",minHeight:65,boxSizing:"border-box"}}><span style={{fontFamily:HEADING_FONT,fontSize:25}}>{name}</span><span style={{fontSize:12,opacity:.5}}>{String(i+1).padStart(2,"0")} ↗</span></Link>)}</div>
     </div>
-    <nav aria-label="Primary navigation" style={{position:"fixed",bottom:"calc(env(safe-area-inset-bottom, 12px) + 18px)",left:"50%",transform:"translateX(-50%)",width:"min(330px,calc(100vw - 48px))",display:"flex",alignItems:"center",padding:"7px 14px",borderRadius:19,background:"rgba(255,255,255,.28)",backdropFilter:"blur(18px)",WebkitBackdropFilter:"blur(18px)",border:"1px solid rgba(255,255,255,.35)",zIndex:10,boxSizing:"border-box"}}>
-      <Link to="/" style={{flex:1,textAlign:"center",padding:"12px 0 10px",borderBottom:"2px solid transparent",color:"#51665e",textDecoration:"none",fontSize:14,fontWeight:450,letterSpacing:".01em"}}>Breathing</Link>
-      <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0 10px",borderBottom:"2px solid #325c50",fontSize:14,fontWeight:650,letterSpacing:".01em"}}>Sensory</span>
-    </nav>
+    <GlassSurface width="min(320px, calc(100vw - 48px))" height={76} borderRadius={38} distortionScale={-180} displace={0.5} backgroundOpacity={0.1} blur={11} style={{position:"fixed",bottom:"calc(env(safe-area-inset-bottom, 12px) + 18px)",left:"50%",transform:"translateX(-50%)",zIndex:10}}>
+      <nav aria-label="Primary navigation" style={{width:"100%",display:"flex",alignItems:"center",padding:"0 18px",boxSizing:"border-box"}}>
+        <Link to="/" style={{flex:1,textAlign:"center",padding:"12px 0",borderBottom:"2px solid transparent",color:"#51665e",textDecoration:"none",fontSize:14}}>Breathing</Link>
+        <span aria-current="page" style={{flex:1,textAlign:"center",padding:"12px 0",borderBottom:"2px solid #325c50",fontSize:14,fontWeight:650}}>Sensory</span>
+      </nav>
+    </GlassSurface>
   </main>;
 }
