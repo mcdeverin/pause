@@ -12,6 +12,7 @@ import NeonNatureScene from "../components/visuals/NeonNatureScene";
 import Balatro from "../components/visuals/Balatro";
 import Antigravity from "../components/visuals/Antigravity";
 import Prism from "../components/visuals/Prism";
+import Iridescence from "../components/visuals/Iridescence";
 import Galaxy from "../components/visuals/Galaxy";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
@@ -21,7 +22,7 @@ import { BACKDROP_PHOTOS } from "../lib/crystalStudio";
 
 const groups = [
   {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"],["Liquid Surface","/sensory/liquid-surface"],["Rain","/sensory/rain"],["Pixel Swap Sky","/sensory/pixel-swap-sky"],["Galaxy","/sensory/galaxy"]]},
-  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"],["Neon Painting","/sensory/neon-painting"],["Prismatic Balatro","/sensory/prismatic-balatro"],["Anti Gravity","/sensory/anti-gravity"],["Prism","/sensory/prism"]]}
+  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Prismatic Water","/sensory/prismatic-water"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"],["Neon Painting","/sensory/neon-painting"],["Prismatic Balatro","/sensory/prismatic-balatro"],["Anti Gravity","/sensory/anti-gravity"],["Prism","/sensory/prism"],["Iridescence","/sensory/iridescence"]]}
 ];
 
 function Preview({name}) {
@@ -35,6 +36,7 @@ function Preview({name}) {
     return ()=>observer.disconnect();
   },[]);
   const scenes={
+    "Iridescence": <Iridescence color="#8099cc" hueShift={0} saturation={1} brightness={1.5} contrast={1} speed={1} scale={1} detail={8} warp={1} rotation={0} mouseReact amplitude={0.1} stir={0.5} sheen={0.3} clickSwirl grain={0} fade={0} />,
     "Cloud": <CloudScene preview />,
     "Galaxy": <Galaxy density={1} glowIntensity={0.3} flareIntensity={1} starSpeed={0.5} mouseRepulsion clickWarp starColors={[]} hueShift={140} saturation={0} starSize={1} twinkleIntensity={0.3} speed={1} rotationSpeed={0.1} layers={4} direction="forward" repulsionStrength={2} mouseInteraction intro lightMode={false} transparent={false} />,
     "Pixel Swap Sky": <PixelSwapSky />,
