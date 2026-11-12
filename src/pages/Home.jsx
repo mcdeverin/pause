@@ -340,7 +340,8 @@ export default function Home() {
           <PauseSetup key="pause-setup" theme={theme} backgroundSettings={preferences} photo={photo}
             onBack={() => setMode("idle")} onBegin={startMoment} busy={preparingPause}
             voiceAvailable={typeof window !== "undefined" && typeof window.Audio !== "undefined"}
-            defaultVoice={preferences.voiceGuide ? "full" : "none"} />
+            defaultVoice={preferences.voiceGuide ? "full" : "none"}
+            onVoiceChange={(value) => updatePreference("voiceGuide", value === "full")} />
         )}
         {mode === "breathing" && technique && (
           <BreathingScreen
