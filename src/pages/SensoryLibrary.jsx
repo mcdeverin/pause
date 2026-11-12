@@ -34,7 +34,7 @@ function Preview({name}) {
     "Liquid Surface": <LiquidSurfaceScene preview photoUrl={BACKDROP_PHOTOS[0]?.url} />,
     "Prismatic Water": <PrismaticWaterScene />,
     "Firefly": <LivingCanvasScene mode="light" paused={false} />,
-    "Rain": <video src="/videos/rain-pond.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}} />
+    "Rain": <video src="/videos/16312401-hd_1920_1080_60fps.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}} />
   };
   return <div ref={ref} style={{width:"100%",height:"100%",background:name==="Underwater"?"linear-gradient(155deg,#194d78,#092744 70%,#071b35)":"#d7e8e9",pointerEvents:"none"}}>
     {visible && (name==="Underwater"
