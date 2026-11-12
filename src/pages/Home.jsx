@@ -201,12 +201,9 @@ export default function Home() {
       (t) => moment.categories.includes(t.category) && hasUsablePhases(t)
     );
     const playable = hasFullAccess ? inMoment : inMoment.filter(isFreeTechnique);
-    const pool =
-      playable.length > 0
-        ? playable
-        : available.filter((t) => isFreeTechnique(t) && hasUsablePhases(t));
+    const pool = playable;
     if (pool.length === 0) {
-      flashNotice("No breathing exercise fits that one yet.");
+      flashNotice(hasFullAccess ? "No breathing exercise fits that choice yet." : "No free breathing exercise is available for that choice yet.");
       setPreparingPause(false);
       return;
     }
