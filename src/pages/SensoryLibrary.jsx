@@ -1,7 +1,7 @@
 import GlassSurface from "../components/GlassSurface";
 import { useState, useEffect, useRef } from "react";
 import CloudScene from "../components/visuals/CloudScene";
-import LiquidChromeScene from "../components/visuals/LiquidChromeScene";
+import MaterialFlowScene from "../components/visuals/MaterialFlowScene";
 import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
 import PrismaticWaterScene from "../components/visuals/PrismaticWaterScene";
 import OrbitScene from "../components/visuals/OrbitScene";
@@ -29,7 +29,7 @@ function Preview({name}) {
   },[]);
   const scenes={
     "Cloud": <CloudScene preview />,
-    "Liquid Chrome": <LiquidChromeScene />,
+    "Liquid Chrome": <MaterialFlowScene mode="chrome" paused={false} />,
     "Popcorn": <OrbitScene />,
     "Liquid Surface": <LiquidSurfaceScene preview photoUrl={BACKDROP_PHOTOS[0]?.url} />,
     "Prismatic Water": <PrismaticWaterScene />,
