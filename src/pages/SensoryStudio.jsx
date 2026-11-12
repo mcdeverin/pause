@@ -46,7 +46,14 @@ export default function SensoryStudio(){
  <div style={{display:expanded?"none":"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
  <label htmlFor="sensory-scene-select" style={{fontSize:13,fontWeight:700,color:"#625c70"}}>Experience</label>
  <select id="sensory-scene-select" value={scene} onChange={e=>{setScene(e.target.value);setPaused(false)}} style={{width:"min(100%,340px)",padding:"12px 16px",borderRadius:14,border:"1px solid #d6d0dc",background:"#fff",color:"#24252a",fontSize:15,cursor:"pointer"}}>
- {[["rain","Rain"],["orbit","Popcorn"],["liquid","Liquid Surface"],["prismatic","Prismatic Water"],["neon","Neon Paint"],["neon-reveal","Neon Reveal Slider"],["smoke","Fireworks"],["cloud","Cloud"],["underwater","Underwater"],["underwater2","Koi Pond"],["light","Firefly"],["lava","Lava Lamp"],["chromatic","Chromatic"],["chrome","Liquid Chrome"],["crystalized","Crystalized Ball"],["morph","Morph Slider"],["dither","Dither Veil"],["pixel","PixelSwap · Sky"],["balatro-prismatic","Prismatic Balatro"],["particles","Particles"],["glow-cursor","Glow Cursor"],["halftone-reveal","Halftone Reveal"],["soft-aurora","Soft Aurora"],["antigravity","Antigravity"],["ghost-cursor","Ghost Cursor"],["prism","Prism"],["galaxy","Galaxy"],["iridescence","Iridescence"],["grid-distortion","Grid Distortion"],["pixel-transition","Pixel Transition"]].map(([id,label])=><option key={id} value={id}>{label}</option>)}
+ {[
+  ["Nature",[
+   ["rain","Rainfall"],["underwater2","Koi Pond"],["underwater","Underwater"],["cloud","Cloud"],["neon","Neon Paint"],["neon-reveal","Neon Reveal Slider"]
+  ]],
+  ["Abstract",[
+   ["orbit","Popcorn"],["liquid","Liquid Surface"],["prismatic","Prismatic Water"],["smoke","Fireworks"],["light","Firefly"],["lava","Lava Lamp"],["chromatic","Chromatic"],["chrome","Liquid Chrome"],["crystalized","Crystalized Ball"],["morph","Morph Slider"],["dither","Dither Veil"],["pixel","PixelSwap · Sky"],["balatro-prismatic","Prismatic Balatro"],["particles","Particles"],["glow-cursor","Glow Cursor"],["halftone-reveal","Halftone Reveal"],["soft-aurora","Soft Aurora"],["antigravity","Antigravity"],["ghost-cursor","Ghost Cursor"],["prism","Prism"],["galaxy","Galaxy"],["iridescence","Iridescence"],["grid-distortion","Grid Distortion"],["pixel-transition","Pixel Transition"]
+  ]]
+ ].map(([group,experiences])=><optgroup key={group} label={group}>{experiences.map(([id,label])=><option key={id} value={id}>{label}</option>)}</optgroup>)}
  </select>
  </div>
  <section style={{background:"#fff",borderRadius:expanded?0:22,padding:expanded?0:12,overflow:"hidden"}}>
