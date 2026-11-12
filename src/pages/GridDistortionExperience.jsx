@@ -1,0 +1,3 @@
+import GridDistortion from "../components/visuals/GridDistortion";
+import SensoryBackButton from "../components/visuals/SensoryBackButton";
+export default function GridDistortionExperience(){return <main style={{position:"relative",width:"100%",height:"100dvh",overflow:"hidden",background:"#111827"}}><GridDistortion imageSrc="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=85" grid={15} radius={0.18} strength={0.15} relaxation={0.96} mode="drag" softness={0} chroma={0} idle={0.3} clickRipple intro/><SensoryBackButton/></main>}
