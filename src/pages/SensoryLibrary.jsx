@@ -23,7 +23,7 @@ import { BACKDROP_PHOTOS } from "../lib/crystalStudio";
 
 const groups = [
   {name:"Nature",description:"Quiet places, natural movement.",items:[["Cloud","/sensory/cloud"],["Underwater","/sensory/underwater"],["Liquid Surface","/sensory/liquid-surface"],["Rain","/sensory/rain"],["Pixel Swap Sky","/sensory/pixel-swap-sky"],["Galaxy","/sensory/galaxy"],["Grid Distortion","/sensory/grid-distortion"]]},
-  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Iridescence","/sensory/iridescence"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"],["Neon Painting","/sensory/neon-painting"],["Prismatic Balatro","/sensory/prismatic-balatro"],["Anti Gravity","/sensory/anti-gravity"],["Prism","/sensory/prism"]]}
+  {name:"Abstract",description:"Light, texture, and fluid motion.",items:[["Liquid Chrome","/sensory/liquid-chrome"],["Popcorn","/sensory/popcorn"],["Iridescence","/sensory/iridescence"],["Firefly","/sensory/firefly"],["Dither Veil","/sensory/dither-veil"],["Neon Painting","/sensory/neon-painting"],["Prismatic Swirl","/sensory/prismatic-swirl"],["Anti Gravity","/sensory/anti-gravity"],["Prism","/sensory/prism"]]}
 ];
 
 function Preview({name}) {
@@ -45,7 +45,7 @@ function Preview({name}) {
     "Neon Painting": <NeonNatureScene preview backgroundMode="dark" />,
     "Prism": <Prism animationType="rotate" timeScale={0.5} height={3.5} baseWidth={5.5} scale={1.65} hueShift={0} colorFrequency={1} glow={1} colors={[]} saturation={1.5} noise={0} interactive hoverStrength={2} inertia={0.05} intro resolution={0.5} lightMode={false} />,
     "Anti Gravity": <Antigravity colors={["#5227FF","#FF9FFC","#B497CF"]} count={1500} magnetRadius={9} ringRadius={7} particleSize={0.9} autoAnimate colorMode="conic" colorSpeed={0.05} particleShape="capsule" particleVariance={1} fieldStrength={10} waveAmplitude={1} waveCount={3} waveSpeed={0.4} rotationSpeed={0} pulseSpeed={3} depthFactor={1} ambient={0.25} lerpSpeed={0.05} interactive clickBurst intro lightMode={false} />,
-    "Prismatic Balatro": <Balatro color1="#FF873B" color2="#F25BD0" color3="#55D9E8" swirl={0.25} pixelSize={1.5} mouseInteraction contrast={3.5} lighting={0.4} speed={1} rotationSpeed={0} scale={1} detail={5} crt={0} mouseStrength={1} clickSwirl intro lightMode={false} />,
+    "Prismatic Swirl": <Balatro color1="#FF873B" color2="#F25BD0" color3="#55D9E8" swirl={0.25} pixelSize={1.5} mouseInteraction contrast={3.5} lighting={0.4} speed={1} rotationSpeed={0} scale={1} detail={5} crt={0} mouseStrength={1} clickSwirl intro lightMode={false} />,
     "Liquid Chrome": <MaterialFlowScene mode="chrome" paused={false} />,
     "Popcorn": <OrbitScene />,
     "Liquid Surface": <LiquidSurfaceScene preview photoUrl={BACKDROP_PHOTOS[0]?.url} />,

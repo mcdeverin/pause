@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { FONT, HEADING_FONT, PAUSE, getTimeCanvas, getMomentStyle } from "../lib/design";
+import { personalizeMoment } from "../lib/onboardingProfile";
 
 export default function AdaptiveHome({ onStart, onExplore, onMoments, onAbout, onPlus, onPersonalize }) {
  const [time] = useState(() => getTimeCanvas());
+ // Time of day sets the default; onboarding answers nudge it toward what they need.
+ const [momentId] = useState(() => personalizeMoment(time.key, time.moment));
  const [menu, setMenu] = useState(false);
- const moment = getMomentStyle(time.moment);
+ const moment = getMomentStyle(momentId);
  const night = time.key === "night";
  const glass = night ? PAUSE.nightGlass : PAUSE.glass;
  const secondary = night ? time.secondary : PAUSE.ink2;
@@ -28,7 +31,7 @@ export default function AdaptiveHome({ onStart, onExplore, onMoments, onAbout, o
      <div aria-hidden="true" style={{width:"min(220px,60vw)",aspectRatio:"1",borderRadius:"50%",background:moment.orb,boxShadow:"0 30px 80px -10px "+moment.ink+"66"}}/>
    </div>
    <div style={{display:"grid",gap:4,maxWidth:440,width:"100%",margin:"0 auto"}}>
-     <button onClick={()=>onStart(time.moment)} style={{height:56,borderRadius:999,border:0,background:night?moment.gradient[0]:moment.ink,color:night?PAUSE.ink:"#fff",fontFamily:FONT,fontSize:16,fontWeight:600,cursor:"pointer"}}>Pause for {time.moment==="wind_down"?"wind down":time.moment} · {time.minutes} min</button>
+     <button onClick={()=>onStart(momentId)} style={{height:56,borderRadius:999,border:0,background:night?moment.gradient[0]:moment.ink,color:night?PAUSE.ink:"#fff",fontFamily:FONT,fontSize:16,fontWeight:600,cursor:"pointer"}}>Pause for {momentId==="wind_down"?"wind down":momentId}</button>
      <button onClick={onExplore} style={{height:44,border:0,background:"transparent",color:secondary,fontFamily:FONT,fontSize:15,fontWeight:600,cursor:"pointer"}}>Something else</button>
    </div>
    <nav aria-label="Primary navigation" style={{height:56,borderRadius:999,padding:5,...glass,display:"flex",marginTop:16,maxWidth:440,width:"100%",alignSelf:"center",boxSizing:"border-box"}}>

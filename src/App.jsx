@@ -9,7 +9,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
-import GhostStudio from './pages/GhostStudio.jsx';
+import Credits from './pages/Credits.jsx';
 import AdminRoute from '@/components/AdminRoute';
 
 const Onboarding = lazy(() => import('./pages/Onboarding.jsx'));
@@ -31,9 +31,16 @@ const NeonPaintingExperience = lazy(() => import('./pages/NeonPaintingExperience
 const PixelSwapSkyExperience = lazy(() => import('./pages/PixelSwapSkyExperience.jsx'));
 const DitherVeilExperience = lazy(() => import('./pages/DitherVeilExperience.jsx'));
 const SensoryLibrary = lazy(() => import('./pages/SensoryLibrary.jsx'));
-const SensoryStudio = lazy(() => import('./pages/SensoryStudio.jsx'));
-const ShapesStudio = lazy(() => import('./pages/ShapesStudio.jsx'));
-const LiquidOrbStudio = lazy(() => import('./pages/LiquidOrbStudio.jsx'));
+
+// Private sandboxes for experimenting. They exist only in `npm run dev` (local
+// and the Base44 editor preview). Production builds — the published site and
+// the App Store app — replace DEV_TOOLS with false, so these pages, their routes
+// and their code are left out of the bundle entirely.
+const DEV_TOOLS = import.meta.env.DEV;
+const GhostStudio = DEV_TOOLS ? lazy(() => import('./pages/GhostStudio.jsx')) : null;
+const SensoryStudio = DEV_TOOLS ? lazy(() => import('./pages/SensoryStudio.jsx')) : null;
+const ShapesStudio = DEV_TOOLS ? lazy(() => import('./pages/ShapesStudio.jsx')) : null;
+const LiquidOrbStudio = DEV_TOOLS ? lazy(() => import('./pages/LiquidOrbStudio.jsx')) : null;
 
 // Add page imports here
 
@@ -79,7 +86,7 @@ const AuthenticatedApp = () => {
       <Route path="/onboarding" element={<Suspense fallback={<div className="fixed inset-0 bg-slate-900" />}><Onboarding /></Suspense>} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
-      <Route path="/theme-studio" element={<AdminRoute><GhostStudio /></AdminRoute>} />
+      <Route path="/credits" element={<Credits />} />
       <Route path="/sensory/anti-gravity" element={<Suspense fallback={<div className="p-8">Loading Anti Gravity…</div>}><AntiGravityExperience /></Suspense>} />
       <Route path="/sensory/prism" element={<Suspense fallback={<div className="p-8">Loading Prism…</div>}><PrismExperience /></Suspense>} />
       <Route path="/sensory/galaxy" element={<Suspense fallback={<div className="p-8">Loading Galaxy…</div>}><GalaxyExperience /></Suspense>} />
@@ -93,14 +100,16 @@ const AuthenticatedApp = () => {
       <Route path="/sensory/dither-veil" element={<Suspense fallback={<div className="p-8">Loading Dither Veil…</div>}><DitherVeilExperience /></Suspense>} />
       <Route path="/sensory/pixel-swap-sky" element={<Suspense fallback={<div className="p-8">Loading Pixel Swap Sky…</div>}><PixelSwapSkyExperience /></Suspense>} />
       <Route path="/sensory/neon-painting" element={<Suspense fallback={<div className="p-8">Loading Neon Painting…</div>}><NeonPaintingExperience /></Suspense>} />
-      <Route path="/sensory/prismatic-balatro" element={<Suspense fallback={<div className="p-8">Loading Prismatic Balatro…</div>}><PrismaticBalatroExperience /></Suspense>} />
+      <Route path="/sensory/prismatic-balatro" element={<Navigate to="/sensory/prismatic-swirl" replace />} />
+      <Route path="/sensory/prismatic-swirl" element={<Suspense fallback={<div className="p-8">Loading Prismatic Swirl…</div>}><PrismaticBalatroExperience /></Suspense>} />
       <Route path="/sensory/firefly" element={<Suspense fallback={<div className="p-8">Loading Firefly…</div>}><Firefly /></Suspense>} />
       <Route path="/sensory/rain" element={<Suspense fallback={<div className="p-8">Loading Rain…</div>}><Rain /></Suspense>} />
       <Route path="/sensory/underwater" element={<Suspense fallback={<div className="p-8">Loading Underwater…</div>}><Underwater /></Suspense>} />
       <Route path="/sensory" element={<Suspense fallback={<div className="p-8">Loading Sensory…</div>}><SensoryLibrary /></Suspense>} />
-      <Route path="/sensory-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense></AdminRoute>} />
-      <Route path="/orb-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense></AdminRoute>} />
-      <Route path="/liquid-orb-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Liquid Orb Studio…</div>}><LiquidOrbStudio /></Suspense></AdminRoute>} />
+      {DEV_TOOLS && <Route path="/theme-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Theme Studio…</div>}><GhostStudio /></Suspense></AdminRoute>} />}
+      {DEV_TOOLS && <Route path="/sensory-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense></AdminRoute>} />}
+      {DEV_TOOLS && <Route path="/orb-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense></AdminRoute>} />}
+      {DEV_TOOLS && <Route path="/liquid-orb-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Liquid Orb Studio…</div>}><LiquidOrbStudio /></Suspense></AdminRoute>} />}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

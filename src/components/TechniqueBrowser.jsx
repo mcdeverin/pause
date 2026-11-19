@@ -3,8 +3,10 @@ import { ArrowLeft, Search } from "lucide-react";
 import BackgroundLayer from "./BackgroundLayer";
 import { MOMENTS } from "../lib/moments";
 
-const CATEGORIES = ["All", "Calm", "Sleep", "Focus", "Energy", "Advanced"];
-export default function TechniqueBrowser({ techniques, momentId, onChoose, onBack, theme, backgroundSettings, photo }) {
+const CATEGORIES = ["All", "Calm", "Stress Relief", "Sleep", "Focus", "Energy", "Advanced"];
+// isLocked marks Always Pause+ techniques: they stay visible, and choosing one
+// opens the offer through onLocked instead of starting a session.
+export default function TechniqueBrowser({ techniques, momentId, onChoose, onLocked, isLocked = () => false, onBack, theme, backgroundSettings, photo }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const moment = MOMENTS.find(item => item.id === momentId);
@@ -19,13 +21,13 @@ export default function TechniqueBrowser({ techniques, momentId, onChoose, onBac
         <span style={{fontFamily:"Georgia,serif",fontSize:22}}>always pause.</span><span style={{width:43}}/>
       </header>
       <h1 style={{fontFamily:"Georgia,serif",fontSize:"clamp(30px,6vw,42px)",fontWeight:400,margin:"24px 0 4px"}}>{explore ? "Explore breathing." : moment?.label + "."}</h1>
-      <p style={{margin:"0 0 20px",opacity:.85,fontSize:14}}>Choose a technique for this moment.</p>
+      <p style={{margin:"0 0 20px",opacity:.85,fontSize:14}}>{explore ? "Choose any technique." : "Choose a technique for this moment."}</p>
       <label style={{display:"flex",alignItems:"center",gap:10,background:"rgba(255,255,255,.16)",border:"1px solid rgba(255,255,255,.35)",borderRadius:18,padding:"12px 14px"}}><Search size={18}/><input aria-label="Search breathing techniques" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search techniques" style={{background:"transparent",border:0,outline:0,color:"#fff",font:"inherit",width:"100%"}} /></label>
       {explore && <div style={{display:"flex",gap:7,overflowX:"auto",padding:"14px 0 4px",flexShrink:0}}>{CATEGORIES.map(name=><button key={name} onClick={()=>setCategory(name)} aria-pressed={category===name} style={{whiteSpace:"nowrap",border:"1px solid rgba(255,255,255,.5)",borderRadius:99,padding:"8px 13px",background:category===name?"#f7f2eb":"rgba(255,255,255,.12)",color:category===name?"#243c3e":"#fff",fontWeight:600,cursor:"pointer"}}>{name}</button>)}</div>}
       <div style={{overflowY:"auto",minHeight:0,flex:1,padding:"12px 0 24px",display:"flex",flexDirection:"column",gap:9}}>
-        {items.map(t=><button key={t.id || t.name} onClick={()=>onChoose(t)} style={{width:"100%",textAlign:"left",padding:"16px 18px",borderRadius:20,border:"1px solid rgba(255,255,255,.35)",background:"rgba(18,37,43,.43)",color:"#fff",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",gap:12}}>
-          <span style={{fontSize:16,fontWeight:600}}>{t.name}</span><span style={{fontSize:12,opacity:.8,whiteSpace:"nowrap"}}>{t.category || "Breathing"} ›</span>
-        </button>)}
+        {items.map(t=>{const locked=isLocked(t);return <button key={t.id || t.name} onClick={()=>locked&&onLocked?onLocked(t):onChoose(t)} aria-label={locked?t.name+", Always Pause+":t.name} style={{width:"100%",textAlign:"left",padding:"16px 18px",borderRadius:20,border:"1px solid rgba(255,255,255,.35)",background:"rgba(18,37,43,.43)",color:"#fff",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",gap:12}}>
+          <span style={{fontSize:16,fontWeight:600}}>{t.name}</span><span style={{display:"flex",alignItems:"center",gap:8,fontSize:12,whiteSpace:"nowrap"}}>{locked&&<span style={{border:"1px solid rgba(255,255,255,.7)",borderRadius:99,padding:"2px 8px",fontWeight:700,letterSpacing:".04em"}}>PLUS</span>}<span style={{opacity:.8}}>{t.category || "Breathing"} ›</span></span>
+        </button>;})}
         {items.length===0 && <p style={{textAlign:"center",opacity:.85}}>No matching techniques. Try another search.</p>}
       </div>
     </div>

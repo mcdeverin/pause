@@ -1,5 +1,5 @@
 // Adapted from ElevenLabs UI Orb (MIT License): https://github.com/elevenlabs/ui
-// Copyright ElevenLabs contributors; see ELEVENLABS-UI-LICENSE.md
+// Copyright ElevenLabs contributors; see THIRD_PARTY_LICENSES/elevenlabs-ui-LICENSE.md
 // Vanilla Three.js renderer: Base44 preview does not resolve React Three Fiber.
 import { useEffect, useRef } from "react";
 import * as THREE from "three";

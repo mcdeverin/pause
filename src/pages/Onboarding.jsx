@@ -6,11 +6,14 @@ import LagoonLiquidOrb from "../components/visuals/LagoonLiquidOrb";
 import OrbitScene from "../components/visuals/OrbitScene";
 import PrismaticWaterScene from "../components/visuals/PrismaticWaterScene";
 import NeonNatureScene from "../components/visuals/NeonNatureScene";
+import LivingCanvasScene from "../components/visuals/LivingCanvasScene";
 import { FONT, HEADING_FONT } from "../lib/design";
 import { buildBreathPlan, breathAt } from "../lib/breathing";
 import { BACKDROP_PHOTOS, DEFAULT_BACKDROP_PHOTO } from "../lib/crystalStudio";
+import { loadPreferences, savePreferences } from "../lib/preferences";
+import { ONBOARDING_KEY } from "../lib/onboardingProfile";
 
-const STORAGE_KEY = "alwaysPauseOnboardingV1";
+const STORAGE_KEY = ONBOARDING_KEY;
 const STEPS = [
   { title: "A moment, just for you.", subtitle: "Touch the water. Stay a while.", options: [] },
   { title: "What brings you here?", subtitle: "Choose what feels right. Select all that apply.", key: "goals", multiple: true,
@@ -69,7 +72,12 @@ export default function Onboarding() {
         durationMs: Date.now() - startedAt,
       }));
     } catch { /* Onboarding still works when local storage is unavailable. */ }
-    navigate("/");
+    // Put their answers to work straight away (the home button and chooser read
+    // the rest from onboardingProfile.js).
+    if (answers.experience === "Guided breathing") {
+      savePreferences({ ...loadPreferences(), voiceGuide: true });
+    }
+    navigate(answers.experience === "Sensory experiences" ? "/sensory" : "/");
   }
 
   function next() {
@@ -160,7 +168,8 @@ function SensoryCardScene({ title, reducedMotion }) {
   if (title === "Popcorn") return <OrbitScene accent="#c77d9b" motion={0.45} paused={Boolean(reducedMotion)} />;
   if (title === "Iridescent Water") return <PrismaticWaterScene palette="lagoon" strength={0.7} softness={0.65} motion={0.65} paused={Boolean(reducedMotion)} />;
   if (title === "Neon Paint") return <NeonNatureScene preview />;
-  if (title === "Underwater") return <iframe title="Underwater jellyfish preview" src="https://holtsetio.com/lab/aurelia/" loading="lazy" tabIndex={-1} style={{ width: "100%", height: "calc(100% + 250px)", marginTop: -45, border: 0, pointerEvents: "none", background: "#031426" }} />;
+  // Built into the app, so the first impression never depends on another website.
+  if (title === "Fireflies") return <LivingCanvasScene mode="light" paused={Boolean(reducedMotion)} />;
   return null;
 }
 
@@ -192,7 +201,7 @@ const SENSORY_CARDS = [
   { title: "Popcorn", kind: "sensory", accent: "#c77d9b" },
   { title: "Iridescent Water", kind: "sensory", accent: "#8accc9" },
   { title: "Neon Paint", kind: "sensory", accent: "#ff388b" },
-  { title: "Underwater", kind: "sensory", accent: "#82b7a2" },
+  { title: "Fireflies", kind: "sensory", accent: "#d9b96a" },
 ];
 
 const PREVIEW_PATTERNS = {
@@ -239,7 +248,7 @@ function OnboardingSensoryPreview({ card, reducedMotion, onBack }) {
     "Popcorn": "Move your finger and watch the shapes respond.",
     "Iridescent Water": "Trace the surface. Follow the ripples.",
     "Neon Paint": "Draw slowly across the canvas.",
-    "Underwater": "Take a moment to watch the water.",
+    "Fireflies": "Watch the light drift and settle.",
   }[card.title] || "Explore at your own pace.";
   return <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", gap: 12 }}>
     <div style={{ position: "relative", flex: 1, minHeight: 180, borderRadius: 24, overflow: "hidden", border: "1px solid rgba(255,255,255,.4)", background: "#102d32", isolation: "isolate" }}>

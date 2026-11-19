@@ -13,7 +13,7 @@ export const MOMENTS = [
   { id: "calm", label: "Feel calmer", categories: ["Calm"] },
   { id: "focus", label: "Find focus", categories: ["Focus"] },
   { id: "wind_down", label: "Wind down", categories: ["Sleep"] },
-  { id: "reset", label: "Reset", categories: ["Calm"] },
+  { id: "reset", label: "Reset", categories: ["Stress Relief", "Calm"] },
   { id: "energy", label: "Feel energized", categories: ["Energy"] },
   { id: "explore_all", label: "Explore all", categories: ["All"] },
 ];

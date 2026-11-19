@@ -232,7 +232,8 @@ export const PAUSE = {
  calm:{label:"Calm",tint:"#E1F0E7",ink:"#39705F",gradient:["#CFE7DA","#82B49E","#39705F"]},
  focus:{label:"Focus",tint:"#E0EBF5",ink:"#3E6A94",gradient:["#D6E5F3","#8FB0D0","#3E6A94"]},
  wind_down:{label:"Wind down",tint:"#EFE8F7",ink:"#63548F",gradient:["#B9AEDB","#7C6FAE","#3E3468"]},
- reset:{label:"Reset",tint:"#FFF0D9",ink:"#9A6A29",gradient:["#FBE7C6","#D4A867","#9A6A29"]}},
+ reset:{label:"Reset",tint:"#FFF0D9",ink:"#9A6A29",gradient:["#FBE7C6","#D4A867","#9A6A29"]},
+ energy:{label:"Energy",tint:"#FCE6DD",ink:"#A4553B",gradient:["#F8D5C6","#E39A7E","#A4553B"]}},
  times:{
  morning:{label:"Morning",headline:"Start the day steady.",canvas:["#FDF7EF","#F8E9DC","#F2DFD4"],ink:"#2E2924",moment:"focus",minutes:2},
  afternoon:{label:"Afternoon",headline:"A midday reset.",canvas:["#F9FBF7","#EDF3EC","#E3EDE6"],ink:"#26302C",moment:"reset",minutes:1},
