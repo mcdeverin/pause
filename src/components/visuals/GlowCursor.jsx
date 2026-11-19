@@ -584,7 +584,7 @@ const GlowCursor = ({
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
-    const use = (pass, texel) => {
+    const beginPass = (pass, texel) => {
       gl.useProgram(pass.program);
       if (pass.uniforms.uTexel) gl.uniform2f(pass.uniforms.uTexel, texel[0], texel[1]);
       return pass.uniforms;
@@ -597,7 +597,7 @@ const GlowCursor = ({
     };
 
     const splat = (pair, ax, ay, bx, by, radius, value, mode, strength, wide = radius) => {
-      const u = use(passes.splat, pair.read.texel);
+      const u = beginPass(passes.splat, pair.read.texel);
       gl.uniform1i(u.uTarget, bind(0, pair.read));
       gl.uniform1f(u.uAspect, state.width / state.height);
       gl.uniform2f(u.uA, ax / state.width, 1 - ay / state.height);
@@ -687,17 +687,17 @@ const GlowCursor = ({
     const step = (s, dt) => {
       const { velocity, dye, pressure, divergence } = state.targets;
       if (!reduce) {
-        let u = use(passes.divergence, velocity.read.texel);
+        let u = beginPass(passes.divergence, velocity.read.texel);
         gl.uniform1i(u.uVelocity, bind(0, velocity.read));
         draw(divergence);
 
-        u = use(passes.scale, pressure.read.texel);
+        u = beginPass(passes.scale, pressure.read.texel);
         gl.uniform1i(u.uSource, bind(0, pressure.read));
         gl.uniform1f(u.uValue, 0.8);
         draw(pressure.write);
         pressure.swap();
 
-        u = use(passes.pressure, pressure.read.texel);
+        u = beginPass(passes.pressure, pressure.read.texel);
         gl.uniform1i(u.uDivergence, bind(1, divergence));
         for (let i = 0; i < PRESSURE_STEPS; i++) {
           gl.uniform1i(u.uPressure, bind(0, pressure.read));
@@ -705,13 +705,13 @@ const GlowCursor = ({
           pressure.swap();
         }
 
-        u = use(passes.gradient, velocity.read.texel);
+        u = beginPass(passes.gradient, velocity.read.texel);
         gl.uniform1i(u.uPressure, bind(0, pressure.read));
         gl.uniform1i(u.uVelocity, bind(1, velocity.read));
         draw(velocity.write);
         velocity.swap();
 
-        u = use(passes.advect, velocity.read.texel);
+        u = beginPass(passes.advect, velocity.read.texel);
         gl.uniform2f(u.uVelocityTexel, velocity.read.texel[0], velocity.read.texel[1]);
         gl.uniform1i(u.uVelocity, bind(0, velocity.read));
         gl.uniform1i(u.uSource, bind(0, velocity.read));
@@ -730,7 +730,7 @@ const GlowCursor = ({
       ];
       const { forward, back } = state.targets;
       if (reduce) {
-        const u = use(passes.advect, dye.read.texel);
+        const u = beginPass(passes.advect, dye.read.texel);
         gl.uniform2f(u.uVelocityTexel, velocity.read.texel[0], velocity.read.texel[1]);
         gl.uniform1i(u.uVelocity, bind(0, velocity.read));
         gl.uniform1i(u.uSource, bind(1, dye.read));
@@ -740,7 +740,7 @@ const GlowCursor = ({
         dye.swap();
         return;
       }
-      let u = use(passes.advect, dye.read.texel);
+      let u = beginPass(passes.advect, dye.read.texel);
       gl.uniform2f(u.uVelocityTexel, velocity.read.texel[0], velocity.read.texel[1]);
       gl.uniform1i(u.uVelocity, bind(0, velocity.read));
       gl.uniform1i(u.uSource, bind(1, dye.read));
@@ -750,7 +750,7 @@ const GlowCursor = ({
       gl.uniform1i(u.uSource, bind(1, forward));
       gl.uniform1f(u.uDt, -dt);
       draw(back);
-      u = use(passes.maccormack, dye.read.texel);
+      u = beginPass(passes.maccormack, dye.read.texel);
       gl.uniform2f(u.uVelocityTexel, velocity.read.texel[0], velocity.read.texel[1]);
       gl.uniform2f(u.uSourceTexel, dye.read.texel[0], dye.read.texel[1]);
       gl.uniform1i(u.uVelocity, bind(0, velocity.read));
@@ -773,12 +773,12 @@ const GlowCursor = ({
     const render = s => {
       const { dye, bloom } = state.targets;
       if (s.glow > 0) {
-        let u = use(passes.prefilter, bloom[0].texel);
+        let u = beginPass(passes.prefilter, bloom[0].texel);
         gl.uniform1i(u.uDye, bind(0, dye.read));
         gl.uniform2f(u.uDyeTexel, dye.read.texel[0], dye.read.texel[1]);
         setShade(u, s);
         draw(bloom[0]);
-        u = use(passes.down, bloom[0].texel);
+        u = beginPass(passes.down, bloom[0].texel);
         for (let i = 1; i < bloom.length; i++) {
           gl.uniform1i(u.uSource, bind(0, bloom[i - 1]));
           gl.uniform2f(u.uSourceTexel, bloom[i - 1].texel[0], bloom[i - 1].texel[1]);
@@ -786,7 +786,7 @@ const GlowCursor = ({
         }
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.ONE, gl.ONE);
-        u = use(passes.up, bloom[0].texel);
+        u = beginPass(passes.up, bloom[0].texel);
         for (let i = bloom.length - 1; i > 0; i--) {
           gl.uniform1i(u.uSource, bind(0, bloom[i]));
           gl.uniform2f(u.uSourceTexel, bloom[i].texel[0], bloom[i].texel[1]);
@@ -794,7 +794,7 @@ const GlowCursor = ({
         }
         gl.disable(gl.BLEND);
       }
-      const u = use(passes.display, [1 / canvas.width, 1 / canvas.height]);
+      const u = beginPass(passes.display, [1 / canvas.width, 1 / canvas.height]);
       gl.uniform1i(u.uDye, bind(0, dye.read));
       gl.uniform1i(u.uBloom, bind(1, bloom[0]));
       setShade(u, s);

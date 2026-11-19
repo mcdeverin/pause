@@ -49,6 +49,7 @@ export default function CrystalPrototype({
     if (!host) return undefined;
     let renderer, observer, frame = 0, disposed = false;
     let pmrem, room, environment;
+    let resize;
     let geometry, edgesGeometry, backdropGeometry, backdropMaterial, backdropTexture;
     const materials = [];
     const scene = new THREE.Scene();
@@ -157,7 +158,7 @@ export default function CrystalPrototype({
       blush.position.set(0, -5, -2);
       scene.add(ambient, key, fill, blush);
 
-      const resize = () => {
+      resize = () => {
         if (disposed) return;
         const width = Math.max(1, host.clientWidth);
         const height = Math.max(1, host.clientHeight);
@@ -214,7 +215,7 @@ export default function CrystalPrototype({
       disposed = true;
       cancelAnimationFrame(frame);
       observer?.disconnect();
-      if (!observer) window.removeEventListener("resize", resize);
+      if (!observer && resize) window.removeEventListener("resize", resize);
       geometry?.dispose();
       edgesGeometry?.dispose();
       backdropGeometry?.dispose();

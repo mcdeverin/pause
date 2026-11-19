@@ -10,6 +10,7 @@ import Home from './pages/Home.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
 import GhostStudio from './pages/GhostStudio.jsx';
+import AdminRoute from '@/components/AdminRoute';
 
 const Onboarding = lazy(() => import('./pages/Onboarding.jsx'));
 const Cloud = lazy(() => import('./pages/Cloud.jsx'));
@@ -78,7 +79,7 @@ const AuthenticatedApp = () => {
       <Route path="/onboarding" element={<Suspense fallback={<div className="fixed inset-0 bg-slate-900" />}><Onboarding /></Suspense>} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
-      <Route path="/theme-studio" element={<GhostStudio />} />
+      <Route path="/theme-studio" element={<AdminRoute><GhostStudio /></AdminRoute>} />
       <Route path="/sensory/anti-gravity" element={<Suspense fallback={<div className="p-8">Loading Anti Gravity…</div>}><AntiGravityExperience /></Suspense>} />
       <Route path="/sensory/prism" element={<Suspense fallback={<div className="p-8">Loading Prism…</div>}><PrismExperience /></Suspense>} />
       <Route path="/sensory/galaxy" element={<Suspense fallback={<div className="p-8">Loading Galaxy…</div>}><GalaxyExperience /></Suspense>} />
@@ -97,9 +98,9 @@ const AuthenticatedApp = () => {
       <Route path="/sensory/rain" element={<Suspense fallback={<div className="p-8">Loading Rain…</div>}><Rain /></Suspense>} />
       <Route path="/sensory/underwater" element={<Suspense fallback={<div className="p-8">Loading Underwater…</div>}><Underwater /></Suspense>} />
       <Route path="/sensory" element={<Suspense fallback={<div className="p-8">Loading Sensory…</div>}><SensoryLibrary /></Suspense>} />
-      <Route path="/sensory-studio" element={<Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense>} />
-      <Route path="/orb-studio" element={<Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense>} />
-      <Route path="/liquid-orb-studio" element={<Suspense fallback={<div className="p-8">Loading Liquid Orb Studio…</div>}><LiquidOrbStudio /></Suspense>} />
+      <Route path="/sensory-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense></AdminRoute>} />
+      <Route path="/orb-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Shapes Studio…</div>}><ShapesStudio /></Suspense></AdminRoute>} />
+      <Route path="/liquid-orb-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Liquid Orb Studio…</div>}><LiquidOrbStudio /></Suspense></AdminRoute>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
