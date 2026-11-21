@@ -1,25 +1,38 @@
-// Optional product analytics.
+// Analytics — one set of consent rules for the iPhone app and the website.
 //
-// • iPhone app: off until someone turns on "Share anonymous usage" in About &
-//   Legal. Nothing about PostHog runs before that: no script, no network
-//   request, no storage.
-// • Website: visitors in Europe are asked first (AnalyticsConsentBanner) and
-//   nothing loads unless they tap Allow. Elsewhere it's on by default — PostHog
-//   plus Google Analytics through Google Tag Manager — unless the browser sends
-//   Global Privacy Control or Do Not Track. Everyone can switch it off in About.
-//   See consentRegion.js.
-// Turning it back off stops the client and deletes any identifiers it
-// created. Every call here is fire-and-forget and swallows its own failures, so
-// a blocked network or a missing chunk can never interrupt a breathing session.
+// What runs when analytics is on:
+//   • PostHog anonymous usage counts (app and website) — this file.
+//   • Google Analytics: on the website through Google Tag Manager
+//     (googleTag.js); in the app through Google Analytics for Firebase
+//     (nativeAnalytics.js).
 //
-// Only the handful of events at the bottom of the app's own call sites are sent.
+// When it is on (until the person makes their own choice in About or on the
+// banner, which always wins):
+//   • Europe (EU, EEA, UK, Switzerland — consentRegion.js): off until they tap
+//     Allow on the banner. Required by GDPR / ePrivacy / UK PECR.
+//   • Everywhere else, in the app: on once they tap "Begin" on the first
+//     onboarding screen, which says that continuing means agreeing to the Terms
+//     and Privacy Policy, analytics included. Apple's guideline 5.1.1(ii) asks
+//     apps to get consent even for anonymous usage data; people who installed
+//     before this notice existed stay off unless they switch it on.
+//   • Everywhere else, on the website: on by default (US law asks for notice in
+//     the privacy policy and an opt-out), unless the browser sends Global
+//     Privacy Control or Do Not Track.
+//   • "Share anonymous usage" in About turns everything off or on, any time.
+//
+// Every call here is fire-and-forget and swallows its own failures, so a
+// blocked network or a missing chunk can never interrupt a breathing session.
 // Photographs, photograph URLs, exact colours, health data and the user's
 // identity never leave the device, and no person profiles are ever created.
 
 import { isWebsite, startGoogleTag, stopGoogleTag } from "./googleTag";
 import { hasBrowserOptOut, requiresConsentFirst } from "./consentRegion";
+import { logNativeEvent, setNativeAnalyticsEnabled } from "./nativeAnalytics";
 
 const CONSENT_KEY = "pauseAnalyticsConsent";
+// When they tapped "Begin" on the onboarding screen that carries the Terms and
+// Privacy Policy notice.
+const AGREEMENT_KEY = "pauseAgreementAcceptedAt";
 
 // The project key and host are public values that ship in the client anyway, so
 // they fall back to the app's own project when no VITE_ variables are set.
@@ -56,9 +69,30 @@ export function getAnalyticsChoice() {
   }
 }
 
+export function hasAcceptedAgreement() {
+  try {
+    return Boolean(localStorage.getItem(AGREEMENT_KEY));
+  } catch {
+    return false;
+  }
+}
+
+/** Records the "Begin" tap on the first onboarding screen, then applies it. */
+export function recordAgreement() {
+  try {
+    if (!localStorage.getItem(AGREEMENT_KEY)) {
+      localStorage.setItem(AGREEMENT_KEY, new Date().toISOString());
+    }
+  } catch {
+    // Storage unavailable — analytics simply stays off.
+  }
+  resumeAnalyticsIfAllowed();
+}
+
 // What applies before someone has made a choice of their own.
 function enabledByDefault() {
-  return isWebsite() && !requiresConsentFirst() && !hasBrowserOptOut();
+  if (requiresConsentFirst() || hasBrowserOptOut()) return false;
+  return isWebsite() || hasAcceptedAgreement();
 }
 
 export function isAnalyticsEnabled() {
@@ -160,19 +194,27 @@ export function setAnalyticsEnabled(enabled) {
     stop();
     stopGoogleTag();
   }
+  setNativeAnalyticsEnabled(enabled);
 
   return enabled;
 }
 
-// Called once at launch: picks up an earlier choice, or the website default.
+// Called at launch (and after the onboarding agreement): applies the current
+// state. Firebase is told every time, so it always matches the choice here.
 export function resumeAnalyticsIfAllowed() {
-  if (isAnalyticsEnabled()) startGoogleTag();
+  const enabled = isAnalyticsEnabled();
+  if (enabled) startGoogleTag();
+  setNativeAnalyticsEnabled(enabled);
 }
 
 // Sends one event with a small, non-identifying property bag. Never throws and
 // never blocks the caller.
 export function track(event, properties = {}) {
   if (!isAnalyticsEnabled()) return;
+
+  // Inside the iPhone app the same event also goes to Google Analytics for
+  // Firebase (a no-op on the website or without the native plugin).
+  logNativeEvent(event, properties);
 
   const send = () => {
     try {

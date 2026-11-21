@@ -1,20 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getAnalyticsChoice, setAnalyticsEnabled } from "@/lib/analytics";
-import { isWebsite } from "@/lib/googleTag";
 import { requiresConsentFirst } from "@/lib/consentRegion";
 import { FONT, PAUSE } from "@/lib/design";
 
-// Website-only consent prompt for visitors in Europe (EU, EEA, UK, Switzerland),
-// where analytics cookies need a "yes" first. Shown once, until they choose;
-// the choice can be changed any time with "Share anonymous usage" in About.
-// Visitors elsewhere don't see it: analytics is on by default for them, with
-// the same switch in About to turn it off (see consentRegion.js).
+// Consent prompt for people in Europe (EU, EEA, UK, Switzerland), on the
+// website and in the iPhone app alike: analytics needs an explicit "yes" there
+// before anything loads. Shown once, until they choose; the choice can be
+// changed any time with "Share anonymous usage" in About. Everyone else agrees
+// through the notice on the first onboarding screen instead (analytics.js).
 // Sits at the top so it never covers onboarding or the breathing controls,
 // and the app stays fully usable without answering it.
 export default function AnalyticsConsentBanner() {
   const [visible, setVisible] = useState(
-    () => isWebsite() && requiresConsentFirst() && getAnalyticsChoice() === null
+    () => requiresConsentFirst() && getAnalyticsChoice() === null
   );
   if (!visible) return null;
 
@@ -46,8 +45,8 @@ export default function AnalyticsConsentBanner() {
       }}
     >
       <p style={{ margin: 0 }}>
-        Can we use Google Analytics cookies to see how people find and use Always Pause?
-        No ads, and we never sell data.{" "}
+        Can we use analytics, including Google Analytics, to see how people find and use
+        Always Pause? No ads, and we never sell data.{" "}
         <Link to="/privacy" style={{ color: PAUSE.accent, fontWeight: 600 }}>Privacy</Link>
       </p>
       <div style={{ display: "flex", gap: 8, marginTop: 10, justifyContent: "flex-end" }}>

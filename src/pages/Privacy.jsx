@@ -30,40 +30,38 @@ export default function Privacy() {
           <section>
             <h2 className="text-lg font-bold mb-3">Information We Collect</h2>
             <p>
-              Always Pause is designed to be a minimal, privacy-respecting app. We collect only the following:
+              Always Pause is designed to be a minimal, privacy-respecting app. Your breathing history, preferences and photos stay on your device. The only information that leaves it is optional analytics, described below.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-bold mb-3">Analytics (app and website)</h2>
+            <p>
+              We use analytics to understand how people find and use Always Pause, so we can improve it. The same rules apply in the iPhone app and on alwayspause.com.
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
-              <li><strong>Optional Usage Analytics:</strong> In the iPhone app this is off by default — only if you switch on "Share anonymous usage" in About &amp; Legal do we send a small number of anonymous events to PostHog about the choices you save and the sessions you run: which breathing visual you use, which background category and preset background you save, whether you use your own colour or your own photo (a yes or no answer only), which technique you start, and whether a session was completed along with its rounded length. These events are not linked to you, are not used to build a profile, and are never used for advertising.</li>
-              <li><strong>Website Analytics (alwayspause.com only):</strong> On our website we use Google Tag Manager and Google Analytics, together with the anonymous usage counts described above, to understand how visitors find and use the site: pages viewed, approximate location (country/city derived from your network address), device and browser type, and how you arrived. Google Analytics sets cookies on your browser to recognise repeat visits. Advertising features and ad personalisation are switched off. None of this runs inside the iPhone app.
-                <ul className="list-[circle] list-inside ml-5 mt-1 space-y-1">
-                  <li><strong>Visitors in Europe</strong> (the EU, EEA, UK and Switzerland, judged from your browser's time zone): we ask first with a banner, and nothing loads unless you tap "Allow".</li>
-                  <li><strong>Visitors elsewhere:</strong> website analytics is on by default. You can switch it off at any time with "Share anonymous usage" in About &amp; Legal.</li>
-                  <li><strong>Browser signals:</strong> if your browser sends a Global Privacy Control or Do Not Track signal, website analytics stays off unless you turn it on yourself.</li>
-                </ul>
-              </li>
-              <li><strong>Never collected:</strong> your photographs or their web addresses, the exact colours you choose, your name, email, account, location, heart rate, Health data, or the content of your sessions.</li>
+              <li><strong>Anonymous usage counts (PostHog):</strong> which breathing visual you use, which background category and preset background you save, whether you use your own colour or photo (a yes or no only), which technique you start, whether a session was completed and its rounded length, and when the Always Pause+ offer is viewed or a purchase is started.</li>
+              <li><strong>Google Analytics:</strong> on the website through Google Tag Manager, and in the app through Google Analytics for Firebase. It records pages or screens viewed, app opens and sessions, the same events listed above, device and operating system or browser, approximate location (country or city, derived from a masked network address — never GPS), how you arrived, and App Store purchase events (product and price, never payment details). It uses a random app-instance identifier in the app and cookies on the website to recognise repeat visits.</li>
+              <li><strong>Never collected:</strong> your name, email, account, precise location, photographs or their web addresses, the exact colours you choose, Health data, heart rate, or the content of your sessions. Analytics is never linked to your identity, never uses your device’s advertising identifier, and Google’s advertising features and ad personalisation are switched off.</li>
+            </ul>
+            <p className="mt-4"><strong>When analytics is on</strong></p>
+            <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
+              <li><strong>In Europe</strong> (the EU, EEA, UK and Switzerland, judged from your device’s time zone): we ask first, in the app and on the website. Nothing is collected unless you tap “Allow”.</li>
+              <li><strong>Elsewhere, in the app:</strong> the first screen explains that by continuing you agree to our Terms and this Privacy Policy, including analytics. Analytics starts when you tap “Begin your journey”. If you installed the app before this notice was added, analytics stays off unless you turn it on.</li>
+              <li><strong>Elsewhere, on the website:</strong> analytics is on by default. If your browser sends a Global Privacy Control or Do Not Track signal, it stays off unless you turn it on yourself.</li>
+              <li><strong>Everywhere:</strong> you can switch “Share anonymous usage” off or on at any time in About &amp; Legal. Turning it off stops all analytics straight away.</li>
             </ul>
             <p className="mt-4">
-              In the iPhone app, usage analytics stays switched off — and nothing at all is loaded or sent — until you turn it on yourself.
-            </p>
-            <p className="mt-4">
-              We do <strong>NOT</strong> collect your name, email address, location, health data, or any personally identifiable information.
-            </p>
-            <p>
-              We do <strong>NOT</strong> sell your data to third parties.
-            </p>
-            <p>
-              We do <strong>NOT</strong> use your data for advertising purposes.
+              We do <strong>NOT</strong> sell your data, share it for advertising, or use it to build a profile of you.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold mb-3">How We Use Your Information</h2>
             <p>
-              Anonymous usage data is used solely to improve the app experience — understanding which features are used most helps us make Always Pause better.
+              Analytics is used solely to understand which features help people and where the app can improve. Purchase events help us understand which plans people choose.
             </p>
           </section>
-
           <section>
             <h2 className="text-lg font-bold mb-3">Health &amp; Fitness Data</h2>
             <p>
@@ -74,23 +72,19 @@ export default function Privacy() {
           <section>
             <h2 className="text-lg font-bold mb-3">Third Party Services</h2>
             <p>
-              On the website only, while website analytics is on, Google Analytics and Google Tag Manager (Google LLC, United States) process the website usage information described above for us, under Google's own privacy policy (policies.google.com/privacy). Google is never given your name, email or anything you create in the app.
+              While analytics is on, Google LLC (United States) processes the information described above for us through Google Analytics, Google Tag Manager and Google Analytics for Firebase, under Google’s privacy policy (policies.google.com/privacy). PostHog, Inc. (United States) stores the anonymous usage counts for us as our data processor. PostHog is configured without session recording, screen recording, heatmaps, automatic interaction capture, surveys, advertising features or user profiles. Both receive the network address each request comes from, which is used only to derive a rough location.
             </p>
             <p className="mt-4">
-              When optional usage analytics is switched on, Always Pause sends the events described above to PostHog (PostHog, Inc., United States), which stores them for us as our data processor. PostHog receives the network address each request comes from, which it may use to derive a rough country; we do not use it to identify you. PostHog is configured without session recording, screen recording, heatmaps, automatic interaction capture, surveys, advertising features or user profiles, and it is never given anything that could identify you.
-            </p>
-            <p className="mt-4">
-              Always Pause may also use Apple's built-in App Analytics which collects anonymous usage data subject to Apple's own privacy policy.
+              Purchases are handled by Apple through the App Store and managed with RevenueCat, which receives an anonymous app user identifier and your purchase receipts so your subscription works. Apple’s built-in App Analytics may also collect anonymous usage data under Apple’s own privacy policy.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold mb-3">Your Choices</h2>
             <p>
-              Usage analytics is optional. In the iPhone app it is off unless you turn it on; on the website it works as described above. You can switch "Share anonymous usage" on or off at any time in About &amp; Legal. Turning it off stops all analytics immediately and deletes the identifiers the analytics service created on your device. On the website, turning it off also stops Google Analytics and deletes its cookies. Because the events never identify you, we cannot look up or retrieve "your" analytics data on request, but switching the setting off means nothing further is collected.
+              Analytics is optional. Switch “Share anonymous usage” off in About &amp; Legal at any time, in the app or on the website. Turning it off stops all further analytics immediately, deletes the identifiers PostHog created on your device and, on the website, deletes Google Analytics cookies. Because analytics never identifies you, we cannot look up or retrieve “your” analytics data on request, but switching the setting off means nothing further is collected. Using Always Pause, including Always Pause+, never depends on turning analytics on.
             </p>
           </section>
-
           <section>
             <h2 className="text-lg font-bold mb-3">Children's Privacy</h2>
             <p>
