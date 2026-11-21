@@ -21,7 +21,7 @@ export default function MomentChooser({onBack,onBegin,onBrowse,initialMoment="ca
  <div style={{gridColumn:"1 / -1",marginTop:14}}>
  <p style={{fontSize:12,letterSpacing:".1em",textTransform:"uppercase",fontWeight:700,color:night?time.secondary:PAUSE.ink3,margin:"0 0 12px"}}>Guidance</p>
  <div style={{display:"flex",height:56,padding:5,borderRadius:999,...glass}}>
- {[["Lauren's voice",true],["Visual only",false]].map(([label,value])=><button key={label} onClick={()=>setGuided(value)} style={{flex:1,border:0,borderRadius:999,background:guided===value?"#fff":"transparent",boxShadow:guided===value?"0 1px 4px rgba(38,48,44,.08)":"none",fontSize:15,fontWeight:600,color:PAUSE.ink,cursor:"pointer"}}>{label}</button>)}
+ {[["Lauren's voice",true],["Visual only",false]].map(([label,value])=><button key={label} onClick={()=>setGuided(value)} style={{flex:1,border:0,borderRadius:999,background:guided===value?"#fff":"transparent",boxShadow:guided===value?"0 1px 4px rgba(38,48,44,.08)":"none",fontSize:15,fontWeight:600,color:guided===value||!night?PAUSE.ink:time.ink,cursor:"pointer"}}>{label}</button>)}
  </div></div>
  </div>
  <div style={{flex:1,minHeight:12}}/>

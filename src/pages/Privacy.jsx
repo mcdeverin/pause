@@ -4,7 +4,7 @@ export default function Privacy() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full min-h-screen bg-background p-8 flex flex-col">
+    <div className="w-full min-h-screen bg-background p-8 flex flex-col" style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 2rem)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}>
       <button
         onClick={() => navigate("/")}
         className="text-sm text-foreground/60 hover:text-foreground mb-8"

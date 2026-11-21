@@ -31,7 +31,7 @@ const CONTEXT_LINES = {
 };
 
 export default function PaywallScreen({
-  theme = "day",
+  theme: _theme = "day",
   onClose,
   onPurchase,
   source = "menu",
@@ -79,7 +79,10 @@ export default function PaywallScreen({
     return () => { cancelled = true; };
   }, []);
 
-  const isDayTheme = theme === "day";
+  // The paywall always sits on ivory (PAUSE.ivory) with white plan cards, so it
+  // always uses the light palette. Following the night theme made the headline,
+  // plan names, prices and the close button white-on-ivory after 9pm.
+  const isDayTheme = true;
   const textColor = isDayTheme ? "#222222" : "#F5F5F2";
   const secondaryTextColor = isDayTheme ? "#444444" : "#C9C9C4";
   const bg = isDayTheme ? "#FAFAF8" : "#0D1117";
