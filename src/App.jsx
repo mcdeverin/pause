@@ -11,6 +11,7 @@ import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
 import Credits from './pages/Credits.jsx';
 import AdminRoute from '@/components/AdminRoute';
+import AnalyticsConsentBanner from '@/components/AnalyticsConsentBanner';
 
 const Onboarding = lazy(() => import('./pages/Onboarding.jsx'));
 const Cloud = lazy(() => import('./pages/Cloud.jsx'));
@@ -123,6 +124,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <AuthenticatedApp />
+          <AnalyticsConsentBanner />
         </Router>
         <Toaster />
       </QueryClientProvider>

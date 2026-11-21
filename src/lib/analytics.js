@@ -1,14 +1,23 @@
-// Optional product analytics — off until someone turns on "Share anonymous
-// usage" in About & Legal.
+// Optional product analytics.
 //
-// Nothing about PostHog runs before that: no script, no network request, no
-// storage. Turning it back off stops the client and deletes any identifiers it
+// • iPhone app: off until someone turns on "Share anonymous usage" in About &
+//   Legal. Nothing about PostHog runs before that: no script, no network
+//   request, no storage.
+// • Website: visitors in Europe are asked first (AnalyticsConsentBanner) and
+//   nothing loads unless they tap Allow. Elsewhere it's on by default — PostHog
+//   plus Google Analytics through Google Tag Manager — unless the browser sends
+//   Global Privacy Control or Do Not Track. Everyone can switch it off in About.
+//   See consentRegion.js.
+// Turning it back off stops the client and deletes any identifiers it
 // created. Every call here is fire-and-forget and swallows its own failures, so
 // a blocked network or a missing chunk can never interrupt a breathing session.
 //
 // Only the handful of events at the bottom of the app's own call sites are sent.
 // Photographs, photograph URLs, exact colours, health data and the user's
 // identity never leave the device, and no person profiles are ever created.
+
+import { isWebsite, startGoogleTag, stopGoogleTag } from "./googleTag";
+import { hasBrowserOptOut, requiresConsentFirst } from "./consentRegion";
 
 const CONSENT_KEY = "pauseAnalyticsConsent";
 
@@ -37,12 +46,25 @@ const STRIPPED_PROPERTIES = [
 let client = null;
 let loading = null;
 
-export function isAnalyticsEnabled() {
+/** "granted", "denied", or null when the person hasn't chosen yet. */
+export function getAnalyticsChoice() {
   try {
-    return localStorage.getItem(CONSENT_KEY) === "granted";
+    const value = localStorage.getItem(CONSENT_KEY);
+    return value === "granted" || value === "denied" ? value : null;
   } catch {
-    return false;
+    return null;
   }
+}
+
+// What applies before someone has made a choice of their own.
+function enabledByDefault() {
+  return isWebsite() && !requiresConsentFirst() && !hasBrowserOptOut();
+}
+
+export function isAnalyticsEnabled() {
+  const choice = getAnalyticsChoice();
+  if (choice) return choice === "granted";
+  return enabledByDefault();
 }
 
 function clearStoredIdentifiers() {
@@ -129,10 +151,22 @@ export function setAnalyticsEnabled(enabled) {
     return isAnalyticsEnabled();
   }
 
-  if (enabled) start();
-  else stop();
+  // On the website the same choice also covers Google Analytics (via Google Tag
+  // Manager); inside the iPhone app googleTag.js does nothing.
+  if (enabled) {
+    start();
+    startGoogleTag();
+  } else {
+    stop();
+    stopGoogleTag();
+  }
 
   return enabled;
+}
+
+// Called once at launch: picks up an earlier choice, or the website default.
+export function resumeAnalyticsIfAllowed() {
+  if (isAnalyticsEnabled()) startGoogleTag();
 }
 
 // Sends one event with a small, non-identifying property bag. Never throws and
