@@ -17,13 +17,13 @@ export default function Terms() {
 
         <div className="space-y-6 text-sm text-foreground/85 leading-relaxed font-sans">
           <p className="text-xs text-foreground/60 mb-6">
-            Last Updated: March 2026
+            Last Updated: November 2026
           </p>
 
           <section>
             <h2 className="text-lg font-bold mb-3">Acceptance of Terms</h2>
             <p>
-              By downloading or using Always Pause, you agree to be bound by these Terms. If you do not agree, do not use the app.
+              By downloading or using Always Pause — including by tapping “Begin your journey” on the first screen — you agree to be bound by these Terms and to our <a href="/privacy" className="underline hover:opacity-70">Privacy Policy</a>, which explains the optional analytics we use and how to turn it off. If you do not agree, do not use the app.
             </p>
           </section>
 
@@ -51,7 +51,7 @@ export default function Terms() {
           <section>
             <h2 className="text-lg font-bold mb-3">In-App Purchases</h2>
             <p>
-              Always Pause may offer optional in-app purchases. All purchases are final and subject to Apple's App Store terms. We do not offer refunds outside of Apple's standard refund policy.
+              Always Pause may offer optional in-app purchases, including Always Pause+ subscriptions. Subscriptions renew automatically at the price shown until you cancel, which you can do at any time in your Apple ID settings at least 24 hours before the current period ends. Purchases are made through Apple and are also governed by <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" className="underline hover:opacity-70" target="_blank" rel="noreferrer">Apple’s Standard Licensed Application End User License Agreement</a>. Refunds are handled by Apple under its standard refund policy.
             </p>
           </section>
 

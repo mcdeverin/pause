@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import LiquidSurfaceScene from "../components/visuals/LiquidSurfaceScene";
 import LagoonLiquidOrb from "../components/visuals/LagoonLiquidOrb";
@@ -12,6 +12,8 @@ import { buildBreathPlan, breathAt } from "../lib/breathing";
 import { BACKDROP_PHOTOS, DEFAULT_BACKDROP_PHOTO } from "../lib/crystalStudio";
 import { loadPreferences, savePreferences } from "../lib/preferences";
 import { ONBOARDING_KEY } from "../lib/onboardingProfile";
+import { recordAgreement } from "../lib/analytics";
+import { requiresConsentFirst } from "../lib/consentRegion";
 
 const STORAGE_KEY = ONBOARDING_KEY;
 const STEPS = [
@@ -81,6 +83,9 @@ export default function Onboarding() {
   }
 
   function next() {
+    // "Begin" on the first screen is the agreement to the Terms and Privacy
+    // Policy shown under it (outside Europe this also starts analytics).
+    if (step === 0 && !exploring) recordAgreement();
     if (exploring) { setExploring(false); setStep(3); return; }
     if (step === STEPS.length - 1) return finish();
     if (!hasSelection) return;
@@ -147,11 +152,19 @@ export default function Onboarding() {
           </button>
           {(exploring || (step > 0 && step < 4)) && <button onClick={() => { if (exploring) { setExploring(false); setStep(3); } else setStep((value) => value + 1); }} style={{ ...textButton, alignSelf: "center", padding: 5 }}>Skip for now</button>}
           {step === 0 && <span style={{ fontSize: 12, textAlign: "center", opacity: .85 }}>Move your finger across the water</span>}
+          {step === 0 && !exploring && (
+            <p style={{ margin: 0, fontSize: 11.5, lineHeight: 1.45, textAlign: "center", opacity: .85, pointerEvents: "auto" }}>
+              By continuing, you agree to our <Link to="/terms" style={legalLink}>Terms</Link> and{" "}
+              <Link to="/privacy" style={legalLink}>Privacy Policy</Link>
+              {requiresConsentFirst() ? "." : ", including anonymous analytics you can turn off any time in About."}
+            </p>
+          )}
         </div>
       </div>
     </main>
   );
 }
+const legalLink = { color: "white", textDecoration: "underline" };
 const textButton = { background: "transparent", border: 0, color: "white", fontSize: 13, padding: "8px 4px", cursor: "pointer" };
 
 
