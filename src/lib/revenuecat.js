@@ -10,14 +10,34 @@ export const initRevenueCat = async () => {
   });
 };
 
+export const hasProEntitlement = (customerInfo) =>
+  !!customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
+
 export const checkEntitlement = async () => {
-  const { customerInfo } = await Purchases.getCustomerInfo();
-  return !!customerInfo.entitlements.active[ENTITLEMENT_ID];
+  try {
+    const { customerInfo } = await Purchases.getCustomerInfo();
+    return hasProEntitlement(customerInfo);
+  } catch {
+    return false;
+  }
 };
 
+// Keeps Always Pause+ in step with purchases, renewals, expiries and refunds
+// that happen while the app is open (or arrive from the App Store later).
+// Returns a function that removes the listener.
+export const addEntitlementListener = async (onChange) => {
+  const callbackId = await Purchases.addCustomerInfoUpdateListener((customerInfo) => {
+    onChange(hasProEntitlement(customerInfo));
+  });
+  return () => Purchases.removeCustomerInfoUpdateListener({ listenerToRemove: callbackId }).catch(() => {});
+};
+
+// purchases-capacitor returns the offerings object itself (not wrapped in
+// { offerings }). Destructuring it made every offering undefined, so the
+// paywall fell back to built-in prices, never saw the store's trial, and every
+// purchase failed with "this plan is not available right now".
 export const getOfferings = async () => {
-  const { offerings } = await Purchases.getOfferings();
-  return offerings;
+  return await Purchases.getOfferings();
 };
 
 export const purchasePackage = async (rcPackage) => {

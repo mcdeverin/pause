@@ -10,7 +10,7 @@ import PaywallScreen from "../components/PaywallScreen";
 import PersonalizePanel from "../components/personalize/PersonalizePanel";
 import AboutLegalSheet from "../components/AboutLegalSheet";
 import { loadTechniques, getRandomTechnique } from "../lib/techniqueLoader";
-import { initRevenueCat, checkEntitlement } from "../lib/revenuecat";
+import { initRevenueCat, checkEntitlement, addEntitlementListener } from "../lib/revenuecat";
 import { loadPreferences, savePreferences } from "../lib/preferences";
 import { addStoredPhoto, getStoredPhotos, removeStoredPhoto } from "../lib/backgroundPhoto";
 import { resolveBackgroundImage } from "../lib/backgroundImage";
@@ -77,10 +77,28 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    initRevenueCat()
-      .then(() => checkEntitlement())
-      .then((pro) => setIsPro(pro))
-      .catch(() => {});
+    let cancelled = false;
+    let removeListener;
+    (async () => {
+      try {
+        await initRevenueCat();
+      } catch {
+        return; // Web preview or RevenueCat unavailable: stay on the free tier.
+      }
+      const pro = await checkEntitlement();
+      if (!cancelled) setIsPro(pro);
+      try {
+        removeListener = await addEntitlementListener((nextPro) => {
+          if (!cancelled) setIsPro(nextPro);
+        });
+      } catch {
+        // Listener unavailable: the launch check above still applies.
+      }
+    })();
+    return () => {
+      cancelled = true;
+      removeListener?.();
+    };
   }, []);
 
   // The app's own admin account sees every exercise, visual and background. This
