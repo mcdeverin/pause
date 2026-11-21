@@ -5,6 +5,7 @@ import { ExternalLink, FileText, Heart, Mail, ShieldCheck, X } from "lucide-reac
 import { FONT, getColors } from "../lib/design";
 import PreferenceToggle from "./personalize/PreferenceToggle";
 import { isAnalyticsEnabled, setAnalyticsEnabled } from "../lib/analytics";
+import { isWebsite } from "../lib/googleTag";
 
 const PRIVACY_URL = "https://alwayspause.com/privacy";
 const TERMS_URL = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
@@ -160,7 +161,9 @@ export default function AboutLegalSheet({ theme, onClose }) {
         <PreferenceToggle
           theme={theme}
           label="Share anonymous usage"
-          description="Sends anonymous counts of the visuals, backgrounds and techniques you use. Never your photos, exact colours, or identity. Off by default."
+          description={isWebsite()
+            ? "Lets Google Analytics (website only) and anonymous usage counts show us how Always Pause is used. Never your photos, exact colours, or identity. Off by default."
+            : "Sends anonymous counts of the visuals, backgrounds and techniques you use. Never your photos, exact colours, or identity. Off by default."}
           checked={shareUsage}
           onChange={(value) => {
             setShareUsage(value);

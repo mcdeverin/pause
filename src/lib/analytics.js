@@ -10,6 +10,8 @@
 // Photographs, photograph URLs, exact colours, health data and the user's
 // identity never leave the device, and no person profiles are ever created.
 
+import { startGoogleTag, stopGoogleTag } from "./googleTag";
+
 const CONSENT_KEY = "pauseAnalyticsConsent";
 
 // The project key and host are public values that ship in the client anyway, so
@@ -36,6 +38,16 @@ const STRIPPED_PROPERTIES = [
 
 let client = null;
 let loading = null;
+
+/** "granted", "denied", or null when the person hasn't chosen yet. */
+export function getAnalyticsChoice() {
+  try {
+    const value = localStorage.getItem(CONSENT_KEY);
+    return value === "granted" || value === "denied" ? value : null;
+  } catch {
+    return null;
+  }
+}
 
 export function isAnalyticsEnabled() {
   try {
@@ -129,10 +141,22 @@ export function setAnalyticsEnabled(enabled) {
     return isAnalyticsEnabled();
   }
 
-  if (enabled) start();
-  else stop();
+  // On the website the same choice also covers Google Analytics (via Google Tag
+  // Manager); inside the iPhone app googleTag.js does nothing.
+  if (enabled) {
+    start();
+    startGoogleTag();
+  } else {
+    stop();
+    stopGoogleTag();
+  }
 
   return enabled;
+}
+
+// Called once at launch: picks up a choice made on an earlier visit.
+export function resumeAnalyticsIfAllowed() {
+  if (isAnalyticsEnabled()) startGoogleTag();
 }
 
 // Sends one event with a small, non-identifying property bag. Never throws and
