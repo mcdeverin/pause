@@ -1,6 +1,10 @@
 import { Purchases, LOG_LEVEL } from '@revenuecat/purchases-capacitor';
 
-export const ENTITLEMENT_ID = "always_pause_plus";
+// The entitlement's identifier in RevenueCat is "Always Pause+" (identifiers
+// can't be renamed there). The app used to look for "always_pause_plus", so a
+// successful purchase never unlocked Plus. Both are accepted.
+export const ENTITLEMENT_ID = "Always Pause+";
+const ENTITLEMENT_IDS = [ENTITLEMENT_ID, "always_pause_plus"];
 
 export const initRevenueCat = async () => {
   // Verbose SDK logs only while developing; release builds log warnings and up.
@@ -11,7 +15,7 @@ export const initRevenueCat = async () => {
 };
 
 export const hasProEntitlement = (customerInfo) =>
-  !!customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
+  ENTITLEMENT_IDS.some((id) => !!customerInfo?.entitlements?.active?.[id]);
 
 export const checkEntitlement = async () => {
   try {
