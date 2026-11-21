@@ -162,7 +162,7 @@ export default function AboutLegalSheet({ theme, onClose }) {
           theme={theme}
           label="Share anonymous usage"
           description={isWebsite()
-            ? "Lets Google Analytics (website only) and anonymous usage counts show us how Always Pause is used. Never your photos, exact colours, or identity. Off by default."
+            ? "Lets Google Analytics and anonymous usage counts show us how the website is used. Never your photos, exact colours, or identity."
             : "Sends anonymous counts of the visuals, backgrounds and techniques you use. Never your photos, exact colours, or identity. Off by default."}
           checked={shareUsage}
           onChange={(value) => {

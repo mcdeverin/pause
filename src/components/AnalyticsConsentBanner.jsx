@@ -2,14 +2,20 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getAnalyticsChoice, setAnalyticsEnabled } from "@/lib/analytics";
 import { isWebsite } from "@/lib/googleTag";
+import { requiresConsentFirst } from "@/lib/consentRegion";
 import { FONT, PAUSE } from "@/lib/design";
 
-// Website-only consent prompt. Shown once, until the visitor chooses; the
-// choice can be changed any time with "Share anonymous usage" in About.
+// Website-only consent prompt for visitors in Europe (EU, EEA, UK, Switzerland),
+// where analytics cookies need a "yes" first. Shown once, until they choose;
+// the choice can be changed any time with "Share anonymous usage" in About.
+// Visitors elsewhere don't see it: analytics is on by default for them, with
+// the same switch in About to turn it off (see consentRegion.js).
 // Sits at the top so it never covers onboarding or the breathing controls,
 // and the app stays fully usable without answering it.
 export default function AnalyticsConsentBanner() {
-  const [visible, setVisible] = useState(() => isWebsite() && getAnalyticsChoice() === null);
+  const [visible, setVisible] = useState(
+    () => isWebsite() && requiresConsentFirst() && getAnalyticsChoice() === null
+  );
   if (!visible) return null;
 
   const choose = (allow) => {

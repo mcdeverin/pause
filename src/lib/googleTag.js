@@ -4,9 +4,10 @@ import { Capacitor } from "@capacitor/core";
 //
 // • Never runs inside the iPhone app: the App Store listing says the app is
 //   tracker-free, and its privacy label doesn't declare Google Analytics.
-// • Never loads before consent: nothing is requested from Google until the
-//   visitor taps Allow on the website banner, or switches on "Share anonymous
-//   usage" in About (the same choice, stored by analytics.js).
+// • Loads only when analytics.js says analytics is on: in Europe that means the
+//   visitor tapped Allow on the banner; elsewhere it's on by default unless the
+//   browser sends Global Privacy Control / Do Not Track, or the visitor switched
+//   off "Share anonymous usage" in About.
 // • The GTM container carries the GA4 tag (G-7161SFJEGG), so GA4 is not added
 //   here a second time — that would double-count visits. Page views on route
 //   changes come from GA4's enhanced measurement (browser history events).
@@ -33,7 +34,7 @@ function gtag() {
   window.dataLayer.push(arguments);
 }
 
-/** Loads the container (once) after the visitor has agreed. */
+/** Loads the container (once) when analytics is on for this visitor. */
 export function startGoogleTag() {
   if (!isWebsite()) return;
   window[`ga-disable-${GA_MEASUREMENT_ID}`] = false;
@@ -44,8 +45,8 @@ export function startGoogleTag() {
   }
   loaded = true;
 
-  // The visitor agreed to analytics only. Advertising storage stays denied, so
-  // any ads tags added to the container later stay off until asked separately.
+  // Analytics only. Advertising storage stays denied, so any ads tags added to
+  // the container later stay off until visitors are asked separately.
   gtag("consent", "default", {
     analytics_storage: "granted",
     ad_storage: "denied",
