@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import AdaptiveHome from "../components/AdaptiveHome";
@@ -21,17 +21,28 @@ import { track } from "../lib/analytics";
 import { describeSavedBackground, describeVisual } from "../lib/analyticsProps";
 import { isFreeTechnique } from "../lib/access";
 import { loadNarrationManifest } from "../lib/narration";
+import { getTimeCanvas } from "../lib/design";
+import { personalizeMoment } from "../lib/onboardingProfile";
 
-function getSuggestedMoment(){const h=new Date().getHours();return h>=5&&h<11?"focus":h>=11&&h<17?"reset":h>=17&&h<21?"calm":"wind_down";}
+// Records whose phase string can't be read are never offered.
+const hasUsablePhases = (technique) => {
+  const parsed = String(technique?.phases || "").split(",").map(Number);
+  return parsed.length > 0 && !parsed.some(isNaN);
+};
+
+// The chooser opens on the same moment the home button suggests.
+function getSuggestedMoment(){const time=getTimeCanvas();return personalizeMoment(time.key,time.moment);}
 export default function Home() {
   useEffect(() => { void loadNarrationManifest(); }, []);
   const [mode, setMode] = useState("idle");
   const [sessionVoice, setSessionVoice] = useState("none");
-  const [preparingPause, setPreparingPause] = useState(false);
   const [browseMoment, setBrowseMoment] = useState(null);
   const [browseTechniques, setBrowseTechniques] = useState([]);
   const [technique, setTechnique] = useState(null);
-  const [hapticsEnabled, setHapticsEnabled] = useState(true);
+  const [hapticsEnabled] = useState(true);
+  // A technique chosen from the browser that needs Always Pause+; it starts
+  // straight after a successful purchase.
+  const [pendingTechnique, setPendingTechnique] = useState(null);
 
   const [showSupport, setShowSupport] = useState(false);
   // { source, featureId, featureCategory, introductory } — null when closed.
@@ -45,7 +56,6 @@ export default function Home() {
   const [isPro, setIsPro] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [techniques, setTechniques] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [preferences, setPreferences] = useState(loadPreferences);
   const [photos, setPhotos] = useState(getStoredPhotos);
 
@@ -145,79 +155,34 @@ export default function Home() {
     }
   }, [techniques]);
 
-  const hasUsablePhases = (technique) => {
-    const parsed = String(technique.phases || "").split(",").map(Number);
-    return parsed.length > 0 && !parsed.some(isNaN);
-  };
-
-  // A category is locked only when nothing free lives in it, so the menu never
-  // marks an exercise's home as premium by accident.
-  const lockedCategories = useMemo(() => {
-    const categories = [...new Set(techniques.map((technique) => technique.category).filter(Boolean))];
-    return categories.filter(
-      (category) => !techniques.some((t) => t.category === category && isFreeTechnique(t))
-    );
-  }, [techniques]);
-
-  const startBreathing = useCallback(async (forcedTechnique = null) => {
+  // One way into a session for both the home button and the chooser. Free users
+  // get the free techniques for that moment; if a moment has none, a free
+  // starter plays instead, so the button never does nothing.
+  const startForMoment = useCallback(async (momentId, guided) => {
     const available = await ensureTechniques();
-    if (available.length === 0) {
-      flashNotice("Your exercises could not load. Check your connection and tap again.");
+    const moment = MOMENTS.find((m) => m.id === momentId);
+    const usable = available.filter(hasUsablePhases);
+    const inMoment = usable.filter((t) => moment?.categories.includes(t.category));
+    const allowed = hasFullAccess ? inMoment : inMoment.filter(isFreeTechnique);
+    const pool = allowed.length
+      ? allowed
+      : hasFullAccess ? usable : usable.filter(isFreeTechnique);
+    if (!pool.length) {
+      flashNotice("Your exercises could not load. Close the app and try again.");
       return;
     }
-
-    const inCategory =
-      selectedCategory === "All"
-        ? available
-        : available.filter((t) => t.category === selectedCategory);
-    // Free breathing is unlimited, but only for the starter exercises.
-    const playable = hasFullAccess ? inCategory : inCategory.filter(isFreeTechnique);
-    const pool =
-      playable.length > 0
-        ? playable
-        : hasFullAccess
-          ? available
-          : available.filter(isFreeTechnique);
-    if (pool.length === 0) {
-      flashNotice("No breathing exercise fits that one yet.");
-      return;
-    }
-
-    beginSession(forcedTechnique || getRandomTechnique(pool), null);
-  }, [ensureTechniques, selectedCategory, hasFullAccess, beginSession, flashNotice]);
-
-  // Choosing how you feel is always free: a shortcut uses the free exercises in
-  // its own category where it can, and otherwise a starter exercise — it never
-  // opens the offer.
-  const startMoment = useCallback(async (momentId, voice = "none") => {
-    setPreparingPause(true);
-    const moment = MOMENTS.find((entry) => entry.id === momentId);
-    if (!moment) { setPreparingPause(false); return; }
-
-    const available = await ensureTechniques();
-    if (available.length === 0) {
-      flashNotice("Your techniques are still loading. Try again in a moment.");
-      setPreparingPause(false);
-      return;
-    }
-
-    const inMoment = available.filter(
-      (t) => (moment.id === "explore_all" || moment.categories.includes(t.category)) && hasUsablePhases(t)
-    );
-    const playable = hasFullAccess ? inMoment : inMoment.filter(isFreeTechnique);
-    const pool = playable;
-    if (pool.length === 0) {
-      flashNotice(hasFullAccess ? "No breathing exercise fits that choice yet." : "No free breathing exercise is available for that choice yet.");
-      setPreparingPause(false);
-      return;
-    }
-
-    setSessionVoice(voice);
-    setPreparingPause(false);
-    setBrowseMoment(moment.id);
-    setBrowseTechniques(pool);
-    setMode("browse");
+    setSessionVoice(guided ? "full" : "none");
+    beginSession(getRandomTechnique(pool), momentId);
   }, [ensureTechniques, hasFullAccess, beginSession, flashNotice]);
+
+  // The full list, with Always Pause+ techniques visible but marked.
+  const openBrowser = useCallback(async (guided) => {
+    const available = await ensureTechniques();
+    setSessionVoice(guided ? "full" : "none");
+    setBrowseMoment("explore_all");
+    setBrowseTechniques(available.filter(hasUsablePhases));
+    setMode("browse");
+  }, [ensureTechniques]);
 
   const openPaywall = useCallback((context = {}) => {
     // Interest in a specific premium feature, recorded once per attempt.
@@ -245,7 +210,13 @@ export default function Home() {
   const closePaywall = useCallback(() => {
     setPaywall(null);
     setPendingDraft(null);
+    setPendingTechnique(null);
   }, []);
+
+  const requestTechnique = useCallback((chosen) => {
+    setPendingTechnique(chosen);
+    openPaywall({ source: "technique", featureId: chosen.id, featureCategory: "technique" });
+  }, [openPaywall]);
 
   const handlePaywallPurchase = useCallback(() => {
     const context = paywall;
@@ -258,10 +229,13 @@ export default function Home() {
       setPendingDraft(null);
       setShowPersonalize(false);
     }
-    if (context?.featureCategory === "technique" && context.featureId) {
-      setSelectedCategory(context.featureId);
+    // Start the technique they picked before the offer appeared.
+    if (context?.featureCategory === "technique" && pendingTechnique) {
+      const chosen = pendingTechnique;
+      setPendingTechnique(null);
+      beginSession(chosen, null);
     }
-  }, [paywall, pendingDraft, commitPreferences]);
+  }, [paywall, pendingDraft, pendingTechnique, commitPreferences, beginSession]);
 
   const finishSession = useCallback((result) => {
     const endedTechnique = technique;
@@ -309,29 +283,20 @@ export default function Home() {
 
       <AnimatePresence mode="wait">
         {mode === "idle" && (
-          <AdaptiveHome key="main" onStart={async (momentId) => {
-            const available = await ensureTechniques();
-            const moment = MOMENTS.find(m => m.id === momentId);
-            const eligible = available.filter(t => moment?.categories.includes(t.category) && hasUsablePhases(t) && (hasFullAccess || isFreeTechnique(t)));
-            if (!eligible.length) { flashNotice("No breathing technique is available for this moment yet."); return; }
-            setSessionVoice(preferences.voiceGuide ? "full" : "none");
-            beginSession(getRandomTechnique(eligible), momentId);
-          }} onExplore={() => setMode("choose")}
+          <AdaptiveHome key="main" onStart={(momentId) => startForMoment(momentId, preferences.voiceGuide)} onExplore={() => setMode("choose")}
             onPersonalize={() => setShowPersonalize(true)} onMoments={() => setShowMoments(true)} onAbout={() => setShowAbout(true)} onPlus={() => openPaywall({source:"menu"})} />
         )}
-        {mode === "choose" && <MomentChooser key="choose" initialMoment={getSuggestedMoment()} initialGuided={preferences.voiceGuide} onBack={() => setMode("idle")} onBegin={async (momentId,guided) => {
-          const available = await ensureTechniques();
-          const moment = MOMENTS.find(m => m.id === momentId);
-          const eligible = available.filter(t => moment?.categories.includes(t.category) && hasUsablePhases(t) && (hasFullAccess || isFreeTechnique(t)));
-          if (!eligible.length) { flashNotice("No breathing technique is available for this moment yet."); return; }
-          setSessionVoice(guided ? "full" : "none");
-          beginSession(getRandomTechnique(eligible),momentId);
-        }} />}
+        {mode === "choose" && <MomentChooser key="choose" initialMoment={getSuggestedMoment()} initialGuided={preferences.voiceGuide}
+          onBack={() => setMode("idle")}
+          onBegin={(momentId, guided) => startForMoment(momentId, guided)}
+          onBrowse={(guided) => openBrowser(guided)} />}
         {mode === "browse" && (
           <TechniqueBrowser key="technique-browser" techniques={browseTechniques} momentId={browseMoment}
             theme={theme} backgroundSettings={preferences} photo={photo}
-            onBack={() => setMode("idle")}
-            onChoose={(chosen) => beginSession(chosen, browseMoment)} />
+            isLocked={(t) => !hasFullAccess && !isFreeTechnique(t)}
+            onLocked={requestTechnique}
+            onBack={() => setMode("choose")}
+            onChoose={(chosen) => beginSession(chosen, null)} />
         )}
         {mode === "breathing" && technique && (
           <BreathingScreen
@@ -352,6 +317,13 @@ export default function Home() {
           />
         )}
       </AnimatePresence>
+
+      {/* Short notices (for example, when the library could not load). */}
+      {shortcutNotice && (
+        <div role="status" style={{ position: "fixed", left: 16, right: 16, bottom: "calc(env(safe-area-inset-bottom, 0px) + 96px)", zIndex: 60, margin: "0 auto", maxWidth: 420, padding: "12px 16px", borderRadius: 16, background: "rgba(20,26,24,.88)", color: "#fff", fontSize: 14, lineHeight: 1.4, textAlign: "center" }}>
+          {shortcutNotice}
+        </div>
+      )}
 
       {/* Personalize: retain all existing controls, previews and save/upgrade flows. */}
       <AnimatePresence>

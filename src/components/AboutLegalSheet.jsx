@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ExternalLink, FileText, Mail, ShieldCheck, X } from "lucide-react";
+import { ExternalLink, FileText, Heart, Mail, ShieldCheck, X } from "lucide-react";
 import { FONT, getColors } from "../lib/design";
 import PreferenceToggle from "./personalize/PreferenceToggle";
 import { isAnalyticsEnabled, setAnalyticsEnabled } from "../lib/analytics";
@@ -62,6 +63,7 @@ function SectionLabel({ children, theme }) {
 }
 
 export default function AboutLegalSheet({ theme, onClose }) {
+  const navigate = useNavigate();
   const colors = getColors(theme);
   // Off unless the person has turned it on before. The choice is stored on the
   // device and applied immediately — switching it off clears the analytics
@@ -178,6 +180,12 @@ export default function AboutLegalSheet({ theme, onClose }) {
           icon={FileText}
           label="Terms of Use"
           onClick={() => window.open(TERMS_URL, "_blank")}
+        />
+        <InfoRow
+          theme={theme}
+          icon={Heart}
+          label="Credits & licences"
+          onClick={() => { onClose?.(); navigate("/credits"); }}
         />
 
         <SectionLabel theme={theme}>Support</SectionLabel>

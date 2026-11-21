@@ -3,7 +3,8 @@ import { Purchases, LOG_LEVEL } from '@revenuecat/purchases-capacitor';
 export const ENTITLEMENT_ID = "always_pause_plus";
 
 export const initRevenueCat = async () => {
-  await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG });
+  // Verbose SDK logs only while developing; release builds log warnings and up.
+  await Purchases.setLogLevel({ level: import.meta.env.DEV ? LOG_LEVEL.DEBUG : LOG_LEVEL.WARN });
   await Purchases.configure({
     apiKey: "appl_vfxpRLXujuSdAhnusNWvmAxrnYH"
   });

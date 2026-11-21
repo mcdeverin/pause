@@ -5,13 +5,9 @@ import {
   BarChart3,
   Crosshair,
   Flame,
-  ChevronDown,
-  ChevronRight,
-  Orbit,
   Info,
   Layers,
   Waves,
-  Cloud as CloudIcon,
   Leaf,
   Lock,
   Moon,
@@ -177,7 +173,7 @@ export default function NavigationSheet({
 
         <div style={{ flex: 1, overflowY: "auto", padding: "0 10px" }}>
           <SheetRow theme={theme} icon={Waves} label="Breathing" onClick={() => { onClose(); navigate("/"); }} />
-          <SheetRow theme={theme} icon={Sparkles} label="Sensory Studio" onClick={() => { onClose(); navigate("/sensory"); }} />
+          <SheetRow theme={theme} icon={Sparkles} label="Sensory" onClick={() => { onClose(); navigate("/sensory"); }} />
           <div style={{ height: 1, margin: "12px 14px", background: colors.border }} />
           <SheetRow
             theme={theme}

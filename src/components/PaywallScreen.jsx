@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import LiquidOrb from "./LiquidOrb";
 import {
   getOfferings,
   purchasePackage,

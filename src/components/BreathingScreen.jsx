@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { playPhaseHaptic, stopHaptics } from "../lib/haptics";
 import { motion, useReducedMotion } from "framer-motion";
 import BreathingVisual from "./visuals/BreathingVisual";
 import FullScreenFill from "./visuals/FullScreenFill";
-import SessionTimerPill from "./SessionTimerPill";
 import TechniqueInfoCard from "./TechniqueInfoCard";
 import { FONT, HEADING_FONT, PAUSE, getMomentStyle, getTimeCanvas, getColors, isPhotoBackground } from "../lib/design";
 import { getBreathingInk } from "../lib/canvasInk";
-import BackgroundLayer from "./BackgroundLayer";
 import useBreathingClock from "../hooks/useBreathingClock";
 import { loadLaurenLibrary, findLaurenClip, phasePosition, isVideoFirst, playLaurenClip } from "../lib/laurenAudio";
 import { usePhotoLightness } from "../hooks/usePhotoLightness";
@@ -158,19 +157,6 @@ export default function BreathingScreen({
     else complete();
   };
 
-  // ── Haptic feedback ──────────────────────────────────────────────
-  const triggerHaptic = (label) => {
-    if (!hapticsEnabled || !navigator.vibrate) return;
-    const l = String(label || "").toLowerCase();
-    if (/(inhale|sniff|belly|chest|collar)/.test(l)) {
-      navigator.vibrate([80, 40, 80]); // soft double pulse — breathe in
-    } else if (/(exhale|hum)/.test(l)) {
-      navigator.vibrate([40, 30, 40, 30, 40]); // gentle triple fade — breathe out
-    } else if (/hold/.test(l)) {
-      navigator.vibrate(150); // single sustained — stay still
-    }
-  };
-  // ────────────────────────────────────────────────────────────────
 
   // One session clock drives the countdown, the cues, the progress bar and both
   // visualisations — there is no separate timing engine for orb and ring.
@@ -192,8 +178,8 @@ export default function BreathingScreen({
   useEffect(() => {
     if (!readyToBreathe || phaseSequence === hapticPhaseRef.current) return;
     hapticPhaseRef.current = phaseSequence;
-    triggerHaptic(currentLabel);
-  }, [phaseSequence, currentLabel, readyToBreathe]);
+    if (hapticsEnabled) playPhaseHaptic(currentLabel, activePhases[clock.index]);
+  }, [phaseSequence, currentLabel, readyToBreathe, hapticsEnabled, activePhases, clock.index]);
 
   // Start eligible MP3 cues only at boundaries emitted by the existing clock.
   // Late/missing/overlong clips are skipped rather than delaying the orb.
@@ -210,7 +196,7 @@ export default function BreathingScreen({
     if (clip) stopAudioRef.current = playLaurenClip(clip);
   }, [guided, readyToBreathe, laurenLibrary, phaseSequence, currentLabel, activeTechnique, activePhases, clock.index]);
 
-  useEffect(() => () => { stopAudioRef.current?.(); }, []);
+  useEffect(() => () => { stopAudioRef.current?.(); stopHaptics(); }, []);
 
   // The information card is height-capped to the space above the breathing
   // visual, so its text can never reach or cover the animation. On a very short

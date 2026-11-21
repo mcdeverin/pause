@@ -7,11 +7,15 @@
 import { CUSTOM_GRADIENT_ID } from "./design";
 import { isGalleryPhotoId } from "./backgroundGallery";
 
-// The three starter exercises, by their stored record ids.
+// The starter exercises, by their stored record ids. Every moment on the home
+// screen and in the chooser has at least one, so the main button always plays
+// something for free users; the paywall lives where people ask for more.
 export const FREE_TECHNIQUE_IDS = [
   "69ca561206566afe944a443d", // Box Breathing — Calm, 4·4·4·4
   "69ca561206566afe944a443e", // 4-7-8 Breathing — Calm, 4·7·8
   "69ca561206566afe944a4458", // Equal Breathing (Sama Vritti) — Sleep, 5·5
+  "69ca561206566afe944a4445", // Triangle Breathing — Focus, 4·4·4
+  "69ca561206566afe944a446c", // Morning Activation Breath — Energy, 2·2·2·2
 ];
 
 // Original only.

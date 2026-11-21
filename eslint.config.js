@@ -52,7 +52,17 @@ export default [
       "react/react-in-jsx-scope": "off",
       "react/no-unknown-property": [
         "error",
-        { ignore: ["cmdk-input-wrapper", "toast-close"] },
+        {
+          ignore: [
+            "cmdk-input-wrapper",
+            "toast-close",
+            // React Three Fiber props on three.js objects (meshes, materials, lights).
+            "args", "attach", "clearcoat", "clearcoatRoughness", "depthWrite", "envMap",
+            "fragmentShader", "geometry", "intensity", "map", "metalness", "position",
+            "refractionRatio", "rotation", "roughness", "side", "transparent", "uniforms",
+            "vertexShader", "visible",
+          ],
+        },
       ],
       "react-hooks/rules-of-hooks": "error",
     },

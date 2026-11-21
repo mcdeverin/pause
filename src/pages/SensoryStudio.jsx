@@ -9,8 +9,6 @@ import GhostCursor from "@/components/visuals/GhostCursor";
 import Antigravity from "@/components/visuals/Antigravity";
 import SoftAurora from "@/components/visuals/SoftAurora";
 import HalftoneReveal from "@/components/visuals/HalftoneReveal";
-import GlowCursor from "@/components/visuals/GlowCursor";
-import Particles from "@/components/visuals/Particles";
 import Balatro from "@/components/visuals/Balatro";
 import DitherVeil from "@/components/visuals/DitherVeil";
 import PixelSwap from "@/components/visuals/PixelSwap";
