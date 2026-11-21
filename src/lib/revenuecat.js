@@ -1,6 +1,10 @@
 import { Purchases, LOG_LEVEL } from '@revenuecat/purchases-capacitor';
 
-export const ENTITLEMENT_ID = "always_pause_plus";
+// The entitlement's identifier in RevenueCat is "Always Pause+" (identifiers
+// can't be renamed there). The app used to look for "always_pause_plus", so a
+// successful purchase never unlocked Plus. Both are accepted.
+export const ENTITLEMENT_ID = "Always Pause+";
+const ENTITLEMENT_IDS = [ENTITLEMENT_ID, "always_pause_plus"];
 
 export const initRevenueCat = async () => {
   // Verbose SDK logs only while developing; release builds log warnings and up.
@@ -10,14 +14,34 @@ export const initRevenueCat = async () => {
   });
 };
 
+export const hasProEntitlement = (customerInfo) =>
+  ENTITLEMENT_IDS.some((id) => !!customerInfo?.entitlements?.active?.[id]);
+
 export const checkEntitlement = async () => {
-  const { customerInfo } = await Purchases.getCustomerInfo();
-  return !!customerInfo.entitlements.active[ENTITLEMENT_ID];
+  try {
+    const { customerInfo } = await Purchases.getCustomerInfo();
+    return hasProEntitlement(customerInfo);
+  } catch {
+    return false;
+  }
 };
 
+// Keeps Always Pause+ in step with purchases, renewals, expiries and refunds
+// that happen while the app is open (or arrive from the App Store later).
+// Returns a function that removes the listener.
+export const addEntitlementListener = async (onChange) => {
+  const callbackId = await Purchases.addCustomerInfoUpdateListener((customerInfo) => {
+    onChange(hasProEntitlement(customerInfo));
+  });
+  return () => Purchases.removeCustomerInfoUpdateListener({ listenerToRemove: callbackId }).catch(() => {});
+};
+
+// purchases-capacitor returns the offerings object itself (not wrapped in
+// { offerings }). Destructuring it made every offering undefined, so the
+// paywall fell back to built-in prices, never saw the store's trial, and every
+// purchase failed with "this plan is not available right now".
 export const getOfferings = async () => {
-  const { offerings } = await Purchases.getOfferings();
-  return offerings;
+  return await Purchases.getOfferings();
 };
 
 export const purchasePackage = async (rcPackage) => {
