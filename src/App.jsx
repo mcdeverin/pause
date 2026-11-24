@@ -12,6 +12,7 @@ import Terms from './pages/Terms.jsx';
 import Credits from './pages/Credits.jsx';
 import AdminRoute from '@/components/AdminRoute';
 import AnalyticsConsentBanner from '@/components/AnalyticsConsentBanner';
+import SensoryScene from '@/components/SensoryScene';
 
 const Onboarding = lazy(() => import('./pages/Onboarding.jsx'));
 const Cloud = lazy(() => import('./pages/Cloud.jsx'));
@@ -88,24 +89,24 @@ const AuthenticatedApp = () => {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/credits" element={<Credits />} />
-      <Route path="/sensory/anti-gravity" element={<Suspense fallback={<div className="p-8">Loading Anti Gravity…</div>}><AntiGravityExperience /></Suspense>} />
-      <Route path="/sensory/prism" element={<Suspense fallback={<div className="p-8">Loading Prism…</div>}><PrismExperience /></Suspense>} />
-      <Route path="/sensory/galaxy" element={<Suspense fallback={<div className="p-8">Loading Galaxy…</div>}><GalaxyExperience /></Suspense>} />
-      <Route path="/sensory/iridescence" element={<Suspense fallback={<div className="p-8">Loading Iridescence…</div>}><IridescenceExperience /></Suspense>} />
-      <Route path="/sensory/grid-distortion" element={<Suspense fallback={<div className="p-8">Loading Grid Distortion…</div>}><GridDistortionExperience /></Suspense>} />
-      <Route path="/sensory/liquid-surface" element={<Suspense fallback={<div className="p-8">Loading Liquid Surface…</div>}><LiquidSurface /></Suspense>} />
-      <Route path="/sensory/prismatic-water" element={<Suspense fallback={<div className="p-8">Loading Prismatic Water…</div>}><PrismaticWater /></Suspense>} />
-      <Route path="/sensory/liquid-chrome" element={<Suspense fallback={<div className="p-8">Loading Liquid Chrome…</div>}><LiquidChromeExperience /></Suspense>} />
-      <Route path="/sensory/cloud" element={<Suspense fallback={<div className="p-8">Loading Cloud…</div>}><Cloud /></Suspense>} />
-      <Route path="/sensory/popcorn" element={<Suspense fallback={<div className="p-8">Loading Popcorn…</div>}><Popcorn /></Suspense>} />
-      <Route path="/sensory/dither-veil" element={<Suspense fallback={<div className="p-8">Loading Dither Veil…</div>}><DitherVeilExperience /></Suspense>} />
-      <Route path="/sensory/pixel-swap-sky" element={<Suspense fallback={<div className="p-8">Loading Pixel Swap Sky…</div>}><PixelSwapSkyExperience /></Suspense>} />
-      <Route path="/sensory/neon-painting" element={<Suspense fallback={<div className="p-8">Loading Neon Painting…</div>}><NeonPaintingExperience /></Suspense>} />
+      <Route path="/sensory/anti-gravity" element={<SensoryScene id="anti-gravity" name="Anti Gravity"><AntiGravityExperience /></SensoryScene>} />
+      <Route path="/sensory/prism" element={<SensoryScene id="prism" name="Prism"><PrismExperience /></SensoryScene>} />
+      <Route path="/sensory/galaxy" element={<SensoryScene id="galaxy" name="Galaxy"><GalaxyExperience /></SensoryScene>} />
+      <Route path="/sensory/iridescence" element={<SensoryScene id="iridescence" name="Iridescence"><IridescenceExperience /></SensoryScene>} />
+      <Route path="/sensory/grid-distortion" element={<SensoryScene id="grid-distortion" name="Grid Distortion"><GridDistortionExperience /></SensoryScene>} />
+      <Route path="/sensory/liquid-surface" element={<SensoryScene id="liquid-surface" name="Liquid Surface"><LiquidSurface /></SensoryScene>} />
+      <Route path="/sensory/prismatic-water" element={<SensoryScene id="prismatic-water" name="Prismatic Water"><PrismaticWater /></SensoryScene>} />
+      <Route path="/sensory/liquid-chrome" element={<SensoryScene id="liquid-chrome" name="Liquid Chrome"><LiquidChromeExperience /></SensoryScene>} />
+      <Route path="/sensory/cloud" element={<SensoryScene id="cloud" name="Cloud"><Cloud /></SensoryScene>} />
+      <Route path="/sensory/popcorn" element={<SensoryScene id="popcorn" name="Popcorn"><Popcorn /></SensoryScene>} />
+      <Route path="/sensory/dither-veil" element={<SensoryScene id="dither-veil" name="Dither Veil"><DitherVeilExperience /></SensoryScene>} />
+      <Route path="/sensory/pixel-swap-sky" element={<SensoryScene id="pixel-swap-sky" name="Pixel Swap Sky"><PixelSwapSkyExperience /></SensoryScene>} />
+      <Route path="/sensory/neon-painting" element={<SensoryScene id="neon-painting" name="Neon Painting"><NeonPaintingExperience /></SensoryScene>} />
       <Route path="/sensory/prismatic-balatro" element={<Navigate to="/sensory/prismatic-swirl" replace />} />
-      <Route path="/sensory/prismatic-swirl" element={<Suspense fallback={<div className="p-8">Loading Prismatic Swirl…</div>}><PrismaticBalatroExperience /></Suspense>} />
-      <Route path="/sensory/firefly" element={<Suspense fallback={<div className="p-8">Loading Firefly…</div>}><Firefly /></Suspense>} />
-      <Route path="/sensory/rain" element={<Suspense fallback={<div className="p-8">Loading Rain…</div>}><Rain /></Suspense>} />
-      <Route path="/sensory/underwater" element={<Suspense fallback={<div className="p-8">Loading Underwater…</div>}><Underwater /></Suspense>} />
+      <Route path="/sensory/prismatic-swirl" element={<SensoryScene id="prismatic-swirl" name="Prismatic Swirl"><PrismaticBalatroExperience /></SensoryScene>} />
+      <Route path="/sensory/firefly" element={<SensoryScene id="firefly" name="Firefly"><Firefly /></SensoryScene>} />
+      <Route path="/sensory/rain" element={<SensoryScene id="rain" name="Rain"><Rain /></SensoryScene>} />
+      <Route path="/sensory/underwater" element={<SensoryScene id="underwater" name="Underwater"><Underwater /></SensoryScene>} />
       <Route path="/sensory" element={<Suspense fallback={<div className="p-8">Loading Sensory…</div>}><SensoryLibrary /></Suspense>} />
       {DEV_TOOLS && <Route path="/theme-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Theme Studio…</div>}><GhostStudio /></Suspense></AdminRoute>} />}
       {DEV_TOOLS && <Route path="/sensory-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense></AdminRoute>} />}
