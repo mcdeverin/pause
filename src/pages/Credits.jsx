@@ -41,7 +41,7 @@ const CODE = [
     text: elevenLabsLicense,
     author: "ElevenLabs",
     license: "MIT",
-    use: "The shader the liquid breathing orbs are adapted from.",
+    use: "The shader the liquid breathing orbs are adapted from, and its noise texture.",
     url: "https://github.com/elevenlabs/ui",
   },
   {
@@ -118,7 +118,8 @@ export default function Credits() {
             <h2 className="text-lg font-bold mb-3">Photography</h2>
             <p>
               Background and scene photographs by {PHOTOGRAPHERS.join(", ")} and other
-              photographers on Unsplash, used under the Unsplash License.
+              photographers on Unsplash, used under the Unsplash License. Scene photos are
+              stored inside the app so they work offline.
             </p>
           </section>
 

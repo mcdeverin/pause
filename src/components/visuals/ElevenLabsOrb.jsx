@@ -49,7 +49,7 @@ export function Orb({
     noise.needsUpdate = true;
     const loader = new THREE.TextureLoader();
     let loadedNoise = null;
-    loader.load("https://storage.googleapis.com/eleven-public-cdn/images/perlin-noise.png", texture => {
+    loader.load("/sensory-assets/perlin-noise.png", texture => {
       if (disposed) { texture.dispose(); return; }
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       loadedNoise = texture;

@@ -39,7 +39,7 @@ function Preview({name}) {
   },[]);
   const scenes={
     "Iridescence": <Iridescence color="#8099cc" hueShift={0} saturation={1} brightness={1.5} contrast={1} speed={1} scale={1} detail={8} warp={1} rotation={0} mouseReact amplitude={0.1} stir={0.5} sheen={0.3} clickSwirl grain={0} fade={0} />,
-    "Grid Distortion": <GridDistortion imageSrc="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=85" grid={15} radius={0.18} strength={0.15} relaxation={0.96} mode="drag" softness={0} chroma={0} idle={0.3} clickRipple intro />,
+    "Grid Distortion": <GridDistortion imageSrc="/sensory-assets/grid-distortion-mountains.jpg" grid={15} radius={0.18} strength={0.15} relaxation={0.96} mode="drag" softness={0} chroma={0} idle={0.3} clickRipple intro />,
     "Cloud": <CloudScene preview />,
     "Galaxy": <Galaxy density={1} glowIntensity={0.3} flareIntensity={1} starSpeed={0.5} mouseRepulsion clickWarp starColors={[]} hueShift={140} saturation={0} starSize={1} twinkleIntensity={0.3} speed={1} rotationSpeed={0.1} layers={4} direction="forward" repulsionStrength={2} mouseInteraction intro lightMode={false} transparent={false} />,
     "Pixel Swap Sky": <PixelSwapSky />,
