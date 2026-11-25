@@ -89,24 +89,24 @@ const AuthenticatedApp = () => {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/credits" element={<Credits />} />
-      <Route path="/sensory/anti-gravity" element={<SensoryScene id="anti-gravity" name="Anti Gravity"><AntiGravityExperience /></SensoryScene>} />
-      <Route path="/sensory/prism" element={<SensoryScene id="prism" name="Prism"><PrismExperience /></SensoryScene>} />
-      <Route path="/sensory/galaxy" element={<SensoryScene id="galaxy" name="Galaxy"><GalaxyExperience /></SensoryScene>} />
-      <Route path="/sensory/iridescence" element={<SensoryScene id="iridescence" name="Iridescence"><IridescenceExperience /></SensoryScene>} />
-      <Route path="/sensory/grid-distortion" element={<SensoryScene id="grid-distortion" name="Grid Distortion"><GridDistortionExperience /></SensoryScene>} />
-      <Route path="/sensory/liquid-surface" element={<SensoryScene id="liquid-surface" name="Liquid Surface"><LiquidSurface /></SensoryScene>} />
-      <Route path="/sensory/prismatic-water" element={<SensoryScene id="prismatic-water" name="Prismatic Water"><PrismaticWater /></SensoryScene>} />
-      <Route path="/sensory/liquid-chrome" element={<SensoryScene id="liquid-chrome" name="Liquid Chrome"><LiquidChromeExperience /></SensoryScene>} />
-      <Route path="/sensory/cloud" element={<SensoryScene id="cloud" name="Cloud"><Cloud /></SensoryScene>} />
-      <Route path="/sensory/popcorn" element={<SensoryScene id="popcorn" name="Popcorn"><Popcorn /></SensoryScene>} />
-      <Route path="/sensory/dither-veil" element={<SensoryScene id="dither-veil" name="Dither Veil"><DitherVeilExperience /></SensoryScene>} />
-      <Route path="/sensory/pixel-swap-sky" element={<SensoryScene id="pixel-swap-sky" name="Pixel Swap Sky"><PixelSwapSkyExperience /></SensoryScene>} />
-      <Route path="/sensory/neon-painting" element={<SensoryScene id="neon-painting" name="Neon Painting"><NeonPaintingExperience /></SensoryScene>} />
+      <Route path="/sensory/anti-gravity" element={<SensoryScene id="anti-gravity"><AntiGravityExperience /></SensoryScene>} />
+      <Route path="/sensory/prism" element={<SensoryScene id="prism"><PrismExperience /></SensoryScene>} />
+      <Route path="/sensory/galaxy" element={<SensoryScene id="galaxy"><GalaxyExperience /></SensoryScene>} />
+      <Route path="/sensory/iridescence" element={<SensoryScene id="iridescence"><IridescenceExperience /></SensoryScene>} />
+      <Route path="/sensory/grid-distortion" element={<SensoryScene id="grid-distortion"><GridDistortionExperience /></SensoryScene>} />
+      <Route path="/sensory/liquid-surface" element={<SensoryScene id="liquid-surface"><LiquidSurface /></SensoryScene>} />
+      <Route path="/sensory/prismatic-water" element={<SensoryScene id="prismatic-water"><PrismaticWater /></SensoryScene>} />
+      <Route path="/sensory/liquid-chrome" element={<SensoryScene id="liquid-chrome"><LiquidChromeExperience /></SensoryScene>} />
+      <Route path="/sensory/cloud" element={<SensoryScene id="cloud"><Cloud /></SensoryScene>} />
+      <Route path="/sensory/popcorn" element={<SensoryScene id="popcorn"><Popcorn /></SensoryScene>} />
+      <Route path="/sensory/dither-veil" element={<SensoryScene id="dither-veil"><DitherVeilExperience /></SensoryScene>} />
+      <Route path="/sensory/pixel-swap-sky" element={<SensoryScene id="pixel-swap-sky"><PixelSwapSkyExperience /></SensoryScene>} />
+      <Route path="/sensory/neon-painting" element={<SensoryScene id="neon-painting"><NeonPaintingExperience /></SensoryScene>} />
       <Route path="/sensory/prismatic-balatro" element={<Navigate to="/sensory/prismatic-swirl" replace />} />
-      <Route path="/sensory/prismatic-swirl" element={<SensoryScene id="prismatic-swirl" name="Prismatic Swirl"><PrismaticBalatroExperience /></SensoryScene>} />
-      <Route path="/sensory/firefly" element={<SensoryScene id="firefly" name="Firefly"><Firefly /></SensoryScene>} />
-      <Route path="/sensory/rain" element={<SensoryScene id="rain" name="Rain"><Rain /></SensoryScene>} />
-      <Route path="/sensory/underwater" element={<SensoryScene id="underwater" name="Underwater"><Underwater /></SensoryScene>} />
+      <Route path="/sensory/prismatic-swirl" element={<SensoryScene id="prismatic-swirl"><PrismaticBalatroExperience /></SensoryScene>} />
+      <Route path="/sensory/firefly" element={<SensoryScene id="firefly"><Firefly /></SensoryScene>} />
+      <Route path="/sensory/rain" element={<SensoryScene id="rain"><Rain /></SensoryScene>} />
+      <Route path="/sensory/underwater" element={<SensoryScene id="underwater"><Underwater /></SensoryScene>} />
       <Route path="/sensory" element={<Suspense fallback={<div className="p-8">Loading Sensory…</div>}><SensoryLibrary /></Suspense>} />
       {DEV_TOOLS && <Route path="/theme-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Theme Studio…</div>}><GhostStudio /></Suspense></AdminRoute>} />}
       {DEV_TOOLS && <Route path="/sensory-studio" element={<AdminRoute><Suspense fallback={<div className="p-8">Loading Sensory Studio…</div>}><SensoryStudio /></Suspense></AdminRoute>} />}

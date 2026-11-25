@@ -1,4 +1,5 @@
 import GlassSurface from "../components/GlassSurface";
+import WebglScope from "../components/WebglScope";
 import { useState, useEffect, useRef } from "react";
 import CloudScene from "../components/visuals/CloudScene";
 import MaterialFlowScene from "../components/visuals/MaterialFlowScene";
@@ -55,9 +56,10 @@ function Preview({name}) {
     "Rain": <video src="/videos/16312401-hd_1920_1080_60fps.mp4" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}} />
   };
   return <div ref={ref} style={{width:"100%",height:"100%",background:name==="Underwater"?"linear-gradient(155deg,#194d78,#092744 70%,#071b35)":"#d7e8e9",pointerEvents:"none"}}>
+    {/* WebglScope gives the tile's graphics context back when it scrolls out of view. */}
     {visible && (name==="Underwater"
       ? <iframe title="Underwater visual preview" src="https://holtsetio.com/lab/aurelia/" loading="lazy" tabIndex={-1} aria-hidden="true" style={{border:0,width:"100%",height:"calc(100% + 650px)",marginTop:-40,pointerEvents:"none"}} />
-      : scenes[name])}
+      : <WebglScope>{scenes[name]}</WebglScope>)}
   </div>;
 }
 
@@ -76,7 +78,9 @@ export default function SensoryLibrary() {
         </svg>
       </button>
     </header>
-    <div style={{maxWidth:900,margin:"clamp(36px,6vh,64px) auto 0"}}>
+    {/* People were playing with the moving tiles without realising they open. */}
+    <p style={{fontFamily:HEADING_FONT,fontStyle:"italic",fontSize:18,lineHeight:1.4,color:"#51665e",textAlign:"center",margin:"clamp(18px,3vh,28px) auto 0"}}>Tap a scene to step inside.</p>
+    <div style={{maxWidth:900,margin:"clamp(22px,4vh,40px) auto 0"}}>
       {visibleGroups.map(group=><section key={group.name} aria-label={group.name} style={{marginTop:0,marginBottom:48}}>
         <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:12,marginBottom:14}}>
           <h2 style={{fontFamily:HEADING_FONT,fontSize:25,fontWeight:400,margin:0}}>{group.name}</h2>
@@ -86,6 +90,9 @@ export default function SensoryLibrary() {
           {group.items.map(([name,path])=><Link key={path} to={path} aria-label={`Explore ${name}`} style={{display:"block",textDecoration:"none",color:"inherit",minWidth:0}}>
             <div style={{position:"relative",aspectRatio:"4 / 4.3",borderRadius:16,overflow:"hidden",background:"#d9e1dd"}}>
               <Preview name={name} />
+              <span aria-hidden="true" style={{position:"absolute",right:10,bottom:10,width:34,height:34,borderRadius:"50%",background:"rgba(255,255,255,.78)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",color:"#263a34",display:"grid",placeItems:"center",boxShadow:"0 2px 10px rgba(0,0,0,.10)",pointerEvents:"none"}}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+              </span>
             </div>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6,padding:"11px 2px 0"}}>
               <span aria-hidden="true" />
