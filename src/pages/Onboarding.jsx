@@ -156,7 +156,7 @@ export default function Onboarding() {
             <p style={{ margin: 0, fontSize: 11.5, lineHeight: 1.45, textAlign: "center", opacity: .85, pointerEvents: "auto" }}>
               By continuing, you agree to our <Link to="/terms" style={legalLink}>Terms</Link> and{" "}
               <Link to="/privacy" style={legalLink}>Privacy Policy</Link>
-              {requiresConsentFirst() ? "." : ", including anonymous analytics you can turn off any time in About."}
+              {requiresConsentFirst() ? "." : ", including anonymous analytics and session recordings you can turn off any time in About."}
             </p>
           )}
         </div>
