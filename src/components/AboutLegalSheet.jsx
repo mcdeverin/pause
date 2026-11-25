@@ -160,7 +160,7 @@ export default function AboutLegalSheet({ theme, onClose }) {
         <PreferenceToggle
           theme={theme}
           label="Share anonymous usage"
-          description="Lets Google Analytics and anonymous usage counts show us how Always Pause is used. Never your photos, exact colours, or identity. Turn off any time."
+          description="Lets Google Analytics, anonymous usage counts and session recordings show us how Always Pause is used. Never your photos, what you type, exact colours, or identity. Turn off any time."
           checked={shareUsage}
           onChange={(value) => {
             setShareUsage(value);

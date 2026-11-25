@@ -45,8 +45,9 @@ export default function AnalyticsConsentBanner() {
       }}
     >
       <p style={{ margin: 0 }}>
-        Can we use analytics, including Google Analytics, to see how people find and use
-        Always Pause? No ads, and we never sell data.{" "}
+        Can we use analytics, including Google Analytics and anonymous session recordings, to
+        see how people find and use Always Pause? Your photos and anything you type are never
+        recorded. No ads, and we never sell data.{" "}
         <Link to="/privacy" style={{ color: PAUSE.accent, fontWeight: 600 }}>Privacy</Link>
       </p>
       <div style={{ display: "flex", gap: 8, marginTop: 10, justifyContent: "flex-end" }}>

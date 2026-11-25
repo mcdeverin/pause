@@ -41,6 +41,8 @@ export default function WebglScope({ children }) {
     };
   }, []);
 
-  // display: contents keeps this wrapper out of layout.
-  return <div ref={rootRef} style={{ display: "contents" }}>{children}</div>;
+  // display: contents keeps this wrapper out of layout. data-replay-canvas lets
+  // session replays capture these canvases (sensory scenes and library tiles
+  // only; analytics.js blanks every other canvas).
+  return <div ref={rootRef} data-replay-canvas="" style={{ display: "contents" }}>{children}</div>;
 }

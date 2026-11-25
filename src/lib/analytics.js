@@ -20,6 +20,17 @@
 //     Privacy Control or Do Not Track.
 //   • "Share anonymous usage" in About turns everything off or on, any time.
 //
+// Session replays (PostHog) need an active "yes", so they run only when the
+// person agreed themselves: tapped "Begin" in the app (whose notice mentions
+// recordings), tapped Allow on the Europe banner, or switched "Share anonymous
+// usage" on. Website visitors who are only covered by the default above never
+// get recorded (US session-replay lawsuits under wiretap laws make that the
+// safe line). Typed text is always masked.
+//
+// While analytics is on, PostHog keeps one random ID in localStorage (no
+// cookie) so a returning visitor counts as the same visitor; it is deleted when
+// analytics is switched off. Every event carries platform: ios_app | website.
+//
 // Every call here is fire-and-forget and swallows its own failures, so a
 // blocked network or a missing chunk can never interrupt a breathing session.
 // Photographs, photograph URLs, exact colours, health data and the user's
@@ -101,11 +112,23 @@ export function isAnalyticsEnabled() {
   return enabledByDefault();
 }
 
+// Replays need an active agreement, not just the website default.
+function replaysAllowed() {
+  const choice = getAnalyticsChoice();
+  if (choice) return choice === "granted";
+  return !isWebsite() && hasAcceptedAgreement() && enabledByDefault();
+}
+
 function clearStoredIdentifiers() {
   try {
+    // ph_… holds the random ID and replay state. (PostHog's own opt-out flag
+    // stays, so a stopped client is inert; start() opts back in on a "yes".)
     Object.keys(localStorage)
       .filter((key) => key.startsWith("ph_"))
       .forEach((key) => localStorage.removeItem(key));
+    Object.keys(sessionStorage)
+      .filter((key) => key.startsWith("ph_"))
+      .forEach((key) => sessionStorage.removeItem(key));
   } catch {
     // Storage unavailable — there was nothing to clear.
   }
@@ -114,9 +137,15 @@ function clearStoredIdentifiers() {
 function start() {
   if (loading) return loading;
 
-  loading = import("posthog-js")
-    .then(({ default: posthog }) => {
-      posthog.init(PROJECT_TOKEN, {
+  const record = replaysAllowed();
+  loading = Promise.all([
+    import("posthog-js"),
+    // The recorder ships inside the app instead of being downloaded from
+    // PostHog's CDN, and is only loaded for people who agreed to recordings.
+    record ? import("posthog-js/dist/posthog-recorder") : null,
+  ])
+    .then(([{ default: posthog }]) => {
+      const config = {
         api_host: API_HOST,
         ui_host: "https://us.posthog.com",
         // No automatic capture of any kind. Every event is written by hand.
@@ -125,21 +154,37 @@ function start() {
         capture_pageleave: false,
         capture_performance: false,
         capture_exceptions: false,
-        disable_session_recording: true,
+        disable_session_recording: !record,
+        enable_recording_console_log: false,
+        session_recording: {
+          maskAllInputs: true,
+          // Sensory scenes are WebGL canvases; without this they replay blank.
+          captureCanvas: { recordCanvas: true, canvasFps: 4, canvasQuality: "0.4" },
+          // Blanked out in replays (shown as an empty box):
+          //  • images held inside the page as data: URLs, which is how people's
+          //    own background photos are stored, so their photos never leave
+          //    the device, as the privacy policy promises;
+          //  • every canvas outside a sensory scene or library tile (marked by
+          //    WebglScope), in case a visual ever draws a personal photo.
+          blockSelector: 'img[src^="data:"], [style*="data:image"], canvas:not([data-replay-canvas] canvas)',
+        },
         enable_heatmaps: false,
         disable_surveys: true,
         disable_surveys_automatic_display: true,
         disable_external_dependency_loading: true,
-        advanced_disable_flags: true,
-        advanced_disable_decide: true,
+        // Replays start only once PostHog's project settings confirm they are on,
+        // so that one config request is allowed for people being recorded.
+        // Feature flags are never used or requested.
+        advanced_disable_flags: !record,
+        advanced_disable_feature_flags: true,
+        advanced_disable_feature_flags_on_first_load: true,
         // Anonymous events only: no person data is processed at all, and
         // identify() is never called anywhere in the app.
         person_profiles: "never",
-        // Memory-only persistence: no cookie, no localStorage identifier, so
-        // nothing survives the app being closed.
-        persistence: "memory",
-        disable_cookie: true,
-        disable_persistence: true,
+        // One random ID in localStorage, never a cookie, so returning visitors
+        // are counted once. stop() deletes it. (Don't add disable_cookie: in
+        // posthog-js it is an old name for disable_persistence.)
+        persistence: "localStorage",
         // One request per event instead of a batch that iOS could suspend
         // before it is sent.
         request_batching: false,
@@ -149,7 +194,15 @@ function start() {
           });
           return properties;
         },
-      });
+      };
+      // PostHog only takes init() once per page load, so after "off then on"
+      // the same instance is re-configured instead.
+      if (posthog.__loaded) posthog.set_config(config);
+      else posthog.init(PROJECT_TOKEN, config);
+      // Our own consent rules decide; start() only runs when analytics is on.
+      if (posthog.has_opted_out_capturing()) posthog.opt_in_capturing({ captureEventName: false });
+      posthog.register({ platform: isWebsite() ? "website" : "ios_app" });
+      if (record) posthog.startSessionRecording();
       client = posthog;
       return posthog;
     })
@@ -164,9 +217,12 @@ function start() {
 function stop() {
   try {
     if (client) {
+      client.stopSessionRecording();
       client.opt_out_capturing();
+      // Turning persistence off makes PostHog delete its stored ID; reset()
+      // then gives the next "yes" a fresh, unrelated ID.
+      client.set_config({ disable_persistence: true, disable_session_recording: true });
       client.reset(true);
-      if (typeof client.shutdown === "function") client.shutdown();
     }
   } catch {
     // A failing shutdown must not surface anywhere.
@@ -174,6 +230,8 @@ function stop() {
   client = null;
   loading = null;
   clearStoredIdentifiers();
+  // PostHog may write once more as it winds down; sweep again after it has.
+  setTimeout(clearStoredIdentifiers, 0);
 }
 
 // Persists the choice, then starts or fully tears down the client. Returns the
@@ -203,7 +261,11 @@ export function setAnalyticsEnabled(enabled) {
 // state. Firebase is told every time, so it always matches the choice here.
 export function resumeAnalyticsIfAllowed() {
   const enabled = isAnalyticsEnabled();
-  if (enabled) startGoogleTag();
+  if (enabled) {
+    // Started at launch (not at the first event) so a replay covers the visit.
+    start();
+    startGoogleTag();
+  }
   setNativeAnalyticsEnabled(enabled);
 }
 
