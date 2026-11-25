@@ -5,7 +5,7 @@ import { Renderer, Program, Mesh, Triangle, Texture, RenderTarget } from 'ogl';
 
 import './DitherVeil.css';
 
-const DEFAULT_SRC = 'https://images.unsplash.com/photo-1737071371043-761e02b1ef95?q=80&w=1400&auto=format&fit=crop';
+const DEFAULT_SRC = '/sensory-assets/dither-veil.jpg';
 
 const ORDERED = { bayer: 0, noise: 1, lines: 2 };
 

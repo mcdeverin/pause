@@ -1,7 +1,7 @@
 import PixelSwap from "./PixelSwap";
 
-const skyOne="https://images.unsplash.com/photo-1564115484-a4aaa88d5449?auto=format&fit=crop&w=1600&q=85";
-const skyTwo="https://images.unsplash.com/photo-1779462303506-c46eb40de2c9?auto=format&fit=crop&w=1600&q=85";
+const skyOne="/sensory-assets/pixel-swap-sky-1.jpg";
+const skyTwo="/sensory-assets/pixel-swap-sky-2.jpg";
 
 export default function PixelSwapSky() {
   return <PixelSwap firstContent={<img src={skyOne} alt="Pink and blue sunset clouds" style={{width:"100%",height:"100%",objectFit:"cover"}}/>}
