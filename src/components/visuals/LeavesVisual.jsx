@@ -23,7 +23,7 @@ export default function LeavesVisual({ breath = 0, theme = "day", options = {}, 
           width: "100%",
           height: "100%",
           transform: `scale(${scale})`,
-          transition: reducedMotion ? "none" : "transform 0.12s linear",
+          transition: "none",
           animation: animate && !reducedMotion ? "pauseSway 11s ease-in-out infinite" : "none",
         }}
       >

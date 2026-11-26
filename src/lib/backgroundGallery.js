@@ -5,8 +5,10 @@
 // Each image: { id, label, url, tone } where `tone` is an optional css background
 // used behind the photo while it loads.
 //
-// The files themselves live in the app's own public asset storage, so a saved
-// choice keeps working after the app is reopened.
+// The files ship inside the app (public/backgrounds/), resized to phone size
+// (shortest side 1600 px, about 0.3–0.5 MB each instead of 1.5–3.5 MB), so they
+// appear straight away and work offline. Saved choices refer to the id, never
+// the url, so moving files doesn't reset anyone's background.
 
 export const BACKGROUND_CATEGORIES = [
   { id: "nature", label: "Nature" },
@@ -16,7 +18,7 @@ export const BACKGROUND_CATEGORIES = [
   { id: "photos", label: "Your Photos" },
 ];
 
-const ASSET_ROOT = "https://media.base44.com/images/public/69ca3c28f8f30cee64e1f21c";
+const ASSET_ROOT = "/backgrounds";
 
 export const NATURE_IMAGES = [
   {

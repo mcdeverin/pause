@@ -50,7 +50,7 @@ export default function GlassOrb({ breath = 0, reducedMotion = false, animate = 
               height: "100%",
               objectFit: "contain",
               transform: `scale(${scale})`,
-              transition: reducedMotion ? "none" : "transform 0.12s linear",
+              transition: "none",
               filter: "drop-shadow(0 10px 26px rgba(78, 108, 128, 0.22))",
               WebkitUserSelect: "none",
             }}
@@ -65,7 +65,7 @@ export default function GlassOrb({ breath = 0, reducedMotion = false, animate = 
               height: "72%",
               borderRadius: "50%",
               transform: `scale(${scale})`,
-              transition: reducedMotion ? "none" : "transform 0.12s linear",
+              transition: "none",
               background:
                 "radial-gradient(circle at 34% 30%, #FAD9B5 0%, #D1C6F2 42%, #A5E3E0 78%, rgba(165, 227, 224, 0) 100%)",
             }}
