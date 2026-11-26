@@ -50,22 +50,18 @@ const AGREEMENT_KEY = "pauseAgreementAcceptedAt";
 const PROJECT_TOKEN = import.meta.env.VITE_POSTHOG_KEY || "phc_CLU24jdcNPqwPtJeZCJB2NTirCsDzVsZjDnfsBQRt8uv";
 const API_HOST = import.meta.env.VITE_POSTHOG_HOST || "https://us.i.posthog.com";
 
-// Automatic properties that describe the page rather than the person. The app is
-// a single screen, and a URL can carry a query string, so none of them are sent.
-const STRIPPED_PROPERTIES = [
-  "$current_url",
-  "$pathname",
-  "$host",
-  "$referrer",
-  "$referring_domain",
-  "$initial_current_url",
-  "$initial_pathname",
-  "$initial_referrer",
-  "$initial_referring_domain",
-  "$session_entry_url",
-  "$prev_pageview_pathname",
-  "$prev_pageview_url",
-];
+// Page addresses are kept (so PostHog shows which screens people open) but
+// cut back to the path: a query string or #fragment can carry tokens or other
+// details, so they are removed. Full referrer addresses are dropped; only the
+// referring site's domain (how someone arrived) is kept.
+const URL_PROPERTIES = ["$current_url", "$initial_current_url", "$session_entry_url", "$prev_pageview_url"];
+const STRIPPED_PROPERTIES = ["$referrer", "$initial_referrer"];
+
+function withoutQuery(value) {
+  if (typeof value !== "string") return value;
+  const cut = value.search(/[?#]/);
+  return cut === -1 ? value : value.slice(0, cut);
+}
 
 let client = null;
 let loading = null;
@@ -148,9 +144,11 @@ function start() {
       const config = {
         api_host: API_HOST,
         ui_host: "https://us.posthog.com",
-        // No automatic capture of any kind. Every event is written by hand.
+        // No automatic capture besides page views. Every other event is written by hand.
         autocapture: false,
-        capture_pageview: false,
+        // A $pageview on load and on every in-app navigation, in the app and
+        // on the website, so PostHog's paths and top pages work.
+        capture_pageview: "history_change",
         capture_pageleave: false,
         capture_performance: false,
         capture_exceptions: false,
@@ -191,6 +189,9 @@ function start() {
         sanitize_properties: (properties) => {
           STRIPPED_PROPERTIES.forEach((key) => {
             delete properties[key];
+          });
+          URL_PROPERTIES.forEach((key) => {
+            if (key in properties) properties[key] = withoutQuery(properties[key]);
           });
           return properties;
         },
