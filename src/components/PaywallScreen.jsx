@@ -108,6 +108,10 @@ export default function PaywallScreen({
   };
   const hasTrial = (key) => {
     if (!trialDays[key]) return false;
+    // Google Play only includes the free-trial offer in a product when this
+    // customer can still use it, and RevenueCat's eligibility check always
+    // answers "unknown" there, so on Android the offer itself is the answer.
+    if (Capacitor.getPlatform() === "android") return true;
     const productId = getPackage(offerings, key)?.product?.identifier;
     return eligibility?.[productId]?.status === TRIAL_ELIGIBLE_STATUS;
   };

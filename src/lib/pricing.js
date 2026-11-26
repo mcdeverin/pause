@@ -16,10 +16,12 @@ const DISPLAY_FALLBACK = {
 };
 
 // Packages are looked up by their store product ID inside the default offering,
-// so the package identifiers chosen in RevenueCat can be anything.
+// so the package identifiers chosen in RevenueCat can be anything. Google Play
+// reports subscriptions as "productId:basePlanId" (e.g. "…annual:yearly"), so
+// only the part before the colon is compared.
 export function getPackage(offerings, key) {
   const packages = offerings?.all?.default?.availablePackages || [];
-  return packages.find((p) => p?.product?.identifier === PRODUCT_IDS[key]) || null;
+  return packages.find((p) => String(p?.product?.identifier || "").split(":")[0] === PRODUCT_IDS[key]) || null;
 }
 
 export function getLocalizedPrice(offerings, key) {
