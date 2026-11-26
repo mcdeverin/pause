@@ -21,11 +21,13 @@
 //   • "Share anonymous usage" in About turns everything off or on, any time.
 //
 // Session replays (PostHog) need an active "yes", so they run only when the
-// person agreed themselves: tapped "Begin" in the app (whose notice mentions
-// recordings), tapped Allow on the Europe banner, or switched "Share anonymous
-// usage" on. Website visitors who are only covered by the default above never
-// get recorded (US session-replay lawsuits under wiretap laws make that the
-// safe line). Typed text is always masked.
+// person agreed themselves: tapped "Begin" on the first onboarding screen (in
+// the app or on the website; its notice says continuing means agreeing to
+// analytics and session recordings), tapped Allow on the Europe banner, or
+// switched "Share anonymous usage" on. Website visitors who never tapped Begin
+// (they arrived straight on another page) are only covered by the default
+// above and are not recorded: US session-replay lawsuits under wiretap laws
+// make an active agreement the safe line. Typed text is always masked.
 //
 // While analytics is on, PostHog keeps one random ID in localStorage (no
 // cookie) so a returning visitor counts as the same visitor; it is deleted when
@@ -94,6 +96,7 @@ export function recordAgreement() {
     // Storage unavailable — analytics simply stays off.
   }
   resumeAnalyticsIfAllowed();
+  startReplaysIfAllowed();
 }
 
 // What applies before someone has made a choice of their own.
@@ -112,7 +115,7 @@ export function isAnalyticsEnabled() {
 function replaysAllowed() {
   const choice = getAnalyticsChoice();
   if (choice) return choice === "granted";
-  return !isWebsite() && hasAcceptedAgreement() && enabledByDefault();
+  return hasAcceptedAgreement() && enabledByDefault();
 }
 
 function clearStoredIdentifiers() {
@@ -170,10 +173,11 @@ function start() {
         disable_surveys: true,
         disable_surveys_automatic_display: true,
         disable_external_dependency_loading: true,
-        // Replays start only once PostHog's project settings confirm they are on,
-        // so that one config request is allowed for people being recorded.
-        // Feature flags are never used or requested.
-        advanced_disable_flags: !record,
+        // Replays start only once PostHog's project settings confirm they are
+        // on. That config is fetched for everyone with analytics on, so a
+        // recording can begin the moment someone agrees (startReplaysIfAllowed)
+        // instead of on their next visit. Feature flags are never requested.
+        advanced_disable_flags: false,
         advanced_disable_feature_flags: true,
         advanced_disable_feature_flags_on_first_load: true,
         // Anonymous events only: no person data is processed at all, and
@@ -235,6 +239,19 @@ function stop() {
   setTimeout(clearStoredIdentifiers, 0);
 }
 
+// Turns recording on for a client that started without it, e.g. a website
+// visitor who taps "Begin" on onboarding after PostHog was already running.
+function startReplaysIfAllowed() {
+  if (!replaysAllowed()) return;
+  Promise.all([start(), import("posthog-js/dist/posthog-recorder")])
+    .then(([posthog]) => {
+      if (!posthog || !replaysAllowed() || !posthog.config.disable_session_recording) return;
+      posthog.set_config({ disable_session_recording: false });
+      posthog.startSessionRecording();
+    })
+    .catch(() => {});
+}
+
 // Persists the choice, then starts or fully tears down the client. Returns the
 // state that was stored, or the previous one when storage is unavailable.
 export function setAnalyticsEnabled(enabled) {
@@ -248,6 +265,7 @@ export function setAnalyticsEnabled(enabled) {
   // Manager); inside the iPhone app googleTag.js does nothing.
   if (enabled) {
     start();
+    startReplaysIfAllowed();
     startGoogleTag();
   } else {
     stop();

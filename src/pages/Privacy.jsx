@@ -48,7 +48,7 @@ export default function Privacy() {
             <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
               <li><strong>In Europe</strong> (the EU, EEA, UK and Switzerland, judged from your device’s time zone): we ask first, in the app and on the website. Nothing is collected, and nothing is recorded, unless you tap “Allow”.</li>
               <li><strong>Elsewhere, in the app:</strong> the first screen explains that by continuing you agree to our Terms and this Privacy Policy, including analytics and session recordings. Analytics starts when you tap “Begin your journey”. If you installed the app before this notice was added, analytics stays off unless you turn it on.</li>
-              <li><strong>Elsewhere, on the website:</strong> analytics is on by default. If your browser sends a Global Privacy Control or Do Not Track signal, it stays off unless you turn it on yourself. Session recordings are never made on the website unless you switch “Share anonymous usage” on yourself.</li>
+              <li><strong>Elsewhere, on the website:</strong> analytics is on by default. If your browser sends a Global Privacy Control or Do Not Track signal, it stays off unless you turn it on yourself. Session recordings start only once you tap “Begin your journey” on the first screen, which carries the same notice as the app, or switch “Share anonymous usage” on yourself.</li>
               <li><strong>Everywhere:</strong> you can switch “Share anonymous usage” off or on at any time in About &amp; Legal. Turning it off stops all analytics straight away.</li>
             </ul>
             <p className="mt-4">
