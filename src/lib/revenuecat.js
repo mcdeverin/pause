@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import { Purchases, LOG_LEVEL } from '@revenuecat/purchases-capacitor';
 
 // The entitlement's identifier in RevenueCat is "Always Pause+" (identifiers
@@ -6,12 +7,21 @@ import { Purchases, LOG_LEVEL } from '@revenuecat/purchases-capacitor';
 export const ENTITLEMENT_ID = "Always Pause+";
 const ENTITLEMENT_IDS = [ENTITLEMENT_ID, "always_pause_plus"];
 
+// RevenueCat public SDK keys, one per store (safe to ship in the app).
+// The Google Play key comes from RevenueCat → Project settings → Apps →
+// the Play Store app (it starts with "goog_"). Until it is filled in, Android
+// simply stays on the free tier, like the website.
+const API_KEYS = {
+  ios: "appl_vfxpRLXujuSdAhnusNWvmAxrnYH",
+  android: "",
+};
+
 export const initRevenueCat = async () => {
+  const apiKey = API_KEYS[Capacitor.getPlatform()];
+  if (!apiKey) throw new Error("RevenueCat isn't set up for this platform");
   // Verbose SDK logs only while developing; release builds log warnings and up.
   await Purchases.setLogLevel({ level: import.meta.env.DEV ? LOG_LEVEL.DEBUG : LOG_LEVEL.WARN });
-  await Purchases.configure({
-    apiKey: "appl_vfxpRLXujuSdAhnusNWvmAxrnYH"
-  });
+  await Purchases.configure({ apiKey });
 };
 
 export const hasProEntitlement = (customerInfo) =>
