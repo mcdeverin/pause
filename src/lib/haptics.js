@@ -2,15 +2,18 @@ import { Capacitor, registerPlugin } from "@capacitor/core";
 
 // Breathing haptics.
 //
-// iPhone: iOS does not support navigator.vibrate, so on the phone haptics only
-// work through a native plugin. This calls the app's own CoreHaptics plugin
-// (jsName "CoreHaptics": playInhaleHaptic / playExhaleHaptic / playHoldHaptic /
-// stopHaptic, each taking { durationMs }) when the native build includes it.
-// The plugin has to be registered with the Capacitor bridge in the Xcode
-// project; if it isn't, isPluginAvailable() is false and nothing is sent.
+// In the apps, haptics go through the app's own CoreHaptics plugin (jsName
+// "CoreHaptics": playInhaleHaptic / playExhaleHaptic / playHoldHaptic /
+// stopHaptic, each taking { durationMs }):
+//   • iPhone: CoreHapticsPlugin.swift in the Xcode project (iOS has no
+//     navigator.vibrate, so this is the only way). It has to be registered
+//     with the Capacitor bridge there.
+//   • Android: android/app/src/main/java/…/CoreHapticsPlugin.java, registered
+//     in MainActivity, with the same ramps and pulses.
+// If the plugin isn't in a build, isPluginAvailable() is false and nothing is sent.
 //
-// Everywhere else (Android browsers, desktop previews) the short
-// navigator.vibrate patterns below are used where supported.
+// Everywhere else (browsers, desktop previews) the short navigator.vibrate
+// patterns below are used where supported.
 //
 // Every call swallows its own failures: haptics must never break a session.
 
