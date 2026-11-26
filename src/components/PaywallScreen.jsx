@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
 import { motion } from "framer-motion";
 import {
   getOfferings,
@@ -124,13 +125,20 @@ export default function PaywallScreen({
     return `Continue with ${planKey}`;
   };
 
+  // Where subscriptions are managed, and whose terms apply, depends on the store.
+  const isAndroid = Capacitor.getPlatform() === "android";
+  const manageIn = isAndroid ? "Google Play" : "Settings";
+  const termsUrl = isAndroid
+    ? "https://alwayspause.com/terms"
+    : "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
+
   const disclosureText = () => {
     if (planKey === 'lifetime') return 'one-time purchase · yours forever · no subscription.';
     const price = getPlanPriceLabel(offerings, planKey);
     if (hasTrial(planKey)) {
-      return `${trialDays[planKey]} days free, then ${price}. auto-renews until canceled. cancel anytime in Settings.`;
+      return `${trialDays[planKey]} days free, then ${price}. auto-renews until canceled. cancel anytime in ${manageIn}.`;
     }
-    return `auto-renews at ${price} until canceled. cancel anytime in Settings.`;
+    return `auto-renews at ${price} until canceled. cancel anytime in ${manageIn}.`;
   };
 
   const handlePurchase = async () => {
@@ -620,7 +628,7 @@ export default function PaywallScreen({
           }}>
             {[
               { label: "restore", action: handleRestore },
-              { label: "terms", action: () => window.open("https://www.apple.com/legal/internet-services/itunes/dev/stdeula/", "_blank") },
+              { label: "terms", action: () => window.open(termsUrl, "_blank") },
               { label: "privacy", action: () => window.open("https://alwayspause.com/privacy", "_blank") },
             ].map(({ label, action }, i, arr) => (
               <span key={label} style={{ display: "flex", alignItems: "center", gap: "12px" }}>

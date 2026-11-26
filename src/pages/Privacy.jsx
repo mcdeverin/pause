@@ -75,7 +75,7 @@ export default function Privacy() {
               While analytics is on, Google LLC (United States) processes the information described above for us through Google Analytics, Google Tag Manager and Google Analytics for Firebase, under Google’s privacy policy (policies.google.com/privacy). PostHog, Inc. (United States) stores the anonymous usage counts for us as our data processor. PostHog makes session recordings only as described above, and is configured without heatmaps, automatic interaction capture, surveys, advertising features or user profiles. Both receive the network address each request comes from, which is used only to derive a rough location.
             </p>
             <p className="mt-4">
-              Purchases are handled by Apple through the App Store and managed with RevenueCat, which receives an anonymous app user identifier and your purchase receipts so your subscription works. Apple’s built-in App Analytics may also collect anonymous usage data under Apple’s own privacy policy.
+              Purchases are handled by Apple through the App Store on iPhone, or by Google through Google Play on Android, and managed with RevenueCat, which receives an anonymous app user identifier and your purchase receipts so your subscription works. Apple’s built-in App Analytics may also collect anonymous usage data under Apple’s own privacy policy.
             </p>
           </section>
 

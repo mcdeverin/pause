@@ -51,7 +51,7 @@ export default function Terms() {
           <section>
             <h2 className="text-lg font-bold mb-3">In-App Purchases</h2>
             <p>
-              Always Pause may offer optional in-app purchases, including Always Pause+ subscriptions. Subscriptions renew automatically at the price shown until you cancel, which you can do at any time in your Apple ID settings at least 24 hours before the current period ends. Purchases are made through Apple and are also governed by <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" className="underline hover:opacity-70" target="_blank" rel="noreferrer">Apple’s Standard Licensed Application End User License Agreement</a>. Refunds are handled by Apple under its standard refund policy.
+              Always Pause may offer optional in-app purchases, including Always Pause+ subscriptions. Subscriptions renew automatically at the price shown until you cancel, which you can do at any time at least 24 hours before the current period ends: on iPhone in your Apple ID settings, on Android in Google Play → Payments &amp; subscriptions. On iPhone, purchases are made through Apple and are also governed by <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" className="underline hover:opacity-70" target="_blank" rel="noreferrer">Apple’s Standard Licensed Application End User License Agreement</a>. Refunds are handled by Apple, or by Google Play on Android, under their standard refund policies.
             </p>
           </section>
 
