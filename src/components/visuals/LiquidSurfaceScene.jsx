@@ -12,7 +12,9 @@ export default function LiquidSurfaceScene({ photoUrl, strength=.65, viscosity=.
   catch(e){console.warn("Liquid Surface unavailable",e);return;}
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));
   renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.domElement.style.cssText="width:100%;height:100%;display:block;touch-action:none";
+  // Hidden until its photo texture is ready: the host div shows the same photo
+  // as a plain picture underneath, so people never see a placeholder.
+  renderer.domElement.style.cssText=`width:100%;height:100%;display:block;touch-action:none;transition:opacity .35s ease;opacity:${opts.current.photoUrl?0:1}`;
   el.appendChild(renderer.domElement);
   const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
   const uniforms={
@@ -84,14 +86,16 @@ export default function LiquidSurfaceScene({ photoUrl, strength=.65, viscosity=.
   let disposed=false;
   const loader=new THREE.TextureLoader();
   const setPhoto=url=>{
-   if(!url){uniforms.uPhoto.value=0;return;}
+   const show=()=>{renderer.domElement.style.opacity="1";};
+   if(!url){uniforms.uPhoto.value=0;show();return;}
    loader.load(url,texture=>{
     if(disposed){texture.dispose();return;}
     if(uniforms.uTexture.value)uniforms.uTexture.value.dispose();
     texture.colorSpace=THREE.SRGBColorSpace;
     texture.wrapS=texture.wrapT=THREE.ClampToEdgeWrapping;
     uniforms.uTexture.value=texture;uniforms.uPhoto.value=1;
-   },undefined,()=>{uniforms.uPhoto.value=0;});
+    show();
+   },undefined,()=>{uniforms.uPhoto.value=0;show();});
   };
   let currentUrl=opts.current.photoUrl;setPhoto(currentUrl);
   let lastTime=performance.now(),elapsed=0;
@@ -120,5 +124,7 @@ export default function LiquidSurfaceScene({ photoUrl, strength=.65, viscosity=.
    el.removeEventListener("pointerup",up);el.removeEventListener("pointercancel",up);el.removeEventListener("pointerleave",leave);
    uniforms.uTexture.value?.dispose();geometry.dispose();material.dispose();renderer.dispose();renderer.domElement.remove();};
  },[]);
- return <div ref={host} style={{width:"100%",height:"100%",touchAction:"none"}}/>;
+ // The photo as a plain picture (stretched exactly like the shader draws it)
+ // shows instantly while the interactive water starts up on top of it.
+ return <div ref={host} style={{width:"100%",height:"100%",touchAction:"none",backgroundImage:photoUrl?`url("${photoUrl}")`:undefined,backgroundSize:"100% 100%"}}/>;
 }

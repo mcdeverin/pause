@@ -25,7 +25,7 @@ export default function BranchesVisual({ breath = 0, theme = "day", reducedMotio
           width: "100%",
           height: "100%",
           transform: `scale(${scale})`,
-          transition: reducedMotion ? "none" : "transform 0.12s linear",
+          transition: "none",
           animation: animate && !reducedMotion ? "pauseSway 13s ease-in-out infinite" : "none",
         }}
       >

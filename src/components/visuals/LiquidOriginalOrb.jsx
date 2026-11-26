@@ -10,7 +10,7 @@ export default function LiquidOriginalOrb({ breath = 0, reducedMotion = false, a
       <div aria-label="Liquid breathing orb" style={{
         width:"100%",height:"100%",
         transform:`scale(${scale})`,
-        transition:reducedMotion?"none":"transform 120ms linear",
+        transition:"none",
         willChange:"transform"
       }}>
         <Orb colors={["#b6a5ee","#ffd2c8"]} seed={420} volumeMode="manual"

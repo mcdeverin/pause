@@ -36,13 +36,31 @@ export function Orb({
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-4, 4, 4, -4, .1, 20);
     camera.position.z = 5;
+    // Stand-in until perlin-noise.png loads: smooth, tileable value noise (two
+    // octaves). Plain random pixels here made the surface shimmer like a tremor.
     const noiseData = new Uint8Array(256 * 256 * 4);
     let randomSeed = (seed || 420) >>> 0;
     const random = () => { randomSeed = (1664525 * randomSeed + 1013904223) >>> 0; return randomSeed / 4294967296; };
-    for (let i = 0; i < noiseData.length; i += 4) {
-      const value = Math.floor(random() * 256);
-      noiseData[i] = noiseData[i+1] = noiseData[i+2] = value;
-      noiseData[i+3] = 255;
+    const octave = (cells) => {
+      const grid = Array.from({ length: cells * cells }, random);
+      const at = (x, y) => grid[((y % cells) * cells) + (x % cells)];
+      const smooth = (t) => t * t * (3 - 2 * t);
+      return (x, y) => {
+        const fx = (x / 256) * cells, fy = (y / 256) * cells;
+        const x0 = Math.floor(fx), y0 = Math.floor(fy), tx = smooth(fx - x0), ty = smooth(fy - y0);
+        const top = at(x0, y0) * (1 - tx) + at(x0 + 1, y0) * tx;
+        const bottom = at(x0, y0 + 1) * (1 - tx) + at(x0 + 1, y0 + 1) * tx;
+        return top * (1 - ty) + bottom * ty;
+      };
+    };
+    const coarse = octave(8), fine = octave(32);
+    for (let y = 0; y < 256; y++) {
+      for (let x = 0; x < 256; x++) {
+        const i = (y * 256 + x) * 4;
+        const value = Math.floor((coarse(x, y) * 0.7 + fine(x, y) * 0.3) * 255);
+        noiseData[i] = noiseData[i+1] = noiseData[i+2] = value;
+        noiseData[i+3] = 255;
+      }
     }
     const noise = new THREE.DataTexture(noiseData, 256, 256, THREE.RGBAFormat);
     noise.wrapS = noise.wrapT = THREE.RepeatWrapping;

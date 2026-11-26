@@ -33,7 +33,7 @@ export default function AuroraVisual({ breath = 0, theme = "day", options = {}, 
           width: "100%",
           height: "100%",
           transform: `scale(${scale})`,
-          transition: reducedMotion ? "none" : "transform 0.12s linear",
+          transition: "none",
         }}
       >
         {/* Halo behind the orb */}
@@ -68,7 +68,7 @@ export default function AuroraVisual({ breath = 0, theme = "day", options = {}, 
                 position: "absolute",
                 inset: 0,
                 transform: `translate3d(0, ${(breath - 0.5) * spread * ribbon.dir}px, 0)`,
-                transition: reducedMotion ? "none" : "transform 0.16s linear",
+                transition: "none",
               }}
             >
               <div

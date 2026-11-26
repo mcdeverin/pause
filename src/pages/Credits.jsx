@@ -118,7 +118,7 @@ export default function Credits() {
             <h2 className="text-lg font-bold mb-3">Photography</h2>
             <p>
               Background and scene photographs by {PHOTOGRAPHERS.join(", ")} and other
-              photographers on Unsplash, used under the Unsplash License. Scene photos are
+              photographers on Unsplash, used under the Unsplash License. All photos are
               stored inside the app so they work offline.
             </p>
           </section>
