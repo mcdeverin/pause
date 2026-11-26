@@ -18,7 +18,7 @@ export default function BasketballVisual({ breath = 0, options = {}, reducedMoti
           width: "100%",
           height: "100%",
           transform: `scale(${scale})`,
-          transition: reducedMotion ? "none" : "transform 0.12s linear",
+          transition: "none",
         }}
       >
         <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true" style={{ overflow: "visible", display: "block" }}>

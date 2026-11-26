@@ -1,8 +1,8 @@
 // The iridescent glass orb ships as a PNG on a solid black backdrop. Rather than
 // lay a black square on the user's chosen background, the black is turned into
 // transparency once, in a canvas, and the result is reused everywhere.
-const SOURCE =
-  "https://media.base44.com/images/public/69ca3c28f8f30cee64e1f21c/c9baf9f1e_EtherealIridescentLiquidGlassOrb.png";
+// Bundled at 768 px (the size it is used at), so it loads instantly and offline.
+const SOURCE = "/backgrounds/c9baf9f1e_EtherealIridescentLiquidGlassOrb.png";
 
 const MAX_SIZE = 768;
 
