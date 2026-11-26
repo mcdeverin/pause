@@ -13,7 +13,7 @@ const ENTITLEMENT_IDS = [ENTITLEMENT_ID, "always_pause_plus"];
 // simply stays on the free tier, like the website.
 const API_KEYS = {
   ios: "appl_vfxpRLXujuSdAhnusNWvmAxrnYH",
-  android: "",
+  android: "goog_GjcYcMHsAgZTkxFChoMfnvBYehj",
 };
 
 export const initRevenueCat = async () => {
